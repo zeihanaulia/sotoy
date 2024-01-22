@@ -1,0 +1,47 @@
+<h1 id="architecture-patterns-for-resilient-distributed-systems"><a aria-hidden="true" class="anchor-heading icon-link" href="#architecture-patterns-for-resilient-distributed-systems"></a>Architecture Patterns for Resilient Distributed Systems</h1>
+<h2 id="scaling-to-100-million"><a aria-hidden="true" class="anchor-heading icon-link" href="#scaling-to-100-million"></a>Scaling to 100 million</h2>
+<p>Bagaimana memproses 100 juta request</p>
+<h3 id="allow-for-evolutionary-architechture"><a aria-hidden="true" class="anchor-heading icon-link" href="#allow-for-evolutionary-architechture"></a>Allow for evolutionary architechture</h3>
+<p>Liat area yang kita fokuskan untuk mendapatkan kejelasan.
+Ibaratnya seperti kaca mata, ketika tidak pakai kacamata maka terasa buram dan tidak jelas.
+Ketika pakai kaca mata maka semuanya akan tampak jelas dan fokus.</p>
+<p>Jadi bagaimana untuk memastikan system kita survive under the load operations.</p>
+<h3 id="weakest-link"><a aria-hidden="true" class="anchor-heading icon-link" href="#weakest-link"></a>Weakest Link</h3>
+<ul>
+<li>Disaster Recovert</li>
+<li>Multi Region</li>
+<li>Near Customer</li>
+<li>Canary</li>
+<li>Feature Toggle</li>
+<li>Multi Currency</li>
+<li>Multi Langugage</li>
+<li>Compliance</li>
+<li>Integration</li>
+<li>Data regulatory</li>
+<li>Expansion strategy</li>
+<li>Cost</li>
+<li>Service Availablity</li>
+</ul>
+<h3 id="bagaimana-untuk-achieve-ha-pada-postgresql"><a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-untuk-achieve-ha-pada-postgresql"></a>Bagaimana untuk achieve HA pada postgresql</h3>
+<p>Salah satu caranya adalah dengan Multi Availability Zone. Read replica gak akan memberikan HA. Kalau Multi Region digunakan ketika lo mau melakukan global deployment.
+Misalnya coca cola dia punya US, canada dan eropa, agar databasenya HA mereka harus membuat database sharding untuk memisahkan data, lo gak perlu menggunakan database yang sama</p>
+<h3 id="bagaimana-cara-membuat-resilient-architechture"><a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-cara-membuat-resilient-architechture"></a>Bagaimana cara membuat resilient architechture</h3>
+<h2 id="fail-point"><a aria-hidden="true" class="anchor-heading icon-link" href="#fail-point"></a>Fail Point</h2>
+<p>Salah satu yang sangat penting, bagaimana kita mengumpulkan requirement.
+Indentify requriement dan temukan paint point.
+Apa yang akan kita fokuskan.
+Lhat dari scalebiliy persepective</p>
+<h2 id="empathy-map"><a aria-hidden="true" class="anchor-heading icon-link" href="#empathy-map"></a>Empathy Map</h2>
+<p>Setelah itu kita jadikan KPI key indicator performance
+Lalu lo akan ke product manager dan satukan apa KPI engineer dengan mereka
+Lalu cari tau lagi apa yang salah, apa yang berhasil dan terus cari permasalahannya
+Apa issue yang kita hadapi dan cari learning dari tempat lain juga</p>
+<h2 id="microservice-issue"><a aria-hidden="true" class="anchor-heading icon-link" href="#microservice-issue"></a>Microservice Issue</h2>
+<h2 id="bulk-head"><a aria-hidden="true" class="anchor-heading icon-link" href="#bulk-head"></a>Bulk Head</h2>
+<h2 id="sharding"><a aria-hidden="true" class="anchor-heading icon-link" href="#sharding"></a>Sharding</h2>
+<p>Bagaimana kita melakukan pembedaan dengar perbedaan customer</p>
+<h2 id="resilient-pattern"><a aria-hidden="true" class="anchor-heading icon-link" href="#resilient-pattern"></a>Resilient Pattern</h2>
+<p>Apa pattern yang sudah kita miliki</p>
+<h2 id="caching"><a aria-hidden="true" class="anchor-heading icon-link" href="#caching"></a>Caching</h2>
+<p>Apa saja yang bisa kita cache</p>
+<h2 id="failure-injection"><a aria-hidden="true" class="anchor-heading icon-link" href="#failure-injection"></a>Failure Injection</h2>

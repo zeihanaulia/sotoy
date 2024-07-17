@@ -1,0 +1,241 @@
+<h1 id="casbin">Casbin<a aria-hidden="true" class="anchor-heading icon-link" href="#casbin"></a></h1>
+<h2 id="what-happen-if-i-call-casbinnewenforcer-function-each-request-it-will-impacted-to-app-performance">What happen if I call "casbin.NewEnforcer" function each request? it will impacted to app performance<a aria-hidden="true" class="anchor-heading icon-link" href="#what-happen-if-i-call-casbinnewenforcer-function-each-request-it-will-impacted-to-app-performance"></a></h2>
+<p>It depends on how you use the <code>casbin.NewEnforcer</code> function and the size of your policy. If you are using <code>casbin.NewEnforcer</code> to create a new instance of the Enforcer on each request, this could potentially have a negative impact on the performance of your application. This is because creating a new instance of the Enforcer and loading the policy each time can be resource-intensive, especially if the policy is large.</p>
+<p>In general, it is best to avoid creating a new instance of the Enforcer on each request, and instead create a single instance of the Enforcer at the start of your application and reuse it for each request. This will allow the policy to be loaded only once, which can help improve the performance of your application.</p>
+<p>If you do need to use multiple instances of the Enforcer, for example if you have multiple policies that need to be enforced, it is best to create the Enforcers when your application starts up and store them in memory for later use. This will avoid the overhead of creating and loading the Enforcer on each request.</p>
+<p>Overall, it is important to consider the performance implications of your use of the <code>casbin.NewEnforcer</code> function, and to carefully consider whether creating a new instance on each request is necessary or not.</p>
+<h2 id="but-the-problem-i-have-three-app-replicas-if-one-app-receives-an-update-then-how-to-update-two-other-apps-example-when-app-one-gets-a-request-to-add-a-policy-or-create-a-new-permission-what-happens-with-the-two-other-apps">But the problem, I have three app replicas, if one app receives an update then how to update two other apps? example, when app one gets a request to add a policy or create a new permission. what happens with the two other apps<a aria-hidden="true" class="anchor-heading icon-link" href="#but-the-problem-i-have-three-app-replicas-if-one-app-receives-an-update-then-how-to-update-two-other-apps-example-when-app-one-gets-a-request-to-add-a-policy-or-create-a-new-permission-what-happens-with-the-two-other-apps"></a></h2>
+<p>If you are using multiple replicas of your application, it is important to ensure that they are all using the same version of the policy. Otherwise, one replica may enforce a different policy than the others, which could lead to inconsistencies in your application.</p>
+<p>One way to handle this situation is to use a central storage location for your policy, such as a database or a shared file system. When one of your replicas receives an update to the policy, it can update the central storage location, and the other replicas can then read the updated policy from this location. This will ensure that all of your replicas are using the same version of the policy.</p>
+<p>Another option is to use a tool like etcd or Consul to manage your policies. These tools provide a distributed key-value store that can be used to store your policy, and can automatically synchronize the policy across all of your replicas. This can make it easier to manage your policies and ensure that all of your replicas are using the same policy.</p>
+<p>Overall, it is important to carefully consider how you manage your policies when using multiple replicas of your application, and to choose a solution that ensures that all of your replicas are using the same version of the policy.</p>
+<h2 id="show-me-an-example-central-storage-location-with-postgreql-in-go-code">show me an example "central storage location" with postgreql in go code<a aria-hidden="true" class="anchor-heading icon-link" href="#show-me-an-example-central-storage-location-with-postgreql-in-go-code"></a></h2>
+<p>Here is an example of how you might use a PostgreSQL database as a central storage location for your policy in Go:</p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"database/sql"</span>
+    <span class="token string">"log"</span>
+
+    <span class="token boolean">_</span> <span class="token string">"github.com/lib/pq"</span> <span class="token comment">// Import the PostgreSQL driver</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Connect to the database</span>
+    db<span class="token punctuation">,</span> err <span class="token operator">:=</span> sql<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token string">"postgres"</span><span class="token punctuation">,</span> <span class="token string">"postgres://user:password@host/database"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">defer</span> db<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Create the policy table if it does not exist</span>
+    createTableStmt <span class="token operator">:=</span> <span class="token string">`
+        CREATE TABLE IF NOT EXISTS policy (
+            p_type VARCHAR(64) NOT NULL,
+            v0 VARCHAR(1024) NOT NULL,
+            v1 VARCHAR(1024) NOT NULL,
+            v2 VARCHAR(1024) NOT NULL,
+            v3 VARCHAR(1024) NOT NULL,
+            v4 VARCHAR(1024) NOT NULL,
+            v5 VARCHAR(1024) NOT NULL
+        );
+    `</span>
+    <span class="token keyword">if</span> <span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Exec</span><span class="token punctuation">(</span>createTableStmt<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Add a policy to the database</span>
+    addPolicyStmt <span class="token operator">:=</span> <span class="token string">`
+        INSERT INTO policy (p_type, v0, v1, v2, v3, v4, v5)
+        VALUES ($1, $2, $3, $4, $5, $6, $7);
+    `</span>
+    <span class="token keyword">if</span> <span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Exec</span><span class="token punctuation">(</span>addPolicyStmt<span class="token punctuation">,</span> <span class="token string">"p"</span><span class="token punctuation">,</span> <span class="token string">"alice"</span><span class="token punctuation">,</span> <span class="token string">"data1"</span><span class="token punctuation">,</span> <span class="token string">"read"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Query the database for the policy</span>
+    queryPolicyStmt <span class="token operator">:=</span> <span class="token string">`
+        SELECT p_type, v0, v1, v2, v3, v4, v5 FROM policy;
+    `</span>
+    rows<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span>queryPolicyStmt<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">defer</span> rows<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Iterate through the rows and print the policy</span>
+    <span class="token keyword">for</span> rows<span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> pType<span class="token punctuation">,</span> v0<span class="token punctuation">,</span> v1<span class="token punctuation">,</span> v2<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> v4<span class="token punctuation">,</span> v5 <span class="token builtin">string</span>
+        <span class="token keyword">if</span> err <span class="token operator">:=</span> rows<span class="token punctuation">.</span><span class="token function">Scan</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span>pType<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>v0<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>v1<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>v2<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>v3<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>v4<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>v5<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"Policy: %s, %s, %s, %s, %s, %s, %s"</span><span class="token punctuation">,</span> pType<span class="token punctuation">,</span> v0<span class="token punctuation">,</span> v1<span class="token punctuation">,</span> v2<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> v4<span class="token punctuation">,</span> v5<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>`
+</code></pre>
+<p>This code connects to a PostgreSQL database, creates a <code>policy</code> table if it does not already exist, and then adds a policy to the table. It then queries the table and prints the policy that was added.</p>
+<p>You can modify this code to suit your specific needs, such as using a different database schema or using different SQL statements to manage the policy. This is just an example of how you might use a PostgreSQL database as a central storage location for your policy in Go.</p>
+<h2 id="suggest-to-me-how-to-init-casbin-and-i-can-add-policy-and-enforcer-policy-with-rest-api-in-go-code">suggest to me how to init casbin and I can add policy and enforcer policy with REST API in go code<a aria-hidden="true" class="anchor-heading icon-link" href="#suggest-to-me-how-to-init-casbin-and-i-can-add-policy-and-enforcer-policy-with-rest-api-in-go-code"></a></h2>
+<p>I apologize if my previous response was truncated. Here is the full response again:</p>
+<p>Here is an example of how you might initialize Casbin and use a REST API to add policies and enforce them in Go:</p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"log"</span>
+    <span class="token string">"net/http"</span>
+
+    <span class="token string">"github.com/casbin/casbin"</span>
+    <span class="token string">"github.com/julienschmidt/httprouter"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Create a new Casbin enforcer</span>
+    e<span class="token punctuation">,</span> err <span class="token operator">:=</span> casbin<span class="token punctuation">.</span><span class="token function">NewEnforcer</span><span class="token punctuation">(</span><span class="token string">"path/to/model.conf"</span><span class="token punctuation">,</span> <span class="token string">"path/to/policy.csv"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Create a new router</span>
+    router <span class="token operator">:=</span> httprouter<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Add a policy to the enforcer</span>
+    router<span class="token punctuation">.</span><span class="token function">POST</span><span class="token punctuation">(</span><span class="token string">"/policy"</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">,</span> <span class="token boolean">_</span> httprouter<span class="token punctuation">.</span>Params<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Parse the policy from the request body</span>
+        pType <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"p_type"</span><span class="token punctuation">)</span>
+        v0 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v0"</span><span class="token punctuation">)</span>
+        v1 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v1"</span><span class="token punctuation">)</span>
+        v2 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v2"</span><span class="token punctuation">)</span>
+        v3 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v3"</span><span class="token punctuation">)</span>
+        v4 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v4"</span><span class="token punctuation">)</span>
+        v5 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v5"</span><span class="token punctuation">)</span>
+
+        <span class="token comment">// Add the policy to the enforcer</span>
+        e<span class="token punctuation">.</span><span class="token function">AddPolicy</span><span class="token punctuation">(</span>pType<span class="token punctuation">,</span> v0<span class="token punctuation">,</span> v1<span class="token punctuation">,</span> v2<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> v4<span class="token punctuation">,</span> v5<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Enforce a policy</span>
+    router<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/enforce/:p_type/:v0/:v1/:v2/:v3/:v4/:v5"</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">,</span> ps httprouter<span class="token punctuation">.</span>Params<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Get the policy from the URL parameters</span>
+        pType <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"p_type"</span><span class="token punctuation">)</span>
+        v0 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v0"</span><span class="token punctuation">)</span>
+        v1 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v1"</span><span class="token punctuation">)</span>
+        v2 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v2"</span><span class="token punctuation">)</span>
+        v3 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v3"</span><span class="token punctuation">)</span>
+        v4 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v4"</span><span class="token punctuation">)</span>
+        v5 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v5"</span><span class="token punctuation">)</span>
+
+        <span class="token comment">// Enforce the policy</span>
+        result<span class="token punctuation">,</span> err <span class="token operator">:=</span> e<span class="token punctuation">.</span><span class="token function">Enforce</span><span class="token punctuation">(</span>pType<span class="token punctuation">,</span> v0<span class="token punctuation">,</span> v1<span class="token punctuation">,</span> v2<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> v4<span class="token punctuation">,</span> v5<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            http<span class="token punctuation">.</span><span class="token function">Error</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"Error enforcing policy"</span><span class="token punctuation">,</span> http<span class="token punctuation">.</span>StatusInternalServerError<span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// Return the result of the enforcement</span>
+        w<span class="token punctuation">.</span><span class="token function">WriteHeader</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusOK<span class="token punctuation">)</span>
+        w<span class="token punctuation">.</span><span class="token function">Write</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Start the server</span>
+    log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token string">":8080"</span><span class="token punctuation">,</span> router<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>`
+</code></pre>
+<p>This code creates a new Casbin enforcer and initializes it with the specified model and policy files. It then sets up two endpoints: one for adding a policy to the enforcer, and one for enforcing a policy. You can use these endpoints to manage and enforce your policies using a REST API.</p>
+<h2 id="so-with-this-example-the-data-will-be-consistent-with-other-replicas">so with this example, the data will be consistent with other replicas<a aria-hidden="true" class="anchor-heading icon-link" href="#so-with-this-example-the-data-will-be-consistent-with-other-replicas"></a></h2>
+<p>The example code I provided does not include any mechanisms for ensuring that the data is consistent across multiple replicas. If you want to ensure that the policies and enforcer are consistent across multiple replicas, you will need to implement some sort of synchronization mechanism. This could involve using a central storage location, such as a database, to store the policies and enforcer data, and having the replicas regularly poll that storage location to get the latest data.</p>
+<p>For example, you could use PostgreSQL as the central storage location, and use the <code>gorm</code> library to access it from your Go code. Here is an example of how you might do this:</p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"log"</span>
+    <span class="token string">"net/http"</span>
+
+    <span class="token string">"github.com/casbin/casbin"</span>
+    <span class="token string">"github.com/julienschmidt/httprouter"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Connect to the PostgreSQL database</span>
+    db<span class="token punctuation">,</span> err <span class="token operator">:=</span> gorm<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token string">"postgres"</span><span class="token punctuation">,</span> <span class="token string">"postgres://user:password@host/dbname?sslmode=disable"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">defer</span> db<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Create a new Casbin enforcer</span>
+    e<span class="token punctuation">,</span> err <span class="token operator">:=</span> casbin<span class="token punctuation">.</span><span class="token function">NewEnforcer</span><span class="token punctuation">(</span><span class="token string">"path/to/model.conf"</span><span class="token punctuation">,</span> casbin<span class="token punctuation">.</span><span class="token function">NewAdapters</span><span class="token punctuation">(</span>db<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Load the policies from the database</span>
+    e<span class="token punctuation">.</span><span class="token function">LoadPolicy</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Create a new router</span>
+    router <span class="token operator">:=</span> httprouter<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Add a policy to the enforcer</span>
+    router<span class="token punctuation">.</span><span class="token function">POST</span><span class="token punctuation">(</span><span class="token string">"/policy"</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">,</span> <span class="token boolean">_</span> httprouter<span class="token punctuation">.</span>Params<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Parse the policy from the request body</span>
+        pType <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"p_type"</span><span class="token punctuation">)</span>
+        v0 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v0"</span><span class="token punctuation">)</span>
+        v1 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v1"</span><span class="token punctuation">)</span>
+        v2 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v2"</span><span class="token punctuation">)</span>
+        v3 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v3"</span><span class="token punctuation">)</span>
+        v4 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v4"</span><span class="token punctuation">)</span>
+        v5 <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"v5"</span><span class="token punctuation">)</span>
+
+        <span class="token comment">// Add the policy to the enforcer</span>
+        e<span class="token punctuation">.</span><span class="token function">AddPolicy</span><span class="token punctuation">(</span>pType<span class="token punctuation">,</span> v0<span class="token punctuation">,</span> v1<span class="token punctuation">,</span> v2<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> v4<span class="token punctuation">,</span> v5<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Enforce a policy</span>
+    router<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/enforce/:p_type/:v0/:v1/:v2/:v3/:v4/:v5"</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">,</span> ps httprouter<span class="token punctuation">.</span>Params<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Get the policy from the URL parameters</span>
+        pType <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"p_type"</span><span class="token punctuation">)</span>
+        v0 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v0"</span><span class="token punctuation">)</span>
+        v1 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v1"</span><span class="token punctuation">)</span>
+        v2 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v2"</span><span class="token punctuation">)</span>
+        v3 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v3"</span><span class="token punctuation">)</span>
+        v4 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v4"</span><span class="token punctuation">)</span>
+        v5 <span class="token operator">:=</span> ps<span class="token punctuation">.</span><span class="token function">ByName</span><span class="token punctuation">(</span><span class="token string">"v5"</span><span class="token punctuation">)</span>
+
+        <span class="token comment">// Enforce the policy</span>
+        result<span class="token punctuation">,</span> err <span class="token operator">:=</span> e<span class="token punctuation">.</span><span class="token function">Enforce</span><span class="token punctuation">(</span>pType<span class="token punctuation">,</span> v0<span class="token punctuation">,</span> v1<span class="token punctuation">,</span> v2<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> v4<span class="token punctuation">,</span> v5<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            http<span class="token punctuation">.</span><span class="token function">Error</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"Error enforcing policy"</span><span class="token punctuation">,</span> http<span class="token punctuation">.</span>StatusInternalServerError<span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// Return the result of the enforcement</span>
+        w<span class="token punctuation">.</span><span class="token function">WriteHeader</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusOK<span class="token punctuation">)</span>
+        w<span class="token punctuation">.</span><span class="token function">Write</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// Start the server</span>
+    log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token string">":8080"</span><span class="token punctuation">,</span> router<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>`
+</code></pre>
+<h2 id="jelaskan-apa-yang-terjadi-ketika-memangil-function-eaddpolicy">jelaskan apa yang terjadi ketika memangil function e.AddPolicy<a aria-hidden="true" class="anchor-heading icon-link" href="#jelaskan-apa-yang-terjadi-ketika-memangil-function-eaddpolicy"></a></h2>
+<p>The <code>e.AddPolicy()</code> function is used to add a new policy to the enforcer. This function takes the policy data as arguments, which can vary depending on the type of policy you are adding. For example, if you are using the default policy model, the policy data should consist of the following:</p>
+<ul>
+<li>p_type`: The type of policy, which should be one of "p", "g", or "e".</li>
+<li>v0`: The first policy element.</li>
+<li>v1`: The second policy element.</li>
+<li>v2`: The third policy element.</li>
+<li>v3`: The fourth policy element.</li>
+<li>v4`: The fifth policy element.</li>
+<li>v5`: The sixth policy element.</li>
+</ul>
+<p>Once you have provided the policy data, the <code>e.AddPolicy()</code> function will add the policy to the enforcer's internal policy storage. This means that the next time the enforcer is asked to enforce a policy, it will take this new policy into account.</p>
+<p>For example, if you call <code>e.AddPolicy("p", "alice", "data1", "read")</code>, this will add a policy that allows the user "alice" to read the resource "data1". If the enforcer is later asked to enforce the policy for a request made by "alice" to read "data1", it will return <code>true</code> to indicate that the request is allowed.</p>
+<h2 id="jelaskan-apa-yang-terjadi-ketika-memanggil-casbinnewenforcer">jelaskan apa yang terjadi ketika memanggil casbin.NewEnforcer<a aria-hidden="true" class="anchor-heading icon-link" href="#jelaskan-apa-yang-terjadi-ketika-memanggil-casbinnewenforcer"></a></h2>
+<p>The <code>casbin.NewEnforcer()</code> function is used to create a new instance of a Casbin enforcer. This function takes two arguments: the path to the model file and the path to the policy file. The model file defines the policy model, which specifies the types of policies that can be added and enforced, as well as the elements that make up those policies. The policy file contains the actual policies that should be enforced by the enforcer.</p>
+<p>Once you have provided the paths to the model and policy files, the <code>casbin.NewEnforcer()</code> function will create a new enforcer instance and initialize it with the data from those files. This means that the enforcer will be able to enforce the policies specified in the policy file according to the rules defined in the model file.</p>
+<p>For example, if you call <code>e, err := casbin.NewEnforcer("path/to/model.conf", "path/to/policy.csv")</code>, this will create a new enforcer instance and initialize it with the data from the <code>model.conf</code> and <code>policy.csv</code> files. You can then use the <code>e</code> enforcer instance to enforce policies, add new policies, or perform other operations.</p>
+<p>It's important to note that the <code>casbin.NewEnforcer()</code> function returns an error if there is a problem creating the enforcer or initializing it with the provided data. You should always check for errors and handle them appropriately in your code.</p>
+<h2 id="jelaskan-apa-yang-terjadi-ketika-memanggil-eloadpolicy">jelaskan apa yang terjadi ketika memanggil e.LoadPolicy()<a aria-hidden="true" class="anchor-heading icon-link" href="#jelaskan-apa-yang-terjadi-ketika-memanggil-eloadpolicy"></a></h2>
+<p>The <code>e.LoadPolicy()</code> function is used to load the policies from the enforcer's policy storage. This function is typically used when the enforcer is initialized using an adapter that connects to a central storage location, such as a database. In this case, the policies are not loaded from a file on disk, but are instead retrieved from the central storage location.</p>
+<p>When you call the <code>e.LoadPolicy()</code> function, the enforcer will retrieve the policies from the central storage location and load them into its internal policy storage. This means that the enforcer will be able to enforce the policies that were previously stored in the central storage location.</p>
+<p>For example, if you have an enforcer initialized with a PostgreSQL adapter and you call <code>e.LoadPolicy()</code>, the enforcer will connect to the PostgreSQL database and retrieve the policies from the <code>casbin_rule</code> table. It will then load those policies into its internal policy storage and be able to enforce them.</p>
+<p>It's important to note that the <code>e.LoadPolicy()</code> function can return an error if there is a problem loading the policies from the central storage location. You should always check for errors and handle them appropriately in your code.</p>

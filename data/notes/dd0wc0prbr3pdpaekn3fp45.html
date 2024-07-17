@@ -1,0 +1,28 @@
+<h1 id="krakend">Krakend<a aria-hidden="true" class="anchor-heading icon-link" href="#krakend"></a></h1>
+<h3 id="basic-configuration">Basic Configuration<a aria-hidden="true" class="anchor-heading icon-link" href="#basic-configuration"></a></h3>
+<pre><code>{
+    "endpoints": [
+        {
+            "endpoint": "/rbac",
+            "input_headers":[
+                "*"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [ "https://iam.example.com" ],
+                    "url_pattern": "/rbac"
+                }
+            ]
+        },
+    ]
+}
+</code></pre>
+<p>snipet diatas adalah endpoint konfigurasi tempat dimana kita mendefinisikan seluruh endpoint yang ada pada service kita.
+field <code>endpoint</code> adalah path yang akan diakses, kekurangan dari krakend community adalah dia tidak bisa wildcard.
+Karena tidak bisa wildcard kita perlu ada generator untuk mengenerate seluruh endpoint yang ada dan disesuaikan dengan configurasi krakend.
+lalu field <code>input_headers</code> kita isi dengan "*" jika kita ingin meneruskan header dari api gateway ke service upstream.
+field "output_encoding" dengan value "no-op" perlu ditambahkan, jika tidak krakend secara default akan memanipulasi response yang krakend terima.
+problem yang dirasakan jika tanpa <code>"output_encoding": "no-op"</code> adalah jika service upstream terkena error atau response code selain 200, krakend akan mengembalikan 500.
+terakhir ada field <code>backend</code> kenapa field ini array of object, karena krakend dapat digunakan sebagai backend for front-end, sehingga kita bisa mengembalikan response dari beberapa endpoint berbeda.
+didalam object <code>backend</code> kita define <code>host</code> menunjukan dimana service yang dituju dan <code>url_pattern</code> yang menunjukan path apa yang mau diakses.</p>

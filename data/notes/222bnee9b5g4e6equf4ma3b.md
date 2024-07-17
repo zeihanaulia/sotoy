@@ -1,0 +1,173 @@
+
+## Chapter 1 - Essentials of Software Requirements
+
+Begitu lama sekali, saya (Karl) terkadang langsung melompat ke dalam menulis program baru hanya berdasarkan gagasan awal. Saya menghabiskan waktu untuk menulis kode, menjalankan, memperbaiki, dan membuat kekacauan di editor kode sumber saat saya mencoba mencari hasil. Akhirnya, **saya menyadari bahwa akar masalahnya adalah terburu-buru menulis kode tanpa memiliki titik akhir dalam pikiran—menulis kode itu menyenangkan!** Pengalaman-pengalaman yang membuat frustrasi itu mengajarkan saya **pentingnya memikirkan beberapa kebutuhan—tujuan (requirements—objectives), tugas penggunaan, elemen data, dan lain-lain—sebelum melakukan hal lain**. Setelah saya mengubah proses saya untuk memahami kebutuhan saya terlebih dahulu, saya tidak pernah lagi merasa bahwa proyek software saya tidak terkendali.
+
+**Semua proyek memiliki requirements**. Beberapa tim memulai dengan tujuan bisnis yang jelas, tim lain menerima deskripsi lengkap tentang kemampuan dan karakteristik solusi yang diinginkan, dan ada juga yang hanya memiliki konsep produk yang samar. Terlepas dari titik awalnya, semua peserta akhirnya harus mencapai pemahaman bersama tentang apa yang tim seharusnya hasilkan.
+
+Beberapa peserta proyek tidak terlalu tertarik dengan kebutuhan. Beberapa manajer mungkin mengklaim bahwa mereka terlalu sibuk untuk terlibat dalam diskusi kebutuhan. Tetapi kemudian harapan mereka muncul setelah produk telah berkembang hingga titik di mana perubahan besar berarti pekerjaan ulang yang mahal. Beberapa orang teknis mungkin menganggap waktu yang dihabiskan untuk menjelajahi dan mendokumentasikan kebutuhan sebagai pengalihan dari pekerjaan nyata dalam membuat kode. Namun, satu set requirements yang baik memungkinkan Anda menjawab beberapa pertanyaan penting dan universal.
+
+- Mengapa kita bekerja pada ini?
+- Siapa yang ingin kita puaskan?
+- Apa yang ingin kita bangun?
+- Fungsionalitas apa yang kita implementasikan pertama? Selanjutnya? Mungkin tidak sama sekali?
+- Bagaimana kita tahu jika solusi kita sudah cukup baik?
+- Bagaimana kita tahu kapan kita selesai?
+
+Buku ini menjelaskan dua puluh praktik paling penting yang membantu development team software menciptakan satu set kebutuhan yang menjadi dasar untuk pekerjaan pengembangan selanjutnya. Praktik-praktik ini secara luas berlaku terlepas dari jenis produk yang tim ciptakan atau pendekatan pengembangan yang mereka gunakan. Beberapa development team software tidak bekerja pada proyek pengembangan yang terpisah tetapi pada produk yang sudah ada yang membutuhkan modifikasi dan fungsionalitas baru secara terus-menerus. Orang-orang yang bertanggung jawab atas pekerjaan kebutuhan pada tim produk seperti itu akan menemukan bahwa praktik-praktik dalam buku ini juga relevan untuk pekerjaan mereka.
+
+Terminologi kebutuhan berbeda antara proyek tradisional (berencana atau prediktif) dan proyek agile (berubah atau adaptif). Terlepas dari terminologi yang digunakan, pengembang tetap membutuhkan informasi yang sama untuk membangun solusi yang tepat dengan benar. Beberapa tim akan melaksanakan praktik tertentu secara berulang, memberikan nilai dalam bentuk bagian kecil. Yang lain mungkin melakukan sebagian besar pekerjaan kebutuhan di awal proyek karena masalahnya sudah dipahami dengan baik. Startup yang mencoba mengevaluasi kesesuaian produknya di pasaran akan fokus pada eksplorasi ide dan pendekatan daripada mencoba menyusun spesifikasi terperinci. Bagaimanapun cara Anda merencanakan siklus pengembangan, melakukan kedua puluh praktik ini dengan baik dapat membuat perbedaan antara memberikan solusi yang memuaskan pemangku kepentingan Anda atau tidak.
+
+### Requirements Defined
+
+Sekarang setelah kita telah menggunakan kata "kebutuhan" beberapa kali, kita harus mendefinisikan apa yang kita maksud dengan itu. Sebuah tim software harus menghadapi banyak jenis pengetahuan yang berhubungan dengan kebutuhan, dan orang akan bingung jika mereka tidak memiliki pemahaman yang sama tentangnya. Meskipun tidak sepenuhnya lengkap, satu definisi yang berguna tentang kebutuhan berasal dari Ian Sommerville dan Pete Sawyer (1997):
+
+Kebutuhan adalah ... spesifikasi tentang apa yang harus diimplementasikan. Mereka adalah deskripsi tentang bagaimana sistem harus berperilaku, atau tentang properti atau atribut sistem. Mereka bisa menjadi batasan pada proses pengembangan sistem.
+
+Definisi ini menunjukkan bahwa kebutuhan mencakup berbagai jenis informasi. Namun, satu aspek yang kurang dari definisi itu adalah konsep kebutuhan sebagai pernyataan tentang kebutuhan pemangku kepentingan, yang merupakan titik awal sebenarnya untuk semua diskusi tentang kebutuhan.
+
+Beberapa skema klasifikasi dan model umum digunakan untuk menggambarkan berbagai jenis informasi kebutuhan (Robertson dan Robertson 2013, Wiegers dan Beatty 2013, IIBA 2015). Mereka umumnya setuju tetapi berbeda dalam beberapa detail terminologi. Dalam buku ini, kita akan menggunakan model yang ditunjukkan dalam Gambar 1.1.
+
+![Figure 1.1 Connections between several types of requirements information and containers that store them. Solid lines mean “are stored in.” Dotted lines mean “are the origin of” or “influence.”](assets/2023-05-18-00-01-37.png)
+
+Sebuah diagram yang menunjukkan beberapa jenis informasi kebutuhan yang berbeda dalam bentuk oval: kebutuhan bisnis, kebutuhan sistem, kebutuhan pengguna, kebutuhan solusi, aturan bisnis, interface eksternal, dan kendala. Informasi ini ditunjukkan sebagai masukan ke dalam berbagai wadah yang ditunjukkan dalam bentuk persegi panjang: dokumen visi dan lingkup, spesifikasi kebutuhan sistem, dokumen kebutuhan pengguna, dan spesifikasi kebutuhan software.
+Gambar 1.1 Hubungan antara beberapa jenis informasi kebutuhan dan wadah penyimpanannya. Garis solid berarti "disimpan dalam." Garis putus-putus berarti "berasal dari" atau "mempengaruhi."
+
+Model ini menunjukkan berbagai kategori informasi kebutuhan (oval) serta wadah penyimpanan untuk menyimpan informasi tersebut (persegi panjang). Untuk kesederhanaan, buku ini akan mengacu pada wadah-wadah tersebut sebagai dokumen. Mereka juga bisa berupa spreadsheet, database, alat manajemen kebutuhan, alat pelacakan masalah, wiki, atau dinding yang ditutupi dengan sticky notes—apa pun yang bekerja untuk tim Anda. Wadah itu sendiri kurang penting dibandingkan dengan informasi yang di dalamnya dan bagaimana Anda memilih untuk merekam, mengorganisir, dan mengkomunikasikan informasi tersebut.
+
+Model seperti yang ditunjukkan dalam Gambar 1.1 menggambarkan bahwa ada banyak jenis informasi kebutuhan. Buku ini menggunakan definisi-definisi dalam Tabel 1.1, yang secara luas diterima dalam rekayasa kebutuhan dan domain analisis bisnis. Perlu diperhatikan bahwa kebutuhan solusi mencakup kebutuhan fungsional, nonfungsional, dan data (IIBA 2015). Anda akan melihat contoh-contoh item-item tersebut di bab-bab selanjutnya. Buku ini menggunakan istilah kolektif "kebutuhan" untuk merujuk kepada semua jenis informasi tersebut, apakah terminologi lokal Anda berfokus pada fitur-fitur, kasus penggunaan, cerita pengguna, atau hal lain.
+
+| Jenis Informasi             | Definisi                                                                                                                                                                                                                                                                                           |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Kebutuhan bisnis            | Informasi yang menjelaskan mengapa organisasi melaksanakan proyek, menetapkan tujuan bisnis, mendefinisikan visi produk, dan mencakup informasi pengaturan arah lainnya. (Lihat Praktik #2, "Tentukan tujuan bisnis.")                                                                                  |
+| Aturan bisnis               | Petunjuk yang menentukan atau membatasi tindakan dalam operasi suatu organisasi. Kebijakan, regulasi, hukum, atau standar yang menghasilkan kebutuhan solusi turunan yang menerapkan atau mematuhi aturan tersebut. (Lihat Praktik #16, "Identifikasi dan dokumentasikan aturan bisnis.")                 |
+| Kendala                     | Batasan yang diterapkan pada kebutuhan, desain, atau aktivitas implementasi.                                                                                                                                                                                                                        |
+| Kebutuhan data              | Definisi objek atau elemen data yang harus dimanipulasi oleh sistem, komposisi dan atributnya, hubungan antara objek data, serta format input dan output mereka. (Lihat Praktik #8, "Evaluasi konsep dan hubungan data.")                                                                     |
+| Kebutuhan interface eksternal | Deskripsi koneksi antara solusi yang sedang dibangun dan elemen-elemen lain di sekitarnya, termasuk pengguna, sistem software lain, perangkat keras, dan jaringan.                                                                                                                          |
+| Kebutuhan fungsional        | Deskripsi perilaku yang akan ditunjukkan oleh produk dalam keadaan tertentu yang ditentukan.                                                                                                                                                                                                       |
+| Kebutuhan nonfungsional     | Paling umum merujuk pada apa yang juga dikenal sebagai kebutuhan atribut kualitas. Atribut kualitas menggambarkan berbagai karakteristik kualitas, layanan, atau kinerja dari solusi. (Lihat Praktik #9, "Dapatkan dan nilai atribut kualitas.")                                                  |
+| Kebutuhan solusi            | Deskripsi kemampuan atau karakteristik yang harus dimiliki oleh produk yang sedang dibuat untuk memenuhi kebutuhan pengguna tertentu dan membantu mencapai tujuan bisnis proyek. Kebutuhan solusi meliputi kebutuhan fungsional, nonfungsional, dan data, serta operasi manual.                   |
+
+Fakta bahwa panah diagonal dalam Gambar 1.1 yang mengarah dari Kebutuhan Bisnis ke Spesifikasi Kebutuhan Perangkat Lunak semuanya sejajar bukanlah kebetulan. Pengembang tidak langsung mengimplementasikan kebutuhan bisnis atau kebutuhan pengguna. Mereka mengimplementasikan kebutuhan fungsional, termasuk yang berasal dari kategori-kategori informasi kebutuhan lainnya. Tujuannya adalah mengimplementasikan seperangkat fungsionalitas yang tepat agar pengguna dapat melakukan tugas mereka dan memenuhi harapan kualitas mereka, dengan harapan mencapai kebutuhan bisnis proyek, dengan memperhatikan semua kendala yang ada. "Seperangkat fungsionalitas yang tepat" tersebut berasal dari dasar kebutuhan bisnis dan pengguna yang dipahami dengan baik.
+
+Tidak semua kebutuhan akan pas dengan rapi ke dalam salah satu kategori dalam Tabel 1.1. Membahas secara persis apa yang disebutkan dalam pernyataan tertentu tidaklah penting. Yang penting adalah tim mengenali kebutuhan tersebut, menganalisanya, mencatatnya dalam bentuk dan lokasi yang sesuai, dan membangun apa pun yang diperlukan untuk memenuhinya.
+
+#### Ringkasan
+
+Ada berbagai jenis informasi kebutuhan yang mencakup tujuan bisnis, aturan bisnis, kendala, kebutuhan data, kebutuhan interface eksternal, kebutuhan fungsional, kebutuhan nonfungsional, dan kebutuhan solusi. Meskipun tidak setiap kebutuhan dapat dikelompokkan dengan sempurna dalam kategori tertentu, yang penting adalah tim memahami kebutuhan tersebut, menganalisanya, dan mencatatnya dengan baik. Pengembang tidak langsung mengimplementasikan kebutuhan bisnis atau pengguna, tetapi mereka mengimplementasikan kebutuhan fungsional yang berasal dari kebutuhan bisnis dan pengguna. Tujuannya adalah mengimplementasikan fungsionalitas yang tepat agar pengguna dapat melakukan tugas mereka dan memenuhi harapan kualitas mereka.
+
+### Good Practices for Requirements Engineering
+
+Domain rekayasa kebutuhan secara umum terbagi menjadi pengembangan kebutuhan dan pengelolaan kebutuhan. Pengembangan kebutuhan mencakup aktivitas yang dilakukan oleh tim untuk mengidentifikasi, memahami, dan mengkomunikasikan pengetahuan kebutuhan. Pengelolaan kebutuhan berkaitan dengan penanganan kebutuhan setelah Anda memilikinya. Aktivitas pengelolaan kebutuhan meliputi penanganan perubahan yang tak terhindarkan, pelacakan versi kebutuhan dan statusnya dari waktu ke waktu, dan melacak kebutuhan individual ke kebutuhan terkait lainnya, komponen desain, kode, tes, dan elemen lainnya.
+
+Pengembangan kebutuhan lebih lanjut dibagi menjadi empat subdomain:
+
+| Elicitation (Pengumpulan)   | Aktivitas untuk mengumpulkan, menemukan, dan menemukan kebutuhan. Terkadang disebut sebagai pengumpulan kebutuhan, namun penggalian kebutuhan lebih dari sekadar proses pengumpulan.                     |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Analysis (Analisis)         | Aktivitas untuk menilai kebutuhan untuk detail, nilai, interkoneksi, kelayakan, dan properti lainnya untuk mencapai pemahaman yang cukup jelas untuk mengimplementasikan kebutuhan dengan risiko rendah. |
+| Specification (Spesifikasi) | Aktivitas untuk merepresentasikan pengetahuan kebutuhan dalam bentuk yang sesuai dan persisten agar dapat dikomunikasikan kepada orang lain.                                                             |
+| Validation (Validasi)       | Aktivitas untuk menilai sejauh mana kebutuhan akan memenuhi kebutuhan pemangku kepentingan.                                                                                                              |
+
+Keempat set aktivitas ini tidak hanya dilakukan secara linear dalam satu urutan. Seperti yang ditunjukkan dalam Gambar 1.2, aktivitas-aktivitas tersebut saling terkait dan diulang sampai set kebutuhan tertentu dipahami dengan cukup baik sehingga development team dapat membangun dan memverifikasi bagian solusi tersebut dengan percaya diri. Pengembangan kebutuhan adalah proses inkremental dan iteratif yang diperlukan, meskipun terkadang frustrasi bagi para pesertanya. Mengeksplorasi kebutuhan merupakan investasi yang mengurangi ketidakpastian dan meningkatkan efisiensi. Proses ini mungkin terasa lambat, tetapi pemikiran kebutuhan menghemat waktu pada akhirnya.
+
+![Figure 1.2 Requirements elicitation, analysis, specification, and validation are performed incrementally, iteratively, and often concurrently.](assets/2023-05-18-00-20-54.png)
+
+Pengumpulan kebutuhan, analisis, spesifikasi, dan validasi ditampilkan dalam satu baris horizontal kotak-kotak. Panah dari setiap kotak yang kembali ke kotak sebelumnya menunjukkan bahwa aktivitas-aktivitas ini saling terkait dengan kembali untuk menutup kesenjangan, memperjelas, merevisi, dan mengevaluasi kembali.
+
+Setiap subdomain rekayasa kebutuhan mencakup banyak praktik yang terpisah. Inilah yang dibahas dalam buku ini. Buku ini menjelaskan dua puluh praktik inti yang memberikan kontribusi yang sangat kuat untuk kesuksesan pada hampir semua proyek. Baik Anda yang memimpin usaha kebutuhan, terlibat dalamnya, atau bergantung pada kebutuhan tersebut untuk melakukan pekerjaan Anda sendiri, Anda akan lebih efektif jika menerapkan praktik inti ini. Beberapa praktik mengacu pada templat, alat spreadsheet, checklist, dan bantuan kerja lainnya, yang dapat Anda unduh dari situs web yang terkait dengan buku ini di <www.informit.com>.
+
+Kami mengelompokkan praktik-praktik tersebut berdasarkan subdomain rekayasa kebutuhan, empat untuk pengembangan kebutuhan dan satu untuk pengelolaan kebutuhan. Bab 3 membahas pengumpulan kebutuhan, Bab 4 menggambarkan praktik analisis, Bab 5 membahas spesifikasi kebutuhan, dan Bab 6 membahas praktik validasi kunci. Praktik-praktik pengelolaan kebutuhan yang paling penting muncul di Bab 7. Setiap deskripsi praktik menyajikan banyak teknik praktis, mengidentifikasi praktik terkait, dan menyarankan beberapa Langkah Berikutnya untuk membantu Anda segera menerapkan praktik tersebut. Deskripsi praktiknya relatif singkat, jadi kami memberikan banyak referensi ke sumber lain di mana Anda dapat mendapatkan informasi yang lebih detail.
+
+Beberapa praktik di bab pengumpulan juga menggambarkan aktivitas analisis dan spesifikasi terkait untuk topik seperti atribut kualitas dan data. Pemaduan ini menggarisbawahi keterkaitan intrinsik dari subdomain kebutuhan ini. Ini bukan pemisahan yang bersih.
+
+Anda mungkin sudah melihat bahwa kami melewati Bab 2. Bab tersebut membahas lima aktivitas terkait kebutuhan tambahan yang harus dilakukan setiap proyek untuk membentuk dasar yang kokoh bagi hasil yang sukses. Anda akan lebih terlayani dengan melakukan aktivitas-aktivitas tersebut sejak awal untuk menyelaraskan semua pemangku kepentingan menuju tujuan bersama, daripada kembali mengatasinya nanti ketika tim menghadapi masalah.
+
+Kumpulan praktik ini tidak merupakan satu-satunya proses kebutuhan yang berlaku untuk semua situasi. Ketika mengembangkan software, siapa pun yang memimpin pekerjaan kebutuhan harus bekerja dengan pemimpin lainnya untuk memutuskan pendekatan kebutuhan mana yang paling efektif. Faktor-faktor yang perlu dipertimbangkan meliputi sifat dan ukuran proyek, pengalaman tim dengan produk serupa, akses tim terhadap pemangku kepentingan, area-area khusus risiko kebutuhan, kendala, dan budaya organisasi (IIBA 2015). Pilihlah praktik-praktik yang menurut Anda akan memberikan nilai tambah terbesar pada pekerjaan tersebut, dan sesuaikan deskripsi praktik dari buku ini dan sumber lain untuk memenuhi kebutuhan Anda yang spesifik.
+
+Lampiran mencantumkan dua puluh praktik yang kami bahas. Ini bukanlah satu-satunya teknik kebutuhan yang tersedia. Banyak buku komprehensif (artinya panjang) yang menjelaskan puluhan praktik untuk rekayasa kebutuhan dan analisis bisnis. Berikut adalah beberapa sumber daya yang berguna:
+
+- Software Requirements, Edisi ke-3 oleh Karl Wiegers dan Joy Beatty (Microsoft Press, 2013)
+- Mastering the Requirements Process: Getting Requirements Right, Edisi ke-3 oleh Suzanne Robertson dan James Robertson (Addison-Wesley, 2013)
+- Agile Software Requirements: Lean Requirements Practices for Teams, Programs, and the Enterprise oleh Dean Leffingwell (Addison-Wesley, 2011)
+- Business Analysis: Best Practices for Success oleh Steven P. Blais (John Wiley & Sons, Inc., 2012)
+- Business Analysis, Edisi ke-4 oleh Debra Paul dan James Cadle (BCS, The Chartered Institute for IT, 2020)
+- A Guide to the Business Analysis Body of Knowledge (BABOK Guide), Edisi ke-3 (International Institute of Business Analysis, 2015)
+- Business Analysis for Practitioners: A Practice Guide (Project Management Institute, Inc., 2015)
+- The PMI Guide to Business Analysis (Project Management Institute, Inc., 2017)
+
+Kami mendorong Anda untuk merujuk buku-buku seperti itu untuk informasi lebih lanjut tentang topik yang kita bahas di sini, serta untuk mempelajari praktik-praktik lain yang mungkin berguna. Seorang profesional di bidang kebutuhan harus mengumpulkan berbagai praktik dan teknik, beserta pengalaman untuk mengetahui alat mana yang terbaik untuk digunakan dalam setiap situasi.
+
+Beberapa buku atau kerangka pengembangan mungkin merekomendasikan Anda untuk mengabaikan praktik yang sudah mapan dan menggantinya dengan yang lain. Itu adalah saran yang buruk. Anda harus menambahkan praktik baru ke dalam toolkit Anda, hanya menggantikan yang lama ketika Anda dapat menggantinya dengan sesuatu yang jelas lebih baik dalam semua situasi. Jika sesuatu berhasil bagi Anda, mengapa membuangnya?
+
+#### ringkasan
+
+ Pengembangan kebutuhan melibatkan kegiatan untuk mengidentifikasi, memahami, dan mengkomunikasikan pengetahuan kebutuhan. Sedangkan pengelolaan kebutuhan berurusan dengan menjaga kebutuhan setelah Anda memilikinya. Ada empat subdomain dalam pengembangan kebutuhan: pengumpulan, analisis, spesifikasi, dan validasi. Keempat aktivitas ini saling terkait dan dilakukan secara iteratif dan berulang hingga kebutuhan tertentu dipahami dengan baik oleh development team. Buku ini menjelaskan dua puluh praktik inti yang kuat dalam rekayasa kebutuhan dan disusun berdasarkan subdomain tersebut. Praktik-praktik ini dapat digunakan untuk meningkatkan keberhasilan proyek di berbagai jenis produk dan pendekatan pengembangan.
+
+### Who Does All This Stuff?
+
+Secara historis, seseorang yang bertanggung jawab dalam mengembangkan dan mengelola kebutuhan dalam proyek software disebut sebagai analis kebutuhan, analis sistem, analis sistem bisnis, atau hanya analis. Pada proyek-proyek besar, terutama yang membangun sistem dengan komponen perangkat keras dan software, mungkin terdapat insinyur kebutuhan yang melaksanakan fungsi ini. Organisasi yang menciptakan produk software komersial menggunakan manajer produk untuk menjembatani kesenjangan antara pemasaran dan development team. Tim pengembangan secara agile sering melibatkan pemilik produk yang mendefinisikan dan mengelola kebutuhan serta elemen kerja lainnya - secara kolektif disebut sebagai item backlog produk.
+
+Dalam beberapa tahun terakhir, istilah bisnis analis telah menggantikan sebagian besar judul pekerjaan historis tersebut. Buku ini menggunakan istilah bisnis analis, atau BA, untuk merujuk kepada siapa pun di dalam development team yang bertanggung jawab terhadap kebutuhan. Di banyak organisasi, peran seorang BA meluas melampaui kebutuhan, tetapi kami akan fokus pada aktivitas kebutuhan mereka.
+
+Perlu dicatat bahwa bisnis analis mengacu pada peran, bukan hanya judul pekerjaan. Bahkan jika tim tidak memiliki BA resmi, seseorang masih harus mengumpulkan, menganalisis, merinci, memvalidasi, dan mengelola kebutuhannya. Pekerjaan ini dapat dibagi di antara beberapa individu, mungkin termasuk manajer proyek, pemimpin jaminan kualitas, dan pengembang. Ketika anggota tim yang memiliki judul lain melaksanakan pekerjaan semacam ini, mereka bertindak sebagai BA.
+
+Karena domain kebutuhan sangat penting dan kompleks, tidak realistis mengharapkan setiap anggota tim secara sembarang dapat menjalankan peran BA tanpa pengetahuan tentang cara melakukannya dengan baik. Seorang BA yang mampu membawa seperangkat pengetahuan, pengalaman, karakteristik kepribadian, dan keterampilan tertentu ke dalam proses, termasuk yang tercantum dalam Tabel 1.2 (Wiegers dan Beatty 2013). Jika Anda bekerja dalam peran ini, nilai kemampuan Anda di setiap kategori dan kemudian berusaha untuk meningkatkan yang kurang kuat dibandingkan yang lain.
+
+Tabel 1.2 Beberapa keterampilan dan karakteristik berharga bagi seorang bisnis analis
+
+| Listening              | Writing                               |
+|------------------------|---------------------------------------|
+| Wawancara dan bertanya | Modeling                              |
+| Fasilitasi             | Fleksibilitas dalam skala abstraksi   |
+| Komunikasi nonverbal   | Mengorganisir informasi dan aktivitas |
+| Berpikir analitis      | Menghadapi interaksi antarpribadi     |
+| Systems thinking       | Kepemimpinan                          |
+| Berpikir cepat         | Kreativitas                           |
+| Analytical             | thinking                              |
+| Observasi              | Rasa ingin tahu                       |
+
+Dalam beberapa tahun terakhir, beberapa organisasi telah mengakui nilai besar yang dapat diberikan oleh bisnis analis dan insinyur kebutuhan. Organisasi-organisasi tersebut telah mengembangkan pengetahuan dan sertifikasi profesional yang dapat ditempuh oleh orang-orang yang bekerja di bidang ini. Beberapa organisasi profesional tersebut meliputi:
+
+- International Institute of Business Analysis (IIBA), iiba.org
+- International Requirements Engineering Board (IREB), ireb.org
+- Project Management Institute (PMI), pmi.org
+
+Pengetahuan yang telah dikumpulkan oleh organisasi-organisasi tersebut merupakan sumber informasi yang kaya tentang berbagai proses, teknik, dan alat kebutuhan yang berkontribusi pada kesuksesan.
+
+#### ringkasan
+
+Dalam pengembangan software, terdapat beberapa peran yang bertanggung jawab dalam mengembangkan dan mengelola kebutuhan. Istilah historis seperti analis kebutuhan, analis sistem, dan analis sistem bisnis telah digantikan oleh istilah bisnis analis. Seorang bisnis analis, atau BA, adalah orang dalam tim pengembangan yang memiliki tanggung jawab terhadap kebutuhan. Meskipun tidak ada BA resmi dalam tim, seseorang harus tetap mengumpulkan, menganalisis, merinci, memvalidasi, dan mengelola kebutuhan. Pekerjaan ini dapat dilakukan oleh beberapa individu, termasuk manajer proyek, pemimpin jaminan kualitas, dan pengembang. Karena pentingnya peran BA, seorang bisnis analis harus memiliki pengetahuan, pengalaman, karakteristik kepribadian, dan keterampilan yang diperlukan. Beberapa organisasi profesional seperti International Institute of Business Analysis (IIBA), International Requirements Engineering Board (IREB), dan Project Management Institute (PMI) telah mengembangkan pengetahuan dan sertifikasi untuk mendukung para profesional di bidang ini.
+
+### Some Recurrent Themes
+
+Beberapa tema umum mengalir melalui buku ini. Ingatlah tema-tema berikut saat Anda memilih praktik yang akan digunakan dalam proyek Anda dan menyesuaikannya sesuai dengan setiap situasi.
+
+- **Pengembangan kebutuhan menuntut pendekatan yang bertahap dan berulang**. Sangat tidak mungkin seseorang akan memikirkan semua kebutuhan sebelum pengembangan dimulai dan bahwa kebutuhan tersebut akan tetap tidak berubah. Orang mendapatkan informasi lebih lanjut, memiliki ide segar, mengingat hal-hal yang terlewatkan, mengubah pikirannya, dan harus beradaptasi dengan realitas bisnis dan teknis yang berubah.
+
+- Tidak peduli bagaimana Anda memilih untuk mewakili pengetahuan kebutuhan, **tujuan dari semua aktivitas spesifikasi adalah komunikasi yang jelas dan efektif**. Artefak yang dihasilkan oleh BA memiliki beragam audiens. Audiens tersebut mungkin ingin melihat informasi yang disajikan dalam bentuk yang berbeda dan tingkat detail yang beragam. Pertimbangkan beragam audiens tersebut saat Anda membuat dokumen kebutuhan.
+
+- **Engineering requirement adalah proses kolaboratif**. Kebutuhan mempengaruhi semua pemangku kepentingan. Banyak orang dapat memberikan masukan terhadap kebutuhan, banyak orang yang bekerja berdasarkan kebutuhan tersebut, dan banyak orang yang menggunakan solusi yang dihasilkan. Keterlibatan pelanggan merupakan faktor penentu keberhasilan. BA harus bekerja dengan orang-orang yang dapat secara akurat menyampaikan kebutuhan dari berbagai komunitas pemangku kepentingan. Kebanyakan keputusan kebutuhan melibatkan partisipan yang memiliki kepentingan dan prioritas yang berbeda, dan terkadang saling bertentangan.
+
+- **Perubahan terjadi**. Upaya pengembangan solusi mengejar target yang bergerak. Kebutuhan bisnis, teknologi, pasar, peraturan, dan pengguna berubah. Seorang BA harus mengikuti perkembangan kebutuhan yang terjadi dan memastikan bahwa perubahan tersebut dipahami, dicatat, dan dikomunikasikan kepada mereka yang terpengaruh.
+
+- Cara yang efektif untuk meningkatkan produktivitas pengembangan adalah dengan meminimalkan jumlah pekerjaan ulang yang harus dilakukan oleh tim. Oleh karena itu, **cobalah untuk mendorong kegiatan kualitas ke awal siklus pengembangan—lebih awal daripada kemudian**. Kebutuhan yang lebih baik akan memberikan manfaat dengan mengurangi pekerjaan ulang pada tahap pengembangan atau setelah pengiriman.
+
+- **Gunakan pemikiran risiko untuk menentukan praktik kebutuhan apa yang akan digunakan**, kapan melakukannya, kapan harus berhenti, dan seberapa detail yang diperlukan. Misalnya, risiko-risiko dalam hal kesalahpahaman dan usaha yang terbuang akan lebih besar saat pengembangan dioutsourcing atau tim beroperasi secara remote dibandingkan dengan saat peserta tim bekerja secara bersamaan. Oleh karena itu, kebutuhan untuk proyek-proyek seperti itu harus ditulis dengan lebih tepat dan dengan lebih detail daripada saat pengembang dapat dengan cepat mendapatkan jawaban dari orang-orang di sekitarnya.
+
+### The Life and Times of Requirements
+
+Kegiatan pengembangan kebutuhan maupun pengelolaan kebutuhan tidak berakhir ketika tim proyek awal mengirimkan solusi. **Kegiatan ini berlanjut sepanjang masa operasional atau masa pemasaran produk, ketika produk tersebut berkembang melalui serangkaian siklus peningkatan dan pemeliharaan yang berkelanjutan**. Saat permintaan perubahan tiba, seseorang harus menggali detail kebutuhan yang sesuai dan mengevaluasi dampaknya pada solusi saat ini. Kemudian, mereka harus mendokumentasikan kebutuhan baru atau yang berubah, memvalidasi mereka, melacak status implementasi, melacak keterkaitan mereka dengan elemen sistem lainnya, dan seterusnya.
+
+**BA harus mencari item terkait kebutuhan yang sudah ada dari proyek-proyek lain yang dapat digunakan kembali**. Terkadang, mereka dapat membuat deliverables yang memiliki potensi penggunaan kembali di tempat lain dalam organisasi. Glosarium, aturan bisnis, deskripsi proses, katalog pemangku kepentingan, model data, kebutuhan keamanan, dan sejenisnya dapat diterapkan dalam berbagai situasi. Setelah sebuah organisasi berinvestasi dalam membuat artefak-artefak ini, mereka harus mengorganisirnya agar dapat digunakan kembali dan mencari peluang untuk memanfaatkan investasi tersebut lebih lanjut (Wiegers and Beatty 2013).
+
+### Getting Started
+
+Buku ini berisi banyak informasi dan merekomendasikan banyak praktik dan teknik. Beberapa praktik ini mungkin sudah Anda lakukan; yang lain mungkin baru bagi Anda. Kami memiliki dua saran tentang memulai dengan praktik yang kami sarankan.
+
+- Jangan merasa buruk jika Anda belum melakukan semua aktivitas ini dalam proyek-proyek Anda.
+- Jangan mencoba melakukan semuanya sekaligus.
+
+Saat Anda membaca, identifikasi praktik-praktik yang menurut Anda akan memberikan nilai tambah paling besar pada proyek Anda. Cari kesempatan untuk mencobanya dan situasi di mana praktik tersebut mungkin menghasilkan hasil yang lebih baik. Sadari kenyataan bahwa kurva pembelajaran akan sedikit memperlambat Anda saat mencoba mencari cara untuk membuat metode baru bekerja untuk Anda dan rekan-rekan Anda. Ikuti referensi yang telah kami sediakan untuk mempelajari lebih lanjut tentang praktik-praktik yang menarik bagi Anda. Seiring berjalannya waktu, cara kerja baru akan menjadi bagian dari peralatan BA Anda—dan Anda akan mendapatkan hasil yang lebih baik.
+
+Apakah Anda menyebutnya analisis bisnis atau rekayasa kebutuhan, itu adalah fungsi yang menantang namun sangat penting. Praktik-praktik inti yang dijelaskan dalam buku ini memberikan Anda alat yang solid untuk mengatasi aktivitas penting ini dengan percaya diri.
+

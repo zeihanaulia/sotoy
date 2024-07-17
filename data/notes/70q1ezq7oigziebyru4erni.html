@@ -1,0 +1,55 @@
+<h1 id="traefik">Traefik<a aria-hidden="true" class="anchor-heading icon-link" href="#traefik"></a></h1>
+<p>Treafik adalah cloud native router atau bisa kita bilang sebagai <strong>API Gateway</strong>.
+Treafik dirancang untuk menyederhanakan operasi dari microservice.
+Project ini ada yang opensource dan ada yang enterprise.
+Project bertujuan memudahkan developer untuk mengembakan dan melakukan deploying aplikasi mereka.
+`
+<img src="/sotoy/assets/treafik-diagram.png" alt="treafik diagram">  </p>
+<p>Treafik support ke setiap teknologi cluster seperti Kubernetes, Docker, Mesos dan lain lain.
+Semuanya punya integrasinya sendiri sendiri yang disebut sebagai provider.
+Si provider ini yang nanti bertanggung jawab untuk menghubungkan si orchestration engine dan service yang berjalan diatasnya.
+Dan treafik juga mampu berintergrasi dengan beberapa provider secara bersamaan.</p>
+<p><img src="/sotoy/asstes/treafik-diagram2.png" alt="treafik diagram 2"></p>
+<p>Treafik dibangun diatas bahasa pemrograman golang. Komunitas yang membangun project ini juga cukup besar dan aktif. Mungkin jika dibandingkan dengan NGINX secara performa masih kalah sedikit. Tapi secara fitur dan dukungan ke microservice treafik lebih unggul.</p>
+<p><img src="/sotoy/assets/trafik-benchmark.png" alt="trafik vs nginx">  </p>
+<p>sumber: <a href="https://devforth.io/blog/nginx-vs-traefik-how-slower-one-can-be-better/">https://devforth.io/blog/nginx-vs-traefik-how-slower-one-can-be-better/</a>.</p>
+<p>Secara configurasi, trafik dibagi menjadi dua bagian <strong>static</strong> dan <strong>dynamic</strong>. Maksudnya ada konfigurasi static yang ketika ada perubahan membutuhkan restart dan ada yang bisa dikonfigurasi ketika sedang berjalan.</p>
+<p><img src="/sotoy/assets/treafik-configuration.png" alt="treafik configuration"></p>
+<p>Static configuration bisa dibilang sebagai entrypoint tempat dimana kita set up para provider sedangkan dynamic configuration digunakan untuk setup routing, service yang berada diprovider.</p>
+<h2 id="instalasi">Instalasi<a aria-hidden="true" class="anchor-heading icon-link" href="#instalasi"></a></h2>
+<p>Untuk demo kali ini kita akan menggunakan tools yang paling basic yaitu docker dan docker-compose.</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.3"</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+
+  <span class="token key atrule">traefik</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> <span class="token string">"traefik:v2.8"</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> <span class="token string">"traefik"</span>
+    <span class="token key atrule">command</span><span class="token punctuation">:</span>
+      <span class="token comment">#- "--log.level=DEBUG"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--api.insecure=true"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--providers.docker=true"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--providers.docker.exposedbydefault=false"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--entrypoints.web.address=:80"</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"80:80"</span>
+      <span class="token punctuation">-</span> <span class="token string">"8080:8080"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"/var/run/docker.sock:/var/run/docker.sock:ro"</span>
+
+  <span class="token key atrule">whoami</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> <span class="token string">"traefik/whoami"</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> <span class="token string">"simple-service"</span>
+    <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"traefik.enable=true"</span>
+      <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.whoami.rule=Host(`test.localhost`)"</span>
+      <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.whoami.entrypoints=web"</span>
+</code></pre>
+<p>jalankan <code>docker-compose up -d</code> dan hasilnya kita bisa mendeploy dashboard treafik dengan mengakses <code>http://localhost:8080</code> dan aplikasi <code>whoami</code> di  <code>http://test.localhost</code>.</p>
+<p>Schema:</p>
+<ul>
+<li><a href="https://json.schemastore.org/traefik-v2.json">https://json.schemastore.org/traefik-v2.json</a></li>
+<li><a href="https://json.schemastore.org/traefik-v2-file-provider.json">https://json.schemastore.org/traefik-v2-file-provider.json</a></li>
+</ul>
+<p>Implementasi diatas akan menggunakan provider docker. Kita bisa juga menggunakan provider lain misalnya file.</p>
+<h3 id="file-provider">File Provider<a aria-hidden="true" class="anchor-heading icon-link" href="#file-provider"></a></h3>

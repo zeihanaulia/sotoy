@@ -1,0 +1,8 @@
+<h1 id="kong">Kong<a aria-hidden="true" class="anchor-heading icon-link" href="#kong"></a></h1>
+<h2 id="installation">Installation<a aria-hidden="true" class="anchor-heading icon-link" href="#installation"></a></h2>
+<p>Untuk mempremudah instalasi kong kita bisa menggunakan <a href="https://github.com/Kong/docker-kong">docker-kong</a>.
+Tinggal <code>make kong-postgres</code> aja.</p>
+<h2 id="konfigurasi">Konfigurasi<a aria-hidden="true" class="anchor-heading icon-link" href="#konfigurasi"></a></h2>
+<p>Diagram yang mau kita buat kurang lebih akan seperti ini.</p>
+<p><img src="/sotoy/assets/20220908112039.png" alt="Desain Api Gateway">  </p>
+<p>Semua request melalui <code>http://localhost:8000</code>, path selanjutnya akan diisi dengan <code>/api/version</code>. untuk version ada beberapa cara bisa melalui path ada juga yang melalui header.</p>

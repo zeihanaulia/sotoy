@@ -1,0 +1,225 @@
+<h1 id="continous-delivery">Continous Delivery<a aria-hidden="true" class="anchor-heading icon-link" href="#continous-delivery"></a></h1>
+<ul>
+<li>Apa yang dimaksud dengan continous delivery?</li>
+</ul>
+<p>Menurut jez humble continous delivery adalah kemampuan dimana ketika kita melakukan perubahan entah itu perubahan configurasi, bug fixes, experiment atau penambahan fitur kedalam production atau ketangan user dapat dilakukan dengan aman dan cepat.</p>
+<ul>
+<li>
+<p>Kenapa continous delivery penting?</p>
+<ul>
+<li>Membuat rilis painless dan meminimalkan resiko</li>
+<li>mengurangi waktu delivery ke user, menjadi lebih cepat</li>
+<li>menaikan software quality dan stability</li>
+<li>mengurangi biaya dari software development</li>
+<li>meningkatkan kepuasan customer dan employee</li>
+<li>menghindari big release, release harus kecil</li>
+<li>intinya akan meningkatkan developer menjadi senang karena bisa rilis dengan perubahan kecil</li>
+<li>bisa mendapatkan feedback dengan cepat</li>
+</ul>
+</li>
+<li>
+<p>Key Principles</p>
+<ul>
+<li>menbuat kualitas menjadi lebih baik</li>
+<li>work in  perubahan kecil</li>
+<li>komputer melakukan repetitif task, manusia menyelesaikan masalah</li>
+<li>terus melakukan improvement, menjadi lebih baik dan baik lagi</li>
+<li>semua orang bertanggung jawab</li>
+</ul>
+</li>
+<li>
+<p>Increase Performance</p>
+<ul>
+<li>lead time for changes, from commit to deploy.
+<ul>
+<li>berapa lama waktu untuk mendeploy perubahan?</li>
+<li>apakah ini berulang, dilakukan dengan cara yang sama?</li>
+<li>seberapa cepat lo bisa merestore service?</li>
+<li>seberapa cepat lo bisa memperbaiki critical bugs ke user?</li>
+<li>seberapa cepat lo bisa memvalidasi apakah fitur bernilai dimata user?</li>
+</ul>
+</li>
+<li>relase frequency, menjadi lebih sering
+<ul>
+<li>semakin kecil perubahan lo, maka akan semakin cepat releasenya</li>
+</ul>
+</li>
+<li>Time eto restore service</li>
+</ul>
+</li>
+<li>
+<p>bagaimana sih caranya lo bisa tau kalau fitur lo ini bermanfaat buat user?</p>
+<ul>
+<li>
+<p>jika ditanya hal seperti ini, pada umumnya adalah dengan membuat user story, praktek ini ramai diperbincangan di komunitas product and development sebagai metode agile. ini adalah cara yang bagus diawal, tapi ada masalah disini?</p>
+<ul>
+<li>orang yang terlibat direquirement awal kadang tidak paham atau mencari cara yang sederhana untuk mendefinisikan apa yang dibutuhkan, apa yang diinginkan.</li>
+<li>masalahnya dimana? masalahnya terletak pada
+<ul>
+<li>user tidak tau apa yang mereka inginkan</li>
+<li>mereka tau apa yang lo gak inginkan</li>
+<li>requirement yang menurut lo bagus, belum tentu user mau</li>
+</ul>
+</li>
+<li>kalau boleh jujur, sebenarnya kita gak punya requirement yang kita punya cuma tebakan. seperti didalam bukunya Jeff Gothelf "Lean UX" punya template yang disebut Hypothesis-Driven Delivery</li>
+</ul>
+</li>
+<li>
+<p>Hypothesis-Driven Delivery</p>
+<pre class="language-text"><code class="language-text">We belive that
+    [building this feature]
+    [for these people]
+Will achieve [this outcome]
+
+We will know we are successful when we see
+[this signal from the market]
+</code></pre>
+</li>
+<li>
+<p>dari hipotesis diatas, maka perlu dilakukan experiment. maka dari itu, kalau lo bisa membuat experiment kecil dimana lo bisa dengan mudah turn on atau off fitur itu akan membantu lo menvalidasi hipotesis itu. Istilah ini disebut dengan feature flag
+<img src="/sotoy/assets/continous-delivery-etsy-feature-flag.png" alt="Etsi Feature Flag">
+gambar diatas diambil dari presentasi engineer dari etsy dimana mereka menunjukan bagaimana mereka membuat konfigurasi atas fitur yang mau diexperimentkan. fitur tersebut akan dinyalakan ke 50% user yang mengunjungi situsnya.</p>
+</li>
+</ul>
+<p>Lalu disisi backend akan ada metrics untuk melihat berapa banyak user yang melihat fitur itu, apakah fitur itu membuat user melanjutkan transaksi atau malah pergi. seperi pada gambar dibawah.</p>
+<p><img src="/sotoy/assets/continous-delivery-etsy-feature-flag-backend-metrics.png" alt="Etsy Feature Flag Backend Metrics"></p>
+<p>Lalu dari data data tersebut, kita bisa menentukan apakah fitur ini dapat dirilis 100% atau tidak. Menurut Ronny Kohavi dia berkerja di microsoft yang membangun microsoft experimentation platform. data yang dia punya memperlihatkan. bisa baca di white papper ini <a href="http://stanford.io/130uW6X">http://stanford.io/130uW6X</a></p>
+<pre class="language-text"><code class="language-text">Evaluating well-designed and executed experiments 
+and executed experiments that were designed to improve a key metric, 
+only about 1/3 were successful at improving key metric
+</code></pre>
+<p>weh, kok bisa, ngeri juga kalau kita udah develop terlalu lama tapi hasilnya mengecewakan atau tidak digunakan dan dampaknya juga lebih dari itu</p>
+<ol>
+<li>menyianyiakan kesempatan, karena tidak membuat sesuatu yang valuable</li>
+<li>lo harus mempertahankan fitu itu ada diproduction selamanya, jadi ada biaya yang terkait dengan itu karena memang seberapa sering lo menghapus fitur?</li>
+<li>fitu fitur itu menambah kompleksitas pada sistem, memperlambat kecepatan penambahan fitur baru.</li>
+</ol>
+<p>jadi pemborosan yang terbesar adalah pengembangan software yang dibangun tapi tidak tepat sasaran dan tidak bisa digunakan user. Ini lah alasan kena web service sangat sangat butuh continous delivery dan continous deployment.</p>
+</li>
+<li>
+<p>Jenis jenis continous</p>
+<ul>
+<li>Continous Integration (integrate early &#x26; often)</li>
+<li>Continous Deployment (deploy as the final stage of CI)
+<ul>
+<li>setiap kali lo build harus melewati automated test dan validasi</li>
+<li>melakukan quick scan</li>
+<li>lalu push menjadi live</li>
+</ul>
+</li>
+<li>Continous Delivery (software is always deployable)
+<ul>
+<li>memastikan jika software kita itu siap untuk di deploy, meskipun lo ga mau deploy saat ini</li>
+<li>mengubah economics software delivery agar lo bisa berkerja dalam batch kecil
+<ul>
+<li>jadi lo bisa melakukan perubahan secara incremental kecil dari pada harus big bang</li>
+<li>Untuk melakukan itu
+<ul>
+<li>lo harus membuat beberapa feedback loops berbeda dengan melakukan automated test</li>
+<li>lalu mendapatkan result dari exploratory testing</li>
+<li>terakhir, feedback loops dari customer ke bisnis jadi kita bisa membuat dengan kualitas yang lebih baik</li>
+</ul>
+</li>
+<li>Menaikan throughput dan stability</li>
+<li>Mengurangi resiko dan ongoing cost of delivery</li>
+<li>Membuat kita untuk belajar dan beradaptasi dengan cepat</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Bahan bahan</p>
+<ul>
+<li>Configuration nmanagement</li>
+<li>Continous Intergation</li>
+<li>Automated Testing</li>
+</ul>
+</li>
+<li>
+<p>High Correlation with IT Performance</p>
+<ul>
+<li>Kode kita, app config dan system config ada didalam version control system
+<img src="/sotoy/assets/continous-delivery-version-control-devops-report.png" alt="Version Control from Devops Report 2014">  </li>
+<li>Kita bisa mendapat failure alert dari logging dan monitoring system</li>
+<li>Developers merge kode mereka ke trunk setiap hari</li>
+<li>Developers memecah fitur besar kedalam bagian kecil dan incremental changes</li>
+<li>Ketika development dan operation saling berinteraksi, maka hasilnya win/win</li>
+</ul>
+</li>
+<li>
+<p><a href="https://media.webteam.puppet.com/uploads/2019/11/2014-state-of-devops-report.pdf">source</a></p>
+</li>
+<li>
+<p>Hal yang salah kaprah</p>
+<ul>
+<li>Testing hanya dilakukan ketika setelah development selesai. Seharusnya testing kita lakukan kapan pun. Cara termurah untuk memperbaiki bugs adalah dengan cara jangan masuk ke version control, maka dari itu kita harus menjalankan automated test diawal.</li>
+<li>Hanya tester yang bertanggun jawab atas kualitas. Seharusnya semua orang bertanggung jawab atas kualitas. </li>
+</ul>
+</li>
+<li>
+<p><a href="https://www.jamesshore.com/v2/blog/2006/continuous-integration-on-a-dollar-a-day">continous integration on a dollar a day</a></p>
+<ul>
+<li>develop</li>
+<li>build dan test dilocal</li>
+<li>pull kerjaan orang lain dari trunk</li>
+<li>build dan test lagi dilocal</li>
+<li>sebelum push, cek apakah ada orang yang sedang deploy ke trunk juga
+<ul>
+<li>karena offline, yang sedang push harus ambil penanda</li>
+</ul>
+</li>
+<li>jika ada, maka tunggu, lalu pull kembali, jika error ajak orang yang push terkahir untuk fix barengan</li>
+<li>jika tidak ada error, ambil penanda, lalu push ke trunk dan </li>
+<li>push ke trunk</li>
+<li>tunggu sampai build test berasil lalu kembalikan penanda</li>
+<li>jika ada error fix dulu dan jangan kembalikan penanda</li>
+</ul>
+</li>
+<li>
+<p>Jenis jenis testing
+<img src="/sotoy/assets/continous-delivery-kind-of-test.png" alt="Kind of test">  </p>
+<ul>
+<li>Automated - Bawah (Programming test)
+<ul>
+<li>Unit Test</li>
+<li>Component Test</li>
+<li>Sustem Test</li>
+</ul>
+</li>
+<li>Automated - Atas (Bussiness Facing - running script user scenario)
+<ul>
+<li>Functional Acceptance Test</li>
+</ul>
+</li>
+<li>Manual - Atas (Bussiness Facing - Memerlukan manusia yang test)
+<ul>
+<li>Showcases</li>
+<li>Usability testing</li>
+<li>Exploratory testing</li>
+</ul>
+</li>
+<li>Manual Bawah - Bawah
+<ul>
+<li>Nonfunctional Acceptance test
+<ul>
+<li>capacity</li>
+<li>security</li>
+<li>availability</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>NOTE:
+<a href="https://learning.oreilly.com/videos/continuous-delivery/9780134389363/9780134389363-CONT_01_04/">chapter terhakhir sudah ditonton tapi belum dicatet</a></p>
+<ul>
+<li>Pertanyaan
+<ul>
+<li>Bagaimana implementasi continous delivery dengan proper</li>
+</ul>
+</li>
+</ul>

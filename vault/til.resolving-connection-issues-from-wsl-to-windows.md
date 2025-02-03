@@ -2,7 +2,7 @@
 id: w4ptpcefqr98mej5hjhs3m9
 title: 'Notes: Resolving Connection Issues from WSL to Windows'
 desc: ''
-updated: 1732271159615
+updated: 1734422343008
 created: 1732271049414
 tags:
   - wsl2
@@ -86,3 +86,7 @@ curl http://localhost:1234
 By following these steps, you should be able to resolve the connection issue from WSL to Windows and get the desired response.
 
 I hope these notes are helpful! If you have any further questions or need additional assistance, feel free to ask.
+
+## Drawbacks
+
+in wsl ubuntu cannot access internet

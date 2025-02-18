@@ -1,0 +1,71 @@
+<h1 id="notes-resolving-connection-issues-from-wsl-to-windows">Notes: Resolving Connection Issues from WSL to Windows<a aria-hidden="true" class="anchor-heading icon-link" href="#notes-resolving-connection-issues-from-wsl-to-windows"></a></h1>
+<h2 id="steps-to-resolve-connection-refused-from-wsl-to-windows">Steps to Resolve "Connection Refused" from WSL to Windows<a aria-hidden="true" class="anchor-heading icon-link" href="#steps-to-resolve-connection-refused-from-wsl-to-windows"></a></h2>
+<h3 id="1-check-windows-ip-address-from-wsl">1. Check Windows IP Address from WSL<a aria-hidden="true" class="anchor-heading icon-link" href="#1-check-windows-ip-address-from-wsl"></a></h3>
+<p>Use the following command inside WSL to find the IP address used by Windows:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">cat</span> /etc/resolv.conf <span class="token operator">|</span> <span class="token function">grep</span> nameserver
+</code></pre>
+<p>The IP address shown is the Windows IP address accessible from WSL.</p>
+<h3 id="2-access-service-using-windows-ip-address">2. Access Service Using Windows IP Address<a aria-hidden="true" class="anchor-heading icon-link" href="#2-access-service-using-windows-ip-address"></a></h3>
+<p>Try accessing the service running on Windows from WSL using the IP address obtained earlier. Example:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> http://10.255.255.254:1234
+</code></pre>
+<h3 id="3-check-firewall-settings">3. Check Firewall Settings<a aria-hidden="true" class="anchor-heading icon-link" href="#3-check-firewall-settings"></a></h3>
+<p>Ensure the Windows firewall does not block connections from WSL to Windows. Temporarily disable the firewall to check if it is the cause of the issue:</p>
+<ul>
+<li>Open "Windows Defender Firewall with Advanced Security".</li>
+<li>Temporarily disable the firewall for Domain, Private, and Public Network.</li>
+</ul>
+<h3 id="4-ensure-services-in-windows-listen-on-all-interfaces">4. Ensure Services in Windows Listen on All Interfaces<a aria-hidden="true" class="anchor-heading icon-link" href="#4-ensure-services-in-windows-listen-on-all-interfaces"></a></h3>
+<p>Ensure the service running on Windows listens on all interfaces (<code>0.0.0.0</code>) and not just <code>127.0.0.1</code>.</p>
+<h3 id="5-use-port-forwarding-with-netsh">5. Use Port Forwarding with <code>netsh</code><a aria-hidden="true" class="anchor-heading icon-link" href="#5-use-port-forwarding-with-netsh"></a></h3>
+<p>Run the following command in PowerShell with Administrator rights to forward traffic from localhost to the Windows IP accessible from WSL:</p>
+<pre class="language-powershell"><code class="language-powershell">netsh interface portproxy add v4tov4 listenaddress=127<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token punctuation">.</span>1 listenport=1234 connectaddress=10<span class="token punctuation">.</span>255<span class="token punctuation">.</span>255<span class="token punctuation">.</span>254 connectport=1234
+</code></pre>
+<h3 id="6-create-or-edit-wslconfig-file">6. Create or Edit <code>.wslconfig</code> File<a aria-hidden="true" class="anchor-heading icon-link" href="#6-create-or-edit-wslconfig-file"></a></h3>
+<p>Create or edit the <code>.wslconfig</code> file in the <code>%UserProfile%</code> directory with the <code>networkingMode=mirrored</code> setting.</p>
+<h4 id="powershell-script-to-createedit-wslconfig">PowerShell Script to Create/Edit <code>.wslconfig</code><a aria-hidden="true" class="anchor-heading icon-link" href="#powershell-script-to-createedit-wslconfig"></a></h4>
+<pre class="language-powershell"><code class="language-powershell"><span class="token comment"># Define the path to the .wslconfig file in the User Profile directory</span>
+<span class="token variable">$wslConfigPath</span> = <span class="token string">"<span class="token variable">$env</span>:UserProfile\.wslconfig"</span>
+
+<span class="token comment"># Content to be added to the .wslconfig file</span>
+<span class="token variable">$newContent</span> = <span class="token string">"networkingMode=mirrored"</span>
+
+<span class="token comment"># Check if the .wslconfig file exists</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">Test-Path</span> <span class="token variable">$wslConfigPath</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment"># Read the content of the .wslconfig file</span>
+    <span class="token variable">$content</span> = <span class="token function">Get-Content</span> <span class="token variable">$wslConfigPath</span>
+
+    <span class="token comment"># Check if the [wsl2] section exists</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$content</span> <span class="token operator">-match</span> <span class="token string">'\[wsl2\]'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment"># If the [wsl2] section exists, add the new setting below it</span>
+        <span class="token function">Add-Content</span> <span class="token operator">-</span>Path <span class="token variable">$wslConfigPath</span> <span class="token operator">-</span>Value <span class="token variable">$newContent</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token comment"># If the [wsl2] section does not exist, add the entire [wsl2] section and the new setting</span>
+        <span class="token function">Add-Content</span> <span class="token operator">-</span>Path <span class="token variable">$wslConfigPath</span> <span class="token operator">-</span>Value <span class="token string">"[wsl2]`n<span class="token variable">$newContent</span>"</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment"># If the file does not exist, create a new file with the entire [wsl2] section and the setting</span>
+    <span class="token function">Set-Content</span> <span class="token operator">-</span>Path <span class="token variable">$wslConfigPath</span> <span class="token operator">-</span>Value <span class="token string">"[wsl2]`n<span class="token variable">$newContent</span>"</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">Write-Output</span> <span class="token string">"Setting has been added to <span class="token variable">$wslConfigPath</span>:"</span>
+<span class="token function">Get-Content</span> <span class="token variable">$wslConfigPath</span>
+</code></pre>
+<h3 id="7-restart-services-in-windows-and-wsl">7. Restart Services in Windows and WSL<a aria-hidden="true" class="anchor-heading icon-link" href="#7-restart-services-in-windows-and-wsl"></a></h3>
+<p>Restart the services running in Windows and the WSL distribution:</p>
+<pre class="language-powershell"><code class="language-powershell">wsl <span class="token operator">--</span>shutdown
+wsl
+</code></pre>
+<h3 id="8-use-localhost-in-wsl">8. Use <code>localhost</code> in WSL<a aria-hidden="true" class="anchor-heading icon-link" href="#8-use-localhost-in-wsl"></a></h3>
+<p>Try accessing <code>localhost</code> directly from WSL:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> http://localhost:1234
+</code></pre>
+<p>By following these steps, you should be able to resolve the connection issue from WSL to Windows and get the desired response.</p>
+<p>I hope these notes are helpful! If you have any further questions or need additional assistance, feel free to ask.</p>
+<h2 id="drawbacks">Drawbacks<a aria-hidden="true" class="anchor-heading icon-link" href="#drawbacks"></a></h2>
+<p>in wsl ubuntu cannot access internet</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #ba6873;" href="/sotoy/notes/dkqx8ibgpx6udhieo5qvqot">wsl2</a></li>
+</ol>

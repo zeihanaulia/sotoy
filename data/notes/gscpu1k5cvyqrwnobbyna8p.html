@@ -1,0 +1,121 @@
+<h1 id="1-idiomatic">1 Idiomatic<a aria-hidden="true" class="anchor-heading icon-link" href="#1-idiomatic"></a></h1>
+<p><a class="color-tag" style="--tag-color: #a8a495;" href="/sotoy/notes/1l18nvi2v8de3tka75ibojn">#go</a></p>
+<h3 id="gunakan-gofmt">Gunakan gofmt<a aria-hidden="true" class="anchor-heading icon-link" href="#gunakan-gofmt"></a></h3>
+<p><a href="https://pkg.go.dev/cmd/gofmt">gofmt</a> adalah program untuk formating digolang.
+Pastikan selalu ada disetiap code editor yang digunakan.</p>
+<h4 id="vscode">VSCode<a aria-hidden="true" class="anchor-heading icon-link" href="#vscode"></a></h4>
+<p>Link: </p>
+<ul>
+<li><a href="https://code.visualstudio.com/docs/languages/go">https://code.visualstudio.com/docs/languages/go</a></li>
+</ul>
+<h4 id="vim">Vim<a aria-hidden="true" class="anchor-heading icon-link" href="#vim"></a></h4>
+<p>Link:</p>
+<ul>
+<li><a href="https://github.com/fatih/vim-go/">https://github.com/fatih/vim-go/</a></li>
+</ul>
+<h3 id="buat-nama-receiver-tetap-pendek">Buat nama receiver tetap pendek<a aria-hidden="true" class="anchor-heading icon-link" href="#buat-nama-receiver-tetap-pendek"></a></h3>
+<pre class="language-go"><code class="language-go"><span class="token keyword">type</span> User <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	Name <span class="token builtin">string</span>
+	IsActive <span class="token builtin">bool</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// gunakan</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>u User<span class="token punctuation">)</span> <span class="token function">Activated</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token comment">// jangan gunakan</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>user User<span class="token punctuation">)</span> <span class="token function">Activated</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>self User<span class="token punctuation">)</span> <span class="token function">Activated</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>this User<span class="token punctuation">)</span> <span class="token function">Activated</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Aktifkan <a href="https://github.com/golangci/golangci-lint">golangci-lint</a> dengan <a href="https://revive.run/docs">revive</a> untuk dapat pengecekan <a href="https://revive.run/r#receiver-naming">receiver-naming</a>.</p>
+<h3 id="memberikan-nama-package-yang-sesuai">Memberikan nama package yang sesuai<a aria-hidden="true" class="anchor-heading icon-link" href="#memberikan-nama-package-yang-sesuai"></a></h3>
+<p>Penamaan package sebaiknya sesuai dengan nama directory atau fungsi dari package tersebut.</p>
+<ul>
+<li>Fungsi: Implementasi elasticsearch ,Dir: /elasticsearch</li>
+</ul>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> elasticsearch
+</code></pre>
+<ul>
+<li>Fungsi: Membuat order pesanan, Dir; /order</li>
+</ul>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> order
+</code></pre>
+<h3 id="kelompokan-import-sesuai-asalnya">Kelompokan import sesuai asalnya<a aria-hidden="true" class="anchor-heading icon-link" href="#kelompokan-import-sesuai-asalnya"></a></h3>
+<p>Ada tiga bagian pada setiap import dan urutkan sesuai dengan asalnya, jangan urutkan sesuai abjad. Contoh</p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token comment">// 1. Untuk standard library</span>
+	<span class="token string">"context"</span>
+
+	<span class="token comment">// 2. Untuk external dependency yang digunakan</span>
+	<span class="token string">"go.opentelemetry.io/otel"</span>
+
+	<span class="token comment">// 3. Untuk internal code yang kita atau tim kita tulis sendiri</span>
+	<span class="token string">"github.com/zeihanaulia/my-project/internal"</span>
+<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="gunakan-nama-pendek-untuk-scope-yang-terbatas">Gunakan nama pendek untuk scope yang terbatas<a aria-hidden="true" class="anchor-heading icon-link" href="#gunakan-nama-pendek-untuk-scope-yang-terbatas"></a></h3>
+<p>Nama pendek seperti 1 karakter huruf hanya boleh digunakan pada scope terbatas.
+Misalnya seperti pada function for.</p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">for</span> i<span class="token operator">:=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&#x3C;</span><span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>sisanya berikan nama yang jelas sesuai maknanya.</p>
+<h3 id="context-harus-menjadi-parameter-pertama">Context harus menjadi parameter pertama<a aria-hidden="true" class="anchor-heading icon-link" href="#context-harus-menjadi-parameter-pertama"></a></h3>
+<p>Ada aturan pada penggunaan context:</p>
+<ol>
+<li>
+<p>Gunakan context sebagai parameter pertama pada function</p>
+<pre class="language-go"><code class="language-go"><span class="token comment">// Boleh</span>
+<span class="token keyword">func</span> <span class="token function">Create</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> args entity<span class="token punctuation">.</span>Order<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token comment">// Tidak boleh</span>
+<span class="token keyword">func</span> <span class="token function">Create</span><span class="token punctuation">(</span>args entity<span class="token punctuation">.</span>Order<span class="token punctuation">,</span> ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+</li>
+<li>
+<p>Jangan simpan context sebagai field dalam struct </p>
+<pre class="language-go"><code class="language-go"><span class="token comment">// Tidak boleh</span>
+<span class="token keyword">type</span> User <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	ctx context<span class="token punctuation">.</span>Context
+	Name <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ol>
+<h3 id="return-diawal">Return diawal<a aria-hidden="true" class="anchor-heading icon-link" href="#return-diawal"></a></h3>
+<p>Dalam setiap function yang mengembalikan nilai seharusnya return diawal.</p>
+<pre class="language-go"><code class="language-go"><span class="token comment">// Tidak boleh dilakukan</span>
+<span class="token keyword">func</span> <span class="token function">ParseValue</span><span class="token punctuation">(</span>value Value<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">string</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> <span class="token operator">!</span>value<span class="token punctuation">.</span>MustBeTrue <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">"must be true"</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> value<span class="token punctuation">.</span>Message <span class="token operator">==</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">"value must be set"</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> value<span class="token punctuation">.</span>Priority <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+				<span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">"priority must be set"</span><span class="token punctuation">)</span>
+			<span class="token punctuation">}</span>
+
+			<span class="token keyword">return</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">"%d %s"</span><span class="token punctuation">,</span> value<span class="token punctuation">.</span>Priority<span class="token punctuation">,</span> value<span class="token punctuation">.</span>Message<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Meskipun code diatas berjalan dengan benar, tapi secara bentuk tidak boleh dilakukan.
+Sebaiknya seperti ini.</p>
+<pre class="language-go"><code class="language-go"><span class="token comment">// Tidak boleh dilakukan</span>
+<span class="token keyword">func</span> <span class="token function">ParseValue</span><span class="token punctuation">(</span>value Value<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">string</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> <span class="token operator">!</span>value<span class="token punctuation">.</span>MustBeTrue <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">"must be true"</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> 
+
+	<span class="token keyword">if</span> value<span class="token punctuation">.</span>Message <span class="token operator">==</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">"value must be set"</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> 
+
+	<span class="token keyword">if</span> value<span class="token punctuation">.</span>Priority <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">"priority must be set"</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">"%d %s"</span><span class="token punctuation">,</span> value<span class="token punctuation">.</span>Priority<span class="token punctuation">,</span> value<span class="token punctuation">.</span>Message<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre>

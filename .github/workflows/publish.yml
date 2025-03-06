@@ -16,15 +16,15 @@ jobs:
         fetch-depth: 0
 
     - name: Restore Node modules cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: node-modules-cache
       with:
-        path: |
-          node_modules
-          .next/*
-          !.next/.next/cache
-          !.next/.env.*
-        key: ${{ runner.os }}-dendronv2-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+      path: |
+        node_modules
+        .next/*
+        !.next/.next/cache
+        !.next/.env.*
+      key: ${{ runner.os }}-dendronv2-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
 
     - name: Install dependencies
       run: yarn
@@ -33,7 +33,7 @@ jobs:
       run: "(test -d .next) && (echo 'updating dendron next...' && cd .next && git reset --hard && git pull && yarn && cd ..) || (echo 'init dendron next' && yarn dendron publish init)"
 
     - name: Restore Next cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           .next/.next/cache

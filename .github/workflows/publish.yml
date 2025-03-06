@@ -19,12 +19,12 @@ jobs:
       uses: actions/cache@v3
       id: node-modules-cache
       with:
-      path: |
-        node_modules
-        .next/*
-        !.next/.next/cache
-        !.next/.env.*
-      key: ${{ runner.os }}-dendronv2-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+        path: |
+          node_modules
+          .next/*
+          !.next/.next/cache
+          !.next/.env.*
+        key: ${{ runner.os }}-dendronv2-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
 
     - name: Install dependencies
       run: yarn

@@ -2,10 +2,9 @@
 id: madilog
 title: Madilog
 desc: ''
-updated: 1741665644208
+updated: 1741704456530
 created: 1739782767097
 ---
-![alt text](image-1.png)
 
 Madilog itu buku yang sering banget dibahas orang. Banyak yang bilang ini buku penting buat belajar berpikir kritis. Tapi jujur aja, gue berkali-kali coba baca, selalu mentok. Gaya bahasanya ribet, cara bertuturnya juga gak gampang dipahami. 
 

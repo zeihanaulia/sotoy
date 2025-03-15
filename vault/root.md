@@ -1,12 +1,10 @@
 ---
 id: oqxmejlafk9x8rj9t5hya5z
-title: Hi 👋
+title: Halo dan Selamat Datang! 👋
 desc: ''
-updated: 1742030056736
+updated: 1742030256619
 created: 1646842475821
 ---
-
-# Halo dan Selamat Datang!
 
 Terima kasih sudah mampir ke halaman utama Gue! Gue menggunakan Dendron sebagai cara untuk merapikan catatan, berbagi pengetahuan, dan menulis apa saja yang Gue anggap menarik. Di situs ini, lo akan menemukan:
 

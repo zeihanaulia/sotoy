@@ -1,0 +1,44 @@
+<h1 id="5-custom-metrics-dengan-promteheus">5 Custom Metrics Dengan Promteheus<a aria-hidden="true" class="anchor-heading icon-link" href="#5-custom-metrics-dengan-promteheus"></a></h1>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> middleware
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"strconv"</span>
+
+    <span class="token string">"github.com/gin-gonic/gin"</span>
+    <span class="token string">"github.com/prometheus/client_golang/prometheus"</span>
+    <span class="token string">"github.com/prometheus/client_golang/prometheus/promauto"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> <span class="token punctuation">(</span>
+    dflBuckets <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">float64</span><span class="token punctuation">{</span><span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">1200</span><span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> <span class="token punctuation">(</span>
+    reqsName           <span class="token operator">=</span> <span class="token string">"requests_total"</span>
+    latencyName        <span class="token operator">=</span> <span class="token string">"request_duration_milliseconds"</span>
+    patternReqsName    <span class="token operator">=</span> <span class="token string">"pattern_requests_total"</span>
+    patternLatencyName <span class="token operator">=</span> <span class="token string">"pattern_request_duration_milliseconds"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> <span class="token punctuation">(</span>
+    requestTotal <span class="token operator">=</span> promauto<span class="token punctuation">.</span><span class="token function">NewCounterVec</span><span class="token punctuation">(</span>
+        prometheus<span class="token punctuation">.</span>CounterOpts<span class="token punctuation">{</span>
+            Namespace<span class="token punctuation">:</span> <span class="token string">"core"</span><span class="token punctuation">,</span>
+            Name<span class="token punctuation">:</span>      reqsName<span class="token punctuation">,</span>
+            Help<span class="token punctuation">:</span>      <span class="token string">"How many HTTP requests processed, partitioned by status code, method and HTTP path."</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">"code"</span><span class="token punctuation">,</span> <span class="token string">"method"</span><span class="token punctuation">,</span> <span class="token string">"path"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">APMPrometheus</span><span class="token punctuation">(</span><span class="token punctuation">)</span> gin<span class="token punctuation">.</span>HandlerFunc <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        c<span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        status <span class="token operator">:=</span> strconv<span class="token punctuation">.</span><span class="token function">Itoa</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>Writer<span class="token punctuation">.</span><span class="token function">Status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        requestTotal<span class="token punctuation">.</span><span class="token function">With</span><span class="token punctuation">(</span>prometheus<span class="token punctuation">.</span>Labels<span class="token punctuation">{</span><span class="token string">"code"</span><span class="token punctuation">:</span> status<span class="token punctuation">,</span> <span class="token string">"method"</span><span class="token punctuation">:</span> c<span class="token punctuation">.</span>Request<span class="token punctuation">.</span>Method<span class="token punctuation">,</span> <span class="token string">"path"</span><span class="token punctuation">:</span> c<span class="token punctuation">.</span><span class="token function">FullPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Inc</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre>

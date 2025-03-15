@@ -2,12 +2,9 @@
 id: udapxjv1fpf80boxvak0rva
 title: Measure What Matters
 desc: ''
-updated: 1721120019513
+updated: 1742029688119
 created: 1659370069465
-published: false
 ---
-
-## Kata pengantar
 
 Pernah gak lo bekerja di perusahaan atau organisasi yang gak jelas, gak tau arahnya mau kemana tapi semuanya mau dicapai dan semuanya menjadi paling prioritas. 
 

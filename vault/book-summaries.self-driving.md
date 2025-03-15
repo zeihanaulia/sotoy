@@ -1,7 +1,7 @@
 ---
 id: oorvvxz032oov7psrw9ygte
 title: Self Driving
-updated: 1721120039367
+updated: 1742029724968
 created: 1646854981225
 tags: [Self Improvement, Rhenald Kasali]
 desc: null
@@ -11,9 +11,6 @@ desc: null
 #rhenald-kasali
 
 Buku ini ditulis oleh Bapak Rhenald Kasali, Ph,D., Beliau adalah seorang guru besar FEUI, Praktisi Management dan Penulis Buku.
-Ditulis pada 
-
-## Kata Pengantar
 
 Dunia usaha menghendaki manusia-manusia berkarakter driver yang berkompetensi, namun juga cekatan, gesit, berinisiatif dan kreatif.
 Masalahnya tanpa disadari kampus-kampus saat ini malah membentuk manusia-manusia menjadi passenger. 

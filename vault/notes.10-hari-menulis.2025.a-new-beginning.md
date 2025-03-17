@@ -1,8 +1,8 @@
 ---
 id: 2025-a-new-beginning
-title: A New Beginning
+title: 20 Tahun Setelahnya
 desc: ''
-updated: 1742251326816
+updated: 1742251402186
 created: 1742251018406
 ---
 

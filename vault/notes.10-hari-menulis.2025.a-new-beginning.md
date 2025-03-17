@@ -24,7 +24,7 @@ Malam pertama di rumah, Hana sulit sekali untuk terlelap selalu gelisah memperta
 Masih dengan pikiran kosong, Ia terbangun dari kasur dan iseng membuka lemari tua yang masih menyimpan barang-barang masa kecilnya. Di antara tumpukan album foto lama, ia menemukan sebuah buku catatan dengan tulisan besar diatas label putih di sampulnya. "Mimpiku". Jantung Hana berdegup pelan. Ia mengenali buku ini. Seketika hana teringat buku ini adalah catatanya kurang lebih 20 tahun yang lalu. Buku itu berisi impian masa kecil Hana, yang ditulisnya saat berusia 15 tahun. Saat dirinya masih percaya bahwa semua mimpi bisa diwujudkan.
 
 Pada halaman pertama terlihat list mimpi, yang pertama Aku ingin menulis buku yang bisa dikenang selamanya. Kedua, Aku ingin menjadi musisi dan membuat lagu yang dimainkan di radio. Ia tersenyum kecil. Radio? Dulu, ia sering mendengarkan iSwara FM, mencatat lirik lagu yang diputarkan, bermimpi suatu hari lagunya sendiri yang akan dimainkan.
-Ketiga, Aku ingin menjadi pemikir yang dikenal luas seperti Pramoedya, Kafka, Ilana Tan, atau Tolstoy.
+Ketiga, Aku ingin menjadi penulis yang dikenal luas seperti Pramoedya, Kafka, Ilana Tan, atau Tolstoy.
 
 Tapi waktu terus berjalan. Seiring waktu, mimpi-mimpi ini perlahan terkubur oleh realitas. Setelah lulus kuliah, ia memilih realistis untuk merantau dan memilih berkarir menjadi karyawan, menikah, dan membangun keluarga. Setelah menikah, ia semakin fokus pada keluarga dan pekerjaan. Ia bekerja di kantor dengan harapan mendapat stabilita yang akhirnya dipecat juga. Sekarang, 20 tahun berlalu, dan tidak ada satu pun impiannya yang terwujud.
 

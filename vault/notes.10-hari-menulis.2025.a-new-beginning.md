@@ -1,8 +1,8 @@
 ---
-id: 2lbyalxis5jjc0wutu8ej1f
+id: 2025-a-new-beginning
 title: A New Beginning
 desc: ''
-updated: 1742251162038
+updated: 1742251326816
 created: 1742251018406
 ---
 

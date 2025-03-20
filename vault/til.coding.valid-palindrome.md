@@ -2,7 +2,7 @@
 id: 5pnd7nalqztbktf5xkr3ibc
 title: Valid Palindrom
 desc: ''
-updated: 1742357182549
+updated: 1742443210977
 created: 1742352034553
 ---
 
@@ -35,20 +35,20 @@ s consists only of printable ASCII characters.
 
 ## Memahami Problem
 
-1. Constrains
+### 1. Constrains
 
 - `1 <= s.length <= 2 * 10^5` lengthnya akalan sampe 200rb karakter
 - `s consists only of printable ASCII characters.` string berisi ASCII character, jadi kemungkinan akan ada special charakter.
 
 Dari sini gue dapet insight kalau harus remove dulu special karakter dan spasi. agar semuanya jadi alphanumeric jadi ada angka juga.
 
-2. Memahami deskripsi soal
+### 2. Memahami deskripsi soal
 
 - `converting all uppercase letters into lowercase` convert dulu ke lowercase
 - `removing all non-alphanumeric characters` hapus semua non-alphanumeric karakter
 - `it reads the same forward and backward` kalau dibaca dari depan dan belakan terbaca sama
 
-## Memahami contoh
+### 3. Memahami contoh
 
 Example 1
 
@@ -97,8 +97,8 @@ Kalau menggunakan two pointer, logikanya bisa gini
 
 1. Definisikan `left = 0` dan `right = len(s) -`
 2. Loop dengan kondisi `left < right`
-   2.1 Loop dengan kondisi `left < righ && s[left]`, Jika bukan alphanumeric geser kiri, `left++`
-   2.2 Loop dengan kondisi `left < righ && s[right]`, Jika bukan alphanumeric geser kanan, `right++`
-   2.3 Jika `s[left]` lowercase tidak sama dengan `s[right]` maka return false
-   2.4 Jika sama, geser kiri dan kanan
+   1. Loop dengan kondisi `left < righ && s[left]`, Jika bukan alphanumeric geser kiri, `left++`
+   2. Loop dengan kondisi `left < righ && s[right]`, Jika bukan alphanumeric geser kanan, `right++`
+   3. Jika `s[left]` lowercase tidak sama dengan `s[right]` maka return false
+   4. Jika sama, geser kiri dan kanan
 3. Jika loop selesai return true

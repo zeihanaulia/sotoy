@@ -2,7 +2,7 @@
 id: owruqdc92klyd58a5eu27e6
 title: Two Sum II - Input Array Is Sorted
 desc: ''
-updated: 1742346540241
+updated: 1742443122881
 created: 1742345168688
 ---
 
@@ -48,6 +48,7 @@ Constraints:
 - -1000 <= target <= 1000
 - The tests are generated such that there is exactly one solution.
 
+
 ## Solusi
 
 Caranya masih sama seperti [[til.coding.two-sum]], tapi di deskripsi ada tambahan `added by one as an integer array [index1, index2] of length 2.` Jadi pada sat return kita tambahin 1. Langsung aja ke solusi maps ya, karen sama. Jadi gini:
@@ -66,7 +67,7 @@ Golang punya hash table. Jadi bisa juga dimanfaatkan untuk menyimpan hasil dari 
 
 Hasilnya [esekusinya](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/1578506826/). Runtime 0ms dan Memory 8.09 MB. Dicoba esekusi dengan [brute force](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/1578513843/), Runtime 312ms dan Memory 7.82 MB. 
 
-## Two Pointer
+### Two Pointer
 
 Karena di deskripsi ada clue **already sorted in non-decreasing order**, Ada teknik lain yang bisa digunakan, yaitu two pointer. Ini bisa menurunkan memory.
 
@@ -85,9 +86,9 @@ Soal two sum cocok menggunakan solusi ini. Tapi check array apakah sudah terurut
 
 1. Inisiasi two pointer, `left = 1`, `right = len(nums)-1`
 2. Look sampai `left < right`. Jika kondisi sudah sampai sini, artinya semua kemungkinan sudah di check.
-    2.1 Jika kondisi `sum == target`, Maka ini jawaban yang kita akan return
-    2.2 Jika kondisi `sum < target`, Maka kita perlu angka yang lebih besar, jadi kita geser yang kiri `left++`
-    2.3 Jika kondisi `sum > target`, Maka kira perlu angka yang lebih kecil, jadi kita geser yang kanan `right--`
+   1. Jika kondisi `sum == target`, Maka ini jawaban yang kita akan return
+   2.  Jika kondisi `sum < target`, Maka kita perlu angka yang lebih besar, jadi kita geser yang kiri `left++`
+   3.  Jika kondisi `sum > target`, Maka kira perlu angka yang lebih kecil, jadi kita geser yang kanan `right--`
 
 ### Dry Run
 

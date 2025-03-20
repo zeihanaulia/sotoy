@@ -12,5 +12,9 @@
     "plantuml.server": "http://localhost:3025",
     "plantuml.commandArgs": [
     
-    ]
+    ],
+    "pasteImage.path": "${currentFileDir}",
+    "markdown.copyFiles.destination": {
+        "**/*": "assets/${documentBaseName}/"
+    }
 }

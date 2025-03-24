@@ -1,0 +1,41 @@
+<h1 id="c4">C4<a aria-hidden="true" class="anchor-heading icon-link" href="#c4"></a></h1>
+<!-- markdownlint-disable no-missing-space-atx -->
+<p><a class="color-tag" style="--tag-color: #7a6a4f;" href="/sotoy/notes/68iwuc6hvz6bq5i6l8r53qa">#software-architechture</a>
+<a class="color-tag" style="--tag-color: #a2cffe;" href="/sotoy/notes/i4qdpg3wjwnulk1by0ti8dm">#diagram</a></p>
+<!-- markdownlint-disable no-missing-space-atx -->
+<p>C4 Diagram terdiri dari 4 tahap</p>
+<ol>
+<li>Context</li>
+<li>Contaners</li>
+<li>Component</li>
+<li>Code</li>
+</ol>
+<p>Yang akan digambar hanya 1-3 saja, sedangkan code itu adalah code yang akan kita tulis. ref: <a href="https://twitter.com/simonbrown/status/1580504505086795778">simon tweet</a>
+Context menggambarkan <code>Big Picture</code> atau bagaimana user akan menggunakan sistem yang sedang kita bangun.</p>
+<h2 id="c4-on-vscode-with-plantuml-extension">C4 on VSCode with PlantUML extension<a aria-hidden="true" class="anchor-heading icon-link" href="#c4-on-vscode-with-plantuml-extension"></a></h2>
+<p>Salah satu tools untuk mempermudah membuat diagram salah satunya dengan vscode dan plugin PlantUML</p>
+<p><img src="/sotoy/assets/C4-plantuml-extension.png" alt="plantuml extension"></p>
+<p>Jadi si plantuml ini dapat menterjemahkan code atau notasi menjadi gambar menggunakan plantuml server.</p>
+<p>Cara setupnya cukup mudah, kita membutuhkan plantuml server yang bisa di run menggunakan docker</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> run -d -p <span class="token number">3025</span>:8080 plantuml/plantuml-server:jetty
+<span class="token function">docker</span> run -d -p <span class="token number">3025</span>:8080 plantuml/plantuml-server:tomcat
+</code></pre>
+<p>Lalu sematkan link server di settings vscode</p>
+<p><img src="/sotoy/assets/C4-config-plantuml-vscode.png" alt="config plantuml vscode"></p>
+<p>Setelah itu untuk menggunakan C4 kita butuh tambahan annotation yang bisa kita gunakan dari <a href="https://github.com/plantuml-stdlib/C4-PlantUML">https://github.com/plantuml-stdlib/C4-PlantUML</a></p>
+<p>kita coba dengan membuat file context.puml</p>
+<pre class="language-bash"><code class="language-bash">@startuml Basic Sample
+<span class="token operator">!</span>include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person<span class="token punctuation">(</span>admin, <span class="token string">"Administrator"</span><span class="token punctuation">)</span>
+System_Boundary<span class="token punctuation">(</span>c1, <span class="token string">"Sample System"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Container<span class="token punctuation">(</span>web_app, <span class="token string">"Web Application"</span>, <span class="token string">"C#, ASP.NET Core 2.1 MVC"</span>, <span class="token string">"Allows users to compare multiple Twitter timelines"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+System<span class="token punctuation">(</span>twitter, <span class="token string">"Twitter"</span><span class="token punctuation">)</span>
+
+Rel<span class="token punctuation">(</span>admin, web_app, <span class="token string">"Uses"</span>, <span class="token string">"HTTPS"</span><span class="token punctuation">)</span>
+Rel<span class="token punctuation">(</span>web_app, twitter, <span class="token string">"Gets tweets from"</span>, <span class="token string">"HTTPS"</span><span class="token punctuation">)</span>
+@enduml
+</code></pre>
+<p>lalu kita render dan hasilnya</p>
+<p><img src="/sotoy/assets/C4-plantuml-vscode-preview.png" alt="plantuml vscode preview"></p>

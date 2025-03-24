@@ -2,7 +2,7 @@
 id: 3vy0eya1ih1ovj9csi7xwnu
 title: Remove Duplicates from Sorted Array
 desc: ''
-updated: 1742351949317
+updated: 1742443390960
 created: 1742346679252
 ---
 
@@ -53,14 +53,14 @@ nums is sorted in non-decreasing order.
 
 ## Memahami problemnya
 
-1. Pelajari constraintnya
+### 1. Pelajari constraintnya
 
 - `1 <= nums.length <= 3 * 104` = lengthnya bisa sampai 30rb digit, artinya kalau pake brute force ini bakalan lama banget
 - `-100 <= nums[i] <= 100` = setiap angka dalam array berisi -100 sampai 100.
 - `nums is sorted in non-decreasing order`. Array sudah diurutkan dalam [non-decreasing order](https://stackoverflow.com/questions/1963474/is-a-non-decreasing-sequence-increasing) artinya urutannya terus naik, 1-2-3-4 dant tidak menurun, tapi memungkinkan duplicate 1-1-1-2-3-4-4-4.
 
 
-2. Cek narasi dari soalnya
+### 2. Cek narasi dari soalnya
 
 - Sorted in **non-decreasing order** = karena dia sudah terurut jadi bisa nih pake two pointer buat remove duplicatenya.
 - Remove the duplicates [in-place(https://en.wikipedia.org/wiki/In-place_algorithm)] = berarti gak boleh bikin array baru, tapi ubah aja array nums.
@@ -68,7 +68,7 @@ nums is sorted in non-decreasing order.
 - The **relative order** of the elements should be kept the same = pastikan urutan arraynya harus sama jangan diubah dan gak boleh di sort ulang.
 - Then return the number of unique elements in nums. =  hasilnya jumlah dari nilai uniknya (k), dan gak perlu hapus nilai (k).
 
-3.Check examle
+### 3. Check examle
 
 Example 1:
 

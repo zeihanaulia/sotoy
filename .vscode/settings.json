@@ -16,5 +16,6 @@
     "pasteImage.path": "${currentFileDir}",
     "markdown.copyFiles.destination": {
         "**/*": "assets/${documentBaseName}/"
-    }
+    },
+    "scm.countBadge": "focused"
 }

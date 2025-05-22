@@ -1,0 +1,95 @@
+<h1 id="setup-spring-boot">Setup Spring Boot<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-spring-boot"></a></h1>
+<p>Siap! Ini dia versi <strong>terbaru dan bersih</strong> dari <strong>step-by-step install Spring Boot pakai Gradle di WSL Ubuntu</strong>, dengan <strong>Java 21 (LTS)</strong> dan <strong>tanpa buka browser</strong>.</p>
+<hr>
+<h2 id="-step-by-step-spring-boot--gradle--java-21-wsl-ubuntu--full-cli">✅ STEP-BY-STEP SPRING BOOT + GRADLE + JAVA 21 (WSL Ubuntu – Full CLI)<a aria-hidden="true" class="anchor-heading icon-link" href="#-step-by-step-spring-boot--gradle--java-21-wsl-ubuntu--full-cli"></a></h2>
+<hr>
+<h3 id="-1-install-dependency-dasar">🧱 1. Install Dependency Dasar<a aria-hidden="true" class="anchor-heading icon-link" href="#-1-install-dependency-dasar"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">unzip</span> <span class="token function">curl</span> <span class="token function">zip</span> -y
+</code></pre>
+<hr>
+<h3 id="️-2-install-sdkman">☕️ 2. Install SDKMAN<a aria-hidden="true" class="anchor-heading icon-link" href="#️-2-install-sdkman"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> -s <span class="token string">"https://get.sdkman.io"</span> <span class="token operator">|</span> <span class="token function">bash</span>
+<span class="token builtin class-name">source</span> <span class="token string">"<span class="token environment constant">$HOME</span>/.sdkman/bin/sdkman-init.sh"</span>
+</code></pre>
+<blockquote>
+<p>✅ SDKMAN = versi manager buat Java, Gradle, Spring CLI</p>
+</blockquote>
+<hr>
+<h3 id="️-3-install-java-21-lts">☕️ 3. Install Java 21 (LTS)<a aria-hidden="true" class="anchor-heading icon-link" href="#️-3-install-java-21-lts"></a></h3>
+<pre class="language-bash"><code class="language-bash">sdk <span class="token function">install</span> java <span class="token number">21.0</span>.7-tem
+sdk default java <span class="token number">21.0</span>.7-tem
+java -version
+javac -version
+</code></pre>
+<hr>
+<h3 id="️-4-install-gradle-dan-spring-boot-cli">⚙️ 4. Install Gradle dan Spring Boot CLI<a aria-hidden="true" class="anchor-heading icon-link" href="#️-4-install-gradle-dan-spring-boot-cli"></a></h3>
+<pre class="language-bash"><code class="language-bash">sdk <span class="token function">install</span> gradle
+sdk <span class="token function">install</span> springboot
+</code></pre>
+<blockquote>
+<p>Cek:</p>
+</blockquote>
+<pre class="language-bash"><code class="language-bash">gradle -v
+spring --version
+</code></pre>
+<hr>
+<h3 id="-5-generate-proyek-spring-boot-pakai-cli">📦 5. Generate Proyek Spring Boot (pakai CLI)<a aria-hidden="true" class="anchor-heading icon-link" href="#-5-generate-proyek-spring-boot-pakai-cli"></a></h3>
+<pre class="language-bash"><code class="language-bash">spring init <span class="token punctuation">\</span>
+  --boot-version<span class="token operator">=</span><span class="token number">3.3</span>.0 <span class="token punctuation">\</span>
+  --build<span class="token operator">=</span>gradle <span class="token punctuation">\</span>
+  --type<span class="token operator">=</span>gradle-project <span class="token punctuation">\</span>
+  --java-version<span class="token operator">=</span><span class="token number">21</span> <span class="token punctuation">\</span>
+  --dependencies<span class="token operator">=</span>web,lombok <span class="token punctuation">\</span>
+  --name<span class="token operator">=</span>demo <span class="token punctuation">\</span>
+  demo
+
+</code></pre>
+<blockquote>
+<p>Ini akan membuat folder <code>demo/</code> berisi project Spring Boot + Gradle.</p>
+</blockquote>
+<hr>
+<h3 id="-6-jalankan-spring-boot">🚀 6. Jalankan Spring Boot<a aria-hidden="true" class="anchor-heading icon-link" href="#-6-jalankan-spring-boot"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">cd</span> demo
+./gradlew bootRun
+</code></pre>
+<blockquote>
+<p>Buka browser di Windows:</p>
+</blockquote>
+<pre><code>http://localhost:8080
+</code></pre>
+<hr>
+<h3 id="-7-tambahkan-endpoint-controller">🔨 7. Tambahkan Endpoint Controller<a aria-hidden="true" class="anchor-heading icon-link" href="#-7-tambahkan-endpoint-controller"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token function">nano</span> src/main/java/com/example/demo/HelloController.java
+</code></pre>
+<p>Isi:</p>
+<pre class="language-java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>demo</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloController</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello from Spring Boot in WSL!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Simpan &#x26; restart:</p>
+<pre class="language-bash"><code class="language-bash">./gradlew bootRun
+</code></pre>
+<hr>
+<h3 id="-8-opsional-buka-di-vscode">👨‍💻 8. (Opsional) Buka di VSCode<a aria-hidden="true" class="anchor-heading icon-link" href="#-8-opsional-buka-di-vscode"></a></h3>
+<pre class="language-bash"><code class="language-bash">code <span class="token builtin class-name">.</span>
+</code></pre>
+<blockquote>
+<p>Pastikan sudah install extension <strong>"Remote - WSL"</strong> di VSCode.</p>
+</blockquote>
+<hr>
+<p>Kalau semua step ini diikuti, kamu udah siap ngoding full Spring Boot di WSL 🎉
+Mau lanjut setup PostgreSQL atau Docker juga?</p>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/idf3tarmf7z2bvtid79a0b3">Package Explanation</a></li>
+</ol>

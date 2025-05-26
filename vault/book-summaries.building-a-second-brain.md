@@ -8,7 +8,7 @@ created: 1741593849105
 
 ## Bab 1: Where It All Started
 
-Di bab pertama banyak membahas soal latar belakang second brain, tidak begitu banyak yang bisa gue ambil. Tapi ada foot note yang menarik, dalam upaya melawan sakitnya dia terbantu dengan komunitas Quantified Self yang mana ini adalah suatu project self tracking dan gak sendirian disana ada sekelompok orang yang berbagi pengalaman dan cerita bagaimana mereka melakukan tracking kesehatan, produktivitas, mood dan perilaku mereka. Intinya belajar tentang diri mereka sendiri. Lebih jelasnya bisa baca disinis [[til.quantified-self]].
+Di bab pertama banyak membahas soal latar belakang second brain, tidak begitu banyak yang bisa gue ambil. Tapi ada foot note yang menarik, dalam upaya melawan sakitnya dia terbantu dengan komunitas Quantified Self yang mana ini adalah suatu project self tracking dan gak sendirian disana ada sekelompok orang yang berbagi pengalaman dan cerita bagaimana mereka melakukan tracking kesehatan, produktivitas, mood dan perilaku mereka. Intinya belajar tentang diri mereka sendiri. Lebih jelasnya bisa baca disinis [[til.managing-team.quantified-self]].
 
  ## Bab 2: What Is a Second Brain?
 

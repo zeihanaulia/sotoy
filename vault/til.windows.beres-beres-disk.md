@@ -4,7 +4,8 @@ title: Beres Beres Disk
 desc: ''
 updated: 1745941691340
 created: 1745941668498
-tags: [windows]
+tags:
+  - windows
 ---
 
 Oke, gue ubah ya—lebih naratif, lebih ngalir, dan gak ada bullet point yang kaku.

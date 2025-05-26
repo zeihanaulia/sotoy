@@ -4,7 +4,10 @@ title: Recovering from a Broken Nix Wsl Setup
 desc: 'Nix, WSL, Recovery, Mitchell Hashimoto Inspiration'
 updated: 1745902346611
 created: 1745898582297
-tags: [nix, wsl, developer-tools]
+tags:
+  - nix
+  - wsl
+  - developer-tools
 ---
 
 

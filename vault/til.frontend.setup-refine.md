@@ -1,12 +1,10 @@
 ---
 id: uwbakxc17t4suloc4pd38o3
-title: Setup Refine
+title: Setup Refine UI sebagai Pengganti Streamlit
 desc: ''
-updated: 1747898868875
+updated: 1748255812327
 created: 1747897465069
 ---
-
-# Setup Refine UI sebagai Pengganti Streamlit
 
 ## Background
 

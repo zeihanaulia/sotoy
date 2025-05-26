@@ -1,0 +1,147 @@
+<h1 id="maximum-sum-of-distinct-subarrays-with-length-k">Maximum Sum of Distinct Subarrays with Length K<a aria-hidden="true" class="anchor-heading icon-link" href="#maximum-sum-of-distinct-subarrays-with-length-k"></a></h1>
+<p>You are given an integer array nums and an integer k. Find the maximum subarray sum of all the subarrays of nums that meet the following conditions:</p>
+<ul>
+<li>The length of the subarray is k, and</li>
+<li>All the elements of the subarray are <strong>distinct</strong>.</li>
+</ul>
+<p>Return the maximum subarray sum of all the subarrays that meet the conditions. If no subarray meets the conditions, return 0.</p>
+<p>A <strong>subarray</strong> is a contiguous non-empty sequence of elements within an array.</p>
+<p><strong>Example 1:</strong></p>
+<p>Input: nums = [1,5,4,2,9,9,9], k = 3
+Output: 15
+Explanation: The subarrays of nums with length 3 are:</p>
+<ul>
+<li>[1,5,4] which meets the requirements and has a sum of 10.</li>
+<li>[5,4,2] which meets the requirements and has a sum of 11.</li>
+<li>[4,2,9] which meets the requirements and has a sum of 15.</li>
+<li>[2,9,9] which does not meet the requirements because the element 9 is repeated.</li>
+<li>[9,9,9] which does not meet the requirements because the element 9 is repeated.
+We return 15 because it is the maximum subarray sum of all the subarrays that meet the conditions</li>
+</ul>
+<p><strong>Example 2:</strong></p>
+<p>Input: nums = [4,4,4], k = 3
+Output: 0
+Explanation: The subarrays of nums with length 3 are:</p>
+<ul>
+<li>[4,4,4] which does not meet the requirements because the element 4 is repeated.
+We return 0 because no subarrays meet the conditions.
+</li>
+</ul>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><a aria-hidden="true" class="block-anchor anchor-heading icon-link" id="^5" href="#^5"></a>1 &#x3C;= k &#x3C;= nums.length &#x3C;= 10</li>
+<li><a aria-hidden="true" class="block-anchor anchor-heading icon-link" id="^5" href="#^5"></a>1 &#x3C;= nums[i] &#x3C;= 10</li>
+</ul>
+<h2 id="memahami-soal">Memahami soal<a aria-hidden="true" class="anchor-heading icon-link" href="#memahami-soal"></a></h2>
+<h3 id="1-constraints">1. Constraints<a aria-hidden="true" class="anchor-heading icon-link" href="#1-constraints"></a></h3>
+<ul>
+<li><code>1 &#x3C;= k &#x3C;= nums.length &#x3C;= 10^5</code> isi dari <code>k</code> dari 1 - 100k</li>
+<li><code>1 &#x3C;= nums[i] &#x3C;= 10^5</code> jumlah nums bisa sampai 100k</li>
+</ul>
+<p>Tidak ada problem yang signifikan. Bisa mulai dari brute force.</p>
+<h3 id="2-memahami-clue">2. Memahami clue<a aria-hidden="true" class="anchor-heading icon-link" href="#2-memahami-clue"></a></h3>
+<ul>
+<li><code>sum of all the subarrays of nums</code> Jumlahkan array </li>
+<li><code>The length of the subarray is k</code> berdasarkan <code>k</code> </li>
+<li><code>All the elements of the subarray are distinct.</code> Semua element adalah distinct, jadi tidak ada angka yang duplicate. Artinya perlu dibersihkan dulu atau perlu di check apakah dari sub array ada angka yang sama atau tidak.</li>
+<li><code>Return the maximum subarray sum of all the subarrays that meet the conditions</code> cari maksimal sum dari subarray tersebut.</li>
+<li><code>A subarray is a contiguous non-empty sequence of elements within an array.</code> subarray tidak boleh kosong dan harus berurutan, urutannya harus sama kaya aslinya</li>
+</ul>
+<h3 id="3-melihat-example">3. Melihat Example<a aria-hidden="true" class="anchor-heading icon-link" href="#3-melihat-example"></a></h3>
+<p><strong>1. Example 1:</strong></p>
+<blockquote>
+<p>Input: nums = [1,5,4,2,9,9,9], k = 3</p>
+<p>Output: 15</p>
+<p>Explanation: The subarrays of nums with length 3 are:</p>
+<ul>
+<li>[1,5,4] which meets the requirements and has a sum of 10.</li>
+<li>[5,4,2] which meets the requirements and has a sum of 11.</li>
+<li>[4,2,9] which meets the requirements and has a sum of 15.</li>
+<li>[2,9,9] which does not meet the requirements because the element 9 is repeated.</li>
+<li>[9,9,9] which does not meet the requirements because the element 9 is repeated.
+We return 15 because it is the maximum subarray sum of all the subarrays that meet the conditions</li>
+</ul>
+</blockquote>
+<p>Dari example 1,kita bisa lihat array yang mau dijumlahkan adalah 3, maka pecah dari array dan ambil per 3 element. Sampai disini kepikiran buat di slice, kaya gini misalnya <code>arr[1:3]</code>.
+Di pecah menjadi 3 sub array, lalu cek apakah dalam array ada nomor yang sama atau tidak.
+Jika ada maka skip.</p>
+<p>Example 2:</p>
+<blockquote>
+<p>Input: nums = [4,4,4], k = 3
+Output: 0
+Explanation: The subarrays of nums with length 3 are:</p>
+<ul>
+<li>[4,4,4] which does not meet the requirements because the element 4 is repeated.
+We return 0 because no subarrays meet the conditions.</li>
+</ul>
+</blockquote>
+<p>Dari sini kita bisa tau, kalau ada angka yang sama langsung return 0 aja.</p>
+<h2 id="solusi">Solusi<a aria-hidden="true" class="anchor-heading icon-link" href="#solusi"></a></h2>
+<h3 id="brute-force">Brute Force<a aria-hidden="true" class="anchor-heading icon-link" href="#brute-force"></a></h3>
+<p>Kita bagi jadi 2 iterasi</p>
+<ol>
+<li>Prepare SubArray
+<ol>
+<li>Definisikan dulu <code>[][]int{}</code></li>
+<li>Looping nums dengan kondisi <code>for i:=0; i &#x3C; len(nums); i++</code></li>
+<li>Masukan angka dalam nums sesuai dengan <code>k</code> jadi <code>subarray = append(subarray, nums[i:k+i])</code></li>
+</ol>
+</li>
+<li>Sum Subarray dengan kondisi
+<ol>
+<li>Looping SubArray jika ada angka yang sama, maka skip</li>
+<li>Jika tidak sama, maka hitung.</li>
+</ol>
+</li>
+</ol>
+<p>Percobaan peratama gagal nih, kena time limit di leetcode. Karena ngecek satu satu. Kita pelajari teknik baru, Yaitu sliding window</p>
+<h3 id="sliding-window">Sliding Window<a aria-hidden="true" class="anchor-heading icon-link" href="#sliding-window"></a></h3>
+<ol>
+<li>Jika <code>k</code> lebih besar dari array <code>n</code>, langsung return <code>0</code></li>
+<li>Inisialisasi Variable:
+<ol>
+<li><code>maxSum</code>: ini akan digunakan untuk menyimpan nilai maksimum dari semua subarray valid dengan tipe (int64)</li>
+<li><code>currentSum</code>: Menyimpan jumlah elemen dalam window saat ini dengan tipe (int64)</li>
+<li><code>left</code>: Pointer kiri /batas awal window dengan tipe (int)</li>
+<li><code>seen</code>: Digunakan untuk tracking element unik dengan tipe <code>make(map[int]bool)</code></li>
+</ol>
+</li>
+<li>Sliding window dengan Two Pounter
+<ol>
+<li>Check Duplikat
+<ol>
+<li>Selama elemen <code>nums[right]</code> sudah ada dalam set
+<ol>
+<li>Buang elemen paling kiri nums[left] dari window</li>
+<li>Kurangi <code>currentSum</code> dengan nilai <code>nums[left]</code></li>
+<li>Geser <code>left</code> pointer ke kanan <code>left++</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Tambahin elemen ke window
+<ol>
+<li>Masukin <code>nums[right]</code> ke dalam set</li>
+<li>Tambahin <code>nums[right]</code> ke currentSum</li>
+</ol>
+</li>
+<li>Check Panjang Window
+<ol>
+<li>Jika panjang window sama dengan <code>k</code>
+<ol>
+<li>Update <code>maxSum</code> jika <code>currentSum</code> lebih besar</li>
+<li>Buang elemen paling kiri dengan elemen <code>nums[left]</code></li>
+<li>Kurangi <code>sum</code> dengan elemen <code>nums[left]</code></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Return <code>maxSum</code></li>
+</ol>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/itfg3kwzv6560orvl3nt79m">Coding</a></li>
+</ol>

@@ -1,8 +1,8 @@
 ---
 id: 5w0lto1q5ywc95uktplo5f5
-title: Setup Vm Azure Terraforn
+title: Setup Vm Azure Terraform
 desc: ''
-updated: 1749091149896
+updated: 1749091726653
 created: 1749091121822
 ---
 

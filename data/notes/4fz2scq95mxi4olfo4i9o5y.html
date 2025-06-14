@@ -1,0 +1,63 @@
+<h1 id="customize-poweshell">Customize Poweshell<a aria-hidden="true" class="anchor-heading icon-link" href="#customize-poweshell"></a></h1>
+<p>Lo pasti pernah ngerasa terminal bawaan Windows itu... meh. Hitam, polos, dan bosenin. Gue juga gitu. Tapi sekarang gue mau share perjalanan gue dari awal setup SSH key ke GitHub sampai akhirnya punya PowerShell yang bukan cuma enak diliat, tapi juga enak dipake. </p>
+<h2 id="ssh-key-ke-github-pondasi-awal">SSH Key ke GitHub: Pondasi Awal<a aria-hidden="true" class="anchor-heading icon-link" href="#ssh-key-ke-github-pondasi-awal"></a></h2>
+<p>Semua berawal dari kebutuhan buat push-pull repo di GitHub tanpa harus ketik username dan password tiap saat. Solusinya? SSH key. Gue generate key pakai <code>ssh-keygen</code>, terus tambahin ke ssh-agent. Tapi kayak biasa, Windows nggak semulus itu. Service <code>ssh-agent</code> nggak bisa jalan, ternyata harus dijalanin secara manual dulu.</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token function">Start-Service</span> ssh-agent
+</code></pre>
+<p>Setelah itu gue add key-nya:</p>
+<pre class="language-powershell"><code class="language-powershell">ssh-add <span class="token string">"C:\Users\Windows\.ssh\id_rsa"</span>
+</code></pre>
+<p>Terus test koneksi:</p>
+<pre class="language-powershell"><code class="language-powershell">ssh <span class="token operator">-</span>T git@github<span class="token punctuation">.</span>com
+</code></pre>
+<p>Kalau muncul pesan "Hi username, you've successfully authenticated..." berarti aman.</p>
+<h2 id="upgrade-powershell-7-biar-gak-tertinggal-zaman">Upgrade PowerShell 7: Biar Gak Tertinggal Zaman<a aria-hidden="true" class="anchor-heading icon-link" href="#upgrade-powershell-7-biar-gak-tertinggal-zaman"></a></h2>
+<p>Ternyata PowerShell lama nggak bisa install module modern. Gue install PowerShell 7 pakai winget:</p>
+<pre class="language-powershell"><code class="language-powershell">winget install <span class="token operator">--</span>id Microsoft<span class="token punctuation">.</span>Powershell <span class="token operator">--</span>source winget
+</code></pre>
+<p>Terus make sure jalanin pakai <code>pwsh</code>, bukan <code>powershell</code>. Bisa dicek versi juga:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token variable">$PSVersionTable</span><span class="token punctuation">.</span>PSVersion
+</code></pre>
+<h2 id="error-lagi-masalah-module--path-yang-nggak-terbaca">Error Lagi? Masalah Module &#x26; Path yang Nggak Terbaca<a aria-hidden="true" class="anchor-heading icon-link" href="#error-lagi-masalah-module--path-yang-nggak-terbaca"></a></h2>
+<p>Pas gue coba install module <code>Terminal-Icons</code> atau <code>PowerShellGet</code>, error mulu. Setelah dicek-cek, ternyata module yang udah gue extract secara manual malah nggak bisa di-load. Gue kira karena path-nya salah atau PowerShell nggak nemu file <code>.psd1</code> yang jadi identitas modulnya.</p>
+<p>Solusinya? Pastikan semua file module udah diekstrak ke folder:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token variable">$env</span>:USERPROFILE\Documents\PowerShell\Modules\PowerShellGet
+</code></pre>
+<p>Dan make sure file <code>PowerShellGet.psd1</code> emang beneran ada:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token function">Test-Path</span> <span class="token string">"<span class="token variable">$env</span>:USERPROFILE\Documents\PowerShell\Modules\PowerShellGet\PowerShellGet.psd1"</span>
+</code></pre>
+<p>Kalau udah, tinggal import ulang:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token function">Import-Module</span> PowerShellGet <span class="token operator">-</span>Force
+</code></pre>
+<h2 id="oh-my-posh-biar-terminal-lo-kece">Oh My Posh: Biar Terminal Lo Kece<a aria-hidden="true" class="anchor-heading icon-link" href="#oh-my-posh-biar-terminal-lo-kece"></a></h2>
+<p>Sekarang bagian serunya. Gue install <code>oh-my-posh</code> biar prompt-nya warna-warni dan informatif:</p>
+<pre class="language-powershell"><code class="language-powershell">winget install JanDeDobbeleer<span class="token punctuation">.</span>OhMyPosh <span class="token operator">-</span>s winget
+</code></pre>
+<p>Terus gue pake theme <code>jandedobbeleer</code> yang udah built-in. Di <code>$PROFILE</code>, tambahin:</p>
+<pre class="language-powershell"><code class="language-powershell">oh-my-posh init pwsh <span class="token operator">--</span>config <span class="token string">"<span class="token variable">$env</span>:POSH_THEMES_PATH\jandedobbeleer.omp.json"</span> <span class="token punctuation">|</span> <span class="token function">Invoke-Expression</span>
+</code></pre>
+<p>Dan pastiin pake font Nerd Font seperti <code>MesloLGS NF</code>, karena tanpa ini icon bakal jadi tanda tanya semua.</p>
+<h2 id="git-alias-biar-ngetik-cepet">Git Alias biar Ngetik Cepet<a aria-hidden="true" class="anchor-heading icon-link" href="#git-alias-biar-ngetik-cepet"></a></h2>
+<p>Gue tambahin alias ala ZSH ke dalam <code>$PROFILE</code> juga:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token keyword">function</span> ga  <span class="token punctuation">{</span> git add @args <span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">gc</span>  <span class="token punctuation">{</span> git commit @args <span class="token punctuation">}</span>
+<span class="token keyword">function</span> gcm <span class="token punctuation">{</span> git commit <span class="token operator">-</span>m @args <span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">gp</span>  <span class="token punctuation">{</span> git push @args <span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">gl</span>  <span class="token punctuation">{</span> git log @args <span class="token punctuation">}</span>
+<span class="token keyword">function</span> gst <span class="token punctuation">{</span> git status <span class="token punctuation">}</span>
+<span class="token keyword">function</span> gcam <span class="token punctuation">{</span> <span class="token keyword">param</span><span class="token punctuation">(</span><span class="token variable">$msg</span><span class="token punctuation">)</span><span class="token punctuation">;</span> git commit <span class="token operator">-</span>am <span class="token variable">$msg</span> <span class="token punctuation">}</span>
+</code></pre>
+<p>Alias ini bener-bener ngebantu biar nggak perlu ketik panjang tiap kali commit.</p>
+<h2 id="issue-di-vscode">Issue di VSCode<a aria-hidden="true" class="anchor-heading icon-link" href="#issue-di-vscode"></a></h2>
+<p>Nyebelin banget entah kenapa vscode ngerefer ke <code>$PROFILE</code> yang berbeda. jadi mesti diakalin di profile dia buat dialigkan ke yang sama kaya di terminal</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token comment"># Forwarder: Redirect pwsh to use WindowsPowerShell profile</span>
+<span class="token variable">$winProfile</span> = <span class="token string">"<span class="token variable">$env</span>:OneDrive\Dokumen\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">Test-Path</span> <span class="token variable">$winProfile</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span> <span class="token variable">$winProfile</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token function">Write-Host</span> <span class="token string">"⚠️ Profile WindowsPowerShell tidak ditemukan."</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Konyol baget, abis dialihin kaya gini, baru bisa.</p>
+<h2 id="penutup">Penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#penutup"></a></h2>
+<p>Sekarang PowerShell gue nggak cuma enak dipake tapi juga enak diliat. Prompt-nya informatif, icon muncul semua, dan semua udah sinkron dengan baik. Mungkin keliatan ribet, tapi begitu semua kelar, rasanya puas banget.</p>

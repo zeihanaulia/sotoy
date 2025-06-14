@@ -1,0 +1,18 @@
+<h1 id="nix">Nix<a aria-hidden="true" class="anchor-heading icon-link" href="#nix"></a></h1>
+<p>Nix adalah solusi kalau lo males buat setup development env dari 0, tiap ganti laptop lo harus instal satu persatu tools yang lo butuhin. dengan nix lo bisa mendeklarasikan konfigurasi yang lo mau.</p>
+<p>ini adalah proses yang gw lakuin, ketika gw init os baru di wsl dengan os ubuntu</p>
+<h2 id="instalasi-ulang-dengan">instalasi ulang dengan<a aria-hidden="true" class="anchor-heading icon-link" href="#instalasi-ulang-dengan"></a></h2>
+<p>awalnya gw setup dari zero to nix, tapi entah kenapa banyak error terjadi dan gw nemu instalasi tanpa daemo dengan cara ini <a href="https://github.com/NixOS/nix/issues/3435#issuecomment-1120488592"> https://github.com/NixOS/nix/issues/3435#issuecomment-859461593</a></p>
+<p><code>sh &#x3C;(curl -L https://nixos.org/nix/install) --no-daemon</code></p>
+<h2 id="build-nix">Build Nix<a aria-hidden="true" class="anchor-heading icon-link" href="#build-nix"></a></h2>
+<p>build nix dari repository</p>
+<pre class="language-bash"><code class="language-bash">nix build github:zeihanaulia/nixpkgs<span class="token comment">#homeConfigurations.x86_64-linux.zeihanaulia.activationPackage</span>
+</code></pre>
+<h2 id="activate-zsh">Activate zsh<a aria-hidden="true" class="anchor-heading icon-link" href="#activate-zsh"></a></h2>
+<p>karena gw menggunakan zsh, maka gw activate lewat command ini <code>chsh -s $(which zsh)</code></p>
+<p>selesai sih dengan kaya gini, gw udah bisa dapet semua env yang gw mau setup di setiap komputer yang gw pake.</p>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/ov1jn2bwsgt3mj88r7ddiss">Nixos on Windows</a></li>
+</ol>

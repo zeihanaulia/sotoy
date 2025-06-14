@@ -1,0 +1,81 @@
+<h1 id="remove-duplicates-from-sorted-array">Remove Duplicates from Sorted Array<a aria-hidden="true" class="anchor-heading icon-link" href="#remove-duplicates-from-sorted-array"></a></h1>
+<p>Given an integer array nums sorted in <strong>non-decreasing order</strong>, remove the duplicates [in-place(https://en.wikipedia.org/wiki/In-place_algorithm)] such that each unique element appears only <strong>once</strong>. The <strong>relative order</strong> of the elements should be kept the same. Then return the number of unique elements in nums.</p>
+<p>Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:</p>
+<p>Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially. The remaining elements of nums are not important as well as the size of nums.
+Return k.
+Custom Judge:</p>
+<p>The judge will test your solution with the following code:</p>
+<blockquote>
+<p>int[] nums = [...]; // Input array
+int[] expectedNums = [...]; // The expected answer with correct length</p>
+<p>int k = removeDuplicates(nums); // Calls your implementation</p>
+<p>assert k == expectedNums.length;
+for (int i = 0; i &#x3C; k; i++) {
+assert nums[i] == expectedNums[i];
+}</p>
+</blockquote>
+<p>If all assertions pass, then your solution will be <strong>accepted</strong>.</p>
+<p>Example 1:</p>
+<p>Input: nums = [1,1,2]
+Output: 2, nums = [1,2,_]
+Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
+It does not matter what you leave beyond the returned k (hence they are underscores).</p>
+<p>Example 2:</p>
+<p>Input: nums = [0,0,1,1,1,2,2,3,3,4]
+Output: 5, nums = [0,1,2,3,4,<em>,</em>,<em>,</em>,_]
+Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+It does not matter what you leave beyond the returned k (hence they are underscores).</p>
+<p>Constraints:</p>
+<p>1 &#x3C;= nums.length &#x3C;= 3 * 104
+-100 &#x3C;= nums[i] &#x3C;= 100
+nums is sorted in non-decreasing order.</p>
+<h2 id="memahami-problemnya">Memahami problemnya<a aria-hidden="true" class="anchor-heading icon-link" href="#memahami-problemnya"></a></h2>
+<h3 id="1-pelajari-constraintnya">1. Pelajari constraintnya<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pelajari-constraintnya"></a></h3>
+<ul>
+<li><code>1 &#x3C;= nums.length &#x3C;= 3 * 104</code> = lengthnya bisa sampai 30rb digit, artinya kalau pake brute force ini bakalan lama banget</li>
+<li><code>-100 &#x3C;= nums[i] &#x3C;= 100</code> = setiap angka dalam array berisi -100 sampai 100.</li>
+<li><code>nums is sorted in non-decreasing order</code>. Array sudah diurutkan dalam <a href="https://stackoverflow.com/questions/1963474/is-a-non-decreasing-sequence-increasing">non-decreasing order</a> artinya urutannya terus naik, 1-2-3-4 dant tidak menurun, tapi memungkinkan duplicate 1-1-1-2-3-4-4-4.</li>
+</ul>
+<h3 id="2-cek-narasi-dari-soalnya">2. Cek narasi dari soalnya<a aria-hidden="true" class="anchor-heading icon-link" href="#2-cek-narasi-dari-soalnya"></a></h3>
+<ul>
+<li>Sorted in <strong>non-decreasing order</strong> = karena dia sudah terurut jadi bisa nih pake two pointer buat remove duplicatenya.</li>
+<li>Remove the duplicates [in-place(https://en.wikipedia.org/wiki/In-place_algorithm)] = berarti gak boleh bikin array baru, tapi ubah aja array nums.</li>
+<li>each unique element appears only <strong>once</strong> = jadi hasilnya setiap angka cuma muncul sekali</li>
+<li>The <strong>relative order</strong> of the elements should be kept the same = pastikan urutan arraynya harus sama jangan diubah dan gak boleh di sort ulang.</li>
+<li>Then return the number of unique elements in nums. =  hasilnya jumlah dari nilai uniknya (k), dan gak perlu hapus nilai (k).</li>
+</ul>
+<h3 id="3-check-examle">3. Check examle<a aria-hidden="true" class="anchor-heading icon-link" href="#3-check-examle"></a></h3>
+<p>Example 1:</p>
+<pre class="language-bash"><code class="language-bash">Input: nums <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1,1</span>,2<span class="token punctuation">]</span>
+Output: <span class="token number">2</span>, nums <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1,2</span>,_<span class="token punctuation">]</span>
+</code></pre>
+<ul>
+<li>Duplikat angka 1 dihapus</li>
+<li>Lalu array tetap dalam urutan yang sama</li>
+<li>Outputnya jumlah element unit yaitu k = 2</li>
+</ul>
+<p>Example 2:</p>
+<pre class="language-bash"><code class="language-bash">Input: nums <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0,0</span>,1,1,1,2,2,3,3,4<span class="token punctuation">]</span>
+Output: <span class="token number">5</span>, nums <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0,1</span>,2,3,4,_,_,_,_,_<span class="token punctuation">]</span>
+</code></pre>
+<ul>
+<li>Semua yang duplikat dihapus</li>
+<li>Urutan angkanya tetap sama</li>
+<li>Outputnya k = 5</li>
+<li>Bagian setelah k tidak dibiarkan, artinya jika di len size tetap sama</li>
+</ul>
+<h2 id="solusi">Solusi<a aria-hidden="true" class="anchor-heading icon-link" href="#solusi"></a></h2>
+<p>Dari pemahaman soal kita sudah tau, bakal pake two pointer.
+Kita tau data sorted kiri lebih kecil dari kanan tapi bisa sama, jadi kita akan cata perubahan yang tidak samanya saja karena kita mau cari keunikannya. jadi kalau ada array [1,1,2], kita geser terus ke kiri, jadi [1,2,2] karena jika ada perbedaan antara nums[left] != nums[right] maka nums[left] = nums[right] dan left kita tambah, jadi indexnya akan maju.
+Jadi logikanya gini</p>
+<ol>
+<li>Definisikan <code>left=0</code></li>
+<li>Looping dengan kondisi <code>right=1; right &#x3C; len(nums); right++</code>
+2.1. Jika <code>nums[left] != nums[right]</code> maka nums[left] = nums[right] dan tambahkan nlai <code>left++</code> </li>
+<li>Return left + 1</li>
+</ol>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/o073b4homigwo9s7lsjw411">Code</a></li>
+</ol>

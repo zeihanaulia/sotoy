@@ -1,17 +1,28 @@
 ---
 id: 075nm8xc03i6c4vgpijyjoi
-title: "Mbah Nun - Kerja Itu Ibadah"
+title: "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006"
 desc: ''
-updated: 1750389500271
+updated: 1750398829041
 created: 1750389267221
+tags:
+    - cak nun
+    - kerja itu ibadah
+    - motivasi kerja
+    - akhlak
+    - islam
+    - kiai kanjeng
+    - indonesia
+    - spiritualitas
+    - kehidupan
+    - inspirasi
 ---
 
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/sgmscPrLHZ8?si=Si6PvijefWbXUZyr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/sgmscPrLHZ8?si=Si6PvijefWbXUZyr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</center>
 ---
 
-Malam itu, Cak Nun dateng ke acara dengan tema “Bekerja Itu Ibadah.” Dia buka dengan guyon, bilang kalau dia dipaksa pake sorban karena katanya dapat rahmat dari Allah—dulu nggak ikut ngerasain gempa, sekarang jadi ikut kebanting-banting.
+Malam itu, Cak Nun berbicara dengan tema “Bekerja Itu Ibadah.” Dia buka dengan guyon, bilang kalau dia dipaksa pake sorban karena katanya dapat rahmat dari Allah—dulu nggak ikut ngerasain gempa, sekarang jadi ikut kebanting-banting.
 
 Cak Nun langsung lempar pertanyaan buat ngebuka: “Jenengan niki wong kuto apa wong deso?” Tapi dia sendiri nyimpulin: meskipun tinggal di kota, jenengan semua tetep punya akar desa. Dan orang desa itu biasanya lebih berani dan tangguh dalam hidup. “Tukang bakso masih bisa jadi bupati, tapi bupati belum tentu bisa jadi tukang bakso.”
 

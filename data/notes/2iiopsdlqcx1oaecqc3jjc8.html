@@ -1,0 +1,28 @@
+<h1 id="code">Code<a aria-hidden="true" class="anchor-heading icon-link" href="#code"></a></h1>
+<h2 id="brute-force">Brute Force<a aria-hidden="true" class="anchor-heading icon-link" href="#brute-force"></a></h2>
+<pre class="language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">twoSum</span><span class="token punctuation">(</span>nums <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> target <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span> <span class="token punctuation">{</span>
+    arr <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">for</span> x <span class="token operator">:=</span> <span class="token keyword">range</span> nums <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> j <span class="token operator">:=</span> <span class="token keyword">range</span> arr <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> nums<span class="token punctuation">[</span>x<span class="token punctuation">]</span> <span class="token operator">==</span> arr<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span>j<span class="token punctuation">,</span> x<span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+       arr <span class="token operator">=</span>  <span class="token function">append</span><span class="token punctuation">(</span>arr<span class="token punctuation">,</span> target <span class="token operator">-</span> nums<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="maps">Maps<a aria-hidden="true" class="anchor-heading icon-link" href="#maps"></a></h2>
+<pre class="language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">twoSum</span><span class="token punctuation">(</span>nums <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> target <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span> <span class="token punctuation">{</span>
+  hash <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">)</span>
+  <span class="token keyword">for</span> x <span class="token operator">:=</span> <span class="token keyword">range</span> nums <span class="token punctuation">{</span>
+    tt <span class="token operator">:=</span> target <span class="token operator">-</span> nums<span class="token punctuation">[</span>x<span class="token punctuation">]</span>
+    <span class="token keyword">if</span> i<span class="token punctuation">,</span> ok <span class="token operator">:=</span> hash<span class="token punctuation">[</span>tt<span class="token punctuation">]</span><span class="token punctuation">;</span> ok <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span>i<span class="token punctuation">,</span> x<span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    hash<span class="token punctuation">[</span>nums<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> x
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>

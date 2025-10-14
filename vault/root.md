@@ -1,29 +1,29 @@
 ---
 id: oqxmejlafk9x8rj9t5hya5z
-title: Halo dan Selamat Datang! 👋
+title: Hello and Welcome! 👋
 desc: ''
 updated: 1742030256619
 created: 1646842475821
 ---
 
-Terima kasih sudah mampir ke halaman utama Gue! Gue menggunakan Dendron sebagai cara untuk merapikan catatan, berbagi pengetahuan, dan menulis apa saja yang Gue anggap menarik. Di situs ini, lo akan menemukan:
+Welcome to the homepage! I use Dendron to store and organize notes, ideas, and experiments I’m working on. Here are the main sections you’ll find on this site:
 
-1. **Catatan Belajar** – Mulai dari programming, teknologi terkini, sampai tips produktivitas.
-2. **Proyek Pribadi** – Kumpulan proyek yang sedang Gue kerjakan, eksperimen, serta hasil akhirnya.
-3. **Tulisan & Opini** – Pandangan Gue tentang berbagai hal, mulai dari perkembangan teknologi, kehidupan sehari-hari, hingga hal-hal acak yang ingin Gue bagikan.
+1. **Learning Notes** — Practical notes on programming, recent technologies, and productivity tips.
+2. **Personal Projects** — Summaries of projects, experiments, and outcomes I’m working on or have completed.
+3. **Writings & Opinions** — Casual articles and reflections about technology, daily life, and other interesting topics.
 
-Sebagai seseorang yang terus belajar dan bereksperimen dengan berbagai teknologi, Gue harap situs ini bisa menjadi tempat diskusi, referensi, atau sekadar bahan bacaan santai.
+I’m constantly experimenting and learning. I hope the content here helps you as a reference, a starting point for discussion, or just light reading.
 
-> **Kenapa Dendron?**  
-> Gue suka dengan pendekatan Dendron yang berbasis “seed” (notes) dan “vault” (kumpulan catatan). Mempermudah Gue mengorganisasi catatan yang biasanya berserakan.
+> Why Dendron?
+>
+Dendron helps keep notes organized. Its "seed" and "vault" concepts make it easy to structure content and find what you need.
 
-## Temukan Lebih Banyak
+## Find More
 
-Jika tertarik untuk tahu lebih banyak atau berinteraksi, berikut beberapa tautan yang mungkin berguna:
+If you want to learn more or connect, check these links:
 
+- [Homepage (Dendron)](https://zeihanaulia.github.io/sotoy/)
+- [My GitHub](https://github.com/zeihanaulia)
+- [My Twitter / X](https://x.com/zeihanaulia)
 
-- [Halaman Utama Dendron](https://zeihanaulia.github.io/sotoy/)
-- [GitHub Gue](https://github.com/zeihanaulia)
-- [Twitter Gue](https://x.com/zeihanaulia)
-
-Semoga lo betah di sini, dan jangan sungkan untuk memberikan masukan atau bertanya apa saja. Selamat menjelajah!
+Thanks for stopping by. If you have feedback or want to chat, feel free to reach out.

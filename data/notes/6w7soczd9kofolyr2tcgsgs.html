@@ -1,0 +1,677 @@
+<h1 id="setup-vm-azure">Setup Vm Azure<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-vm-azure"></a></h1>
+<h2 id="1-pendahuluan">1. Pendahuluan<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pendahuluan"></a></h2>
+<p>Lo mungkin udah sering denger soal <strong>Flowise</strong>—platform open-source yang simpel buat bikin chatflow AI dan integrasi ke berbagai sumber data. Kenapa Flowise? Karena dia bener-bener plug and play: lu tinggal deploy, bikin workflow, dan langsung bisa ngobrol pake LLM kayak ChatGPT. Ga usah repot setup backend ribet—langsung gas.</p>
+<p>Di tutorial kali ini, kita bakal setup Flowise dari awal sampe jalan di server, pake VM. Tapi apa sih <strong>VM</strong> itu?
+Singkatnya, VM (Virtual Machine) adalah server virtual yang lu bisa sewa dan kontrol sendiri. Ibaratnya kayak PC lo, tapi jalan di cloud. Lu bisa pilih: mau di Azure, AWS, GCP—semua sama prinsipnya. Kali ini, gue contohin di <strong>Azure VM</strong>, tapi langkahnya bakal sama aja kalau lu mau pake yang lain.</p>
+<p>Kenapa pake VM?</p>
+<ul>
+<li>Karena <strong>Flowise</strong> itu butuh environment yang stabil dan bisa diakses internet.</li>
+<li>Ga ribet: lu punya full akses buat ngatur environment, install apa aja, aman.</li>
+<li>Bisa di-scale: nanti butuh worker, tinggal jalanin worker. Mau load balancer? Tinggal setup.</li>
+</ul>
+<p>Jadi, di sini kita bakal <strong>bikin VM di Azure, setup environment (Docker, Compose), deploy Flowise sampe kelar</strong>.
+Nextnya, lu bisa lanjut ke worker (buat load queue), bikin backup otomatis, sampe customin environment. Tapi yang penting: Flowise harus hidup dulu.</p>
+<p>Oke, Section 2 gue lanjut!</p>
+<hr>
+<h2 id="2-persiapan-vm">2. Persiapan VM<a aria-hidden="true" class="anchor-heading icon-link" href="#2-persiapan-vm"></a></h2>
+<p>Sebelum Flowise bisa jalan, kita butuh environment-nya dulu: <strong>VM</strong> (Virtual Machine) yang siap jadi rumah Flowise. Gue bakal bahas mulai dari bikin VM sampe nyiapin environment dasarnya.</p>
+<p>Oke, mari kita revisi dan bikin lebih detail, biar bener-bener komprehensif. Ini <strong>Section 2.1 Buat VM di Azure</strong> yang lebih mendalam!</p>
+<hr>
+<h3 id="21-buat-vm-di-azure-langkah-lengkap">2.1 Buat VM di Azure (Langkah Lengkap)<a aria-hidden="true" class="anchor-heading icon-link" href="#21-buat-vm-di-azure-langkah-lengkap"></a></h3>
+<p><strong>Kenapa VM?</strong>
+Karena Flowise bakal jalan stabil di environment yang dedicated. Azure VM ini semacam “rumah” yang lu kelola sendiri — lu bisa atur CPU, RAM, disk space, dan keamanan sesuai kebutuhan.</p>
+<p><strong>Langkah-langkah lengkapnya:</strong></p>
+<h4 id="a-akses-portal-azure">a. Akses Portal Azure<a aria-hidden="true" class="anchor-heading icon-link" href="#a-akses-portal-azure"></a></h4>
+<ol>
+<li>Buka browser dan login ke <a href="https://portal.azure.com/">Azure Portal</a>.</li>
+<li>Di sidebar kiri, klik <strong>Virtual Machines</strong>.</li>
+</ol>
+<h4 id="b-mulai-buat-vm">b. Mulai Buat VM<a aria-hidden="true" class="anchor-heading icon-link" href="#b-mulai-buat-vm"></a></h4>
+<ol>
+<li>Klik <strong>+ Create</strong> > <strong>Azure Virtual Machine</strong>.</li>
+<li>Lu bakal lihat form “Create a virtual machine”.</li>
+</ol>
+<h4 id="c-basic-details">c. Basic Details<a aria-hidden="true" class="anchor-heading icon-link" href="#c-basic-details"></a></h4>
+<ul>
+<li><strong>Subscription</strong>: biasanya udah default ke subscription lu.</li>
+<li><strong>Resource Group</strong>: pilih yang udah ada, atau klik <strong>Create new</strong> buat bikin resource group baru (misalnya <code>rg-flowise</code>).</li>
+<li><strong>Virtual machine name</strong>: nama VM lu, misalnya <code>test-vm-1</code>.</li>
+<li><strong>Region</strong>: pilih region yang dekat sama user. Kalau buat testing, <code>Southeast Asia</code> atau <code>East Asia</code> biasanya bagus.</li>
+<li><strong>Availability options</strong>: default <code>No infrastructure redundancy required</code> (oke buat testing).</li>
+<li><strong>Image</strong>: pilih <strong>Ubuntu 22.04 LTS</strong> (versi stabil dan familiar).</li>
+<li><strong>Size</strong>: klik <strong>See all sizes</strong> dan pilih yang pas. Buat testing, <code>B1s</code> udah cukup (1 vCPU, 1 GB RAM).</li>
+<li><strong>Authentication type</strong>:
+<ul>
+<li>Pilih <strong>SSH public key</strong> biar lebih aman.</li>
+<li><strong>Username</strong>: misalnya <code>azureuser</code>.</li>
+<li><strong>SSH public key source</strong>: biasanya lu udah punya key di <code>~/.ssh/id_rsa.pub</code>. Copy paste ke kolom ini.</li>
+</ul>
+</li>
+<li><strong>Inbound port rules</strong>:
+<ul>
+<li><strong>Public inbound ports</strong>: <code>Allow selected ports</code>.</li>
+<li><strong>Select inbound ports</strong>: pilih <code>SSH (22)</code>.</li>
+<li>Nanti kita atur port lain (3000 buat Flowise, 6379 buat Redis).`</li>
+</ul>
+</li>
+</ul>
+<h4 id="d-disk-dan-storage">d. Disk dan Storage<a aria-hidden="true" class="anchor-heading icon-link" href="#d-disk-dan-storage"></a></h4>
+<ul>
+<li><strong>OS disk type</strong>: defaultnya <strong>Standard SSD</strong> (cukup untuk testing).</li>
+<li>Kalau butuh data disk tambahan, nanti bisa attach disk lain.</li>
+</ul>
+<h4 id="e-networking">e. Networking<a aria-hidden="true" class="anchor-heading icon-link" href="#e-networking"></a></h4>
+<ul>
+<li>Azure otomatis bikin Virtual Network dan Subnet.</li>
+<li><strong>Public IP</strong>: biar lu bisa SSH, pastikan aktif.</li>
+<li><strong>NIC network security group</strong>: defaultnya bikin <strong>Basic</strong> rule SSH (22). Nanti lu bisa atur rule buat 3000 &#x26; 6379 manual kalau perlu.</li>
+</ul>
+<h4 id="f-management-monitoring-dan-lainnya">f. Management, Monitoring, dan lainnya<a aria-hidden="true" class="anchor-heading icon-link" href="#f-management-monitoring-dan-lainnya"></a></h4>
+<ul>
+<li>
+<p>Buat testing, lu bisa biarin default.</p>
+</li>
+<li>
+<p>Kalau buat production, pastikan:</p>
+<ul>
+<li><strong>Boot diagnostics</strong>: aktif.</li>
+<li><strong>Auto-shutdown</strong>: aktifin biar hemat biaya kalo lupa shutdown.</li>
+</ul>
+</li>
+</ul>
+<h4 id="g-review--create">g. Review &#x26; Create<a aria-hidden="true" class="anchor-heading icon-link" href="#g-review--create"></a></h4>
+<ul>
+<li>Klik <strong>Review + create</strong>.</li>
+<li>Azure bakal validasi. Kalau ga ada error, klik <strong>Create</strong>.</li>
+</ul>
+<p>Tunggu 1–2 menit sampe VM ready.</p>
+<hr>
+<h4 id="h-ssh-ke-vm">h. SSH ke VM<a aria-hidden="true" class="anchor-heading icon-link" href="#h-ssh-ke-vm"></a></h4>
+<ul>
+<li>Setelah VM aktif, liat <strong>Public IP address</strong> di dashboard VM.</li>
+<li>Di terminal lokal lu:</li>
+</ul>
+<pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> azureuser@<span class="token operator">&#x3C;</span>public-ip<span class="token operator">></span>
+</code></pre>
+<p>Ganti <code>&#x3C;public-ip></code> dengan IP VM lu. Kalau pake password, dia bakal minta password. Kalau pake SSH key, langsung connect.</p>
+<h4 id="i-atur-firewall-buat-port-flowise--redis">i. Atur Firewall Buat Port Flowise &#x26; Redis<a aria-hidden="true" class="anchor-heading icon-link" href="#i-atur-firewall-buat-port-flowise--redis"></a></h4>
+<p>By default, cuma port 22 yang kebuka. Flowise jalan di port 3000 dan Redis di 6379. Jadi:</p>
+<ol>
+<li>
+<p>Balik ke Azure Portal.</p>
+</li>
+<li>
+<p>Masuk ke VM > <strong>Networking</strong>.</p>
+</li>
+<li>
+<p>Klik <strong>Add inbound port rule</strong>:</p>
+<ul>
+<li><strong>Source</strong>: Any</li>
+<li><strong>Source port ranges</strong>: *</li>
+<li><strong>Destination</strong>: Any</li>
+<li><strong>Destination port ranges</strong>: 3000</li>
+<li><strong>Protocol</strong>: TCP</li>
+<li><strong>Action</strong>: Allow</li>
+<li><strong>Priority</strong>: 300 (biar ga bentrok sama rule lain).</li>
+<li><strong>Name</strong>: allow-3000</li>
+</ul>
+</li>
+<li>
+<p>Ulangi buat port 6379 (Redis).</p>
+</li>
+</ol>
+<hr>
+<h4 id="j-sekarang-vm-lu-siap">j. Sekarang VM lu siap<a aria-hidden="true" class="anchor-heading icon-link" href="#j-sekarang-vm-lu-siap"></a></h4>
+<ul>
+<li>OS Ubuntu 22.04 LTS</li>
+<li>Port 22 (SSH), 3000 (Flowise), 6379 (Redis) udah kebuka</li>
+<li>SSH udah bisa dipake</li>
+</ul>
+<p>Udah. Tinggal setup environment dasar (update OS, pasang Docker, dll.) di section selanjutnya.</p>
+<h3 id="22-akses-vm">2.2 Akses VM<a aria-hidden="true" class="anchor-heading icon-link" href="#22-akses-vm"></a></h3>
+<p>Setelah VM jadi, lu dapet public IP. Buka terminal lokal lu:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> azureuser@<span class="token operator">&#x3C;</span>public-ip<span class="token operator">></span>
+</code></pre>
+<p>Ganti <code>&#x3C;public-ip></code> pake IP VM yang lu buat.</p>
+<p>Kalau pake password, dia minta password. Kalau SSH key, tinggal masuk aja.</p>
+<p>Udah connect? Mantap. Kita lanjut ke setup dasar.</p>
+<h3 id="23-update--install-basic-tools">2.3 Update &#x26; Install Basic Tools<a aria-hidden="true" class="anchor-heading icon-link" href="#23-update--install-basic-tools"></a></h3>
+<p>Karena ini VM fresh, kita update dulu biar paketnya aman dan terbaru:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update <span class="token operator">&#x26;&#x26;</span> <span class="token function">sudo</span> <span class="token function">apt</span> upgrade -y
+</code></pre>
+<p>Install tools basic yang sering kepake:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">git</span> <span class="token function">curl</span> <span class="token function">wget</span> <span class="token function">htop</span>
+</code></pre>
+<p>Nanti lu bisa pake <code>htop</code> buat monitor load VM.</p>
+<h3 id="24-pasang-docker--docker-compose">2.4 Pasang Docker &#x26; Docker Compose<a aria-hidden="true" class="anchor-heading icon-link" href="#24-pasang-docker--docker-compose"></a></h3>
+<p>Flowise butuh Docker biar ga ribet dependensi.</p>
+<ol>
+<li>Install Docker:</li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> -fsSL https://get.docker.com -o get-docker.sh
+<span class="token function">sudo</span> <span class="token function">sh</span> get-docker.sh
+</code></pre>
+<ol start="2">
+<li>Cek Docker udah jalan:</li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl status <span class="token function">docker</span>
+</code></pre>
+<ol start="3">
+<li>Install Docker Compose (biar gampang manage multi-container):</li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">docker-compose</span>
+</code></pre>
+<ol start="4">
+<li>Biar ga pake <code>sudo</code> terus, tambahin user ke grup Docker:</li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">usermod</span> -aG <span class="token function">docker</span> <span class="token environment constant">$USER</span>
+</code></pre>
+<p>Keluar SSH (<code>exit</code>) dan masuk lagi biar group Docker langsung aktif.</p>
+<hr>
+<p>Di sini, VM lu udah siap buat deploy Flowise. Docker dan Compose udah jalan. Next, kita bakal setup Flowise bareng config dasar (pake file <code>.env</code>, <code>docker-compose.yml</code>, dll).</p>
+<p>Oke, lanjut ke <strong>Section 3: Deploy Flowise</strong>?</p>
+<p>Oke, kita lanjut ke <strong>Section 3: Setup Environment Dasar di VM</strong>. Ini bagian penting biar VM lu siap buat deploy Flowise dan Redis.</p>
+<hr>
+<h3 id="3-setup-environment-dasar-di-vm">3. Setup Environment Dasar di VM<a aria-hidden="true" class="anchor-heading icon-link" href="#3-setup-environment-dasar-di-vm"></a></h3>
+<p>Begitu lu SSH ke VM, kita langsung rapihin environment-nya supaya stabil dan ga bikin pusing ke depannya.</p>
+<p><strong>a. Update OS</strong>
+Pertama, update OS ke versi terbaru biar aman dan stabil:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update <span class="token operator">&#x26;&#x26;</span> <span class="token function">sudo</span> <span class="token function">apt</span> upgrade -y
+</code></pre>
+<p>Ini bakal ambil update security patch dan package terbaru. Tunggu sampe kelar.</p>
+<hr>
+<p><strong>b. Install Dependency Dasar</strong>
+Flowise butuh Docker &#x26; Docker Compose. Kita pasang dulu:</p>
+<ol>
+<li><strong>Install Docker:</strong></li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> docker.io -y
+</code></pre>
+<ol start="2">
+<li><strong>Enable dan Start Docker:</strong></li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span>
+<span class="token function">sudo</span> systemctl start <span class="token function">docker</span>
+</code></pre>
+<ol start="3">
+<li><strong>Cek Docker:</strong></li>
+</ol>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> --version
+</code></pre>
+<p>Harusnya muncul versi Docker.</p>
+<hr>
+<p><strong>c. Install Docker Compose</strong>
+Docker Compose biasanya ga include di Ubuntu. Kita install manual:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">docker-compose</span> -y
+</code></pre>
+<p>Cek versi:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker-compose</span> --version
+</code></pre>
+<hr>
+<p><strong>d. Tambah User ke Group Docker (opsional)</strong>
+Supaya ga perlu <code>sudo</code> tiap kali jalanin Docker:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">usermod</span> -aG <span class="token function">docker</span> <span class="token environment constant">$USER</span>
+</code></pre>
+<p>Keluar dan login lagi biar groupnya kebaca:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">exit</span>
+</code></pre>
+<p>Terus SSH lagi ke VM.</p>
+<hr>
+<p><strong>e. Cek Firewall (Opsional)</strong>
+Kadang firewall VM nutup port default:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw status
+</code></pre>
+<p>Kalau aktif dan lu mau atur rule:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow <span class="token number">3000</span>/tcp
+<span class="token function">sudo</span> ufw allow <span class="token number">6379</span>/tcp
+<span class="token function">sudo</span> ufw reload
+</code></pre>
+<hr>
+<p><strong>f. Tes Docker</strong>
+Lu bisa coba jalanin container dummy buat tes:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> run hello-world
+</code></pre>
+<p>Kalau muncul “Hello from Docker!”, environment Docker lu udah beres.</p>
+<hr>
+<p><strong>g. Siapin Direktori Project</strong>
+Lu bisa buat satu folder buat simpen semua file:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">mkdir</span> ~/myapp
+<span class="token builtin class-name">cd</span> ~/myapp
+</code></pre>
+<hr>
+<h3 id="4-deploy-flowise--redis-pakai-docker-compose">4. Deploy Flowise &#x26; Redis pakai Docker Compose<a aria-hidden="true" class="anchor-heading icon-link" href="#4-deploy-flowise--redis-pakai-docker-compose"></a></h3>
+<p>Sekarang kita udah punya environment yang siap tempur. Waktunya deploy Flowise barengan Redis pake Docker Compose.</p>
+<hr>
+<p><strong>a. Buat File <code>.env</code></strong></p>
+<p>Simpan environment variable di satu file <code>.env</code>. Contoh paling basic:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">cat</span> <span class="token operator">&#x3C;&#x3C;</span><span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">></span> .env</span>
+PORT=3000
+DATABASE_PATH=/root/.flowise
+SECRETKEY_PATH=/root/.flowise
+LOG_PATH=/root/.flowise/logs
+BLOB_STORAGE_PATH=/root/.flowise/storage
+JWT_AUTH_TOKEN_SECRET=secret
+JWT_REFRESH_TOKEN_SECRET=secret
+JWT_ISSUER=flowise
+JWT_AUDIENCE=flowise
+EXPRESS_SESSION_SECRET=flowise
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+MODE=queue
+QUEUE_NAME=flowise-queue
+QUEUE_REDIS_EVENT_STREAM_MAX_LEN=100000
+EOF</span>
+</code></pre>
+<hr>
+<p><strong>b. Buat File <code>docker-compose.yml</code></strong></p>
+<p>Ini file utama yang bakal jalanin Flowise &#x26; Redis:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.1'</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis<span class="token punctuation">:</span>alpine
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> docker_redis_1
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">'6379:6379'</span>
+
+  <span class="token key atrule">flowise-web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> flowiseai/flowise
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> flowise<span class="token punctuation">-</span>web
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> PORT=$<span class="token punctuation">{</span>PORT<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> MODE=$<span class="token punctuation">{</span>MODE<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> REDIS_HOST=$<span class="token punctuation">{</span>REDIS_HOST<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> REDIS_PORT=$<span class="token punctuation">{</span>REDIS_PORT<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> QUEUE_NAME=$<span class="token punctuation">{</span>QUEUE_NAME<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> QUEUE_REDIS_EVENT_STREAM_MAX_LEN=$<span class="token punctuation">{</span>QUEUE_REDIS_EVENT_STREAM_MAX_LEN<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> DATABASE_PATH=$<span class="token punctuation">{</span>DATABASE_PATH<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> SECRETKEY_PATH=$<span class="token punctuation">{</span>SECRETKEY_PATH<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> LOG_PATH=$<span class="token punctuation">{</span>LOG_PATH<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> BLOB_STORAGE_PATH=$<span class="token punctuation">{</span>BLOB_STORAGE_PATH<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> JWT_AUTH_TOKEN_SECRET=$<span class="token punctuation">{</span>JWT_AUTH_TOKEN_SECRET<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> JWT_REFRESH_TOKEN_SECRET=$<span class="token punctuation">{</span>JWT_REFRESH_TOKEN_SECRET<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> JWT_ISSUER=$<span class="token punctuation">{</span>JWT_ISSUER<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> JWT_AUDIENCE=$<span class="token punctuation">{</span>JWT_AUDIENCE<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> EXPRESS_SESSION_SECRET=$<span class="token punctuation">{</span>EXPRESS_SESSION_SECRET<span class="token punctuation">}</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">'${PORT}:${PORT}'</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ~/.flowise<span class="token punctuation">:</span>/root/.flowise
+</code></pre>
+<hr>
+<p><strong>c. Jalankan Docker Compose</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker-compose</span> --env-file .env up -d
+</code></pre>
+<p>Docker Compose bakal:</p>
+<ul>
+<li>Download image Redis &#x26; Flowise</li>
+<li>Jalanin container</li>
+<li>Otomatis restart kalo VM reboot</li>
+</ul>
+<hr>
+<p><strong>d. Cek Status</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> <span class="token function">ps</span>
+</code></pre>
+<p>Harusnya muncul dua container:</p>
+<ul>
+<li><code>docker_redis_1</code></li>
+<li><code>flowise-web</code></li>
+</ul>
+<hr>
+<p><strong>e. Akses Flowise</strong></p>
+<p>Buka browser, ketik:</p>
+<pre><code>http://&#x3C;IP_VM>:3000
+</code></pre>
+<p>Harusnya udah muncul Flowise Dashboard.</p>
+<hr>
+<p><strong>f. Troubleshoot Kecil</strong></p>
+<ul>
+<li>
+<p>Kalo container crash:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs flowise-web
+</code></pre>
+</li>
+<li>
+<p>Kalo Redis error:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs docker_redis_1
+</code></pre>
+</li>
+</ul>
+<hr>
+<p><strong>g. Next: Setup Worker</strong>
+Flowise ini udah jalan, tapi dia masih single instance. Worker Redis belum di-setup. Nanti worker Redis ini yang bakal scale dan handle background job.</p>
+<h3 id="5-konfigurasi-environment">5. Konfigurasi Environment<a aria-hidden="true" class="anchor-heading icon-link" href="#5-konfigurasi-environment"></a></h3>
+<p>Oke, di tahap ini kita udah punya Flowise repo dan file-file pentingnya. Sekarang waktunya bikin file environment variable biar Flowise tau di mana dia harus nyimpen data dan konek ke Redis (kalau pakai).</p>
+<hr>
+<h4 id="a-kenapa-penting">a. Kenapa Penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#a-kenapa-penting"></a></h4>
+<p>File <code>.env</code> ini penting banget. Semua setting environment — port, database path, secret key, Redis, dll — disimpen di sini. Biar kalo lu mau deploy lagi di server lain, tinggal copy file <code>.env</code> doang. Praktis!</p>
+<hr>
+<h4 id="b-bikin-file-env-dasar">b. Bikin File <code>.env</code> Dasar<a aria-hidden="true" class="anchor-heading icon-link" href="#b-bikin-file-env-dasar"></a></h4>
+<p>Lu bisa bikin file <code>.env</code> langsung di VM:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">nano</span> .env
+</code></pre>
+<p>Terus isiin basic config kayak gini:</p>
+<pre class="language-env"><code class="language-env">PORT=3000
+
+# Path default storage Flowise
+DATABASE_PATH=/root/.flowise
+SECRETKEY_PATH=/root/.flowise
+LOG_PATH=/root/.flowise/logs
+BLOB_STORAGE_PATH=/root/.flowise/storage
+
+# Basic JWT dan session secret
+JWT_AUTH_TOKEN_SECRET=secret
+JWT_REFRESH_TOKEN_SECRET=secret
+JWT_ISSUER=flowise
+JWT_AUDIENCE=flowise
+EXPRESS_SESSION_SECRET=flowise
+
+# Redis config
+REDIS_HOST=redis
+REDIS_PORT=6379
+MODE=queue
+QUEUE_NAME=flowise-queue
+QUEUE_REDIS_EVENT_STREAM_MAX_LEN=100000
+</code></pre>
+<p>Simpan file <code>.env</code> ini. Ini settingan yang udah cukup buat jalanin Flowise web plus Redis queue worker (opsional).</p>
+<hr>
+<h4 id="c-opsi-setting-bisa-dikosongin--custom">c. Opsi Setting (Bisa Dikosongin / Custom)<a aria-hidden="true" class="anchor-heading icon-link" href="#c-opsi-setting-bisa-dikosongin--custom"></a></h4>
+<p>Kalau mau minimalis banget, lu bisa <strong>skip</strong> beberapa setting kayak SMTP, storage S3, atau Postgres. Flowise bisa jalanin semua data langsung di path <code>~/.flowise</code> default.</p>
+<p>Tapi kalo lu mau:</p>
+<ul>
+<li>Connect ke Postgres → Lu bisa tambah <code>DATABASE_TYPE</code>, <code>DATABASE_HOST</code>, <code>DATABASE_PORT</code>, dll.</li>
+<li>Pakai storage S3 / GCS → Lu bisa tambah <code>STORAGE_TYPE</code>, <code>S3_*</code>, <code>GOOGLE_*</code>.</li>
+<li>Aktifin monitoring (Prometheus, OpenTelemetry) → Tambah <code>METRICS_*</code> di <code>.env</code>.</li>
+</ul>
+<hr>
+<h4 id="d-cek-kembali">d. Cek Kembali<a aria-hidden="true" class="anchor-heading icon-link" href="#d-cek-kembali"></a></h4>
+<p>Sebelum lu <code>docker-compose up -d</code>, pastiin file <code>.env</code> lu udah:
+✅ Path storage
+✅ JWT secret
+✅ Redis config (kalau mau pakai queue)
+✅ Port (3000 default)</p>
+<hr>
+<h4 id="e-gunakan-env-di-docker-compose">e. Gunakan <code>.env</code> di Docker Compose<a aria-hidden="true" class="anchor-heading icon-link" href="#e-gunakan-env-di-docker-compose"></a></h4>
+<p>Pas lu jalanin Docker Compose, jangan lupa pake parameter <code>--env-file</code>:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker-compose</span> --env-file .env up -d
+</code></pre>
+<p>Dengan ini, Docker Compose bakal inject semua setting di <code>.env</code> ke environment container. Jadi config lu rapih dan gampang dikelola.</p>
+<hr>
+<h3 id="6-jalankan-flowise-web">6. Jalankan Flowise Web<a aria-hidden="true" class="anchor-heading icon-link" href="#6-jalankan-flowise-web"></a></h3>
+<p>Nah, sekarang lu udah punya semua yang lu butuhin — Docker Compose, file <code>.env</code>, dan repo Flowise yang udah di-clone. Waktunya ngejalanin Flowise biar bisa lu akses lewat browser!</p>
+<hr>
+<h4 id="a-jalankan-docker-compose">a. Jalankan Docker Compose<a aria-hidden="true" class="anchor-heading icon-link" href="#a-jalankan-docker-compose"></a></h4>
+<p>Cukup satu perintah ini, asalkan lu udah di direktori yang sama sama <code>docker-compose.yml</code>:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker-compose</span> --env-file .env up -d
+</code></pre>
+<p>Penjelasannya:</p>
+<ul>
+<li><code>--env-file .env</code> → buat baca file <code>.env</code> lu.</li>
+<li><code>-d</code> → biar container jalan di background, gak ganggu terminal.</li>
+</ul>
+<hr>
+<h4 id="b-cek-status">b. Cek Status<a aria-hidden="true" class="anchor-heading icon-link" href="#b-cek-status"></a></h4>
+<p>Cek container yang lagi jalan:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> <span class="token function">ps</span>
+</code></pre>
+<p>Harusnya lu bakal liat:</p>
+<ul>
+<li><code>flowise-web</code> (container Flowise)</li>
+<li><code>docker_redis_1</code> (container Redis, kalau lu setup Redis juga)</li>
+</ul>
+<p>Kalau statusnya <strong>Up</strong>, artinya udah beres!</p>
+<hr>
+<h4 id="c-akses-flowise-di-browser">c. Akses Flowise di Browser<a aria-hidden="true" class="anchor-heading icon-link" href="#c-akses-flowise-di-browser"></a></h4>
+<p>Sekarang, lu tinggal buka browser dan masuk ke:</p>
+<pre><code>http://&#x3C;IP_VM>:3000
+</code></pre>
+<p>Contoh:</p>
+<pre><code>http://20.212.155.7:3000
+</code></pre>
+<p>Harusnya lu udah liat dashboard Flowise — itu artinya <strong>Flowise udah running!</strong></p>
+<hr>
+<h4 id="d-apa-yang-dilakuin-flowise">d. Apa yang Dilakuin Flowise<a aria-hidden="true" class="anchor-heading icon-link" href="#d-apa-yang-dilakuin-flowise"></a></h4>
+<p>Pas Flowise Web udah jalan, dia bakal:</p>
+<ul>
+<li>Buka port 3000 buat antarmuka (dashboard web).</li>
+<li>Simpen semua data (flow, setting, secret) di folder <code>~/.flowise</code> (volume mapping).</li>
+<li>Kalau Redis aktif dan lu udah set <code>MODE=queue</code>, dia juga siap ngoper ke worker (nanti lu setup).</li>
+</ul>
+<hr>
+<h4 id="e-troubleshooting-singkat">e. Troubleshooting Singkat<a aria-hidden="true" class="anchor-heading icon-link" href="#e-troubleshooting-singkat"></a></h4>
+<p>Kalau lu gak bisa akses di browser:</p>
+<ul>
+<li>Cek firewall VM (port 3000 udah kebuka belum?).</li>
+<li>Cek status container pakai <code>sudo docker ps</code> (ada yang restart?).</li>
+<li>Liat log container Flowise:</li>
+</ul>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs flowise-web
+</code></pre>
+<p>Biasanya error log cukup jelas, kayak salah path atau conflict port.</p>
+<hr>
+<h3 id="7-opsional-setup-worker">7. (Opsional) Setup Worker<a aria-hidden="true" class="anchor-heading icon-link" href="#7-opsional-setup-worker"></a></h3>
+<p>Worker ini sebenernya <strong>bukan wajib</strong> — Flowise Web udah cukup kalau trafficnya santai. Tapi kalau lu mau:</p>
+<ul>
+<li><strong>Load lebih berat</strong> (banyak user / banyak flow jalan bareng).</li>
+<li><strong>Pakai mode queue</strong> biar lebih scalable.</li>
+<li><strong>Pisahin job processing</strong> biar web lebih ringan.</li>
+</ul>
+<p>Worker adalah jawabannya.</p>
+<hr>
+<h4 id="a-apa-itu-worker">a. Apa itu Worker?<a aria-hidden="true" class="anchor-heading icon-link" href="#a-apa-itu-worker"></a></h4>
+<p>Secara singkat:</p>
+<ul>
+<li><strong>Flowise Web</strong>: frontend dan API.</li>
+<li><strong>Flowise Worker</strong>: backend yang kerjain job intensif (eksekusi alur RAG, LLM, dkk).</li>
+</ul>
+<p>Worker <strong>ngambil job</strong> dari Redis, yang jadi queue. Jadi Redis <strong>harus jalan dulu</strong>.</p>
+<hr>
+<h4 id="b-kapan-worker-ini-kepake">b. Kapan Worker Ini Kepake?<a aria-hidden="true" class="anchor-heading icon-link" href="#b-kapan-worker-ini-kepake"></a></h4>
+<p>Worker jalan kalau di <code>.env</code> lu set:</p>
+<pre class="language-env"><code class="language-env">MODE=queue
+</code></pre>
+<p>Di Flowise Web, dia cuma ngirim job ke Redis. Worker yang bakal ambil job dan eksekusi.</p>
+<hr>
+<h4 id="c-setup-docker-compose-worker">c. Setup Docker Compose Worker<a aria-hidden="true" class="anchor-heading icon-link" href="#c-setup-docker-compose-worker"></a></h4>
+<p>Biasanya <strong>worker Compose file</strong> (<code>docker-compose.worker.yml</code>) beda sama <code>docker-compose.yml</code> web. Contoh file:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.1'</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">worker</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> flowiseai/flowise
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> MODE=queue
+      <span class="token punctuation">-</span> QUEUE_NAME=flowise<span class="token punctuation">-</span>queue
+      <span class="token punctuation">-</span> REDIS_HOST=redis
+      <span class="token punctuation">-</span> REDIS_PORT=6379
+      <span class="token punctuation">-</span> WORKER_CONCURRENCY=100
+      <span class="token punctuation">-</span> DATABASE_PATH=/root/.flowise
+      <span class="token punctuation">-</span> SECRETKEY_PATH=/root/.flowise
+      <span class="token punctuation">-</span> LOG_PATH=/root/.flowise/logs
+      <span class="token punctuation">-</span> BLOB_STORAGE_PATH=/root/.flowise/storage
+    <span class="token key atrule">entrypoint</span><span class="token punctuation">:</span> /bin/sh <span class="token punctuation">-</span>c "sleep 3; flowise worker"
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> redis
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ~/.flowise<span class="token punctuation">:</span>/root/.flowise
+
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis<span class="token punctuation">:</span><span class="token number">7</span>
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+</code></pre>
+<p>Worker ini bakal <strong>nyambung ke Redis</strong> (port 6379) dan siap tarik job.</p>
+<hr>
+<h4 id="d-jalankan-worker">d. Jalankan Worker<a aria-hidden="true" class="anchor-heading icon-link" href="#d-jalankan-worker"></a></h4>
+<p>Kalau Redis udah jalan:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker-compose</span> --env-file .env -f docker-compose.worker.yml up -d
+</code></pre>
+<p>Cek worker status:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> <span class="token function">ps</span>
+</code></pre>
+<p>Harusnya container <code>worker</code> statusnya <strong>Up</strong>.</p>
+<hr>
+<h4 id="e-kapan-worker-ini-bakal-aktif">e. Kapan Worker Ini Bakal "Aktif"?<a aria-hidden="true" class="anchor-heading icon-link" href="#e-kapan-worker-ini-bakal-aktif"></a></h4>
+<p>Worker jalan terus, tapi dia <strong>baru "sibuk"</strong> kalau ada job masuk:</p>
+<ul>
+<li>Flowise Web lempar job (misal deploy Flow).</li>
+<li>Worker ambil job dari Redis dan eksekusi.</li>
+</ul>
+<p>Kalau job kosong, worker standby aja.</p>
+<hr>
+<h4 id="f-tips-tambahan">f. Tips Tambahan<a aria-hidden="true" class="anchor-heading icon-link" href="#f-tips-tambahan"></a></h4>
+<ul>
+<li>Pastikan <code>MODE=queue</code> di Web dan Worker sama.</li>
+<li>Kalau lu pake volume mapping <code>~/.flowise</code>, Worker share data yang sama sama Web.</li>
+<li>Redis <strong>harus stabil</strong> — worker butuh Redis buat ngambil job.</li>
+</ul>
+<h3 id="8-troubleshooting--tips">8. Troubleshooting &#x26; Tips<a aria-hidden="true" class="anchor-heading icon-link" href="#8-troubleshooting--tips"></a></h3>
+<p>Walaupun setup Flowise di VM lumayan gampang, pasti ada beberapa masalah yang sering muncul. Nah, di section ini, gue kasih tips troubleshooting dan juga beberapa tools yang bisa bantu lu mantau performa container.</p>
+<hr>
+<h4 id="a-container-restart-terus">a. Container Restart Terus<a aria-hidden="true" class="anchor-heading icon-link" href="#a-container-restart-terus"></a></h4>
+<p>Kalau lu lihat container <strong>restart terus</strong> di <code>docker ps</code> (statusnya “Restarting”), biasanya karena:</p>
+<ul>
+<li>File <code>.env</code> belum lengkap atau ada yang typo.</li>
+<li>Redis belum jalan (padahal Web/Worker butuh Redis).</li>
+<li>Volume <code>~/.flowise</code> belum ada permission (biasanya di VM fresh, butuh <code>sudo chown</code>).</li>
+<li>Port conflict: port <code>3000</code> (web) atau <code>6379</code> (Redis) udah kepake sama service lain.</li>
+</ul>
+<p><strong>Solusi:</strong></p>
+<ul>
+<li>
+<p>Cek log container:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs flowise-web
+</code></pre>
+</li>
+<li>
+<p>Pastikan file <code>.env</code> valid:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">cat</span> .env
+</code></pre>
+</li>
+<li>
+<p>Tes Redis udah running:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> <span class="token function">ps</span> <span class="token operator">|</span> <span class="token function">grep</span> redis
+</code></pre>
+</li>
+</ul>
+<hr>
+<h4 id="b-port-conflict">b. Port Conflict<a aria-hidden="true" class="anchor-heading icon-link" href="#b-port-conflict"></a></h4>
+<p>Kalau muncul error <code>port already in use</code> pas <code>docker-compose up</code>, itu tandanya port 3000 atau 6379 udah dipake.</p>
+<p><strong>Solusi:</strong></p>
+<ul>
+<li>
+<p>Cari service yang pake port itu:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">lsof</span> -i :3000
+<span class="token function">sudo</span> <span class="token function">lsof</span> -i :6379
+</code></pre>
+</li>
+<li>
+<p>Kill service yang ganggu:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">kill</span> -9 <span class="token operator">&#x3C;</span>pid<span class="token operator">></span>
+</code></pre>
+</li>
+</ul>
+<hr>
+<h4 id="c-worker-gak-jalan--diam-aja">c. Worker Gak Jalan / Diam Aja<a aria-hidden="true" class="anchor-heading icon-link" href="#c-worker-gak-jalan--diam-aja"></a></h4>
+<p>Worker gak ngapa-ngapain?</p>
+<ul>
+<li>
+<p>Cek Redis:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs docker_redis_1
+</code></pre>
+</li>
+<li>
+<p>Pastikan <code>MODE=queue</code> di <code>.env</code> Web dan Worker <strong>sama</strong>.</p>
+</li>
+<li>
+<p>Worker cuma “bangun” kalau ada job. Jadi lu coba jalanin Flow biar dia ada kerjaan.</p>
+</li>
+</ul>
+<hr>
+<h4 id="d-cara-baca-log-container">d. Cara Baca Log Container<a aria-hidden="true" class="anchor-heading icon-link" href="#d-cara-baca-log-container"></a></h4>
+<p>Penting nih buat debugging:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs flowise-web
+<span class="token function">sudo</span> <span class="token function">docker</span> logs worker
+</code></pre>
+<p>Kalau lognya terlalu panjang, bisa pakai <code>tail</code>:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">docker</span> logs -f flowise-web
+</code></pre>
+<hr>
+<h4 id="e-tools-bantu-portainer--docker-dashboard">e. Tools Bantu: Portainer &#x26; Docker Dashboard<a aria-hidden="true" class="anchor-heading icon-link" href="#e-tools-bantu-portainer--docker-dashboard"></a></h4>
+<p>Kalau lu mau <strong>liat container secara visual</strong>, cobain tools kayak:</p>
+<ul>
+<li><strong>Portainer</strong>: UI buat manage container, liat logs, restart, dll.</li>
+<li><strong>Docker Dashboard</strong> (kalau lu pake Docker Desktop).</li>
+</ul>
+<p>Install Portainer:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> volume create portainer_data
+<span class="token function">docker</span> run -d -p <span class="token number">9000</span>:9000 -p <span class="token number">8000</span>:8000 --name portainer <span class="token punctuation">\</span>
+    --restart<span class="token operator">=</span>always -v /var/run/docker.sock:/var/run/docker.sock <span class="token punctuation">\</span>
+    -v portainer_data:/data portainer/portainer-ce
+</code></pre>
+<p>Akses di browser:</p>
+<pre><code>http://&#x3C;VM_IP>:9000
+</code></pre>
+<hr>
+<h4 id="f-tips-tambahan-1">f. Tips Tambahan<a aria-hidden="true" class="anchor-heading icon-link" href="#f-tips-tambahan-1"></a></h4>
+<ul>
+<li><strong>Backup data <code>.flowise</code></strong>: semua logs, DB, dan storage Flowise ada di folder ini.</li>
+<li><strong>Auto restart</strong>: Compose udah <code>restart: always</code>, jadi kalau VM reboot, container auto naik lagi.</li>
+<li><strong>Scaling</strong>: kalau Flowise makin rame, lu bisa deploy Worker di VM lain (asal Redisnya bareng).</li>
+</ul>
+<h3 id="9-next-step-worker-dan-beyond">9. Next Step: Worker dan Beyond<a aria-hidden="true" class="anchor-heading icon-link" href="#9-next-step-worker-dan-beyond"></a></h3>
+<p>Kalau lu udah deploy Flowise Web, biasanya yang kepikiran selanjutnya adalah:</p>
+<hr>
+<h4 id="a-kapan-perlu-setup-worker">a. Kapan Perlu Setup Worker?<a aria-hidden="true" class="anchor-heading icon-link" href="#a-kapan-perlu-setup-worker"></a></h4>
+<p>Flowise Worker itu kayak “otak tambahan” buat ngerjain job berat (kayak scraping, generate response panjang, dll.). Worker <strong>jalanin job</strong> yang dikasih Flowise Web.</p>
+<ul>
+<li><strong>Kalau Flowise Web doang</strong>: semua job jalan di Web, bisa overload.</li>
+<li><strong>Kalau pake Worker</strong>: job dijalanin Worker, Web lebih ringan.</li>
+</ul>
+<p>Worker <strong>wajib</strong> kalau lu:</p>
+<ul>
+<li>Mau performa lebih stabil</li>
+<li>Ada job yang panjang</li>
+<li>Niat integrasi Flowise di production</li>
+</ul>
+<hr>
+<h4 id="b-redis-jadi-penghubung-web--worker">b. Redis Jadi “Penghubung” Web &#x26; Worker<a aria-hidden="true" class="anchor-heading icon-link" href="#b-redis-jadi-penghubung-web--worker"></a></h4>
+<p>Redis itu <strong>queue broker</strong> di Flowise:</p>
+<ul>
+<li>Flowise Web naro job ke Redis</li>
+<li>Worker ambil job dari Redis</li>
+</ul>
+<p>Makanya Redis wajib kalau pake Worker. Redis bisa lu deploy bareng (satu Compose) atau <strong>cluster</strong> (kalau mau scalable).</p>
+<hr>
+<h4 id="c-opsi-lanjutan-ssl--load-balancer">c. Opsi Lanjutan: SSL &#x26; Load Balancer<a aria-hidden="true" class="anchor-heading icon-link" href="#c-opsi-lanjutan-ssl--load-balancer"></a></h4>
+<p>Kalau lu udah deploy Web &#x26; Worker, next step biasanya:</p>
+<ul>
+<li><strong>Pasang SSL</strong> (HTTPS) pake Nginx Proxy Manager atau Caddy.</li>
+<li><strong>Load balancer</strong>: kalo lu deploy banyak Worker, lu load balance biar stabil.</li>
+</ul>
+<hr>
+<h4 id="d-opsi-auth-tambahan">d. Opsi Auth Tambahan<a aria-hidden="true" class="anchor-heading icon-link" href="#d-opsi-auth-tambahan"></a></h4>
+<p>Flowise udah support <strong>Basic Auth</strong> di level dashboard.
+Tapi kalo mau lebih secure, bisa:</p>
+<ul>
+<li>Reverse Proxy (Nginx Proxy Manager) + Basic Auth.</li>
+<li>OAuth2 / SSO pake Nginx atau external proxy.</li>
+</ul>
+<hr>
+<h4 id="e-upgrade--update-flowise">e. Upgrade &#x26; Update Flowise<a aria-hidden="true" class="anchor-heading icon-link" href="#e-upgrade--update-flowise"></a></h4>
+<p>Flowise lumayan aktif update, jadi lu juga perlu jaga:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> pull flowiseai/flowise
+<span class="token function">docker-compose</span> down <span class="token operator">&#x26;&#x26;</span> <span class="token function">docker-compose</span> up -d
+</code></pre>
+<p>Jangan lupa backup dulu <code>.flowise</code> biar data aman.</p>
+<hr>
+<h4 id="f-integrasi-lain">f. Integrasi Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#f-integrasi-lain"></a></h4>
+<p>Flowise itu enak karena bisa:</p>
+<ul>
+<li>Dipake bareng chatbot di WhatsApp, Discord, Slack, dll.</li>
+<li>Ditaro di workflow automation (kayak n8n, Zapier).</li>
+<li>Pake OpenAI atau LLM lain (Claude, Qwen, Ollama).</li>
+</ul>

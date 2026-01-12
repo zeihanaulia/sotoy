@@ -1,0 +1,72 @@
+<h1 id="nixos-on-windows">Nixos on Windows<a aria-hidden="true" class="anchor-heading icon-link" href="#nixos-on-windows"></a></h1>
+<h2 id="nixos-di-wsl--biar-setup-dev-lo-gak-ribet-tiap-ganti-laptop">NixOS di WSL — Biar Setup Dev Lo Gak Ribet Tiap Ganti Laptop<a aria-hidden="true" class="anchor-heading icon-link" href="#nixos-di-wsl--biar-setup-dev-lo-gak-ribet-tiap-ganti-laptop"></a></h2>
+<p>Gue udah capek tiap kali pindah laptop atau reinstall sistem harus setup ulang environment satu per satu. Install ini itu, copy config, lupa set env var, dan akhirnya... gak konsisten. Padahal kan pengennya begitu install, semua langsung jalan kaya sebelumnya.</p>
+<p>Makanya, gue mutusin buat pindah ke NixOS. Nantinya setup development env gue di wsl atau di MacOS akan sama. Tujuan akhirnya: dev environment yang deklaratif dan reproducible.</p>
+<hr>
+<h3 id="kenapa-gak-cukup-pakai-ubuntu--nix">Kenapa Gak Cukup Pakai Ubuntu + Nix?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-gak-cukup-pakai-ubuntu--nix"></a></h3>
+<p>Gue sempet nyobain itu juga. Di WSL Ubuntu, lo bisa install <code>nix</code>, terus setup environment lo lewat <code>nix-env</code>, <code>nix profile</code>, bahkan <code>home-manager</code>. Tapi hasilnya agak laen sih wkwkwk, environment lo seolah ditiban di atas Ubuntu. Kernel, systemd, dan banyak hal lain tetap milik Ubuntu. Yang gue dapet cuma <code>nix</code>-based package manager, bukan full declarative system.</p>
+<p>Dan ya, waktu itu gue juga ngalamin beberapa issue aneh. Salah satunya tentang path resolution di dalam WSL Ubuntu yang bikin environment keacak, terutama kalau lo setup pake <code>.bashrc</code>/<code>.zshrc</code> terus dijalanin lewat flake. Ada juga masalah PATH yang berantakan karena colokan antara Windows dan Linux. Gue dokumentasiin juga di sini:</p>
+<p>👉 <a href="https://zeihanaulia.github.io/sotoy/notes/57q7jyz0wff078xaz4s6eea">Recovering from a Broken Nix Wsl Setup</a></p>
+<p>Intinya, pendekatan "Ubuntu + Nix" bisa dibilang setengah jalan. Kayak lo pengen declarative, tapi fondasinya tetep mutable. Jadi nantinya setiap mau setup atau instalasi baru cuma bisa lewat declarative config ini. </p>
+<hr>
+<h3 id="install-nixos-di-wsl">Install NixOS di WSL<a aria-hidden="true" class="anchor-heading icon-link" href="#install-nixos-di-wsl"></a></h3>
+<p>Pertama, download image <code>.wsl</code> dari GitHub release-nya:
+→ <a href="https://github.com/nix-community/NixOS-WSL/releases">https://github.com/nix-community/NixOS-WSL/releases</a></p>
+<p>Setelah itu, import ke WSL pake PowerShell:</p>
+<pre class="language-powershell"><code class="language-powershell">wsl <span class="token operator">--</span>import NixOS C:\Distros\NixOS <span class="token punctuation">.</span>\Downloads\nixos<span class="token punctuation">.</span>wsl <span class="token operator">--</span>version 2
+</code></pre>
+<ul>
+<li><code>NixOS</code> di situ nama instance-nya. Lo bisa namain ini apa pun sih.</li>
+<li><code>C:\Distros\NixOS</code> itu direktori tempat disimpannya data <code>.ext4</code></li>
+<li>file <code>.wsl</code> tadi yang udah lo download</li>
+</ul>
+<p>Kalau lo mau bikin instance kedua buat testing atau sandbox, tinggal ganti nama dan path:</p>
+<pre class="language-powershell"><code class="language-powershell">wsl <span class="token operator">--</span>import NixTest C:\Distros\NixTest <span class="token punctuation">.</span>\Downloads\nixos<span class="token punctuation">.</span>wsl <span class="token operator">--</span>version 2
+</code></pre>
+<p>Abis itu, lo tinggal masuk:</p>
+<pre class="language-bash"><code class="language-bash">wsl -d NixOS
+</code></pre>
+<p>Lo bakal disambut dengan shell bash kosong. Gak ada <code>zsh</code>, gak ada <code>nvim</code>, belum ada flake juga. Tapi ini udah NixOS beneran.</p>
+<hr>
+<h3 id="konfigurasi-awal">Konfigurasi Awal<a aria-hidden="true" class="anchor-heading icon-link" href="#konfigurasi-awal"></a></h3>
+<p>Tambahin ini ke <code>.bashrc</code> lo supaya fitur flake bisa jalan:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'export NIX_CONFIG="experimental-features = nix-command flakes"'</span> <span class="token operator">>></span> ~/.bashrc
+<span class="token builtin class-name">source</span> ~/.bashrc
+</code></pre>
+<p>Setelah itu tes apakah environment-nya udah siap:</p>
+<pre class="language-bash"><code class="language-bash">nix <span class="token builtin class-name">eval</span> nixpkgs<span class="token comment">#hello</span>
+nix shell nixpkgs<span class="token comment">#bat</span>
+bat --version
+</code></pre>
+<p>Kalau semua jalan, berarti base system udah siap. Nix bisa resolve package, download derivation, dan aktifin shell-nya.</p>
+<hr>
+<h3 id="lokasi-file-nix">Lokasi File Nix<a aria-hidden="true" class="anchor-heading icon-link" href="#lokasi-file-nix"></a></h3>
+<p>Secara default, Nix nyimpen semua derivation dan build result lo di <code>/nix/store</code>. Karena lo lagi di WSL, partisi ini diemount dari file <code>.ext4</code> yang lo simpan waktu import tadi.</p>
+<p>Misal tadi lo import ke <code>C:\Distros\NixOS</code>, maka file ext4-nya ada di situ. Di dalam situ ya semua file yang dibaca Nix.</p>
+<p>Menariknya, bahkan kalau lo <code>ls /nix</code>, itu cuma symlink ke isi mount. Tapi NixOS-WSL udah handle semua mount-nya otomatis.</p>
+<hr>
+<h3 id="testing-basic-dev-setup">Testing Basic Dev Setup<a aria-hidden="true" class="anchor-heading icon-link" href="#testing-basic-dev-setup"></a></h3>
+<p>Lo bisa cobain mulai dari command sederhana:</p>
+<pre class="language-bash"><code class="language-bash">nix shell nixpkgs<span class="token comment">#bat</span>
+</code></pre>
+<p>Masuk ke shell itu dan jalanin:</p>
+<pre class="language-bash"><code class="language-bash">bat --version
+</code></pre>
+<p>Kalau jalan, artinya <code>nixpkgs</code> lo up to date dan semua udah siap dipake.</p>
+<hr>
+<h3 id="whats-next">What's Next?<a aria-hidden="true" class="anchor-heading icon-link" href="#whats-next"></a></h3>
+<p>Gue udah bikin struktur awal kayak gini:</p>
+<pre><code>flake.nix
+flake.lock
+/home/
+  zeihanaulia.nix
+/modules/
+  dev-tools.nix
+</code></pre>
+<p>Tujuannya jelas: gue pengen punya satu file <code>flake.nix</code> yang bisa dipake buat install semua dev tools, shell config, editor setup, bahkan CLI-CLI kecil yang biasa gue pake tiap hari.</p>
+<p>Gue juga rencanain pake <code>home-manager</code> supaya semua user config (git, shell, aliases, dll) bisa diatur dari 1 tempat. Tapi itu di langkah berikutnya.</p>
+<hr>
+<h3 id="penutup">Penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#penutup"></a></h3>
+<p>Yang penting sekarang, gue udah punya pondasi: WSL + NixOS yang proper, gak half-baked. Gak perlu ribet tiap kali ganti laptop atau setup baru. Semua tinggal pull repo dan <code>nixos-rebuild</code>.</p>
+<p>Kalau lo juga pengen dev environment yang gak cuma "works on my machine", tapi bisa dibangun ulang dengan satu command, menurut gue ini worth banget dicoba.</p>
+<p>Mau lanjut ke bagian flake setup dan home-manager? Gas. Kita bikin sampe lo tinggal <code>nixos-rebuild switch</code> dan semuanya siap tempur.</p>

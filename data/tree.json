@@ -1,0 +1,1059 @@
+{
+  "roots": [
+    {
+      "key": "spfwom01chbihki1twghclf",
+      "title": "Book Summaries",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "n7oobf4m1pytfexf8scoxao",
+          "title": "14 Habits of Highly Productive Developers",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "0rn87jn6z3ie8lq11zqhi0n",
+          "title": "Building a Second Brain",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "23znyhsi9lugmrcvhx4b5qr",
+          "title": "Continuous Integration (CI) and Continuous Delivery (CD) a Practical Guide to Designing and Developing Pipelines",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "pviuhlbg2byizkycrj21y2e",
+              "title": "7. Implementing Pipelines",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "qt1780a5r3yr1h7fcqql1by",
+          "title": "Dare to Lead",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "nqcileafeym7dxnxgdjw469",
+          "title": "Filosofi Teras",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "madilog",
+          "title": "Madilog",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "udapxjv1fpf80boxvak0rva",
+          "title": "Measure What Matters",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "oorvvxz032oov7psrw9ygte",
+          "title": "Self Driving",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "z2knclhdtc45qgvhiv78nfx",
+          "title": "Team Topologies",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "k774ju38pzm0h85rubp4dib",
+              "title": "The Problem with Org Charts",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "xvnfefwi9o4b10oxbk491wa",
+          "title": "The Compound Effect",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "apvcp6t3nkh534u1dwngqtv",
+          "title": "The Devops Handbook",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "2jw8nj1c5iybgzw5bjuz4hu",
+              "title": "Part I - The Three Ways",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "588eod7sssw7aq8rt2bqngf",
+                  "title": "Agile Continuous Delivery and the Three Ways",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "tl8lc3dlcmt97609fjhhi8o",
+          "title": "Youtube",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "bxbae5slt8nubmv5thy05xa",
+              "title": "How To Stand Out In An Insanely Competitive Tech Market (Ex-Amazon Principal Engineer)",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "075nm8xc03i6c4vgpijyjoi",
+              "title": "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "7q7g9eix5c7adk4h8hy4vqp",
+              "title": "The Super Mario Effect Tricking Your Brain into Learning More",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "wvtpake5hh5uu6swigzu5dk",
+      "title": "Daily",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "6vm6aa1m4c3judzai45s4cj",
+          "title": "Journal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "u2pv2czilhbwbf9ejm3gt2k",
+              "title": "2026",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "2f435djv1igcy7t1kbr48am",
+                  "title": "01",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": [
+                    {
+                      "key": "34j32rqq98iw0xfl48edqx4",
+                      "title": "2026-01-12",
+                      "icon": null,
+                      "hasTitleNumberOutlined": false,
+                      "vaultName": "vault",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bsv930j2j6qlih60c7eu7wh",
+      "title": "Handbook",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "3e9942id79hw89ncudt79ok",
+          "title": "Golang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "gscpu1k5cvyqrwnobbyna8p",
+              "title": "1 Idiomatic",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "ro7nzb092u06toxmg4iofya",
+              "title": "2 Membuat HTTP Server",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "s74bijnsy1zt9zzshpmeyk3",
+              "title": "3 Build Image Dengan Docker",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "7hpir84idoztmofa72t2ozc",
+              "title": "4 Setup Golang CI",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "85suwlt8zylgcra3sradjfs",
+              "title": "5 Custom Metrics Dengan Promteheus",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "qsjn6anz0awbgtdp59s2n0i",
+          "title": "Rust",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        }
+      ]
+    },
+    {
+      "key": "ohf85tu5nw2b8ewx6cetsmp",
+      "title": "Notes",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "kg0pjvvhr9oisfwxpdu8dtr",
+          "title": "10 Hari Menulis",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "jr9b6n2jbnpebmdh3ckzwzv",
+              "title": "2025",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "2025-a-new-beginning",
+                  "title": "20 Tahun Setelahnya",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                },
+                {
+                  "key": "2025-commitment",
+                  "title": "Di Antara Ribuan",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "6z24mjncoue34r2mlyk8zzu",
+          "title": "API Management",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "wjllig57c56t1zd1r06zi14",
+          "title": "Continous Delivery",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "1j8pdvsu4sefvao13i6zzo9",
+          "title": "Copilot",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.copilot.custom-instructions-best-practices",
+              "title": "Best Practices for Writing Copilot Custom Instructions",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "oihv5n0rca8xhqoon4efmh5",
+          "title": "Eventstorming",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "9hskm07l1ca4vnvdbdeo4uo",
+          "title": "Powershell",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "4fz2scq95mxi4olfo4i9o5y",
+              "title": "Customize Poweshell",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "mvhsipwjxq4bfyq61weiz0a",
+          "title": "Prompt Engineering",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "w4c0gr5hwn0z2un6u7ou7ul",
+              "title": "XML vs JSON dalam AI Coding Tools: Analisis Mendalam Prompt Engineering",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "uftcxwjagb6qyz86je4gqkw",
+          "title": "Software Architechture",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "lkwby4sk4bgobls2xo80u8c",
+              "title": "C4",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "tbz9r5q0jhld5v6so147hz0",
+              "title": "Software Architechture Tradeoff",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "tvdcga33h6hi7fxd9cwqd66",
+      "title": "Today I Learned",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "mpnlvktv73e34y86gjdferd",
+          "title": "Golang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "czze72lb4zct2gtw8tn97e2",
+              "title": "Bagaimana instrumentasi golang dengan elastic APM",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "ctqz34gtlovyev4pc30rb75",
+          "title": "Coding",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "aucxia5pujl6djrchgnpn3m",
+              "title": "Technique",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "r6nqqcsf7no99fxtly7yn18",
+                  "title": "Sliding Window",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "eo4tsx2lyb5ek8fdofer98q",
+              "title": "Maximum Sum of Distinct Subarrays with Length K",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "itfg3kwzv6560orvl3nt79m",
+                  "title": "Coding",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "3vy0eya1ih1ovj9csi7xwnu",
+              "title": "Remove Duplicates from Sorted Array",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "o073b4homigwo9s7lsjw411",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "k49ys33x1rdlqhb78830u7b",
+              "title": "Two Sum",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "2iiopsdlqcx1oaecqc3jjc8",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "owruqdc92klyd58a5eu27e6",
+              "title": "Two Sum II - Input Array Is Sorted",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "7ujwboqgqdxln6skhdzne9h",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "5pnd7nalqztbktf5xkr3ibc",
+              "title": "Valid Palindrom",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "j668eqsvty9mkv82lm7250s",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "usgxd5yie5i0lp6yslc92dy",
+          "title": "Devops",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "6w7soczd9kofolyr2tcgsgs",
+              "title": "Setup Vm Azure",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "5w0lto1q5ywc95uktplo5f5",
+              "title": "Setup Vm Azure Terraform",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "r5515u2ryjoe3fudyqdgmiy",
+              "title": "Terraform",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "nduo5g1yzk1s1fgijagbt64",
+              "title": "Troubleshots",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "0tk30dy71tpxnt8p8lxiiwb",
+                  "title": "Terraform on M1",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "ft5578q9pmx3f3epyv0gp5l",
+          "title": "Frontend",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "2u8zmllhud72fkmhpsypkmh",
+              "title": "Conditional Spread in JavaScript/TypeScript",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "2ado431wmr921exzhwlzxku",
+              "title": "Open Graph Biar Ketika Sharelink Gan Makin Kece",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "uwbakxc17t4suloc4pd38o3",
+              "title": "Setup Refine UI sebagai Pengganti Streamlit",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "ysy5ewwozapqa7ck9m69yn7",
+          "title": "Managing Team",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "xnm5vsac3fqan9fasug824y",
+              "title": "Belajar Coaching",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "kdenagzo0nhhzegy3c6yumk",
+              "title": "Oreily",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "x0x78wplldkhqugsia6u9kw",
+                  "title": "Critical Thinking at Work",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "amiow0h2k6amtoz2zfgn38v",
+              "title": "Preparing Performance Review",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "bmnh-quantified-self",
+              "title": "Quantified Self",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "k7usigpogcwg5p0taxmwnr3",
+              "title": "Youtube",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "az8xqsdmrzd01zpuzu25bfq",
+                  "title": "3 Ways to Express Your Thoughts so That Everyone Will Understand You",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                },
+                {
+                  "key": "ia5bmz82kr2m57t4b68lxm6",
+                  "title": "The Most Powerful Way to Think First Principles",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bgwu895vww7e5evg117ucl3",
+          "title": "Nix",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "ov1jn2bwsgt3mj88r7ddiss",
+              "title": "Nixos on Windows",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "5d2cqa7nfvu29o176w2f4g1",
+          "title": "Observability",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "87x3xiegfz6oofofhvflxms",
+              "title": "Prometheus",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "jycttur7a8w3cl70w69vrc9",
+          "title": "Python",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "gftz68j3eoioq2s8uhw43o1",
+              "title": "Building a Robust Live Log Viewer with FastAPI and Server-Sent Events",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "co2rjq3ldux3qxdhx7dkbdf",
+          "title": "Setup Spring Boot",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "idf3tarmf7z2bvtid79a0b3",
+              "title": "Package Explanation",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "9x4m9ahwr0uiue1msm9kpw2",
+          "title": "Supabase",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "6szjp3xq8zomb5lhyfxd3nz",
+              "title": "RLS Supabase: Biar Data Lo Gak Jadi Konsumsi Publik",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "1p8dbt60sga1nadm2ifywbc",
+          "title": "Windows",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "7ifc2siukn4s85zk6dq4z10",
+              "title": "Beres Beres Disk",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "57q7jyz0wff078xaz4s6eea",
+              "title": "Recovering from a Broken Nix Wsl Setup",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "w4ptpcefqr98mej5hjhs3m9",
+              "title": "Notes: Resolving Connection Issues from WSL to Windows",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "i7lh9xqfk9wyhdt9v9ckry8",
+          "title": "Writing",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "cy3vegj93z5s97gmfoogiym",
+              "title": "Belajar Menulis",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "child2parent": {
+    "spfwom01chbihki1twghclf": null,
+    "n7oobf4m1pytfexf8scoxao": "spfwom01chbihki1twghclf",
+    "0rn87jn6z3ie8lq11zqhi0n": "spfwom01chbihki1twghclf",
+    "23znyhsi9lugmrcvhx4b5qr": "spfwom01chbihki1twghclf",
+    "pviuhlbg2byizkycrj21y2e": "23znyhsi9lugmrcvhx4b5qr",
+    "qt1780a5r3yr1h7fcqql1by": "spfwom01chbihki1twghclf",
+    "nqcileafeym7dxnxgdjw469": "spfwom01chbihki1twghclf",
+    "madilog": "spfwom01chbihki1twghclf",
+    "udapxjv1fpf80boxvak0rva": "spfwom01chbihki1twghclf",
+    "oorvvxz032oov7psrw9ygte": "spfwom01chbihki1twghclf",
+    "z2knclhdtc45qgvhiv78nfx": "spfwom01chbihki1twghclf",
+    "k774ju38pzm0h85rubp4dib": "z2knclhdtc45qgvhiv78nfx",
+    "xvnfefwi9o4b10oxbk491wa": "spfwom01chbihki1twghclf",
+    "apvcp6t3nkh534u1dwngqtv": "spfwom01chbihki1twghclf",
+    "2jw8nj1c5iybgzw5bjuz4hu": "apvcp6t3nkh534u1dwngqtv",
+    "588eod7sssw7aq8rt2bqngf": "2jw8nj1c5iybgzw5bjuz4hu",
+    "tl8lc3dlcmt97609fjhhi8o": "spfwom01chbihki1twghclf",
+    "bxbae5slt8nubmv5thy05xa": "tl8lc3dlcmt97609fjhhi8o",
+    "075nm8xc03i6c4vgpijyjoi": "tl8lc3dlcmt97609fjhhi8o",
+    "7q7g9eix5c7adk4h8hy4vqp": "tl8lc3dlcmt97609fjhhi8o",
+    "wvtpake5hh5uu6swigzu5dk": null,
+    "6vm6aa1m4c3judzai45s4cj": "wvtpake5hh5uu6swigzu5dk",
+    "u2pv2czilhbwbf9ejm3gt2k": "6vm6aa1m4c3judzai45s4cj",
+    "2f435djv1igcy7t1kbr48am": "u2pv2czilhbwbf9ejm3gt2k",
+    "34j32rqq98iw0xfl48edqx4": "2f435djv1igcy7t1kbr48am",
+    "bsv930j2j6qlih60c7eu7wh": null,
+    "3e9942id79hw89ncudt79ok": "bsv930j2j6qlih60c7eu7wh",
+    "gscpu1k5cvyqrwnobbyna8p": "3e9942id79hw89ncudt79ok",
+    "ro7nzb092u06toxmg4iofya": "3e9942id79hw89ncudt79ok",
+    "s74bijnsy1zt9zzshpmeyk3": "3e9942id79hw89ncudt79ok",
+    "7hpir84idoztmofa72t2ozc": "3e9942id79hw89ncudt79ok",
+    "85suwlt8zylgcra3sradjfs": "3e9942id79hw89ncudt79ok",
+    "qsjn6anz0awbgtdp59s2n0i": "bsv930j2j6qlih60c7eu7wh",
+    "ohf85tu5nw2b8ewx6cetsmp": null,
+    "kg0pjvvhr9oisfwxpdu8dtr": "ohf85tu5nw2b8ewx6cetsmp",
+    "jr9b6n2jbnpebmdh3ckzwzv": "kg0pjvvhr9oisfwxpdu8dtr",
+    "2025-a-new-beginning": "jr9b6n2jbnpebmdh3ckzwzv",
+    "2025-commitment": "jr9b6n2jbnpebmdh3ckzwzv",
+    "6z24mjncoue34r2mlyk8zzu": "ohf85tu5nw2b8ewx6cetsmp",
+    "wjllig57c56t1zd1r06zi14": "ohf85tu5nw2b8ewx6cetsmp",
+    "1j8pdvsu4sefvao13i6zzo9": "ohf85tu5nw2b8ewx6cetsmp",
+    "notes.copilot.custom-instructions-best-practices": "1j8pdvsu4sefvao13i6zzo9",
+    "oihv5n0rca8xhqoon4efmh5": "ohf85tu5nw2b8ewx6cetsmp",
+    "9hskm07l1ca4vnvdbdeo4uo": "ohf85tu5nw2b8ewx6cetsmp",
+    "4fz2scq95mxi4olfo4i9o5y": "9hskm07l1ca4vnvdbdeo4uo",
+    "mvhsipwjxq4bfyq61weiz0a": "ohf85tu5nw2b8ewx6cetsmp",
+    "w4c0gr5hwn0z2un6u7ou7ul": "mvhsipwjxq4bfyq61weiz0a",
+    "uftcxwjagb6qyz86je4gqkw": "ohf85tu5nw2b8ewx6cetsmp",
+    "lkwby4sk4bgobls2xo80u8c": "uftcxwjagb6qyz86je4gqkw",
+    "tbz9r5q0jhld5v6so147hz0": "uftcxwjagb6qyz86je4gqkw",
+    "tvdcga33h6hi7fxd9cwqd66": null,
+    "mpnlvktv73e34y86gjdferd": "tvdcga33h6hi7fxd9cwqd66",
+    "czze72lb4zct2gtw8tn97e2": "mpnlvktv73e34y86gjdferd",
+    "ctqz34gtlovyev4pc30rb75": "tvdcga33h6hi7fxd9cwqd66",
+    "aucxia5pujl6djrchgnpn3m": "ctqz34gtlovyev4pc30rb75",
+    "r6nqqcsf7no99fxtly7yn18": "aucxia5pujl6djrchgnpn3m",
+    "eo4tsx2lyb5ek8fdofer98q": "ctqz34gtlovyev4pc30rb75",
+    "itfg3kwzv6560orvl3nt79m": "eo4tsx2lyb5ek8fdofer98q",
+    "3vy0eya1ih1ovj9csi7xwnu": "ctqz34gtlovyev4pc30rb75",
+    "o073b4homigwo9s7lsjw411": "3vy0eya1ih1ovj9csi7xwnu",
+    "k49ys33x1rdlqhb78830u7b": "ctqz34gtlovyev4pc30rb75",
+    "2iiopsdlqcx1oaecqc3jjc8": "k49ys33x1rdlqhb78830u7b",
+    "owruqdc92klyd58a5eu27e6": "ctqz34gtlovyev4pc30rb75",
+    "7ujwboqgqdxln6skhdzne9h": "owruqdc92klyd58a5eu27e6",
+    "5pnd7nalqztbktf5xkr3ibc": "ctqz34gtlovyev4pc30rb75",
+    "j668eqsvty9mkv82lm7250s": "5pnd7nalqztbktf5xkr3ibc",
+    "usgxd5yie5i0lp6yslc92dy": "tvdcga33h6hi7fxd9cwqd66",
+    "6w7soczd9kofolyr2tcgsgs": "usgxd5yie5i0lp6yslc92dy",
+    "5w0lto1q5ywc95uktplo5f5": "usgxd5yie5i0lp6yslc92dy",
+    "r5515u2ryjoe3fudyqdgmiy": "usgxd5yie5i0lp6yslc92dy",
+    "nduo5g1yzk1s1fgijagbt64": "usgxd5yie5i0lp6yslc92dy",
+    "0tk30dy71tpxnt8p8lxiiwb": "nduo5g1yzk1s1fgijagbt64",
+    "ft5578q9pmx3f3epyv0gp5l": "tvdcga33h6hi7fxd9cwqd66",
+    "2u8zmllhud72fkmhpsypkmh": "ft5578q9pmx3f3epyv0gp5l",
+    "2ado431wmr921exzhwlzxku": "ft5578q9pmx3f3epyv0gp5l",
+    "uwbakxc17t4suloc4pd38o3": "ft5578q9pmx3f3epyv0gp5l",
+    "ysy5ewwozapqa7ck9m69yn7": "tvdcga33h6hi7fxd9cwqd66",
+    "xnm5vsac3fqan9fasug824y": "ysy5ewwozapqa7ck9m69yn7",
+    "kdenagzo0nhhzegy3c6yumk": "ysy5ewwozapqa7ck9m69yn7",
+    "x0x78wplldkhqugsia6u9kw": "kdenagzo0nhhzegy3c6yumk",
+    "amiow0h2k6amtoz2zfgn38v": "ysy5ewwozapqa7ck9m69yn7",
+    "bmnh-quantified-self": "ysy5ewwozapqa7ck9m69yn7",
+    "k7usigpogcwg5p0taxmwnr3": "ysy5ewwozapqa7ck9m69yn7",
+    "az8xqsdmrzd01zpuzu25bfq": "k7usigpogcwg5p0taxmwnr3",
+    "ia5bmz82kr2m57t4b68lxm6": "k7usigpogcwg5p0taxmwnr3",
+    "bgwu895vww7e5evg117ucl3": "tvdcga33h6hi7fxd9cwqd66",
+    "ov1jn2bwsgt3mj88r7ddiss": "bgwu895vww7e5evg117ucl3",
+    "5d2cqa7nfvu29o176w2f4g1": "tvdcga33h6hi7fxd9cwqd66",
+    "87x3xiegfz6oofofhvflxms": "5d2cqa7nfvu29o176w2f4g1",
+    "jycttur7a8w3cl70w69vrc9": "tvdcga33h6hi7fxd9cwqd66",
+    "gftz68j3eoioq2s8uhw43o1": "jycttur7a8w3cl70w69vrc9",
+    "co2rjq3ldux3qxdhx7dkbdf": "tvdcga33h6hi7fxd9cwqd66",
+    "idf3tarmf7z2bvtid79a0b3": "co2rjq3ldux3qxdhx7dkbdf",
+    "9x4m9ahwr0uiue1msm9kpw2": "tvdcga33h6hi7fxd9cwqd66",
+    "6szjp3xq8zomb5lhyfxd3nz": "9x4m9ahwr0uiue1msm9kpw2",
+    "1p8dbt60sga1nadm2ifywbc": "tvdcga33h6hi7fxd9cwqd66",
+    "7ifc2siukn4s85zk6dq4z10": "1p8dbt60sga1nadm2ifywbc",
+    "57q7jyz0wff078xaz4s6eea": "1p8dbt60sga1nadm2ifywbc",
+    "w4ptpcefqr98mej5hjhs3m9": "1p8dbt60sga1nadm2ifywbc",
+    "i7lh9xqfk9wyhdt9v9ckry8": "tvdcga33h6hi7fxd9cwqd66",
+    "cy3vegj93z5s97gmfoogiym": "i7lh9xqfk9wyhdt9v9ckry8"
+  },
+  "notesLabelById": {
+    "spfwom01chbihki1twghclf": "Book Summaries",
+    "n7oobf4m1pytfexf8scoxao": "14 Habits of Highly Productive Developers",
+    "0rn87jn6z3ie8lq11zqhi0n": "Building a Second Brain",
+    "23znyhsi9lugmrcvhx4b5qr": "Continuous Integration (CI) and Continuous Delivery (CD) a Practical Guide to Designing and Developing Pipelines",
+    "pviuhlbg2byizkycrj21y2e": "7. Implementing Pipelines",
+    "qt1780a5r3yr1h7fcqql1by": "Dare to Lead",
+    "nqcileafeym7dxnxgdjw469": "Filosofi Teras",
+    "madilog": "Madilog",
+    "udapxjv1fpf80boxvak0rva": "Measure What Matters",
+    "oorvvxz032oov7psrw9ygte": "Self Driving",
+    "z2knclhdtc45qgvhiv78nfx": "Team Topologies",
+    "k774ju38pzm0h85rubp4dib": "The Problem with Org Charts",
+    "xvnfefwi9o4b10oxbk491wa": "The Compound Effect",
+    "apvcp6t3nkh534u1dwngqtv": "The Devops Handbook",
+    "2jw8nj1c5iybgzw5bjuz4hu": "Part I - The Three Ways",
+    "588eod7sssw7aq8rt2bqngf": "Agile Continuous Delivery and the Three Ways",
+    "tl8lc3dlcmt97609fjhhi8o": "Youtube",
+    "bxbae5slt8nubmv5thy05xa": "How To Stand Out In An Insanely Competitive Tech Market (Ex-Amazon Principal Engineer)",
+    "075nm8xc03i6c4vgpijyjoi": "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006",
+    "7q7g9eix5c7adk4h8hy4vqp": "The Super Mario Effect Tricking Your Brain into Learning More",
+    "wvtpake5hh5uu6swigzu5dk": "Daily",
+    "6vm6aa1m4c3judzai45s4cj": "Journal",
+    "u2pv2czilhbwbf9ejm3gt2k": "2026",
+    "2f435djv1igcy7t1kbr48am": "01",
+    "34j32rqq98iw0xfl48edqx4": "2026-01-12",
+    "bsv930j2j6qlih60c7eu7wh": "Handbook",
+    "3e9942id79hw89ncudt79ok": "Golang",
+    "gscpu1k5cvyqrwnobbyna8p": "1 Idiomatic",
+    "ro7nzb092u06toxmg4iofya": "2 Membuat HTTP Server",
+    "s74bijnsy1zt9zzshpmeyk3": "3 Build Image Dengan Docker",
+    "7hpir84idoztmofa72t2ozc": "4 Setup Golang CI",
+    "85suwlt8zylgcra3sradjfs": "5 Custom Metrics Dengan Promteheus",
+    "qsjn6anz0awbgtdp59s2n0i": "Rust",
+    "ohf85tu5nw2b8ewx6cetsmp": "Notes",
+    "kg0pjvvhr9oisfwxpdu8dtr": "10 Hari Menulis",
+    "jr9b6n2jbnpebmdh3ckzwzv": "2025",
+    "2025-a-new-beginning": "20 Tahun Setelahnya",
+    "2025-commitment": "Di Antara Ribuan",
+    "6z24mjncoue34r2mlyk8zzu": "API Management",
+    "wjllig57c56t1zd1r06zi14": "Continous Delivery",
+    "1j8pdvsu4sefvao13i6zzo9": "Copilot",
+    "notes.copilot.custom-instructions-best-practices": "Best Practices for Writing Copilot Custom Instructions",
+    "oihv5n0rca8xhqoon4efmh5": "Eventstorming",
+    "9hskm07l1ca4vnvdbdeo4uo": "Powershell",
+    "4fz2scq95mxi4olfo4i9o5y": "Customize Poweshell",
+    "mvhsipwjxq4bfyq61weiz0a": "Prompt Engineering",
+    "w4c0gr5hwn0z2un6u7ou7ul": "XML vs JSON dalam AI Coding Tools: Analisis Mendalam Prompt Engineering",
+    "uftcxwjagb6qyz86je4gqkw": "Software Architechture",
+    "lkwby4sk4bgobls2xo80u8c": "C4",
+    "tbz9r5q0jhld5v6so147hz0": "Software Architechture Tradeoff",
+    "tvdcga33h6hi7fxd9cwqd66": "Today I Learned",
+    "mpnlvktv73e34y86gjdferd": "Golang",
+    "czze72lb4zct2gtw8tn97e2": "Bagaimana instrumentasi golang dengan elastic APM",
+    "ctqz34gtlovyev4pc30rb75": "Coding",
+    "aucxia5pujl6djrchgnpn3m": "Technique",
+    "r6nqqcsf7no99fxtly7yn18": "Sliding Window",
+    "eo4tsx2lyb5ek8fdofer98q": "Maximum Sum of Distinct Subarrays with Length K",
+    "itfg3kwzv6560orvl3nt79m": "Coding",
+    "3vy0eya1ih1ovj9csi7xwnu": "Remove Duplicates from Sorted Array",
+    "o073b4homigwo9s7lsjw411": "Code",
+    "k49ys33x1rdlqhb78830u7b": "Two Sum",
+    "2iiopsdlqcx1oaecqc3jjc8": "Code",
+    "owruqdc92klyd58a5eu27e6": "Two Sum II - Input Array Is Sorted",
+    "7ujwboqgqdxln6skhdzne9h": "Code",
+    "5pnd7nalqztbktf5xkr3ibc": "Valid Palindrom",
+    "j668eqsvty9mkv82lm7250s": "Code",
+    "usgxd5yie5i0lp6yslc92dy": "Devops",
+    "6w7soczd9kofolyr2tcgsgs": "Setup Vm Azure",
+    "5w0lto1q5ywc95uktplo5f5": "Setup Vm Azure Terraform",
+    "r5515u2ryjoe3fudyqdgmiy": "Terraform",
+    "nduo5g1yzk1s1fgijagbt64": "Troubleshots",
+    "0tk30dy71tpxnt8p8lxiiwb": "Terraform on M1",
+    "ft5578q9pmx3f3epyv0gp5l": "Frontend",
+    "2u8zmllhud72fkmhpsypkmh": "Conditional Spread in JavaScript/TypeScript",
+    "2ado431wmr921exzhwlzxku": "Open Graph Biar Ketika Sharelink Gan Makin Kece",
+    "uwbakxc17t4suloc4pd38o3": "Setup Refine UI sebagai Pengganti Streamlit",
+    "ysy5ewwozapqa7ck9m69yn7": "Managing Team",
+    "xnm5vsac3fqan9fasug824y": "Belajar Coaching",
+    "kdenagzo0nhhzegy3c6yumk": "Oreily",
+    "x0x78wplldkhqugsia6u9kw": "Critical Thinking at Work",
+    "amiow0h2k6amtoz2zfgn38v": "Preparing Performance Review",
+    "bmnh-quantified-self": "Quantified Self",
+    "k7usigpogcwg5p0taxmwnr3": "Youtube",
+    "az8xqsdmrzd01zpuzu25bfq": "3 Ways to Express Your Thoughts so That Everyone Will Understand You",
+    "ia5bmz82kr2m57t4b68lxm6": "The Most Powerful Way to Think First Principles",
+    "bgwu895vww7e5evg117ucl3": "Nix",
+    "ov1jn2bwsgt3mj88r7ddiss": "Nixos on Windows",
+    "5d2cqa7nfvu29o176w2f4g1": "Observability",
+    "87x3xiegfz6oofofhvflxms": "Prometheus",
+    "jycttur7a8w3cl70w69vrc9": "Python",
+    "gftz68j3eoioq2s8uhw43o1": "Building a Robust Live Log Viewer with FastAPI and Server-Sent Events",
+    "co2rjq3ldux3qxdhx7dkbdf": "Setup Spring Boot",
+    "idf3tarmf7z2bvtid79a0b3": "Package Explanation",
+    "9x4m9ahwr0uiue1msm9kpw2": "Supabase",
+    "6szjp3xq8zomb5lhyfxd3nz": "RLS Supabase: Biar Data Lo Gak Jadi Konsumsi Publik",
+    "1p8dbt60sga1nadm2ifywbc": "Windows",
+    "7ifc2siukn4s85zk6dq4z10": "Beres Beres Disk",
+    "57q7jyz0wff078xaz4s6eea": "Recovering from a Broken Nix Wsl Setup",
+    "w4ptpcefqr98mej5hjhs3m9": "Notes: Resolving Connection Issues from WSL to Windows",
+    "i7lh9xqfk9wyhdt9v9ckry8": "Writing",
+    "cy3vegj93z5s97gmfoogiym": "Belajar Menulis"
+  }
+}

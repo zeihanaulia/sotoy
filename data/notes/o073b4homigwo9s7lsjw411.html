@@ -1,0 +1,13 @@
+<h1 id="code">Code<a aria-hidden="true" class="anchor-heading icon-link" href="#code"></a></h1>
+<h2 id="two-pointer">Two Pointer<a aria-hidden="true" class="anchor-heading icon-link" href="#two-pointer"></a></h2>
+<pre class="language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">removeDuplicates</span><span class="token punctuation">(</span>nums <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+    left <span class="token operator">:=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> right<span class="token operator">:=</span><span class="token number">1</span><span class="token punctuation">;</span> right <span class="token operator">&#x3C;</span> <span class="token function">len</span><span class="token punctuation">(</span>nums<span class="token punctuation">)</span><span class="token punctuation">;</span> right<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span> <span class="token operator">!=</span> nums<span class="token punctuation">[</span>right<span class="token punctuation">]</span> <span class="token punctuation">{</span>
+            left<span class="token operator">++</span>
+            nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span> <span class="token operator">=</span> nums<span class="token punctuation">[</span>right<span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> left <span class="token operator">+</span> <span class="token number">1</span>
+<span class="token punctuation">}</span>
+</code></pre>

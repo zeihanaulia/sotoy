@@ -1,0 +1,363 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><link rel="icon" href="/sotoy/favicon.ico"/><title>Rust</title><meta name="robots" content="index,follow"/><meta name="googlebot" content="index,follow"/><meta name="description" content="Personal knowledge space about anything I learn. Notes, knowledge, and ideas from me."/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="zeihanaulia"/><meta name="twitter:creator" content="zeihanaulia"/><meta property="og:title" content="Rust"/><meta property="og:description" content="Personal knowledge space about anything I learn. Notes, knowledge, and ideas from me."/><meta property="og:url" content="https://zeihanaulia.github.io/sotoy/notes/qsjn6anz0awbgtdp59s2n0i/"/><meta property="og:type" content="article"/><meta property="article:published_time" content="1/22/2024"/><meta property="article:modified_time" content="1/22/2024"/><meta property="og:image" content="https://pbs.twimg.com/profile_images/502375255256485888/1UYtt7PT_400x400.jpeg"/><meta property="og:image:alt" content="Software Engineer, "/><link rel="canonical" href="https://zeihanaulia.github.io/sotoy/notes/qsjn6anz0awbgtdp59s2n0i/"/><meta name="next-head-count" content="19"/><link rel="preload" href="/sotoy/_next/static/css/41067a1ca86a1f32.css" as="style"/><link rel="stylesheet" href="/sotoy/_next/static/css/41067a1ca86a1f32.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/sotoy/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script><script src="/sotoy/_next/static/chunks/webpack-3978769f38772f6c.js" defer=""></script><script src="/sotoy/_next/static/chunks/framework-28c999baf2863c3d.js" defer=""></script><script src="/sotoy/_next/static/chunks/main-5b62020850a4108f.js" defer=""></script><script src="/sotoy/_next/static/chunks/pages/_app-2e4995184d10c2c3.js" defer=""></script><script src="/sotoy/_next/static/chunks/935-4dee79e80b8641c6.js" defer=""></script><script src="/sotoy/_next/static/chunks/6-50972def09142ee2.js" defer=""></script><script src="/sotoy/_next/static/chunks/pages/notes/%5Bid%5D-78d472fa3b924116.js" defer=""></script><script src="/sotoy/_next/static/5lbZ5lhXIh2ME6onB9uE-/_buildManifest.js" defer=""></script><script src="/sotoy/_next/static/5lbZ5lhXIh2ME6onB9uE-/_ssgManifest.js" defer=""></script></head><body><div id="__next" data-reactroot=""><section class="ant-layout" style="width:100%;min-height:100%"><header class="ant-layout-header" style="position:fixed;isolation:isolate;z-index:1;width:100%;border-bottom:1px solid #d4dadf;height:64px;padding:0 24px 0 2px"><div class="ant-row ant-row-center" style="max-width:992px;justify-content:space-between;margin:0 auto"><div style="display:flex" class="ant-col ant-col-xs-20 ant-col-sm-4"></div><div class="ant-col gutter-row ant-col-xs-0 ant-col-sm-20 ant-col-md-20 ant-col-lg-19"><div class="ant-select ant-select-lg ant-select-auto-complete ant-select-single ant-select-allow-clear ant-select-show-search" style="width:100%"><div class="ant-select-selector"><span class="ant-select-selection-search"><input type="search" autoComplete="off" class="ant-select-selection-search-input" role="combobox" aria-haspopup="listbox" aria-owns="undefined_list" aria-autocomplete="list" aria-controls="undefined_list" aria-activedescendant="undefined_list_0" value=""/></span><span class="ant-select-selection-placeholder">For full text search please use the &#x27;?&#x27; prefix. e.g. ? Onboarding</span></div></div></div><div style="display:none;align-items:center;justify-content:center" class="ant-col ant-col-xs-4 ant-col-sm-4 ant-col-md-0 ant-col-lg-0"><span role="img" aria-label="menu" style="font-size:24px" tabindex="-1" class="anticon anticon-menu"><svg viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg></span></div></div></header><section class="ant-layout" style="margin-top:64px;display:flex;flex-direction:row"><div class="site-layout-sidebar" style="flex:0 0 auto;width:calc(max((100% - 992px) / 2, 0px) + 200px);min-width:200px;padding-left:calc((100% - 992px) / 2)"><aside class="ant-layout-sider ant-layout-sider-dark" style="position:fixed;overflow:auto;height:calc(100vh - 64px);background-color:transparent;flex:0 0 200px;max-width:200px;min-width:200px;width:200px"><div class="ant-layout-sider-children"></div></aside></div><main class="ant-layout-content side-layout-main" style="max-width:1200px;min-width:0;display:block"><div style="padding:0 24px"><div class="main-content" role="main"><div class="ant-row"><div class="ant-col ant-col-24"><div class="ant-row" style="margin-left:-10px;margin-right:-10px"><div style="padding-left:10px;padding-right:10px" class="ant-col ant-col-xs-24 ant-col-md-18"><div><h1 id="rust">Rust<a aria-hidden="true" class="anchor-heading icon-link" href="#rust"></a></h1>
+<h2 id="setup">Setup<a aria-hidden="true" class="anchor-heading icon-link" href="#setup"></a></h2>
+<ul>
+<li>untuk install rust cukup mudah, cukup pakai <code>rustup</code></li>
+<li>kalau install satu persatu pastikan <code>gcc</code> terinstall, lalu install <code>rustc</code> dan <code>cargo</code></li>
+<li>cargo adalah dependency management, bukan hanya itu cargo juga bisa dipakai untuk build dan run program rust
+<ul>
+<li><code>cargo new</code> untuk membuat project</li>
+<li><code>cargo build</code> untuk build program rust dan akan membuat file executable di <code>target/debug</code></li>
+<li><code>cargo run</code> untuk build dan running program rust, tapi cargo tidak akan melakukan rebuild jika tidak ada program yang berubah</li>
+<li><code>cargo check</code> untuk mngecek code dan memastikan code bisa di compile tapi gak memproduce file executable
+<ul>
+<li>command ini bermanfaat untuk mengecek secara cepat dibandingkan melakukan <code>build</code></li>
+</ul>
+</li>
+<li><code>cargo build --release</code> untuk melakukan release ketika program sudah selesai.
+<ul>
+<li>command ini akan melakukan optimisasi dan akan membuat executable file di <code>target/release</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>lalu apa bedanya <code>rustc</code> dan <code>cargo</code>
+<ul>
+<li>untuk program yang simple cargo tidak jauh berbeda dengan rustc, tapi ketika kita membuat project yang banyak dependency ini akan sangat membantu</li>
+</ul>
+</li>
+</ul>
+<h2 id="coding">Coding<a aria-hidden="true" class="anchor-heading icon-link" href="#coding"></a></h2>
+<ul>
+<li>untuk membuat variable gunakan <code>let</code></li>
+<li>by default variable di rust itu immutable, 
+<ul>
+<li>artinya ketika kita sudah memberikan nilai ke valu maka value tidak bisa diubah</li>
+</ul>
+</li>
+<li>untuk membuat variable menjadi mutable, gunakan <code>mut</code> sebelum variable name</li>
+</ul>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">let</span> apples <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// immutable</span>
+<span class="token keyword">let</span> <span class="token keyword">mut</span> bananas <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// mutable</span>
+</code></pre>
+<ul>
+<li>
+<p>untuk <code>associated function</code> gunakan <code>::</code></p>
+<ul>
+<li>kalau di golang pake <code>.</code> String.new() kalau dirust String::new()</li>
+</ul>
+</li>
+<li>
+<p>untuk melakukan import dengan menggunakan keyword <code>use</code> di awal program</p>
+<ul>
+<li>sebagai contoh <code>std::io</code>, memiliki <code>stdin()</code>, didalamnya ada <code>read_line</code>
+<ul>
+<li>maka penggunaannya <code>io::stdin().read_line(&#x26;mut guess).exepect("Failed to read line")</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>tanda <code>&#x26;</code> mengindikasikan kalau ini adalah reference</p>
+<ul>
+<li>Reference yang tidak dapat diubah (&#x26;T): Ini memungkinkan Anda untuk membaca nilai tanpa mengubahnya.</li>
+<li>Reference yang dapat diubah (&#x26;mut T): Ini memungkinkan Anda untuk mengubah nilai yang direferensikan.</li>
+</ul>
+</li>
+<li>
+<p>yang menarik dari sini, rust memaksa kita untuk memberikan result pada function stdin, melalui expect, <code>Result</code> ini bersifat enumeration <code>ok</code> dan <code>error</code>, jika error maka akan menampilak pesan yang ada pada kolom expect</p>
+</li>
+<li>
+<p><code>crate</code> adalah collection dari source code rust,seperti go package</p>
+<ul>
+<li>sebelum memulai menggunakan function yang ada di crate kita perlu menulis dependencies </li>
+</ul>
+</li>
+<li>
+<p>carg memiliki mekanisme untuk memastikan kita bisa rebuild artifak yang sema setiap waktu</p>
+<ul>
+<li>cargo akan menggunakan versi dari dependensi yang sudah di lock, menggunakan <code>cargo.lock</code></li>
+</ul>
+</li>
+<li>
+<p>dalam penamaan variable rust mengizinkan untuk melakukan shadowing</p>
+<pre class="language-rust"><code class="language-rust">  <span class="token keyword">let</span> <span class="token keyword">mut</span> guess <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token namespace">io<span class="token punctuation">::</span></span><span class="token function">stdin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">read_line</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> guess<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">"Failed to read line"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">let</span> guess<span class="token punctuation">:</span> <span class="token keyword">u32</span> <span class="token operator">=</span> guess
+      <span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">"Please type a number!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</li>
+<li>
+<p>code diatas diperbolehkan, ada 2 variale lalu variable tersebut diganti typenya dengan menggunakan expression <code>trim</code> dan <code>parse</code></p>
+<ul>
+<li><code>guess</code> diambil dari variable guest pertama</li>
+<li>lalu <code>trim()</code> method dari string akan mengeliminasi whitespace</li>
+<li>lalu <code>parse()</code> yang melakukan convert string ke type lain
+<ul>
+<li>yang menariknya method parse ini hanya akan berkerja di character yang secara logika bisa di convert ke number</li>
+<li>jadi kalau ada charakter selain number, maka akan terjadi error, maka dari itu diperlukan method <code>expect()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>untuk error handling, rust menyediakan expression <code>match</code>, expression ini bisa digunakan untuk menagkap error.</p>
+<ul>
+<li>jika sebelumnya <code>expect()</code> digunakan untuk menuliskan ekspektasi input, <code>match</code> bisa menangkapnya</li>
+<li>fungsi <code>parse</code> memiliki result dan result pasti berisi <code>ok</code> dan <code>err</code></li>
+<li><code>match</code> seperti <code>catch</code> dibahasa pemrograman lain</li>
+</ul>
+</li>
+<li>
+<p>variable</p>
+<ul>
+<li>variable immutable by default</li>
+<li>jika mau mutable tambahakan <code>mut</code></li>
+<li>variable itu scopenya local, tidak bisa digunakan diluar fn</li>
+<li>rust tidak mengizinkan unused variable</li>
+</ul>
+</li>
+<li>
+<p>constant</p>
+<ul>
+<li>memiliki cakupan statis, tidak dihapus dari memory selama program berjalan dan bisa diakses dari manasaja didalam module tempat constant itu dideklarasikan atau module lain jika public</li>
+<li>nilai dari const harus ditentukan pada waktu kompilasi, jadi tidak bisa di set ketika program sudah berjalan atau selalu immutable</li>
+<li>untuk penomoran rust menggunakan convention huruf besar dengan underscore contoh <code>THREE_HOURS_IN_SECONDS</code></li>
+</ul>
+</li>
+<li>
+<p>shadowing</p>
+<ul>
+<li>yang menarik dari shadowing adalah kita bisa mengubah value tanpa <code>mut</code></li>
+</ul>
+</li>
+</ul>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> x <span class="token operator">=</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> x <span class="token operator">=</span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x in the inner scope is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li>
+<p>kode diatas bisa digunakan untuk mengubah nilai dari <code>x</code>, sebelumnya nilai <code>x</code> adalah 5, lalu <code>x</code> diubah menjadi <code>x + 1</code> yaitu 6, lalu <code>x</code> diubah kembali didalam inner scope <code>x * 6</code> yaitu 12, karena itu didalam scope maka tidak akan mengubah value yang ada di luar scope, jadi jika di print <code>x</code> yang diluar scope maka akan tetap <code>6</code></p>
+</li>
+<li>
+<p>Data type</p>
+<ul>
+<li>
+<p>Scalar Types</p>
+<ul>
+<li>
+<p>integers</p>
+<ul>
+<li>
+<p>integer adalah number tanpa fractional component / tanpa pecahan</p>
+<ul>
+<li>
+<p>jadi integer adalah bilangan bulat</p>
+</li>
+<li>
+<p>integer terdiri dari unsigned dan signed</p>
+<ul>
+<li>
+<p>signed: -1</p>
+</li>
+<li>
+<p>unsgned: 1 (semua bilangan positif)</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Length</th><th>Signed</th><th>Usigned</th></tr></thead><tbody><tr><td>8-bit</td><td>i8</td><td>u8</td></tr><tr><td>16-bit</td><td>i16</td><td>u16</td></tr><tr><td>32-bi</td><td>t</td><td>i32</td></tr><tr><td>64-bi</td><td>t</td><td>i64</td></tr><tr><td>128-b</td><td>it</td><td>i128</td></tr><tr><td>arch</td><td>isize</td><td>usize</td></tr></tbody></table></div>
+</li>
+</ul>
+</li>
+<li>
+<p>arch ini maksudnya arsitektur dependent, tipedata ini karena ukurannya bergantuk pada arsitektur sistem yang digunakan </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>floating-point numbers</p>
+</li>
+<li>
+<p>booleans</p>
+</li>
+<li>
+<p>characer</p>
+<ul>
+<li>di rust charakter ada type berbeda, char dan string. 
+<ul>
+<li>char: Ini adalah tipe data untuk karakter tunggal. Di Rust, char selalu mewakili satu karakter Unicode Scalar Value, yang mungkin lebih luas daripada hanya ASCII. char didefinisikan menggunakan single quotes, seperti 'a', '1', atau '🎉'.</li>
+<li>String atau &#x26;str: Ini adalah tipe data untuk string, yaitu urutan karakter. String adalah string yang dapat tumbuh, berubah, dan dimiliki, sementara &#x26;str adalah referensi ke string yang ada di tempat lain, biasanya tidak dapat diubah. String didefinisikan menggunakan double quotes, seperti "hello" atau "world".</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Compound Types</p>
+<ul>
+<li>
+<p>tuples</p>
+<ul>
+<li>
+<p>tipe data komposit yang dapat mentimpan sekumpulan nilai dengan tipe berbeda. contoh</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> tup <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token number">6.4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> z<span class="token punctuation">)</span> <span class="token operator">=</span> tup<span class="token punctuation">;</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of y is: {y}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of z is: {z}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// index</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> tup<span class="token number">.0</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> y <span class="token operator">=</span> tup<span class="token number">.1</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> z <span class="token operator">=</span> tup<span class="token number">.2</span><span class="token punctuation">;</span>
+            
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of y is: {y}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of z is: {z}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>array</p>
+<ul>
+<li>ini sama seperti array pada bahasa lain, tapi bedanya array gak bisa berbeda type</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Function</p>
+<ul>
+<li>tidak ada yang berbeda sama seperti bahasa lain, bedanya return value di rust tidak perlu keyword return seperti golang <code>return</code></li>
+</ul>
+</li>
+<li>
+<p>Control Flow</p>
+<ul>
+<li>
+<p>if expression</p>
+<ul>
+<li>if expression bisa digunakan berbarengan dengan let</li>
+</ul>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> condition <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> number <span class="token operator">=</span> <span class="token keyword">if</span> condition <span class="token punctuation">{</span> <span class="token number">5</span> <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token number">6</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of number is: {number}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+<li>
+<p>loops</p>
+<ul>
+<li>
+<p>loop</p>
+<ul>
+<li>
+<p>loop ini adalah basic looping dari rust, yang menariknya loop di sini bisa dibuat lable</p>
+<ul>
+<li>
+<p>loop label dimulai dengan single quote, contoh codenya</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token lifetime-annotation symbol">'counting_up</span><span class="token punctuation">:</span> <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"count = {count}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> remaining <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+            <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"remaining = {remaining}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> remaining <span class="token operator">==</span> <span class="token number">9</span> <span class="token punctuation">{</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> count <span class="token operator">==</span> <span class="token number">2</span> <span class="token punctuation">{</span>
+                <span class="token keyword">break</span> <span class="token lifetime-annotation symbol">'counting_up</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            remaining <span class="token operator">-=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        count <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>while</p>
+<ul>
+<li>dengan while kita bisa menambahkan kondisi</li>
+<li>kodisinya berupa true or false</li>
+</ul>
+</li>
+<li>
+<p>for</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div><div style="padding-left:10px;padding-right:10px" class="ant-col ant-col-xs-0 ant-col-md-6"><div><div class=""><div class="ant-anchor-wrapper dendron-toc" style="max-height:calc(100vh - 64px);z-index:1"><div class="ant-anchor"><div class="ant-anchor-ink"><span class="ant-anchor-ink-ball"></span></div><div class="ant-anchor-link"><a class="ant-anchor-link-title" href="#setup" title="Setup">Setup</a></div><div class="ant-anchor-link"><a class="ant-anchor-link-title" href="#coding" title="Coding">Coding</a></div></div></div></div></div></div></div></div></div></div></div><div class="ant-divider ant-divider-horizontal" role="separator"></div><footer class="ant-layout-footer" style="padding:0 24px 24px"></footer></main></section></section></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"note":{"id":"qsjn6anz0awbgtdp59s2n0i","title":"Rust","desc":"","updated":1705884635260,"created":1705884547047,"custom":{},"fname":"handbook.rust","type":"note","vault":{"fsPath":"vault"},"contentHash":"552574ad0c3785d70ba024b4eae60258","links":[],"anchors":{"setup":{"type":"header","text":"Setup","value":"setup","line":9,"column":0,"depth":2},"coding":{"type":"header","text":"Coding","value":"coding","line":24,"column":0,"depth":2}},"children":[],"parent":"bsv930j2j6qlih60c7eu7wh","data":{}},"body":"\u003ch1 id=\"rust\"\u003eRust\u003ca aria-hidden=\"true\" class=\"anchor-heading icon-link\" href=\"#rust\"\u003e\u003c/a\u003e\u003c/h1\u003e\n\u003ch2 id=\"setup\"\u003eSetup\u003ca aria-hidden=\"true\" class=\"anchor-heading icon-link\" href=\"#setup\"\u003e\u003c/a\u003e\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003euntuk install rust cukup mudah, cukup pakai \u003ccode\u003erustup\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003ekalau install satu persatu pastikan \u003ccode\u003egcc\u003c/code\u003e terinstall, lalu install \u003ccode\u003erustc\u003c/code\u003e dan \u003ccode\u003ecargo\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003ecargo adalah dependency management, bukan hanya itu cargo juga bisa dipakai untuk build dan run program rust\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003ecargo new\u003c/code\u003e untuk membuat project\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ecargo build\u003c/code\u003e untuk build program rust dan akan membuat file executable di \u003ccode\u003etarget/debug\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ecargo run\u003c/code\u003e untuk build dan running program rust, tapi cargo tidak akan melakukan rebuild jika tidak ada program yang berubah\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ecargo check\u003c/code\u003e untuk mngecek code dan memastikan code bisa di compile tapi gak memproduce file executable\n\u003cul\u003e\n\u003cli\u003ecommand ini bermanfaat untuk mengecek secara cepat dibandingkan melakukan \u003ccode\u003ebuild\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ecargo build --release\u003c/code\u003e untuk melakukan release ketika program sudah selesai.\n\u003cul\u003e\n\u003cli\u003ecommand ini akan melakukan optimisasi dan akan membuat executable file di \u003ccode\u003etarget/release\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003elalu apa bedanya \u003ccode\u003erustc\u003c/code\u003e dan \u003ccode\u003ecargo\u003c/code\u003e\n\u003cul\u003e\n\u003cli\u003euntuk program yang simple cargo tidak jauh berbeda dengan rustc, tapi ketika kita membuat project yang banyak dependency ini akan sangat membantu\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"coding\"\u003eCoding\u003ca aria-hidden=\"true\" class=\"anchor-heading icon-link\" href=\"#coding\"\u003e\u003c/a\u003e\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003euntuk membuat variable gunakan \u003ccode\u003elet\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eby default variable di rust itu immutable, \n\u003cul\u003e\n\u003cli\u003eartinya ketika kita sudah memberikan nilai ke valu maka value tidak bisa diubah\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003euntuk membuat variable menjadi mutable, gunakan \u003ccode\u003emut\u003c/code\u003e sebelum variable name\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre class=\"language-rust\"\u003e\u003ccode class=\"language-rust\"\u003e\u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e apples \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token number\"\u003e5\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e \u003cspan class=\"token comment\"\u003e// immutable\u003c/span\u003e\n\u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e \u003cspan class=\"token keyword\"\u003emut\u003c/span\u003e bananas \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token number\"\u003e5\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e \u003cspan class=\"token comment\"\u003e// mutable\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003euntuk \u003ccode\u003eassociated function\u003c/code\u003e gunakan \u003ccode\u003e::\u003c/code\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ekalau di golang pake \u003ccode\u003e.\u003c/code\u003e String.new() kalau dirust String::new()\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003euntuk melakukan import dengan menggunakan keyword \u003ccode\u003euse\u003c/code\u003e di awal program\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003esebagai contoh \u003ccode\u003estd::io\u003c/code\u003e, memiliki \u003ccode\u003estdin()\u003c/code\u003e, didalamnya ada \u003ccode\u003eread_line\u003c/code\u003e\n\u003cul\u003e\n\u003cli\u003emaka penggunaannya \u003ccode\u003eio::stdin().read_line(\u0026#x26;mut guess).exepect(\"Failed to read line\")\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003etanda \u003ccode\u003e\u0026#x26;\u003c/code\u003e mengindikasikan kalau ini adalah reference\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eReference yang tidak dapat diubah (\u0026#x26;T): Ini memungkinkan Anda untuk membaca nilai tanpa mengubahnya.\u003c/li\u003e\n\u003cli\u003eReference yang dapat diubah (\u0026#x26;mut T): Ini memungkinkan Anda untuk mengubah nilai yang direferensikan.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eyang menarik dari sini, rust memaksa kita untuk memberikan result pada function stdin, melalui expect, \u003ccode\u003eResult\u003c/code\u003e ini bersifat enumeration \u003ccode\u003eok\u003c/code\u003e dan \u003ccode\u003eerror\u003c/code\u003e, jika error maka akan menampilak pesan yang ada pada kolom expect\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e\u003ccode\u003ecrate\u003c/code\u003e adalah collection dari source code rust,seperti go package\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003esebelum memulai menggunakan function yang ada di crate kita perlu menulis dependencies \u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003ecarg memiliki mekanisme untuk memastikan kita bisa rebuild artifak yang sema setiap waktu\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ecargo akan menggunakan versi dari dependensi yang sudah di lock, menggunakan \u003ccode\u003ecargo.lock\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003edalam penamaan variable rust mengizinkan untuk melakukan shadowing\u003c/p\u003e\n\u003cpre class=\"language-rust\"\u003e\u003ccode class=\"language-rust\"\u003e  \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e \u003cspan class=\"token keyword\"\u003emut\u003c/span\u003e guess \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token class-name\"\u003eString\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e::\u003c/span\u003e\u003cspan class=\"token function\"\u003enew\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n  \u003cspan class=\"token namespace\"\u003eio\u003cspan class=\"token punctuation\"\u003e::\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token function\"\u003estdin\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n      \u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eread_line\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token operator\"\u003e\u0026#x26;\u003c/span\u003e\u003cspan class=\"token keyword\"\u003emut\u003c/span\u003e guess\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n      \u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eexpect\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"Failed to read line\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n  \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e guess\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"token keyword\"\u003eu32\u003c/span\u003e \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e guess\n      \u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003etrim\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n      \u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eparse\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n      \u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eexpect\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"Please type a number!\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003ecode diatas diperbolehkan, ada 2 variale lalu variable tersebut diganti typenya dengan menggunakan expression \u003ccode\u003etrim\u003c/code\u003e dan \u003ccode\u003eparse\u003c/code\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003eguess\u003c/code\u003e diambil dari variable guest pertama\u003c/li\u003e\n\u003cli\u003elalu \u003ccode\u003etrim()\u003c/code\u003e method dari string akan mengeliminasi whitespace\u003c/li\u003e\n\u003cli\u003elalu \u003ccode\u003eparse()\u003c/code\u003e yang melakukan convert string ke type lain\n\u003cul\u003e\n\u003cli\u003eyang menariknya method parse ini hanya akan berkerja di character yang secara logika bisa di convert ke number\u003c/li\u003e\n\u003cli\u003ejadi kalau ada charakter selain number, maka akan terjadi error, maka dari itu diperlukan method \u003ccode\u003eexpect()\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003euntuk error handling, rust menyediakan expression \u003ccode\u003ematch\u003c/code\u003e, expression ini bisa digunakan untuk menagkap error.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ejika sebelumnya \u003ccode\u003eexpect()\u003c/code\u003e digunakan untuk menuliskan ekspektasi input, \u003ccode\u003ematch\u003c/code\u003e bisa menangkapnya\u003c/li\u003e\n\u003cli\u003efungsi \u003ccode\u003eparse\u003c/code\u003e memiliki result dan result pasti berisi \u003ccode\u003eok\u003c/code\u003e dan \u003ccode\u003eerr\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ematch\u003c/code\u003e seperti \u003ccode\u003ecatch\u003c/code\u003e dibahasa pemrograman lain\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003evariable\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003evariable immutable by default\u003c/li\u003e\n\u003cli\u003ejika mau mutable tambahakan \u003ccode\u003emut\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003evariable itu scopenya local, tidak bisa digunakan diluar fn\u003c/li\u003e\n\u003cli\u003erust tidak mengizinkan unused variable\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003econstant\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ememiliki cakupan statis, tidak dihapus dari memory selama program berjalan dan bisa diakses dari manasaja didalam module tempat constant itu dideklarasikan atau module lain jika public\u003c/li\u003e\n\u003cli\u003enilai dari const harus ditentukan pada waktu kompilasi, jadi tidak bisa di set ketika program sudah berjalan atau selalu immutable\u003c/li\u003e\n\u003cli\u003euntuk penomoran rust menggunakan convention huruf besar dengan underscore contoh \u003ccode\u003eTHREE_HOURS_IN_SECONDS\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eshadowing\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eyang menarik dari shadowing adalah kita bisa mengubah value tanpa \u003ccode\u003emut\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre class=\"language-rust\"\u003e\u003ccode class=\"language-rust\"\u003e\u003cspan class=\"token keyword\"\u003efn\u003c/span\u003e \u003cspan class=\"token function-definition function\"\u003emain\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e x \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token number\"\u003e5\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e x \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e x \u003cspan class=\"token operator\"\u003e+\u003c/span\u003e \u003cspan class=\"token number\"\u003e1\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n    \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n        \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e x \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e x \u003cspan class=\"token operator\"\u003e*\u003c/span\u003e \u003cspan class=\"token number\"\u003e2\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n        \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of x in the inner scope is: {x}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of x is: {x}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003ekode diatas bisa digunakan untuk mengubah nilai dari \u003ccode\u003ex\u003c/code\u003e, sebelumnya nilai \u003ccode\u003ex\u003c/code\u003e adalah 5, lalu \u003ccode\u003ex\u003c/code\u003e diubah menjadi \u003ccode\u003ex + 1\u003c/code\u003e yaitu 6, lalu \u003ccode\u003ex\u003c/code\u003e diubah kembali didalam inner scope \u003ccode\u003ex * 6\u003c/code\u003e yaitu 12, karena itu didalam scope maka tidak akan mengubah value yang ada di luar scope, jadi jika di print \u003ccode\u003ex\u003c/code\u003e yang diluar scope maka akan tetap \u003ccode\u003e6\u003c/code\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eData type\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eScalar Types\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eintegers\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003einteger adalah number tanpa fractional component / tanpa pecahan\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003ejadi integer adalah bilangan bulat\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003einteger terdiri dari unsigned dan signed\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003esigned: -1\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eunsgned: 1 (semua bilangan positif)\u003c/p\u003e\n\u003cdiv class=\"table-responsive\"\u003e\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\u003ctable\u003e\u003cthead\u003e\u003ctr\u003e\u003cth\u003eLength\u003c/th\u003e\u003cth\u003eSigned\u003c/th\u003e\u003cth\u003eUsigned\u003c/th\u003e\u003c/tr\u003e\u003c/thead\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003e8-bit\u003c/td\u003e\u003ctd\u003ei8\u003c/td\u003e\u003ctd\u003eu8\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e16-bit\u003c/td\u003e\u003ctd\u003ei16\u003c/td\u003e\u003ctd\u003eu16\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e32-bi\u003c/td\u003e\u003ctd\u003et\u003c/td\u003e\u003ctd\u003ei32\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e64-bi\u003c/td\u003e\u003ctd\u003et\u003c/td\u003e\u003ctd\u003ei64\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e128-b\u003c/td\u003e\u003ctd\u003eit\u003c/td\u003e\u003ctd\u003ei128\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003earch\u003c/td\u003e\u003ctd\u003eisize\u003c/td\u003e\u003ctd\u003eusize\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003c/div\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003earch ini maksudnya arsitektur dependent, tipedata ini karena ukurannya bergantuk pada arsitektur sistem yang digunakan \u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003efloating-point numbers\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003ebooleans\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003echaracer\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003edi rust charakter ada type berbeda, char dan string. \n\u003cul\u003e\n\u003cli\u003echar: Ini adalah tipe data untuk karakter tunggal. Di Rust, char selalu mewakili satu karakter Unicode Scalar Value, yang mungkin lebih luas daripada hanya ASCII. char didefinisikan menggunakan single quotes, seperti 'a', '1', atau '🎉'.\u003c/li\u003e\n\u003cli\u003eString atau \u0026#x26;str: Ini adalah tipe data untuk string, yaitu urutan karakter. String adalah string yang dapat tumbuh, berubah, dan dimiliki, sementara \u0026#x26;str adalah referensi ke string yang ada di tempat lain, biasanya tidak dapat diubah. String didefinisikan menggunakan double quotes, seperti \"hello\" atau \"world\".\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eCompound Types\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003etuples\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003etipe data komposit yang dapat mentimpan sekumpulan nilai dengan tipe berbeda. contoh\u003c/p\u003e\n\u003cpre class=\"language-rust\"\u003e\u003ccode class=\"language-rust\"\u003e\u003cspan class=\"token keyword\"\u003efn\u003c/span\u003e \u003cspan class=\"token function-definition function\"\u003emain\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e tup \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token number\"\u003e500\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e \u003cspan class=\"token number\"\u003e6.4\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e \u003cspan class=\"token number\"\u003e1\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003ex\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e y\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e z\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e tup\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of y is: {y}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of z is: {z}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of x is: {x}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n    \u003cspan class=\"token comment\"\u003e// index\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e x \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e tup\u003cspan class=\"token number\"\u003e.0\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e y \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e tup\u003cspan class=\"token number\"\u003e.1\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e z \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e tup\u003cspan class=\"token number\"\u003e.2\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n            \n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of y is: {y}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of z is: {z}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of x is: {x}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003earray\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eini sama seperti array pada bahasa lain, tapi bedanya array gak bisa berbeda type\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eFunction\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003etidak ada yang berbeda sama seperti bahasa lain, bedanya return value di rust tidak perlu keyword return seperti golang \u003ccode\u003ereturn\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eControl Flow\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eif expression\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eif expression bisa digunakan berbarengan dengan let\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre class=\"language-rust\"\u003e\u003ccode class=\"language-rust\"\u003e\u003cspan class=\"token keyword\"\u003efn\u003c/span\u003e \u003cspan class=\"token function-definition function\"\u003emain\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e condition \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token boolean\"\u003etrue\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e number \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token keyword\"\u003eif\u003c/span\u003e condition \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e \u003cspan class=\"token number\"\u003e5\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e \u003cspan class=\"token keyword\"\u003eelse\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e \u003cspan class=\"token number\"\u003e6\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n    \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"The value of number is: {number}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eloops\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eloop\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eloop ini adalah basic looping dari rust, yang menariknya loop di sini bisa dibuat lable\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eloop label dimulai dengan single quote, contoh codenya\u003c/p\u003e\n\u003cpre class=\"language-rust\"\u003e\u003ccode class=\"language-rust\"\u003e\u003cspan class=\"token keyword\"\u003efn\u003c/span\u003e \u003cspan class=\"token function-definition function\"\u003emain\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e \u003cspan class=\"token keyword\"\u003emut\u003c/span\u003e count \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token number\"\u003e0\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token lifetime-annotation symbol\"\u003e'counting_up\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"token keyword\"\u003eloop\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n        \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"count = {count}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n        \u003cspan class=\"token keyword\"\u003elet\u003c/span\u003e \u003cspan class=\"token keyword\"\u003emut\u003c/span\u003e remaining \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token number\"\u003e10\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n\n        \u003cspan class=\"token keyword\"\u003eloop\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n            \u003cspan class=\"token macro property\"\u003eprintln!\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string\"\u003e\"remaining = {remaining}\"\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n            \u003cspan class=\"token keyword\"\u003eif\u003c/span\u003e remaining \u003cspan class=\"token operator\"\u003e==\u003c/span\u003e \u003cspan class=\"token number\"\u003e9\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n                \u003cspan class=\"token keyword\"\u003ebreak\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n            \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n            \u003cspan class=\"token keyword\"\u003eif\u003c/span\u003e count \u003cspan class=\"token operator\"\u003e==\u003c/span\u003e \u003cspan class=\"token number\"\u003e2\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n                \u003cspan class=\"token keyword\"\u003ebreak\u003c/span\u003e \u003cspan class=\"token lifetime-annotation symbol\"\u003e'counting_up\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n            \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n            remaining \u003cspan class=\"token operator\"\u003e-=\u003c/span\u003e \u003cspan class=\"token number\"\u003e1\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n        \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\n        count \u003cspan class=\"token operator\"\u003e+=\u003c/span\u003e \u003cspan class=\"token number\"\u003e1\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e;\u003c/span\u003e\n    \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003ewhile\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003edengan while kita bisa menambahkan kondisi\u003c/li\u003e\n\u003cli\u003ekodisinya berupa true or false\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003efor\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e","noteIndex":{"id":"oqxmejlafk9x8rj9t5hya5z","title":"Hello and Welcome! 👋","desc":"","updated":1742030256619,"created":1646842475821,"custom":{"nav_order":0,"permalink":"/"},"fname":"root","type":"note","vault":{"fsPath":"vault"},"contentHash":"f7db9d96297496e598d70248ef16b81f","links":[],"anchors":{"find-more":{"type":"header","text":"Find More","value":"find-more","line":20,"column":0,"depth":2}},"children":["spfwom01chbihki1twghclf","bsv930j2j6qlih60c7eu7wh","ohf85tu5nw2b8ewx6cetsmp","u3lhhpriar8wgcjw8svapha","tvdcga33h6hi7fxd9cwqd66","wvtpake5hh5uu6swigzu5dk"],"parent":null,"data":{},"body":"\nWelcome to the homepage! I use Dendron to store and organize notes, ideas, and experiments I’m working on. Here are the main sections you’ll find on this site:\n\n1. **Learning Notes** — Practical notes on programming, recent technologies, and productivity tips.\n2. **Personal Projects** — Summaries of projects, experiments, and outcomes I’m working on or have completed.\n3. **Writings \u0026 Opinions** — Casual articles and reflections about technology, daily life, and other interesting topics.\n\nI’m constantly experimenting and learning. I hope the content here helps you as a reference, a starting point for discussion, or just light reading.\n\n\u003e Why Dendron?\n\u003e\nDendron helps keep notes organized. Its \"seed\" and \"vault\" concepts make it easy to structure content and find what you need.\n\n## Find More\n\nIf you want to learn more or connect, check these links:\n\n- [Homepage (Dendron)](https://zeihanaulia.github.io/sotoy/)\n- [My GitHub](https://github.com/zeihanaulia)\n- [My Twitter / X](https://x.com/zeihanaulia)\n\nThanks for stopping by. If you have feedback or want to chat, feel free to reach out.\n"},"collectionChildren":null,"customHeadContent":null,"config":{"version":5,"dev":{"enablePreviewV2":true},"commands":{"lookup":{"note":{"selectionMode":"extract","confirmVaultOnCreate":true,"vaultSelectionModeOnCreate":"smart","leaveTrace":false,"bubbleUpCreateNew":true,"fuzzThreshold":0.2}},"randomNote":{},"insertNoteLink":{"aliasMode":"none","enableMultiSelect":false},"insertNoteIndex":{"enableMarker":false},"copyNoteLink":{"aliasMode":"title"},"templateHierarchy":"template"},"workspace":{"dendronVersion":"0.83.0","vaults":[{"fsPath":"vault"}],"journal":{"dailyDomain":"daily","name":"journal","dateFormat":"y.MM.dd","addBehavior":"childOfDomain"},"scratch":{"name":"scratch","dateFormat":"y.MM.dd.HHmmss","addBehavior":"asOwnDomain"},"task":{"name":"","dateFormat":"","addBehavior":"childOfCurrent","statusSymbols":{"":" ","wip":"w","done":"x","assigned":"a","moved":"m","blocked":"b","delegated":"l","dropped":"d","pending":"y"},"prioritySymbols":{"H":"high","M":"medium","L":"low"},"todoIntegration":false,"createTaskSelectionType":"selection2link","taskCompleteStatus":["done","x"]},"graph":{"zoomSpeed":1,"createStub":false},"enableAutoCreateOnDefinition":false,"enableXVaultWikiLink":false,"enableRemoteVaultInit":true,"enableUserTags":true,"enableHashTags":true,"workspaceVaultSyncMode":"noCommit","enableAutoFoldFrontmatter":false,"enableEditorDecorations":true,"maxPreviewsCached":10,"maxNoteLength":204800,"seeds":{"dendron.templates":{}},"enableFullHierarchyNoteTitle":false},"preview":{"enableFMTitle":true,"enableNoteTitleForLink":true,"enableFrontmatterTags":true,"enableHashesForFMTags":false,"enablePrettyRefs":true,"enableKatex":true,"automaticallyShowPreview":false},"publishing":{"enableFMTitle":true,"enableNoteTitleForLink":true,"enablePrettyRefs":true,"enableKatex":true,"copyAssets":true,"siteHierarchies":["root"],"writeStubs":true,"siteRootDir":"docs","seo":{"title":"Sotoy","description":"Personal knowledge space about anything I learn. Notes, knowledge, and ideas from me.","author":"Zeihan Aulia","twitter":"zeihanaulia","image":{"url":"https://pbs.twimg.com/profile_images/502375255256485888/1UYtt7PT_400x400.jpeg","alt":"Software Engineer, "}},"github":{"enableEditLink":true,"editLinkText":"Edit this page on GitHub","editBranch":"main","editViewMode":"tree"},"enableSiteLastModified":true,"enableFrontmatterTags":true,"enableHashesForFMTags":false,"enableRandomlyColoredTags":true,"enableTaskNotes":true,"enablePrettyLinks":true,"searchMode":"lookup","assetsPrefix":"/sotoy","siteUrl":"https://zeihanaulia.github.io","duplicateNoteBehavior":{"action":"useVault","payload":["vault-private","vault","dendron.templates"]},"siteFaviconPath":"favicon.ico","siteIndex":"root"}}},"__N_SSG":true},"page":"/notes/[id]","query":{"id":"qsjn6anz0awbgtdp59s2n0i"},"buildId":"5lbZ5lhXIh2ME6onB9uE-","assetPrefix":"/sotoy","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

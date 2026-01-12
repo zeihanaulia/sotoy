@@ -1,0 +1,249 @@
+<h1 id="best-practices-for-writing-copilot-custom-instructions">Best Practices for Writing Copilot Custom Instructions<a aria-hidden="true" class="anchor-heading icon-link" href="#best-practices-for-writing-copilot-custom-instructions"></a></h1>
+<p>Custom instructions enable you to define common guidelines and rules that automatically influence how GitHub Copilot generates code and handles development tasks. Instead of manually including context in every chat prompt, specify custom instructions in Markdown files to ensure consistent AI responses.</p>
+<h2 id="types-of-instructions-files">Types of Instructions Files<a aria-hidden="true" class="anchor-heading icon-link" href="#types-of-instructions-files"></a></h2>
+<h3 id="1-githubcopilot-instructionsmd">1. <code>.github/copilot-instructions.md</code><a aria-hidden="true" class="anchor-heading icon-link" href="#1-githubcopilot-instructionsmd"></a></h3>
+<ul>
+<li>Single file that applies to <strong>all</strong> chat requests in the workspace</li>
+<li>Best for project-wide guidelines</li>
+<li>Automatically detected by VS Code, Visual Studio, and GitHub.com</li>
+</ul>
+<h3 id="2-instructionsmd-files">2. <code>.instructions.md</code> Files<a aria-hidden="true" class="anchor-heading icon-link" href="#2-instructionsmd-files"></a></h3>
+<ul>
+<li>Multiple files with conditional application based on file patterns</li>
+<li>Uses <code>applyTo</code> glob pattern in YAML frontmatter</li>
+<li>Stored in <code>.github/instructions/</code> folder or user profile</li>
+<li>Best for language-specific or task-specific instructions</li>
+</ul>
+<h3 id="3-agentsmd-files">3. <code>AGENTS.md</code> Files<a aria-hidden="true" class="anchor-heading icon-link" href="#3-agentsmd-files"></a></h3>
+<ul>
+<li>For workspaces using multiple AI agents</li>
+<li>Can be nested in subfolders (experimental)</li>
+<li>Applies to all chat requests in workspace</li>
+</ul>
+<h2 id="five-essential-sections">Five Essential Sections<a aria-hidden="true" class="anchor-heading icon-link" href="#five-essential-sections"></a></h2>
+<p>Based on <a href="https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/">GitHub's recommendations</a>, every instruction file should include:</p>
+<h3 id="1-project-overview">1. <strong>Project Overview</strong><a aria-hidden="true" class="anchor-heading icon-link" href="#1-project-overview"></a></h3>
+<p>Provide an elevator pitch of your application:</p>
+<ul>
+<li>What is the app?</li>
+<li>Who is the audience?</li>
+<li>What are key features?</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Project Description</span>
+
+This is a personal knowledge base (PKM) built with Dendron, a hierarchical note-taking tool for developers. The workspace contains book summaries, technical notes, daily journals, and learning documentation.
+</code></pre>
+<h3 id="2-tech-stack">2. <strong>Tech Stack</strong><a aria-hidden="true" class="anchor-heading icon-link" href="#2-tech-stack"></a></h3>
+<p>List frameworks, languages, and tools used:</p>
+<ul>
+<li>Backend technologies</li>
+<li>Frontend frameworks</li>
+<li>Testing suites</li>
+<li>APIs and databases</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Tech Stack</span>
+
+<span class="token list punctuation">-</span> <span class="token bold"><span class="token punctuation">**</span><span class="token content">Dendron</span><span class="token punctuation">**</span></span>: Core note-taking system with hierarchical structure
+<span class="token list punctuation">-</span> <span class="token bold"><span class="token punctuation">**</span><span class="token content">Markdown</span><span class="token punctuation">**</span></span>: All notes are written in Markdown format
+<span class="token list punctuation">-</span> <span class="token bold"><span class="token punctuation">**</span><span class="token content">Next.js</span><span class="token punctuation">**</span></span>: Static site generation for publishing
+<span class="token list punctuation">-</span> <span class="token bold"><span class="token punctuation">**</span><span class="token content">Git</span><span class="token punctuation">**</span></span>: Version control
+</code></pre>
+<h3 id="3-coding-guidelines">3. <strong>Coding Guidelines</strong><a aria-hidden="true" class="anchor-heading icon-link" href="#3-coding-guidelines"></a></h3>
+<p>Specify coding standards and practices:</p>
+<ul>
+<li>Code style preferences (semicolons, type hints, indentation)</li>
+<li>Testing requirements</li>
+<li>Security practices</li>
+<li>Naming conventions</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Project Guidelines</span>
+
+<span class="token list punctuation">-</span> All notes follow Dendron naming convention: hierarchical with dot notation
+<span class="token list punctuation">-</span> Use kebab-case for note names
+<span class="token list punctuation">-</span> Journal notes follow <span class="token code-snippet code keyword">`daily.journal.{year}.{month}.{day}`</span> format
+<span class="token list punctuation">-</span> Keep notes atomic and well-linked using wiki links
+</code></pre>
+<h3 id="4-project-structure">4. <strong>Project Structure</strong><a aria-hidden="true" class="anchor-heading icon-link" href="#4-project-structure"></a></h3>
+<p>Explain folder organization:</p>
+<ul>
+<li>Main directories and their purposes</li>
+<li>Where to find specific types of files</li>
+<li>Configuration locations</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Project Structure</span>
+
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`vault/`</span> - Public notes (book summaries, handbook, technical notes)
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`vault2/`</span> - Private notes (daily journals, personal reflections)
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`.github/instructions/`</span> - Custom instruction files
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`docs/`</span> - Generated static site
+</code></pre>
+<h3 id="5-available-resources">5. <strong>Available Resources</strong><a aria-hidden="true" class="anchor-heading icon-link" href="#5-available-resources"></a></h3>
+<p>Point to tools, scripts, and utilities:</p>
+<ul>
+<li>Development scripts</li>
+<li>Template systems</li>
+<li>Key commands</li>
+<li>MCP servers</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Resources</span>
+
+<span class="token title important"><span class="token punctuation">###</span> Templates Available</span>
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`templates.journal.daily.5mj`</span> - Five Minute Journal template
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`templates.module`</span> - Module documentation template
+
+<span class="token title important"><span class="token punctuation">###</span> Key Commands</span>
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`Ctrl+L`</span> - Lookup Note
+<span class="token list punctuation">-</span> <span class="token code-snippet code keyword">`Dendron: Apply Template`</span> - Apply template to current note
+</code></pre>
+<h2 id="using-instructionsmd-files-with-applyto">Using <code>.instructions.md</code> Files with <code>applyTo</code><a aria-hidden="true" class="anchor-heading icon-link" href="#using-instructionsmd-files-with-applyto"></a></h2>
+<p>For task-specific or file-specific instructions, create separate <code>.instructions.md</code> files:</p>
+<h3 id="file-format">File Format<a aria-hidden="true" class="anchor-heading icon-link" href="#file-format"></a></h3>
+<pre class="language-markdown"><code class="language-markdown"><span class="token front-matter-block"><span class="token punctuation">---</span>
+<span class="token front-matter yaml language-yaml">name: "Instruction Name"
+description: "Brief description"
+applyTo: "**/*.py"  # Glob pattern</span>
+<span class="token punctuation">---</span></span>
+
+<span class="token title important"><span class="token punctuation">#</span> Instructions content here</span>
+
+Your specific guidelines for files matching the pattern.
+</code></pre>
+<h3 id="example-python-specific-instructions">Example: Python-Specific Instructions<a aria-hidden="true" class="anchor-heading icon-link" href="#example-python-specific-instructions"></a></h3>
+<pre class="language-markdown"><code class="language-markdown"><span class="token front-matter-block"><span class="token punctuation">---</span>
+<span class="token front-matter yaml language-yaml">name: "Python Coding Standards"
+description: "PEP 8 and project-specific Python guidelines"
+applyTo: "**/*.py"</span>
+<span class="token punctuation">---</span></span>
+
+<span class="token title important"><span class="token punctuation">#</span> Python Coding Standards</span>
+
+<span class="token list punctuation">-</span> Follow PEP 8 style guide
+<span class="token list punctuation">-</span> Always use type hints
+<span class="token list punctuation">-</span> Write docstrings for all public functions
+<span class="token list punctuation">-</span> Use 4 spaces for indentation
+</code></pre>
+<h3 id="creating-via-ui">Creating via UI<a aria-hidden="true" class="anchor-heading icon-link" href="#creating-via-ui"></a></h3>
+<ol>
+<li>Open Chat view in VS Code</li>
+<li>Click gear icon (⚙️) > <strong>Chat Instructions</strong></li>
+<li>Select <strong>New instruction file</strong></li>
+<li>Choose location (Workspace or User profile)</li>
+<li>Add YAML frontmatter and instructions</li>
+</ol>
+<h2 id="best-practices">Best Practices<a aria-hidden="true" class="anchor-heading icon-link" href="#best-practices"></a></h2>
+<h3 id="keep-instructions-short-and-focused">Keep Instructions Short and Focused<a aria-hidden="true" class="anchor-heading icon-link" href="#keep-instructions-short-and-focused"></a></h3>
+<ul>
+<li>Each instruction should be a single, simple statement</li>
+<li>Use bullet points for clarity</li>
+<li>Avoid lengthy paragraphs</li>
+</ul>
+<h3 id="use-multiple-files-for-different-topics">Use Multiple Files for Different Topics<a aria-hidden="true" class="anchor-heading icon-link" href="#use-multiple-files-for-different-topics"></a></h3>
+<p>Instead of one large file:</p>
+<pre><code>.github/instructions/
+  ├── python-standards.instructions.md
+  ├── typescript-standards.instructions.md
+  ├── testing-guidelines.instructions.md
+  └── api-design.instructions.md
+</code></pre>
+<h3 id="leverage-applyto-patterns">Leverage <code>applyTo</code> Patterns<a aria-hidden="true" class="anchor-heading icon-link" href="#leverage-applyto-patterns"></a></h3>
+<p>Common patterns:</p>
+<ul>
+<li><code>"**/*.py"</code> - All Python files</li>
+<li><code>"src/**/*.ts"</code> - TypeScript in src folder</li>
+<li><code>"tests/**/*"</code> - All test files</li>
+<li><code>"vault2/daily.journal.*.md"</code> - Daily journal notes</li>
+</ul>
+<h3 id="reference-external-resources">Reference External Resources<a aria-hidden="true" class="anchor-heading icon-link" href="#reference-external-resources"></a></h3>
+<p>Use Markdown links to reference:</p>
+<ul>
+<li>Documentation URLs</li>
+<li>Design documents</li>
+<li>Code examples</li>
+<li>Tool documentation</li>
+</ul>
+<h3 id="store-in-version-control">Store in Version Control<a aria-hidden="true" class="anchor-heading icon-link" href="#store-in-version-control"></a></h3>
+<ul>
+<li>Commit instructions files to Git</li>
+<li>Share with team members</li>
+<li>Track changes over time</li>
+</ul>
+<h3 id="test-your-instructions">Test Your Instructions<a aria-hidden="true" class="anchor-heading icon-link" href="#test-your-instructions"></a></h3>
+<p>After creating instructions:</p>
+<ol>
+<li>Ask Copilot about the project</li>
+<li>Verify it references your guidelines</li>
+<li>Request code generation to check compliance</li>
+<li>Iterate based on results</li>
+</ol>
+<h2 id="common-use-cases">Common Use Cases<a aria-hidden="true" class="anchor-heading icon-link" href="#common-use-cases"></a></h2>
+<h3 id="daily-journal-workflow">Daily Journal Workflow<a aria-hidden="true" class="anchor-heading icon-link" href="#daily-journal-workflow"></a></h3>
+<pre class="language-markdown"><code class="language-markdown"><span class="token front-matter-block"><span class="token punctuation">---</span>
+<span class="token front-matter yaml language-yaml">name: "Daily Journal Template"
+applyTo: "vault2/daily.journal.*.md"</span>
+<span class="token punctuation">---</span></span>
+
+<span class="token title important"><span class="token punctuation">#</span> Creating Daily Journals</span>
+
+<span class="token list punctuation">1.</span> Use naming: <span class="token code-snippet code keyword">`daily.journal.YYYY.MM.DD`</span>
+<span class="token list punctuation">2.</span> Apply template: <span class="token code-snippet code keyword">`templates.journal.daily.5mj`</span>
+<span class="token list punctuation">3.</span> Fill sections: Morning gratitude, Evening reflections
+</code></pre>
+<h3 id="code-review-guidelines">Code Review Guidelines<a aria-hidden="true" class="anchor-heading icon-link" href="#code-review-guidelines"></a></h3>
+<pre class="language-markdown"><code class="language-markdown"><span class="token front-matter-block"><span class="token punctuation">---</span>
+<span class="token front-matter yaml language-yaml">name: "Code Review Standards"
+description: "Guidelines for reviewing pull requests"</span>
+<span class="token punctuation">---</span></span>
+
+<span class="token title important"><span class="token punctuation">#</span> Code Review Checklist</span>
+
+<span class="token list punctuation">-</span> Verify unit tests pass
+<span class="token list punctuation">-</span> Check for security vulnerabilities
+<span class="token list punctuation">-</span> Ensure code follows style guide
+<span class="token list punctuation">-</span> Review performance implications
+</code></pre>
+<h2 id="tips-from-github">Tips from GitHub<a aria-hidden="true" class="anchor-heading icon-link" href="#tips-from-github"></a></h2>
+<ol>
+<li><strong>Don't Overthink</strong>: Start simple, iterate based on experience</li>
+<li><strong>Use Copilot to Generate</strong>: Ask Copilot to help create instruction files</li>
+<li><strong>Keep Under 2 Pages</strong>: Avoid overly long instructions</li>
+<li><strong>Be Specific</strong>: Clear, actionable guidelines work best</li>
+<li><strong>Update Regularly</strong>: Instructions should evolve with your project</li>
+</ol>
+<h2 id="common-mistakes-to-avoid">Common Mistakes to Avoid<a aria-hidden="true" class="anchor-heading icon-link" href="#common-mistakes-to-avoid"></a></h2>
+<p>❌ <strong>Too Generic</strong></p>
+<pre class="language-markdown"><code class="language-markdown">Write good code with best practices.
+</code></pre>
+<p>✅ <strong>Specific and Actionable</strong></p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token list punctuation">-</span> Use TypeScript strict mode
+<span class="token list punctuation">-</span> All functions must have JSDoc comments
+<span class="token list punctuation">-</span> Prefer async/await over raw Promises
+</code></pre>
+<p>❌ <strong>Too Long</strong></p>
+<ul>
+<li>Multiple pages of detailed specifications</li>
+<li>Copy-pasting entire style guides</li>
+</ul>
+<p>✅ <strong>Concise</strong></p>
+<ul>
+<li>Link to full documentation</li>
+<li>Highlight key points only</li>
+</ul>
+<h2 id="references">References<a aria-hidden="true" class="anchor-heading icon-link" href="#references"></a></h2>
+<ul>
+<li><a href="https://code.visualstudio.com/docs/copilot/customization/custom-instructions">VS Code Docs: Custom Instructions</a></li>
+<li><a href="https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/">GitHub Blog: 5 Tips for Better Custom Instructions</a></li>
+<li><a href="https://github.com/skills/customize-your-github-copilot-experience">GitHub Skills: Customize Copilot Experience</a></li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions">GitHub Docs: Repository Custom Instructions</a></li>
+<li><a href="https://github.com/github/awesome-copilot/tree/main">Awesome Copilot Examples</a></li>
+</ul>
+<h2 id="related-notes">Related Notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.dendron.workspace-setup (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handbook.vscode.copilot-configuration (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til.copilot.custom-agents (Private)</a></li>
+</ul>

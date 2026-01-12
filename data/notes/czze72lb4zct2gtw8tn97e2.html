@@ -1,0 +1,141 @@
+<h1 id="bagaimana-instrumentasi-golang-dengan-elastic-apm">Bagaimana instrumentasi golang dengan elastic APM<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-instrumentasi-golang-dengan-elastic-apm"></a></h1>
+<p>Elastic APM (Application Performance Monitoring) dapat membantu kita dalam hal visibility distributed workload.
+Untuk mendapatkan insight kita haru membuat instrumentasi pada aplikasi kita.</p>
+<h2 id="membuat-webrequest">Membuat webrequest<a aria-hidden="true" class="anchor-heading icon-link" href="#membuat-webrequest"></a></h2>
+<p>Elastic APM Go Agent memiliki API "tracing" untuk menerima request ke server.
+Secara default APM akan mengirimkan data ke http://localhost:8200.
+Jika kita menggunakan APM Server selain di localhost dan melakukan load environment variable pada aplikasi.
+Maka khusus untuk variable yang terkait APM sebaiknya di init ketika running, bukan diaplikasi karena ada issue ini <a href="https://github.com/elastic/apm-agent-go/issues/618">apm-agent-go #618</a>.</p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">"net/http"</span>
+`
+	<span class="token string">"github.com/go-chi/chi/v5"</span>
+	<span class="token string">"github.com/go-chi/chi/v5/middleware"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">hello</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	w<span class="token punctuation">.</span><span class="token function">Write</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span><span class="token string">"welcome"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	r <span class="token operator">:=</span> chi<span class="token punctuation">.</span><span class="token function">NewRouter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	r<span class="token punctuation">.</span><span class="token function">Use</span><span class="token punctuation">(</span>middleware<span class="token punctuation">.</span>Logger<span class="token punctuation">)</span>
+	r<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> hello<span class="token punctuation">)</span>
+	http<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token string">":3000"</span><span class="token punctuation">,</span> r<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="setup-kibana-dan-apm">Setup Kibana dan APM<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-kibana-dan-apm"></a></h2>
+<h3 id="local">Local<a aria-hidden="true" class="anchor-heading icon-link" href="#local"></a></h3>
+<p>Gw asummsikan semua sudah menggunakan docker, sehingga tinggal running dengan docker compose</p>
+<pre class="language-dockerfile"><code class="language-Dockerfile">version: '3.7'
+
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+    environment:
+      - bootstrap.memory_lock=true
+      - cluster.name=docker-cluster
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-XX:UseAVX=2 -Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.16.3
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+  
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.16.3
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+    - 8200:8200
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+volumes:
+	elasticsearch:
+	
+</code></pre>
+<h3 id="trial-elastic-cloud">Trial Elastic Cloud<a aria-hidden="true" class="anchor-heading icon-link" href="#trial-elastic-cloud"></a></h3>
+<p>Kalau gak mamu ribet, bisa cobain trial dari <a href="https://www.elastic.co/cloud/">elastic cloud</a>. Kita akan dapat trial selama 14 hari untuk melakukan explorasi fitur firur di APM. Setupnya cukup mudah tinggal klik-klik aja.
+Setelah itu masuk ke menu APM, lalu kebagian agent untuk mendapatkan config yang seharusnya.</p>
+<p>Kita membutuhkan data environtment variable untuk aplikasi.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Initialize using environment variables:</span>
+
+<span class="token comment"># Set the service name. Allowed characters: # a-z, A-Z, 0-9, -, _, and space.</span>
+<span class="token comment"># If ELASTIC_APM_SERVICE_NAME is not specified, the executable name will be used.</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">ELASTIC_APM_SERVICE_NAME</span><span class="token operator">=</span>
+
+<span class="token comment"># Set custom APM Server URL (default: http://localhost:8200)</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">ELASTIC_APM_SERVER_URL</span><span class="token operator">=</span>https://7ccb1cfa41f5426ba7f29ee7123e8f4c.apm.us-central1.gcp.cloud.es.io:443
+
+<span class="token comment"># Use if APM Server requires a secret token</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">ELASTIC_APM_SECRET_TOKEN</span><span class="token operator">=</span>0aaRb0gVrRkaSQdkdR
+
+<span class="token comment"># Set the service environment</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">ELASTIC_APM_ENVIRONMENT</span><span class="token operator">=</span>
+</code></pre>
+<h2 id="instrumenting-application">Instrumenting application<a aria-hidden="true" class="anchor-heading icon-link" href="#instrumenting-application"></a></h2>
+<p>Modifikasi webserver yang kita buat sebelumnya, dengan menambahkan <code>apmhttp.Wrap(r)</code></p>
+<pre class="language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">"net/http"</span>
+`	<span class="token operator">...</span>
+
+	apmchi <span class="token string">"go.elastic.co/apm/module/apmchiv5"</span>
+	<span class="token string">"go.elastic.co/apm/module/apmhttp"</span>
+<span class="token punctuation">)</span>
+
+<span class="token operator">...</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	r <span class="token operator">:=</span> chi<span class="token punctuation">.</span><span class="token function">NewRouter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	r<span class="token punctuation">.</span><span class="token function">Use</span><span class="token punctuation">(</span>apmchi<span class="token punctuation">.</span><span class="token function">Middleware</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token operator">...</span>
+	http<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token string">":3000"</span><span class="token punctuation">,</span> apmhttp<span class="token punctuation">.</span><span class="token function">Wrap</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>apmchi adalah middleware yang isinya pembuatan instrument untuk APM.
+bukan hanya chi, ada beberapa library lain yang disupport secara resmi.
+bisa dilihat disini <a href="https://github.com/elastic/apm-agent-go/tree/main/module">https://github.com/elastic/apm-agent-go/tree/main/module</a> dan dokumentasinya di <a href="https://www.elastic.co/guide/en/apm/agent/go/master/builtin-modules.html">Built-in instrumentation modules</a>.</p>

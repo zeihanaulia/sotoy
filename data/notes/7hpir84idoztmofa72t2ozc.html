@@ -1,0 +1,23 @@
+<h1 id="4-setup-golang-ci">4 Setup Golang CI<a aria-hidden="true" class="anchor-heading icon-link" href="#4-setup-golang-ci"></a></h1>
+<p><a class="color-tag" style="--tag-color: #a8a495;" href="/sotoy/notes/1l18nvi2v8de3tka75ibojn">#go</a> <a class="color-tag" style="--tag-color: #020035;" href="/sotoy/notes/wghdytgfyphqrrcmgp3ko0h">#linter</a></p>
+<p>Linter sangat membantu untuk melakukan standarisasi code.
+Mereka juga bisa mengecek jika ada kode yang tidak efektif atau bugs kecil.</p>
+<p>Cara setupnya cukup mudah</p>
+<ul>
+<li>
+<p>Windows &#x26; Linux</p>
+<p>untuk windows bisa gunakan git bash agar bisa menggunakan <code>curl</code>.</p>
+<pre class="language-bash"><code class="language-bash">	<span class="token comment"># binary will be $(go env GOPATH)/bin/golangci-lint</span>
+	<span class="token function">curl</span> -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh <span class="token operator">|</span> <span class="token function">sh</span> -s -- -b <span class="token variable"><span class="token variable">$(</span>go <span class="token function">env</span> GOPATH<span class="token variable">)</span></span>/bin v1.43.0
+
+	golangci-lint --version
+</code></pre>
+</li>
+<li>
+<p>Mac</p>
+<pre class="language-bash"><code class="language-bash">	brew <span class="token function">install</span> golangci-lint
+	brew upgrade golangci-lint
+</code></pre>
+</li>
+</ul>
+<p>Informasi lebih lanjut bisa cek di <a href="https://golangci-lint.run/usage/install/">https://golangci-lint.run/usage/install/</a>.</p>

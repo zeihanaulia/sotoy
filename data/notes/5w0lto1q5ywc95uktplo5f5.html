@@ -1,0 +1,152 @@
+<h1 id="setup-vm-azure-terraform">Setup Vm Azure Terraform<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-vm-azure-terraform"></a></h1>
+<h2 id="1-install-terraform-tf">1. Install Terraform (TF)<a aria-hidden="true" class="anchor-heading icon-link" href="#1-install-terraform-tf"></a></h2>
+<p>Terraform itu tool buat bikin infrastruktur via kode. Jadi lo bisa definisiin semuanya (VM, jaringan, IP, dll) dari satu file konfig. Ga perlu klik-klik di Azure Portal.</p>
+<p>Lo bisa install Terraform via:</p>
+<ul>
+<li>
+<p>Brew (kalau di Mac):</p>
+<pre class="language-bash"><code class="language-bash">brew tap hashicorp/tap
+brew <span class="token function">install</span> hashicorp/tap/terraform
+</code></pre>
+</li>
+<li>
+<p>Nix (kalau lo anak Nix):</p>
+<pre class="language-nix"><code class="language-nix">home<span class="token punctuation">.</span>packages <span class="token operator">=</span> <span class="token punctuation">[</span> pkgs<span class="token punctuation">.</span>terraform <span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+</li>
+</ul>
+<p>Cek versi:</p>
+<pre class="language-bash"><code class="language-bash">terraform -v
+</code></pre>
+<p>Pastikan versi minimal 1.x ke atas biar support syntax terbaru.</p>
+<hr>
+<h2 id="2-init-project">2. Init Project<a aria-hidden="true" class="anchor-heading icon-link" href="#2-init-project"></a></h2>
+<p>Bikin folder project, misalnya <code>infra</code>, terus lo buat beberapa file utama:</p>
+<ul>
+<li><code>main.tf</code>: isi semua resource Azure.</li>
+<li><code>variables.tf</code>: semua variabel yang reusable didefinisikan di sini.</li>
+<li><code>terraform.tfvars</code>: isinya nilai-nilai variabel real-nya.</li>
+</ul>
+<p>Contoh <code>variables.tf</code>:</p>
+<pre class="language-hcl"><code class="language-hcl"><span class="token keyword">variable<span class="token type variable"> "subscription_id" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">variable<span class="token type variable"> "tenant_id" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">variable<span class="token type variable"> "resource_group_name" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">variable<span class="token type variable"> "location" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">variable<span class="token type variable"> "vm_name" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">variable<span class="token type variable"> "admin_username" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">variable<span class="token type variable"> "ssh_public_key" </span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Contoh isi <code>terraform.tfvars</code>:</p>
+<pre class="language-hcl"><code class="language-hcl"><span class="token property">subscription_id</span>    <span class="token punctuation">=</span> <span class="token string">"&#x3C;ID Azure lo>"</span>
+<span class="token property">tenant_id</span>          <span class="token punctuation">=</span> <span class="token string">"&#x3C;Tenant ID Azure lo>"</span>
+<span class="token property">resource_group_name</span> <span class="token punctuation">=</span> <span class="token string">"rg-tf-dev"</span>
+<span class="token property">location</span>           <span class="token punctuation">=</span> <span class="token string">"East Asia"</span>
+<span class="token property">vm_name</span>            <span class="token punctuation">=</span> <span class="token string">"vm-tf-test"</span>
+<span class="token property">admin_username</span>     <span class="token punctuation">=</span> <span class="token string">"azureuser"</span>
+<span class="token property">ssh_public_key</span>     <span class="token punctuation">=</span> <span class="token string">"ssh-ed25519 AAAA...."</span>
+</code></pre>
+<hr>
+<h2 id="3-isi-maintf">3. Isi <code>main.tf</code><a aria-hidden="true" class="anchor-heading icon-link" href="#3-isi-maintf"></a></h2>
+<p>Di <code>main.tf</code>, lo akan definisiin semua resource yang dibutuhin:</p>
+<ul>
+<li>Resource Group</li>
+<li>Virtual Network</li>
+<li>Subnet</li>
+<li>Public IP</li>
+<li>Network Interface</li>
+<li>Network Security Group</li>
+<li>VM Linux itu sendiri</li>
+</ul>
+<p>Contoh NSG rule buat allow port 80:</p>
+<pre class="language-hcl"><code class="language-hcl"><span class="token keyword">security_rule</span> <span class="token punctuation">{</span>
+  <span class="token property">name</span>                       <span class="token punctuation">=</span> <span class="token string">"Allow-HTTP"</span>
+  <span class="token property">priority</span>                   <span class="token punctuation">=</span> <span class="token number">1002</span>
+  <span class="token property">direction</span>                  <span class="token punctuation">=</span> <span class="token string">"Inbound"</span>
+  <span class="token property">access</span>                     <span class="token punctuation">=</span> <span class="token string">"Allow"</span>
+  <span class="token property">protocol</span>                   <span class="token punctuation">=</span> <span class="token string">"Tcp"</span>
+  <span class="token property">source_port_range</span>          <span class="token punctuation">=</span> <span class="token string">"*"</span>
+  <span class="token property">destination_port_range</span>     <span class="token punctuation">=</span> <span class="token string">"80"</span>
+  <span class="token property">source_address_prefix</span>      <span class="token punctuation">=</span> <span class="token string">"*"</span>
+  <span class="token property">destination_address_prefix</span> <span class="token punctuation">=</span> <span class="token string">"*"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Dan jangan lupa attach NSG ke NIC:</p>
+<pre class="language-hcl"><code class="language-hcl"><span class="token keyword">resource <span class="token type variable">"azurerm_network_interface_security_group_association"</span></span> <span class="token string">"nic_nsg"</span> <span class="token punctuation">{</span>
+  <span class="token property">network_interface_id</span>      <span class="token punctuation">=</span> azurerm_network_interface.nic.id
+  <span class="token property">network_security_group_id</span> <span class="token punctuation">=</span> azurerm_network_security_group.nsg.id
+<span class="token punctuation">}</span>
+</code></pre>
+<hr>
+<h2 id="4-terraform-init--apply">4. Terraform Init &#x26; Apply<a aria-hidden="true" class="anchor-heading icon-link" href="#4-terraform-init--apply"></a></h2>
+<p>Command ini buat jalanin proses provisioning:</p>
+<pre class="language-bash"><code class="language-bash">terraform init     <span class="token comment"># download provider</span>
+terraform plan     <span class="token comment"># ngecek perubahan apa aja</span>
+terraform apply    <span class="token comment"># eksekusi beneran</span>
+</code></pre>
+<p>Kalau apply berhasil, VM akan dibuat lengkap dengan IP publik.</p>
+<hr>
+<h2 id="5-provision-docker-di-vm">5. Provision Docker di VM<a aria-hidden="true" class="anchor-heading icon-link" href="#5-provision-docker-di-vm"></a></h2>
+<p>Setelah VM jadi, lo bisa SSH ke dalam:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> azureuser@<span class="token operator">&#x3C;</span>public-ip<span class="token operator">></span>
+</code></pre>
+<p>Lalu, upload dan jalankan script provisioning:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">scp</span> provision.sh azureuser@<span class="token operator">&#x3C;</span>public-ip<span class="token operator">></span>:
+<span class="token function">ssh</span> azureuser@<span class="token operator">&#x3C;</span>public-ip<span class="token operator">></span>
+<span class="token function">sudo</span> <span class="token function">bash</span> provision.sh
+</code></pre>
+<p>Isi <code>provision.sh</code> bisa seperti ini:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token function">apt</span> update -y
+<span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">git</span> <span class="token function">curl</span> <span class="token function">unzip</span> ufw fail2ban
+<span class="token function">curl</span> -fsSL https://get.docker.com <span class="token operator">|</span> <span class="token function">sh</span>
+<span class="token function">usermod</span> -aG <span class="token function">docker</span> azureuser
+<span class="token function">curl</span> -L <span class="token string">"https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-<span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span> -s<span class="token variable">)</span></span>-<span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span> -m<span class="token variable">)</span></span>"</span> -o /usr/local/bin/docker-compose
+<span class="token function">chmod</span> +x /usr/local/bin/docker-compose
+ufw allow <span class="token number">22</span>
+ufw allow <span class="token number">80</span>
+ufw allow <span class="token number">443</span>
+ufw --force <span class="token builtin class-name">enable</span>
+</code></pre>
+<p>Script ini akan pasang Docker, Docker Compose, dan nyalain firewall.</p>
+<hr>
+<h2 id="6-test-docker-webserver">6. Test Docker Webserver<a aria-hidden="true" class="anchor-heading icon-link" href="#6-test-docker-webserver"></a></h2>
+<p>Kita bikin service web simpel pakai Nginx.</p>
+<p>Contoh <code>Dockerfile</code>:</p>
+<pre class="language-dockerfile"><code class="language-Dockerfile"><span class="token instruction"><span class="token keyword">FROM</span> nginx:alpine</span>
+<span class="token instruction"><span class="token keyword">COPY</span> ./html /usr/share/nginx/html</span>
+</code></pre>
+<p>Contoh <code>docker-compose.yml</code>:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3'</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"80:80"</span>
+</code></pre>
+<p>Isi file <code>html/index.html</code> buat test:</p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>h1</span><span class="token punctuation">></span></span>It works!<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>h1</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>p</span><span class="token punctuation">></span></span>This page is served from inside a Docker container.<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>p</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>Jalankan container:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> compose up -d --build
+</code></pre>
+<p>Cek di browser:</p>
+<pre><code>http://&#x3C;public-ip>
+</code></pre>
+<p>Kalau muncul tulisan "It works!", berarti sukses.</p>
+<hr>
+<h2 id="7-catatan-penting">7. Catatan Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#7-catatan-penting"></a></h2>
+<ul>
+<li>Kalau ada yang ngubah konfigurasi langsung via Azure Portal, itu <strong>nggak sinkron sama Terraform</strong>.</li>
+<li>Saat lo jalankan <code>terraform apply</code> lagi, bisa aja konfigurasi lama dari <code>.tf</code> overwrite perubahan manual tadi.</li>
+<li>Jadi, sebaiknya semua perubahan dilakukan via kode.</li>
+</ul>
+<hr>
+<h2 id="next-steps">Next Steps:<a aria-hidden="true" class="anchor-heading icon-link" href="#next-steps"></a></h2>
+<p>Beberapa hal yang bisa lo lanjutin:</p>
+<ul>
+<li>Pasang domain dengan DNS A record ke IP publik</li>
+<li>Tambah TLS pakai Nginx proxy atau Caddy</li>
+<li>Deploy app beneran kayak Flowise, FastAPI, Botpress</li>
+<li>CI/CD pipeline pakai GitHub Actions buat push ke VM otomatis</li>
+</ul>

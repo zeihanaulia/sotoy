@@ -1,0 +1,107 @@
+
+- [Don't fall into the anti-AI hype](https://antirez.com/news/158)
+  - **facts are facts, and AI is going to change programming forever.**
+    - Disini antirez founder Redis, bikin poin yang menarik banget soal AI dan programming.
+    - AI is going to change programming forever.
+  - **For most projects, writing the code yourself is no longer sensible, if not to have fun.**
+    - ngoding buat fun aja, kalo buat produktivitas mending pake AI.
+    - AI menang dari sisi ekonomis dan efisiensi.
+  -  **It is now a lot more interesting to understand what to do, and how to do it (and, about this second part, LLMs are great partners, too)**
+     -  Programming gak mati, tapi berubah bentuk.
+     -  Dulu programmer itu nulis code, sekarang:
+        -  ngerti problem secara konseptual
+        -  bisa bikin mental model yang jelas
+        -  bisa mengkomunukasikan tujuan dan constraint ke AI
+        -  bisa review koreksi dan mengarahkan
+     -  Jadi kalau lo gak ngerti problemnya, lo gak bakal bisa manfaatin AI dengan maksimal
+  - **I feel great to be part of that.**
+     -  Di profesi lain, banyak orang takut karyanya dimakan sama AI, merasa dicuri hasil jerih payahnya.
+     -  Tapi di programming, LLM ini kelanjutan dari open source. Tujuannya sama demokratisasi kemampuan.
+        -  tahun 90an, open source bikin tim kecil bisa ngalahin korporasi besar.
+        -  Sekaranhg LLM bikin individu bisa bersaing.
+  - **it is absolutely not obvious that it will be like that forever.**
+    -  Tapi ada ke khawatiran, karena AI di kontrol sama perusahaan besar seperti OpenAI, Antropic, Google. 
+    -  Compute training jadi barrier baru.
+    -  Model tertutup ini mendominasi, dan ini bisa bermasalah.
+    -  Tapi agak lega karena ada  beberapa open models yang mulai bermunculan.
+    -  China ikutan dan semoga merelease GPUs canggih mereka ke publik.
+  - **But I'm worried for the folks that will get fired.**
+    - Tapi bakal ada orang yang kena PHK karena AI.
+    - Masih belum jelas apakah perusahaan bakal hire lebih banyak untuk membuat lebih banyak atau justru mengurani karyawan dan hire Prompt Engineer Elite.
+  - **Whatever you believe about what the Right Thing should be, you can't control it by refusing what is happening right now.**
+  -  AI is happening, gak bisa dihindari.
+    -  Kalo lo nolak, lo bakal ketinggalan.
+    -  Mendingan pelajarin dan manfaatin AI sebaik mungkin.
+  
+
+- [Career Strategy For People With Too Many Interests (The M-Shaped Future)](https://www.youtube.com/watch?v=knVaCNiH-8I)
+  - I could do anything if I only knew what it was.
+    - Ini adalah quote dari Ray Dalio, investor sukses yang juga founder Bridgewater Associates.
+    - Dia bilang, dia bisa sukses kalo dia tau apa yang harus dia lakukan.
+    - Masalahnya, dia gak tau apa yang harus dia lakukan.
+    - Dia punya banyak minat, tapi gak ada yang dia rasa "ini dia yang harus gue lakuin".
+  - Banyak orang punya masalah yang sama.
+    - Mereka punya banyak minat, tapi gak ada yang mereka rasa "ini dia yang harus gue lakuin".
+    - Mereka bingung, harus fokus ke satu minat aja, atau eksplorasi semua minat mereka.
+  - ini disebut juga scanner's dilemma.
+    - Scanner's dilemma adalah kondisi dimana seseorang punya banyak minat, tapi gak ada yang dia rasa "ini dia yang harus gue lakuin".
+  - kind environment vs wicked environment
+    - Kind environment adalah lingkungan yang stabil, dimana aturan mainnya jelas, dan hasilnya bisa diprediksi.
+    - Wicked environment adalah lingkungan yang dinamis, dimana aturan mainnya berubah-ubah, dan hasilnya gak bisa diprediksi.
+    - di Kind envronment kalau lo ulangi hal yang sama, hasilnya bisa jadi relatif sama. Di dunia seperti ini make sense kalau orang yang paling sukses adalah orang yang menggali paling dalam.
+    -  Masalahnya, dunia sudah tidak seperti itu lagi. Dunia sekarang berubah dengan cepat, aturan bergeser, feedback datang terlambat, dan serkali datangnya bertahun tahun kemudian.
+    -  Sebagai analogi, golfer vs firefighter.
+       - Golfer itu main di lingkungan yang kind, dia bisa latihan terus menerus, dan hasilnya bisa diprediksi.
+       - Firefighter itu main di lingkungan yang wicked, dia gak bisa latihan terus menerus, dan hasilnya gak bisa diprediksi malah kalau ikuti prosedur mentah mentah malah bisa bahaya.
+  - Specialist tidak salah, yang salah adalah ketika satu model manusia dijadikan satu satunya model standard.
+  - Jadi dari berhenti mikir karir itu sebagai job title, tapi mulai mikir sebagai bentuk.
+    - Kalau specialis itu bentuknya seperti I
+    - Kalau orang yang tau banyak hal tapi gak terlalu dalam itu bentuknya seperti dash (-) lebar tapi rapuh.
+    - Maka bentuk yang paling masuk akal buat scanner adalah M.
+      - Artinya, lo punya beberapa pilar yang benar benar dalam, bukan satu tapi juga bukan semua.
+        - Contoh: data science, storytelling, dan bisnis.
+        - Pilar pertama lo dari data science lo bisa bayar hidup dengan bekerja sebagai data analyst atau data engineer.
+        - Pilar kedua lo dari storytelling lo bisa bikin content yang menarik, dan bikin brand personal yang kuat.
+        - Pilar ketiga lo dari bisnis lo bisa ngerti gimana caranya bikin produk yang laku.
+      - Sisanua lo bisa cari minat minat lain tidak jadi karier terpisah tapi jadi jembatan horizontal yang menhubungkan ketiga pilar utama lo.
+      - Dititik ini lo berubah, lo bukan lagi seorang data scientist yang gampang terdistraksi, tapi orang langka yang bisa ngubah data kompleks jadi cerita yang menarik yang bisa dipahami orang bisnis.
+      - Nilai lo bukan satu skill, tapi kombinasi skill yang unik.
+  - Bagaimana ini bisa terjadi secara kognitif?
+    - Ada namanya konsep Far Transfer.
+      - Specialis biasanya pake Near Transfer, yaitu kemampuan untuk menerapkan pengetahuan dan keterampilan yang dipelajari dalam satu konteks ke konteks yang mirip.
+      - Polymath pakai Far Transfer, yaitu kemampuan untuk menerapkan pengetahuan dan keterampilan yang dipelajari dalam satu konteks ke konteks yang berbeda. Dia melihat structure bukan isi.
+    - Gimana cara ngebangunnya?
+      - Intinya bukan dengan mengejar semuanya sekaligus, ini jebakan dash shape. Lo bakal sibuk tapi gak ada hasil. Lo tau banyak tapi gak dalem. Lo gak punya pilar yang kuat.
+      - Jadi strateginya dengan serial mastery.
+        - Lo pilih satu minat, dalemin sampe satu musim (3-6 bulan). bukan seumur hidup.
+          - Tujuannya, bukan jadi kelas dunia, paling tidak 80% kompeten di bidang itu.
+          - Sampai lo bisa pake skill itu buat ngasilin sesuatu yang nyata.
+          - Dengan begini lo bisa bisa ngejaga dan gak kabur
+          - Ini namanya strategic quiitting, lo berhenti bukan karena lo gak suka, tapi karena lo udah dapet apa yang lo butuhin dari minat itu.
+  - Day job
+    - Otak scanner itu gampang bosen, jadi lo butuh day job yang stabil buat ngebiayain hidup lo.
+    - Pekerjaan terbaik sering kali bukan yang passion draining, tapi yang stabil dan low drain.
+      - Maksudnya, pekerjaan yang gak nyedot energi mental lo terlalu banyak.
+      - Contoh: pekerjaan yang rutin, gak butuh mikir kreatif terus, gak butuh interaksi sosial yang intens.
+    - Kerjaan adalah asset strategis buat ngebiayain hidup lo, bukan tujuan akhir. Kalau kerjaan nyedot 120% energi lo, lo gak bakal punya energi buat ngejar minat lo di luar kerjaan.
+    - Dan buat scanner, eksplorasi bukan hobi, tapi kebutuhan kognitif.
+      - maksudnya, lo butuh eksplorasi buat ngejaga otak lo tetap aktif dan sehat.
+      - Jadi lo butuh waktu buat eksplorasi, bukan cuma di akhir pekan, tapi juga di hari kerja.
+    -  Contoh Niklas luhmann dan Zettelkasten, bagaimana ide kecil kecil yang dia dapet dari eksplorasi dia di catat, dan lama lama jadi sistem pengetahuan yang besar. bahkan bertahun tahun kemudian malah jadi buku yang berpengaruh.
+        
+  
+
+- [If you have multiple interests, do not waste the next 2-3 years](https://x.com/thedankoe/status/2010042119121957316)
+  - Punya banyak ketertarikan itu superpower, tapi cuma berguna kalau lo punya wadah buat nampungnya. 
+    - Tanpa wadah, semua minat itu cuma jadi konsumsi dopamin, bikin lo sibuk, tapi nggak ngasih hasil apa-apa. 
+    - Bikin lo ngerasa berkembang dan sibuk, tapi sebenernya lo cuma muter-muter di tempat.
+  - Generalis aktif, ini adalah tipe manusia yang bisa bertahan, bukan spesialis sempit.
+    - Ciri utamanya ada 3:
+      - Self Education: Belajar mandiri, nggak nungguin sekolah atau institusi buat ngasih ilmu
+      - Self Interest: Punya rasa penasaran yang tinggi, suka eksplorasi berbagai topik
+      - Self Sufficiency: Mampu ngatur diri sendiri, nggak tergantung sama orang lain buat maju
+    - Lo belajar karena lo pengen, bukan karena disuruh.  Lo ikutin minat lo sendiri, bukan agenda institusi. Lo gak nyewa otak orang lain buat mikirin masa depan lo.
+  - Kalau mau hidup dari minat, lo harus bikin orang lain peduli sama minat lo itu.
+    - Caranya: Tunjukin keahlian lo, bangun reputasi, dan kasih nilai tambah ke orang lain lewat minat lo.
+    - Dengan menjadikan belajar lo sebagai sesuatu yang terlihat alias belajar di public, catatan yang tadinya buat diri sendiri sekarang bisa jadi content.
+  - lo kejar tujuan hidup lo -> lo ceritakan prosesnya -> lo bantu versi lama dari diri lo lewat produk atau sistem.

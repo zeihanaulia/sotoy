@@ -1,0 +1,53 @@
+<h1 id="two-sum">Two Sum<a aria-hidden="true" class="anchor-heading icon-link" href="#two-sum"></a></h1>
+<p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.
+You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the same element twice.
+You can return the answer in any order.</p>
+<p>Example 1:</p>
+<p>Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].</p>
+<p>Example 2:</p>
+<p>Input: nums = [3,2,4], target = 6
+Output: [1,2]</p>
+<p>Example 3:</p>
+<p>Input: nums = [3,3], target = 6
+Output: [0,1]</p>
+<p>Constraints:</p>
+<p>2 &#x3C;= nums.length &#x3C;= 104
+-109 &#x3C;= nums[i] &#x3C;= 109
+-109 &#x3C;= target &#x3C;= 109
+Only one valid answer exists.</p>
+<p>Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?</p>
+<h3 id="solusi">Solusi<a aria-hidden="true" class="anchor-heading icon-link" href="#solusi"></a></h3>
+<h3 id="brute-force">Brute force<a aria-hidden="true" class="anchor-heading icon-link" href="#brute-force"></a></h3>
+<p>Soalnya mudah di mengerti, gue udah tau kalau maksudnya adalah cari index yang jika di jumlah = target. Jadi bisa ambil approach seperti ini.</p>
+<ol>
+<li>Bikin variable arr berupa array</li>
+<li>Looping <code>nums</code></li>
+<li>Value dari index iterasi akan dikurangi oleh target lalu disimpan di variable.</li>
+<li>jika nums = [2,7,11,15], maka 9 - 2 = 7, simpan di dalam variable arr {7,}.</li>
+<li>lalu lanjut ke iterasi selanjutnya, cari apakah ada 7 didalam variable arr, jika ada ambil indexnya maka return index dalam variable arr 0 dan index iterari yaitu 1. return [0, 1]</li>
+</ol>
+<p>Hasilnya <a href="https://leetcode.com/problems/two-sum/submissions/1578248970/">eksekusinya</a>, runtime 31ms dan Memory 5.73 MB.</p>
+<h3 id="maps">Maps<a aria-hidden="true" class="anchor-heading icon-link" href="#maps"></a></h3>
+<p>Golang punya hash table. Jadi bisa juga dimanfaatkan untuk menyimpan hasil dari pengurangan. logikanya</p>
+<ol>
+<li>bikin variable hash</li>
+<li>looping nums [2,7,11,15]</li>
+<li>iterasi 1: x = 0, nums[x] = 2, check apakah target - nums[x] ada didalam hash atau tidak</li>
+<li>tidak ada, masukan "nums[x], x" kedalam hash map, jadi [2,0]</li>
+<li>iterasi 2: x = 1,nums[x] = 7, check apakah target - nums[x] ada didalam hash atau tidak</li>
+<li>ada, target - 7 = 2. value dari 2 adalah 0</li>
+<li>return value dari hash map yaitu 0, dan x yaitu 1, jadi []int{0,1}</li>
+</ol>
+<p>Hasil <a href="https://leetcode.com/problems/two-sum/submissions/1578286649/">esekusinya</a>, runtime 0ms dan memory 5.91. Ada kenaikan 3.14% memory tapi mempercepat runtime dari 31ms ke 0ms 100% improvement. Kenaikan adalah dampak dari penambahan data key value dari maps.</p>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/2iiopsdlqcx1oaecqc3jjc8">Code</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/owruqdc92klyd58a5eu27e6">Two Sum II - Input Array Is Sorted</a></li>
+</ul>

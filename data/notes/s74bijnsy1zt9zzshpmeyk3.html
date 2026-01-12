@@ -1,0 +1,53 @@
+<h1 id="3-build-image-dengan-docker">3 Build Image Dengan Docker<a aria-hidden="true" class="anchor-heading icon-link" href="#3-build-image-dengan-docker"></a></h1>
+<p><a class="color-tag" style="--tag-color: #a8a495;" href="/sotoy/notes/1l18nvi2v8de3tka75ibojn">#go</a> <a class="color-tag" style="--tag-color: #7ef4cc;" href="/sotoy/notes/6y00oq5e6tpq0g68u34frr7">#docker</a></p>
+<pre class="language-dockerfile"><code class="language-Dockerfile"><span class="token instruction"><span class="token keyword">FROM</span> golang:1.17 <span class="token keyword">as</span> build</span>
+<span class="token instruction"><span class="token keyword">WORKDIR</span> /app</span>
+<span class="token instruction"><span class="token keyword">ADD</span> . .</span>
+<span class="token instruction"><span class="token keyword">RUN</span> CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags <span class="token string">'-extldflags "-static"'</span> -o main .</span>
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"go"</span>, <span class="token string">"run"</span>, <span class="token string">"main.go"</span>]</span>
+
+<span class="token instruction"><span class="token keyword">FROM</span> gcr.io/distroless/base-debian10 <span class="token keyword">as</span> production</span>
+<span class="token instruction"><span class="token keyword">COPY</span> <span class="token options"><span class="token property">--from</span><span class="token punctuation">=</span><span class="token string">build</span></span> /app/main /</span>
+<span class="token instruction"><span class="token keyword">EXPOSE</span> 8080</span>
+
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"/main"</span>]</span>
+</code></pre>
+<ul>
+<li>
+<p><code>FROM golang:1.17 as build</code></p>
+<p>build akan dialankan pada golang versi1.17, versi bisa disesuaikan dengan versi golang saat ini.</p>
+</li>
+<li>
+<p><code>WORKDIR /app</code></p>
+<p>Buat folder /app sebagai working directory </p>
+</li>
+<li>
+<p><code>ADD . .</code></p>
+<p>copy source code kita dengan <code>ADD . .</code></p>
+</li>
+<li>
+<p><code>RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o main .</code></p>
+<p>build source code hingga menjadi binary dan filenya nanti akan bernama main</p>
+</li>
+<li>
+<p><code>FROM gcr.io/distroless/base-debian10 as production</code></p>
+<p>selanjutnya ambil image minimal menggunakan distroless base image.
+info selanjutnya bisa dibaca disini <a href="https://github.com/GoogleContainerTools/distroless">https://github.com/GoogleContainerTools/distroless</a>.</p>
+</li>
+<li>
+<p><code>COPY --from=build /app/main /</code></p>
+<p>lalu copy binary apliasi yang sudah dibuat sebelumnya.</p>
+</li>
+<li>
+<p><code>COPY --from=build /app/main /</code></p>
+<p>copy binary dari build stage ke root</p>
+</li>
+<li>
+<p><code>EXPOSE 8080</code></p>
+<p>expose 8080</p>
+</li>
+<li>
+<p><code>CMD ["/main"]</code></p>
+<p>runing command <code>/main</code></p>
+</li>
+</ul>

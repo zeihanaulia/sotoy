@@ -1,0 +1,37 @@
+<h1 id="terraform-on-m1">Terraform on M1<a aria-hidden="true" class="anchor-heading icon-link" href="#terraform-on-m1"></a></h1>
+<p>Gembel banget, entah kenapa terraform di M1 ada issue nyebelin.</p>
+<pre class="language-sh"><code class="language-sh">│ Error: Incompatible provider version
+│ 
+│ Provider registry.terraform.io/hashicorp/template v2.2.0 does not have a package available for your current platform,
+│ darwin_arm64.
+│ 
+│ Provider releases are separate from Terraform CLI releases, so not all providers are available for all platforms. Other versions
+│ of this provider may have different platforms supported.
+</code></pre>
+<p>bisa bisanya, di M1 gak ada dan gak update. Perlu ada workaround buat benerin ginian.</p>
+<pre class="language-sh"><code class="language-sh">brew install kreuzwerker/taps/m1-terraform-provider-helper
+m1-terraform-provider-helper activate
+m1-terraform-provider-helper install hashicorp/template -v 
+</code></pre>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<p>Lengkapnya disini sih, <a href="https://github.com/kreuzwerker/m1-terraform-provider-helper">https://github.com/kreuzwerker/m1-terraform-provider-helper</a></p>
+<p>Gue ceritain dikit kali ya soal gimana cara kerja project <code>m1-terraform-provider-helper</code> ini.</p>
+<p>Jadi gini, lo abis install Terraform, pengen pake provider tertentu — misalnya <code>vault</code> atau <code>azurerm</code> — tapi begitu lo jalanin <code>terraform init</code>, malah error karena gak nemu provider buat darwin_arm64. Masalahnya, banyak provider di registry Terraform itu cuma sediain binary buat x86_64, alias amd64. Nah, di M1, itu gak langsung bisa dipake, dan Terraform juga strict banget soal checksum. Gak bisa asal compile lokal doang, karena lockfile-nya bakal nolak kalau checksum-nya beda.</p>
+<p>Di situ lah <code>m1-terraform-provider-helper</code> masuk. Dia basically ngebantuin lo untuk compile provider-provider itu dari source code langsung di mesin lo, tapi gak cuma berhenti di compile doang. Dia juga nanganin semua penempatan binary-nya di path yang Terraform expect, dan bahkan bisa bantu lo update <code>.terraform.lock.hcl</code> biar checksum dari binary lokal tadi dianggap valid sama Terraform.</p>
+<p>Cara pakenya pun cukup simpel. Pertama lo aktifin dulu si helper-nya lewat <code>m1-terraform-provider-helper activate</code>. Ini bakal nge-setup environment lo biar Terraform ngarah ke folder plugin lokal yang dipake si helper. Abis itu lo tinggal install providernya, misalnya <code>m1-terraform-provider-helper install hashicorp/vault -v v2.10.0</code>. Di balik layar, dia bakal clone repo GitHub providernya, nge-run build (biasanya <code>make build</code>), dan nyimpen hasilnya ke direktori plugin Terraform dengan struktur folder yang valid sesuai versi Terraform lo.</p>
+<p>Satu langkah lagi yang penting, lo harus update lockfile-nya. Karena provider lokal yang lo compile tadi punya checksum yang beda, lo bisa jalanin <code>m1-terraform-provider-helper lockfile upgrade</code> supaya <code>.terraform.lock.hcl</code> lo ditambahin checksum dari binary baru tadi. Kalau enggak, Terraform bakal tetap error pas lo <code>init</code> atau <code>apply</code>.</p>
+<p>Dan udah, gitu doang. Lo sekarang bisa jalanin Terraform kaya biasa, tapi semua provider yang tadinya gak support M1 sekarang udah bisa dipake tanpa error checksum atau masalah arsitektur. Tool ini tuh fungsional banget kalau lo kerja banyak dengan Terraform di Mac M1 dan capek debug karena provider gak support.</p>
+<p>Kalau lo butuh compile custom atau provider dari repo yang gak standar, dia juga sediain flag buat override build command atau source URL. Tapi buat sebagian besar kasus, command default-nya udah cukup.</p>
+<p>Singkatnya, ini tool yang ngisi celah antara Apple Silicon dan ekosistem Terraform yang belum 100% native ARM. Gak perlu hack aneh-aneh atau tunggu provider dirilis resmi, tinggal compile lokal dan jalan.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">terraform (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">apple-silicon (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">m1 (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">devops (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">troubleshooting (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">provider (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">arm64 (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">macos (Private)</a></li>
+</ol>

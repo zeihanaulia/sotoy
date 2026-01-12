@@ -1,0 +1,101 @@
+<h1 id="coding">Coding<a aria-hidden="true" class="anchor-heading icon-link" href="#coding"></a></h1>
+<h2 id="percobaan-gagal">Percobaan Gagal<a aria-hidden="true" class="anchor-heading icon-link" href="#percobaan-gagal"></a></h2>
+<pre class="language-go"><code class="language-go"><span class="token comment">// You can edit this code!</span>
+<span class="token comment">// Click here and start typing.</span>
+<span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token string">"fmt"</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">maximumSubarraySum</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token comment">// fmt.Println(isDuplicate([]int{2, 9, 9}))</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> subarray <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">maximumSubarraySum</span><span class="token punctuation">(</span>nums <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> k <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int64</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> x <span class="token operator">:=</span> <span class="token keyword">range</span> nums <span class="token punctuation">{</span>
+		sub <span class="token operator">:=</span> k <span class="token operator">+</span> x
+		<span class="token keyword">if</span> sub <span class="token operator">&#x3C;=</span> <span class="token function">len</span><span class="token punctuation">(</span>nums<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token comment">// fmt.Println(x, k+x, nums[x:k+x])</span>
+			subarray <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>subarray<span class="token punctuation">,</span> nums<span class="token punctuation">[</span>x<span class="token punctuation">:</span>k<span class="token operator">+</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	sums <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> subs <span class="token operator">:=</span> <span class="token keyword">range</span> subarray <span class="token punctuation">{</span>
+
+		<span class="token comment">// fmt.Println(subs, isDuplicate(subs))</span>
+		<span class="token keyword">if</span> <span class="token function">isDuplicate</span><span class="token punctuation">(</span>subs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">continue</span>
+		<span class="token punctuation">}</span>
+
+		result <span class="token operator">:=</span> <span class="token number">0</span>
+		<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&#x3C;</span> <span class="token function">len</span><span class="token punctuation">(</span>subs<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+			result <span class="token operator">+=</span> subs<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+		<span class="token punctuation">}</span>
+		sums <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>sums<span class="token punctuation">,</span> result<span class="token punctuation">)</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>sums<span class="token punctuation">,</span> result<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	max <span class="token operator">:=</span> <span class="token number">0</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> v <span class="token operator">:=</span> <span class="token keyword">range</span> sums <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> max <span class="token operator">&#x3C;</span> v <span class="token punctuation">{</span>
+			max <span class="token operator">=</span> v
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> <span class="token function">int64</span><span class="token punctuation">(</span>max<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">isDuplicate</span><span class="token punctuation">(</span>subs <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	temp <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">)</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> v <span class="token operator">:=</span> <span class="token keyword">range</span> subs <span class="token punctuation">{</span>
+		<span class="token boolean">_</span><span class="token punctuation">,</span> ok <span class="token operator">:=</span> temp<span class="token punctuation">[</span>v<span class="token punctuation">]</span>
+		<span class="token keyword">if</span> ok <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token boolean">true</span>
+		<span class="token punctuation">}</span>
+		temp<span class="token punctuation">[</span>v<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+
+
+</code></pre>
+<h2 id="fixed-pake-sliding-window">Fixed Pake sliding window<a aria-hidden="true" class="anchor-heading icon-link" href="#fixed-pake-sliding-window"></a></h2>
+<pre class="language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">maximumSubarraySum</span><span class="token punctuation">(</span>nums <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> k <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int64</span> <span class="token punctuation">{</span>
+	n <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>nums<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> n <span class="token operator">&#x3C;</span> k <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token number">0</span>
+	<span class="token punctuation">}</span>
+
+	max <span class="token operator">:=</span> <span class="token number">0</span>
+	currentSum <span class="token operator">:=</span> <span class="token number">0</span>
+	left <span class="token operator">:=</span> <span class="token number">0</span>
+	seen <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span><span class="token builtin">bool</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">for</span> right <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> right <span class="token operator">&#x3C;</span> n<span class="token punctuation">;</span> right<span class="token operator">++</span> <span class="token punctuation">{</span>
+
+		<span class="token keyword">for</span> seen<span class="token punctuation">[</span>nums<span class="token punctuation">[</span>right<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token punctuation">{</span>
+			seen<span class="token punctuation">[</span>nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span>
+			currentSum <span class="token operator">-=</span> nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span>
+			left<span class="token operator">++</span>
+		<span class="token punctuation">}</span>
+
+		seen<span class="token punctuation">[</span>nums<span class="token punctuation">[</span>right<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span>
+		currentSum <span class="token operator">+=</span> nums<span class="token punctuation">[</span>right<span class="token punctuation">]</span>
+
+		<span class="token keyword">if</span> right<span class="token operator">-</span>left<span class="token operator">+</span><span class="token number">1</span> <span class="token operator">==</span> k <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> currentSum <span class="token operator">></span> max <span class="token punctuation">{</span>
+				max <span class="token operator">=</span> currentSum
+			<span class="token punctuation">}</span>
+
+			seen<span class="token punctuation">[</span>nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span>
+			currentSum <span class="token operator">-=</span> nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span>
+			left<span class="token operator">++</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> <span class="token function">int64</span><span class="token punctuation">(</span>max<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>

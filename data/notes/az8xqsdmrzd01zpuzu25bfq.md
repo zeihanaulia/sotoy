@@ -1,0 +1,36 @@
+
+![youtube](assets/20230427002651.png)
+
+link: <https://www.youtube.com/watch?v=rrOnk0JnXW4>
+
+## Intinya
+
+Inti dari transkrip ini adalah bahwa menjadi seorang komunikator yang efektif adalah keterampilan yang dapat dipelajari dan ditingkatkan melalui praktik dan pengalaman. Ada tiga tips utama yang dapat membantu seseorang menjadi lebih baik dalam berkomunikasi: memiliki fokus pada satu ide utama, menggunakan cerita untuk menjelaskan atau memperkuat ide tersebut, dan mengulang ide utama tiga kali selama presentasi. Namun, untuk benar-benar menjadi seorang komunikator yang efektif, seseorang harus merubah cara berpikir mereka tentang berkomunikasi dan mengambil langkah-langkah untuk terhubung dengan audiens mereka dengan cara yang lebih positif dan bermakna.
+
+## Transcript
+
+Saya tidak terlalu suka dengan tips; tips tentang cara berkomunikasi dengan baik, tips tentang cara menulis. Apa yang saya lebih suka adalah proses yang mengubah Anda sehingga tips terjadi secara otomatis.
+
+Seringkali, orang memberi tips seperti "ketika Anda berbicara di depan orang banyak, variasikan kecepatan bicara Anda, variasikan volume suara Anda." Dua hal itu bagus, tetapi jika terjadi secara mekanis, itu menjadi membosankan. Beberapa orang merasa terbantu ketika mereka dilatih: "pada saat ini, tinggalkan tempat Anda berdiri dan berjalan ke sana dan berhenti sejenak." Mungkin itu masuk akal dalam hal bagaimana ditulis, tetapi itu tidak selalu masuk akal dalam hal bagaimana Anda berbicara dan berhubungan dengan orang-orang yang Anda ajak bicara.
+
+Hubungan dengan orang tersebut seharusnya menjadi sumber jeda, sumber gerakan, karena itu keluar dari proses berpikir yang saya lakukan dan keluar dari proses berpikir yang saya rasakan bahwa Anda juga alami. Ada hubungan dinamis antara kita yang mengarah pada perubahan dalam kecepatan, volume, dan hal-hal semacam itu.
+
+Sebuah tips hanya merupakan intelektualisasi dari hal itu, yang mungkin baik untuk diberikan kepada seseorang setelah mereka memiliki kemampuan untuk terhubung, tetapi itu seharusnya keluar dari hubungan. Itu tidak boleh menjadi kotak centang yang Anda tandai.
+
+Ada tiga tips yang saya ikuti. Kemungkinan itu adalah ide yang baik untuk mengikuti tips ini setelah Anda terbiasa terhubung dengan seseorang, tetapi ada tiga hal yang saya sukai, saya menyebutnya tiga aturan dari tiga hal.
+
+Aturan pertama adalah, saya hanya mencoba mengatakan tiga hal penting saat berbicara dengan orang. Jika hanya satu hal itu mungkin lebih baik, tetapi biasanya ada banyak yang ingin dikatakan. Ketika saya membuat catatan tentang apa yang ingin saya bicarakan, jika saya melihat saya berbicara lebih dari tiga atau empat hal, saya mulai menghilangkannya atau mencoba melipatgandakan hal-hal tersebut menjadi satu. Karena tiga hal adalah semua yang bisa saya ingat dan saya tidak bekerja dari catatan saat berbicara dengan orang dan saya menyarankan orang lain juga tidak melakukannya. Saya tidak pernah membacanya karena membaca hanya akan membuat Anda terputus; itu bukan komunikasi, itu pengucilan menurut pandangan saya. Jadi saya hanya mengingat tiga hal, itu adalah aturan pertama dari tiga hal.
+
+Aturan kedua adalah, jika saya memiliki hal yang sulit dipahami, jika ada sesuatu yang saya pikir tidak akan mudah dipahami, saya mencoba mengatakannya dalam tiga cara yang berbeda karena saya pikir jika Anda datang dari sudut pandang yang berbeda, Anda memiliki peluang yang lebih baik untuk memahami ide sulit ini secara tiga dimensi.
+
+Dan tip ketiga, yang seringkali saya lupakan, adalah jika saya memiliki hal yang sulit untuk disampaikan, saya mencoba mengulanginya tiga kali selama pidato, sehingga pada kali pertama Anda mendengarnya, Anda mulai terbiasa, pada kali kedua sudah terasa akrab, dan pada kali ketiga Anda akan mengatakan, "Oh ya, benar. Baiklah." Sekarang, saya memang mengikuti ketiga tips ini, tetapi saya tidak berpikir saya akan memberitahu seseorang: "Anda akan berbicara di depan umum, berikut adalah tiga tips yang harus diingat." Ini adalah proses. Anda harus berubah menjadi seorang komunikator yang lebih baik. Anda harus melewati tahap-tahap seperti pergi ke gym, hanya saja jauh lebih menyenangkan daripada pergi ke gym karena melibatkan terhubung dengan orang lain dan kita memang dibangun untuk terhubung dengan orang lain. Meskipun kita sering menghindarinya, sebenarnya sangat menyenangkan saat kita berada dalam posisi tersebut. Jadi jika kita bisa mengubah diri kita untuk menyukai terhubung dengan audiens yang kita ajak bicara atau tulis, maka tips-tips ini akan terjadi secara otomatis atau akhirnya kita akan dapat mengaplikasikannya dalam cara yang berubah itu untuk terhubung dengan audiens dengan lebih baik. Rasanya sangat baik.
+
+## Rules of three yang bisa diaplikasikan untuk seorang engineering manager
+
+1. Ketika memberikan feedback kepada anggota tim, Anda dapat menggunakan rules of three untuk memberikan kritik konstruktif. Pertama, jelaskan apa yang dilakukan dengan benar. Kemudian, jelaskan apa yang harus diperbaiki. Terakhir, berikan saran konstruktif untuk membantu mereka memperbaiki kinerja mereka.
+
+2. Ketika memimpin rapat, gunakan rules of three untuk memastikan pesan Anda disampaikan dengan jelas dan efektif. Pertama, jelaskan masalah atau topik yang akan dibahas. Kemudian, berikan beberapa contoh atau bukti yang mendukung argumen Anda. Terakhir, sampaikan kesimpulan atau rekomendasi.
+
+3. Ketika mengembangkan strategi produk, gunakan rules of three untuk memprioritaskan fitur dan fungsi yang akan dikembangkan. Pertama, identifikasi tiga fitur yang paling penting. Kemudian, identifikasi tiga fitur tambahan yang akan meningkatkan nilai produk. Terakhir, identifikasi tiga fitur tambahan yang mungkin bermanfaat tetapi tidak kritis untuk sukses produk.
+
+Dalam hal ini, rules of three dapat membantu Engineering Manager untuk berkomunikasi dengan jelas dan efektif, memprioritaskan tugas dan mengambil keputusan yang lebih baik

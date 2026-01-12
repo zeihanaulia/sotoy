@@ -1,0 +1,80 @@
+<h1 id="valid-palindrom">Valid Palindrom<a aria-hidden="true" class="anchor-heading icon-link" href="#valid-palindrom"></a></h1>
+<p>A phrase is a <strong>palindrome</strong> if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.</p>
+<p>Given a string s, return true if it is a <strong>palindrome</strong>, or false otherwise.</p>
+<p>Example 1:</p>
+<p>Input: s = "A man, a plan, a canal: Panama"
+Output: true
+Explanation: "amanaplanacanalpanama" is a palindrome.
+Example 2:</p>
+<p>Input: s = "race a car"
+Output: false
+Explanation: "raceacar" is not a palindrome.
+Example 3:</p>
+<p>Input: s = " "
+Output: true
+Explanation: s is an empty string "" after removing non-alphanumeric characters.
+Since an empty string reads the same forward and backward, it is a palindrome.</p>
+<p>Constraints:</p>
+<p>1 &#x3C;= s.length &#x3C;= 2 * 105
+s consists only of printable ASCII characters.</p>
+<h2 id="memahami-problem">Memahami Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#memahami-problem"></a></h2>
+<h3 id="1-constrains">1. Constrains<a aria-hidden="true" class="anchor-heading icon-link" href="#1-constrains"></a></h3>
+<ul>
+<li><code>1 &#x3C;= s.length &#x3C;= 2 * 10^5</code> lengthnya akalan sampe 200rb karakter</li>
+<li><code>s consists only of printable ASCII characters.</code> string berisi ASCII character, jadi kemungkinan akan ada special charakter.</li>
+</ul>
+<p>Dari sini gue dapet insight kalau harus remove dulu special karakter dan spasi. agar semuanya jadi alphanumeric jadi ada angka juga.</p>
+<h3 id="2-memahami-deskripsi-soal">2. Memahami deskripsi soal<a aria-hidden="true" class="anchor-heading icon-link" href="#2-memahami-deskripsi-soal"></a></h3>
+<ul>
+<li><code>converting all uppercase letters into lowercase</code> convert dulu ke lowercase</li>
+<li><code>removing all non-alphanumeric characters</code> hapus semua non-alphanumeric karakter</li>
+<li><code>it reads the same forward and backward</code> kalau dibaca dari depan dan belakan terbaca sama</li>
+</ul>
+<h3 id="3-memahami-contoh">3. Memahami contoh<a aria-hidden="true" class="anchor-heading icon-link" href="#3-memahami-contoh"></a></h3>
+<p>Example 1</p>
+<pre><code>Input: s = "A man, a plan, a canal: Panama"
+Output: true
+Explanation: "amanaplanacanalpanama" is a palindrome.
+</code></pre>
+<p>setelah dihapus semua special character dan di lowercase dan terbaca sama dari depan dan belakang, maka ini disebut palindrome</p>
+<p>Example 2</p>
+<pre><code>Input: s = "race a car"
+Output: false
+Explanation: "raceacar" is not a palindrome.
+</code></pre>
+<p>ini tidak terbaca sama dari depan dan belakang, maka ini bukan palindrome</p>
+<p>Example 3</p>
+<pre><code>Input: s = " "
+Output: true
+Explanation: s is an empty string "" after removing non-alphanumeric characters.
+Since an empty string reads the same forward and backward, it is a palindrome.
+</code></pre>
+<p>Kalau string kosong langsung aja return true</p>
+<h2 id="solusi">Solusi<a aria-hidden="true" class="anchor-heading icon-link" href="#solusi"></a></h2>
+<h3 id="brute-force">Brute Force<a aria-hidden="true" class="anchor-heading icon-link" href="#brute-force"></a></h3>
+<ol>
+<li>Hapus spesial karakter</li>
+<li>Ubah string jadi lower case</li>
+<li>looping agar bisa dieja dari belakang dan masukan kedalam variable  <code>backward</code> dengan type []string</li>
+<li>Join slice strings.Join(backward, "")</li>
+<li>Check apakah sama jika dibaca forward dan backward</li>
+</ol>
+<h3 id="two-pointer">Two Pointer<a aria-hidden="true" class="anchor-heading icon-link" href="#two-pointer"></a></h3>
+<p>Kalau menggunakan two pointer, logikanya bisa gini</p>
+<ol>
+<li>Definisikan <code>left = 0</code> dan <code>right = len(s) -</code></li>
+<li>Loop dengan kondisi <code>left &#x3C; right</code>
+<ol>
+<li>Loop dengan kondisi <code>left &#x3C; righ &#x26;&#x26; s[left]</code>, Jika bukan alphanumeric geser kiri, <code>left++</code></li>
+<li>Loop dengan kondisi <code>left &#x3C; righ &#x26;&#x26; s[right]</code>, Jika bukan alphanumeric geser kanan, <code>right++</code></li>
+<li>Jika <code>s[left]</code> lowercase tidak sama dengan <code>s[right]</code> maka return false</li>
+<li>Jika sama, geser kiri dan kanan</li>
+</ol>
+</li>
+<li>Jika loop selesai return true</li>
+</ol>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/j668eqsvty9mkv82lm7250s">Code</a></li>
+</ol>

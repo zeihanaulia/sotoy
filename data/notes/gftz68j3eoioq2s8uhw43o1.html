@@ -1,0 +1,274 @@
+<h1 id="building-a-robust-live-log-viewer-with-fastapi-and-server-sent-events">Building a Robust Live Log Viewer with FastAPI and Server-Sent Events<a aria-hidden="true" class="anchor-heading icon-link" href="#building-a-robust-live-log-viewer-with-fastapi-and-server-sent-events"></a></h1>
+<p>Kadang lo bikin sistem yang kerjanya di balik layar. Kayak proses code generation yang lo trigger dari web, tapi di balik itu semua, ada proses AI yang jalan di background, parsing metadata, generate kode, dan simpen hasil. Masalahnya: user cuma liat loading spinner, padahal di balik layar lagi banyak hal seru—dan penting—yang terjadi.</p>
+<p>Di sinilah lo pengen kasih visibility. Biar user bisa liat log secara real-time. Biar kalau mereka cabut dan balik lagi, masih bisa liat jejak prosesnya. Lo butuh log system yang ringan, bisa di-<em>stream</em>, dan bisa di-<em>persist</em>. Bukan cuma buat user experience, tapi juga buat debugging, QA, dan observabilitas internal tim dev.</p>
+<p><img src="/sotoy/assets/til.python.building-sse/image.png" alt="alt text"></p>
+<hr>
+<h2 id="sistem-ini-dibangun-di-atas-tiga-pilar">Sistem Ini Dibangun di Atas Tiga Pilar<a aria-hidden="true" class="anchor-heading icon-link" href="#sistem-ini-dibangun-di-atas-tiga-pilar"></a></h2>
+<p>FastAPI jadi tulang punggungnya. Server-Sent Events (SSE) yang ngirim log kayak radio satu arah. Dan Supabase jadi storage kalau semua udah kelar. Sisanya? Sedikit HTML dan JavaScript untuk prototipe awal.</p>
+<p>Gue tau lo pengen cepat nyoba, jadi UI-nya nggak langsung React atau Refine. Nanti itu bisa nyusul. Sekarang yang penting jalan dulu.</p>
+<pre class="language-sh"><code class="language-sh">+-----------+          SSE           +-----------------+
+|           |  &#x3C;------------------  |                 |
+|  FastAPI  | ------------------>   |   Frontend UI   |
+| (Backend) |   Streaming Logs      | (HTML/JS/React) |
++-----------+                       +-----------------+
+     |
+     | Background Tasks
+     |
+     v
++------------------+
+|  BufferedLogger  |
+|  (In-Memory Log) |
++------------------+
+     |
+     | flush when done
+     v
++------------------+
+|    Supabase      |
+| (Final Log Store)|
++------------------+
+
+</code></pre>
+<p>Gambaran besarnya:</p>
+<ul>
+<li>FastAPI jadi otaknya, ngatur semua routing dan trigger proses.</li>
+<li>Frontend UI (HTML/JS awalnya, bisa evolve ke React) connect via SSE buat dapetin log real-time.</li>
+<li>Sementara itu di dalam FastAPI, log dicatat dulu di BufferedLogger—disimpan sementara di memori.</li>
+<li>Begitu prosesnya selesai, logger nge-flush log-nya ke Supabase buat diambil lagi nanti kalau user refresh atau datang belakangan.</li>
+</ul>
+<hr>
+<h2 id="logger-komponen-paling-penting-yang-lo-gak-liat">Logger: Komponen Paling Penting yang Lo Gak Liat<a aria-hidden="true" class="anchor-heading icon-link" href="#logger-komponen-paling-penting-yang-lo-gak-liat"></a></h2>
+<p>Di dalam FastAPI, kita bikin <code>BufferedLogger</code>. Ini semacam log manager lokal. Dia nyimpen log selama proses jalan, terus kasih akses ke client lewat <code>subscribe()</code> pake <code>asyncio.Queue</code>. Tiap log baru langsung dipush ke semua subscriber aktif. Dan kalau prosesnya udah selesai, dia <code>flush_to_supabase()</code> biar gak hilang.</p>
+<p>Semua logger disimpan di satu peta global: <code>logger_map[(upload_id, service)]</code>. Jadi kapan pun, route mana pun, asal tau ID-nya, bisa ambil logger yang sama. Ini yang bikin komunikasi antara background task dan SSE handler jadi seamless.</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">import</span> asyncio
+<span class="token keyword">from</span> datetime <span class="token keyword">import</span> datetime
+<span class="token keyword">from</span> typing <span class="token keyword">import</span> Literal
+
+
+<span class="token keyword">class</span> <span class="token class-name">BufferedLogger</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>subscribers<span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span>asyncio<span class="token punctuation">.</span>Queue<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        self<span class="token punctuation">.</span><span class="token builtin">buffer</span><span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token builtin">dict</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+        self<span class="token punctuation">.</span>done <span class="token operator">=</span> <span class="token boolean">False</span>
+        self<span class="token punctuation">.</span>last_used <span class="token operator">=</span> datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>timestamp<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">subscribe</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> asyncio<span class="token punctuation">.</span>Queue<span class="token punctuation">:</span>
+        queue <span class="token operator">=</span> asyncio<span class="token punctuation">.</span>Queue<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>subscribers<span class="token punctuation">.</span>append<span class="token punctuation">(</span>queue<span class="token punctuation">)</span>
+
+        <span class="token comment"># Kirim log yang sudah ada ke subscriber baru</span>
+        <span class="token keyword">for</span> entry <span class="token keyword">in</span> self<span class="token punctuation">.</span><span class="token builtin">buffer</span><span class="token punctuation">:</span>
+            queue<span class="token punctuation">.</span>put_nowait<span class="token punctuation">(</span>entry<span class="token punctuation">)</span>
+
+        <span class="token keyword">return</span> queue
+
+    <span class="token keyword">def</span> <span class="token function">unsubscribe</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> queue<span class="token punctuation">:</span> asyncio<span class="token punctuation">.</span>Queue<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>subscribers<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>queue<span class="token punctuation">)</span>
+        <span class="token keyword">except</span> ValueError<span class="token punctuation">:</span>
+            <span class="token keyword">pass</span>
+
+    <span class="token keyword">def</span> <span class="token function">mark_done</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>done <span class="token operator">=</span> <span class="token boolean">True</span>
+
+    <span class="token keyword">def</span> <span class="token function">log</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> message<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> level<span class="token punctuation">:</span> Literal<span class="token punctuation">[</span><span class="token string">"info"</span><span class="token punctuation">,</span> <span class="token string">"error"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"info"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        entry <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">"timestamp"</span><span class="token punctuation">:</span> datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token string">"log_level"</span><span class="token punctuation">:</span> level<span class="token punctuation">,</span>
+            <span class="token string">"message"</span><span class="token punctuation">:</span> message
+        <span class="token punctuation">}</span>
+
+        <span class="token comment"># save buffer</span>
+        self<span class="token punctuation">.</span><span class="token builtin">buffer</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>entry<span class="token punctuation">)</span>
+
+        <span class="token comment"># Broadcast to all subscribers</span>
+        <span class="token keyword">for</span> q <span class="token keyword">in</span> self<span class="token punctuation">.</span>subscribers<span class="token punctuation">:</span>
+            q<span class="token punctuation">.</span>put_nowait<span class="token punctuation">(</span>entry<span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>last_used <span class="token operator">=</span> datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>timestamp<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">flush_to_supabase</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> upload_id<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> service<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> supabase<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> entry <span class="token keyword">in</span> self<span class="token punctuation">.</span><span class="token builtin">buffer</span><span class="token punctuation">:</span>
+            supabase<span class="token punctuation">.</span>table<span class="token punctuation">(</span><span class="token string">"runs_logs"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>insert<span class="token punctuation">(</span><span class="token punctuation">{</span>
+                <span class="token string">"upload_id"</span><span class="token punctuation">:</span> upload_id<span class="token punctuation">,</span>
+                <span class="token string">"service_name"</span><span class="token punctuation">:</span> service<span class="token punctuation">,</span>
+                <span class="token string">"timestamp"</span><span class="token punctuation">:</span> entry<span class="token punctuation">[</span><span class="token string">"timestamp"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                <span class="token string">"log_level"</span><span class="token punctuation">:</span> entry<span class="token punctuation">[</span><span class="token string">"log_level"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                <span class="token string">"message"</span><span class="token punctuation">:</span> entry<span class="token punctuation">[</span><span class="token string">"message"</span><span class="token punctuation">]</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<hr>
+<h2 id="jalankan-proses-stream-log-nya">Jalankan Proses, Stream Log-nya<a aria-hidden="true" class="anchor-heading icon-link" href="#jalankan-proses-stream-log-nya"></a></h2>
+<p>Begitu user nge-trigger endpoint generate, lo bikin logger, simpan ke map, dan langsung jalanin background task. Tapi karena ini async, kita bungkus <code>background_task()</code> dalam lambda dan jalanin pake <code>asyncio.run()</code>. Di dalam situ, semua log dikirim via logger, dan pas udah selesai baru log-nya di-<em>flush</em> ke Supabase.</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">from</span> fastapi <span class="token keyword">import</span> APIRouter<span class="token punctuation">,</span> BackgroundTasks<span class="token punctuation">,</span> Request
+<span class="token keyword">from</span> starlette<span class="token punctuation">.</span>responses <span class="token keyword">import</span> StreamingResponse
+<span class="token keyword">import</span> asyncio
+<span class="token keyword">import</span> json
+
+router <span class="token operator">=</span> APIRouter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@router<span class="token punctuation">.</span>post</span><span class="token punctuation">(</span><span class="token string">"/{upload_id}/{service}/generate"</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">generate_code</span><span class="token punctuation">(</span>upload_id<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> service<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> background_tasks<span class="token punctuation">:</span> BackgroundTasks<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    logger <span class="token operator">=</span> BufferedLogger<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    logger_map<span class="token punctuation">[</span><span class="token punctuation">(</span>upload_id<span class="token punctuation">,</span> service<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> logger
+
+    <span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">background_task</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            result <span class="token operator">=</span> <span class="token keyword">await</span> generate_and_save_code<span class="token punctuation">(</span>
+                upload_id<span class="token operator">=</span>upload_id<span class="token punctuation">,</span>
+                service<span class="token operator">=</span>service<span class="token punctuation">,</span>
+                logger<span class="token operator">=</span>logger
+            <span class="token punctuation">)</span>
+        <span class="token keyword">finally</span><span class="token punctuation">:</span>
+            logger<span class="token punctuation">.</span>done <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">await</span> logger<span class="token punctuation">.</span>flush_to_supabase<span class="token punctuation">(</span>upload_id<span class="token punctuation">,</span> service<span class="token punctuation">)</span>
+            logger_map<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">(</span>upload_id<span class="token punctuation">,</span> service<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Bungkus coroutine ke dalam background thread</span>
+    background_tasks<span class="token punctuation">.</span>add_task<span class="token punctuation">(</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> asyncio<span class="token punctuation">.</span>run<span class="token punctuation">(</span>background_task<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"status"</span><span class="token punctuation">:</span> <span class="token string">"Generation started"</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Sementara itu, user bisa buka <code>/logs</code>, dan browser akan buka koneksi SSE. Tiap log masuk, langsung di-<em>yield</em> ke client. Kalau 30 detik gak ada apa-apa dan proses udah selesai, koneksi ditutup rapi, dan user dapet pesan terakhir: stream ended.</p>
+<pre class="language-python"><code class="language-python"><span class="token decorator annotation punctuation">@router<span class="token punctuation">.</span>get</span><span class="token punctuation">(</span><span class="token string">"/{upload_id}/{service}/logs"</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">stream_logs</span><span class="token punctuation">(</span>upload_id<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> service<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> request<span class="token punctuation">:</span> Request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    logger <span class="token operator">=</span> logger_map<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token punctuation">(</span>upload_id<span class="token punctuation">,</span> service<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> logger<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> StreamingResponse<span class="token punctuation">(</span>
+            <span class="token builtin">iter</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"data: Log not available\n\n"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            media_type<span class="token operator">=</span><span class="token string">"text/event-stream"</span>
+        <span class="token punctuation">)</span>
+
+    <span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">event_stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        queue <span class="token operator">=</span> logger<span class="token punctuation">.</span>subscribe<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        idle_counter <span class="token operator">=</span> <span class="token number">0</span>
+
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> <span class="token keyword">await</span> request<span class="token punctuation">.</span>is_disconnected<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">break</span>
+            <span class="token keyword">try</span><span class="token punctuation">:</span>
+                log <span class="token operator">=</span> <span class="token keyword">await</span> asyncio<span class="token punctuation">.</span>wait_for<span class="token punctuation">(</span>queue<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+                idle_counter <span class="token operator">=</span> <span class="token number">0</span>
+                <span class="token keyword">yield</span> <span class="token string-interpolation"><span class="token string">f"data: </span><span class="token interpolation"><span class="token punctuation">{</span>json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>log<span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">\n\n"</span></span>
+            <span class="token keyword">except</span> asyncio<span class="token punctuation">.</span>TimeoutError<span class="token punctuation">:</span>
+                idle_counter <span class="token operator">+=</span> <span class="token number">1</span>
+                <span class="token keyword">yield</span> <span class="token string">": keep-alive\n\n"</span>
+                <span class="token keyword">if</span> idle_counter <span class="token operator">>=</span> <span class="token number">6</span> <span class="token keyword">and</span> logger<span class="token punctuation">.</span>done<span class="token punctuation">:</span>
+                    <span class="token keyword">yield</span> <span class="token string-interpolation"><span class="token string">f"data: </span><span class="token interpolation"><span class="token punctuation">{</span>json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'message'</span><span class="token punctuation">:</span> <span class="token string">'Log stream ended.'</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">\n\n"</span></span>
+                    <span class="token keyword">break</span>
+
+        logger<span class="token punctuation">.</span>unsubscribe<span class="token punctuation">(</span>queue<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> StreamingResponse<span class="token punctuation">(</span>event_stream<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> media_type<span class="token operator">=</span><span class="token string">"text/event-stream"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Nah, bagian ini yang bikin prosesnya kerasa live. Tiap kali logger .log(...), semua subscriber bakal dapet update, dan user bisa ngeliat langsung progres di layar. Dan karena pakai asyncio.Queue, gak akan blocking route lain—FastAPI tetep responsif.</p>
+<p>Dengan kombinasi background_tasks, logger in-memory, dan SSE, proses panjang kayak code generation atau data processing jadi jauh lebih transparan buat user. Lo gak cuma bikin sistem jalan, tapi bikin user ngerti apa yang lagi dikerjain.</p>
+<hr>
+<h2 id="kalau-telat-gak-masalah-ada-final-log">Kalau Telat? Gak Masalah. Ada Final Log<a aria-hidden="true" class="anchor-heading icon-link" href="#kalau-telat-gak-masalah-ada-final-log"></a></h2>
+<pre class="language-sh"><code class="language-sh">[ User buka UI ]
+       |
+       v
+[ UI panggil /status ]
+       |
+       v
+[ Logger aktif? ]
+   |             \
+  Ya              Tidak
+   |                |
+   v                v
+[SSE connect]    [GET /logs/final]
+   |                |
+   v                v
+[Streaming]     [Ambil log dari Supabase]
+   |                |
+   v                v
+[Tutup saat done]  [Tampilkan log final]
+
+</code></pre>
+<p>Gak semua user nungguin. Kadang mereka cabut, terus balik 5 menit lagi. Makanya lo siapin endpoint <code>/logs/final</code> buat ambil semua log yang udah di-<em>persist</em> ke Supabase. Tinggal fetch dan render ulang. Sesimpel itu.</p>
+<pre class="language-python"><code class="language-python"><span class="token decorator annotation punctuation">@router<span class="token punctuation">.</span>get</span><span class="token punctuation">(</span><span class="token string">"/{upload_id}/{service}/logs/final"</span><span class="token punctuation">)</span>
+<span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">get_logs_final</span><span class="token punctuation">(</span>upload_id<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> service<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    response <span class="token operator">=</span> supabase<span class="token punctuation">.</span>table<span class="token punctuation">(</span><span class="token string">"runs_logs"</span><span class="token punctuation">)</span>\
+        <span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span>\
+        <span class="token punctuation">.</span>eq<span class="token punctuation">(</span><span class="token string">"upload_id"</span><span class="token punctuation">,</span> upload_id<span class="token punctuation">)</span>\
+        <span class="token punctuation">.</span>eq<span class="token punctuation">(</span><span class="token string">"service"</span><span class="token punctuation">,</span> service<span class="token punctuation">)</span>\
+        <span class="token punctuation">.</span>order<span class="token punctuation">(</span><span class="token string">"timestamp"</span><span class="token punctuation">,</span> desc<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>\
+        <span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"logs"</span><span class="token punctuation">:</span> response<span class="token punctuation">.</span>data <span class="token keyword">or</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Endpoint <code>/status</code> juga lo kasih buat ngecek: logger masih aktif gak? Kalau iya, jalanin SSE. Kalau enggak, langsung fetch final logs.</p>
+<hr>
+<h2 id="ui-html-cepat-kecil-gak-ribet">UI HTML: Cepat, Kecil, Gak Ribet<a aria-hidden="true" class="anchor-heading icon-link" href="#ui-html-cepat-kecil-gak-ribet"></a></h2>
+<p>Jujur aja, lo butuh UI cepat buat testing, dan gak pengen terlalu berat setup-nya. Jadi pakai HTML murni dulu. Satu halaman, satu fungsi <code>startStream()</code>, dan satu kotak <code>&#x3C;pre></code> buat nampilin log.</p>
+<p>Begitu tombol “Start” diklik, JS-nya ngecek status logger. Kalau masih aktif, dia buka koneksi SSE dan nampilin setiap log yang masuk. Kalau enggak, dia fallback ke log final dan render dari hasil Supabase. Log box otomatis scroll ke bawah tiap log baru masuk.</p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>title</span><span class="token punctuation">></span></span>OSB Logs UI<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>title</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+    <span class="token keyword">function</span> <span class="token function">startStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> uploadId <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">'uploadId'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> service <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">'service'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> logContainer <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">'logs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logContainer<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
+
+      <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/runs/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>uploadId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>service<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/status</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token method function property-access">then</span><span class="token punctuation">(</span><span class="token parameter">res</span> <span class="token arrow operator">=></span> res<span class="token punctuation">.</span><span class="token method function property-access">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token method function property-access">then</span><span class="token punctuation">(</span><span class="token parameter">status</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+          <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token property-access">active</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">const</span> eventSource <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">EventSource</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/runs/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>uploadId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>service<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/logs</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            eventSource<span class="token punctuation">.</span><span class="token method-variable function-variable method function property-access">onmessage</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              <span class="token keyword control-flow">try</span> <span class="token punctuation">{</span>
+                <span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token known-class-name class-name">JSON</span><span class="token punctuation">.</span><span class="token method function property-access">parse</span><span class="token punctuation">(</span>event<span class="token punctuation">.</span><span class="token property-access">data</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                logContainer<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token embedded-code html">[${data.timestamp}] ${data.log_level.toUpperCase()}: ${data.message}\n</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+                logContainer<span class="token punctuation">.</span><span class="token property-access">scrollTop</span> <span class="token operator">=</span> logContainer<span class="token punctuation">.</span><span class="token property-access">scrollHeight</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span> <span class="token keyword control-flow">catch</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">warn</span><span class="token punctuation">(</span><span class="token string">"Malformed log:"</span><span class="token punctuation">,</span> event<span class="token punctuation">.</span><span class="token property-access">data</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            eventSource<span class="token punctuation">.</span><span class="token method-variable function-variable method function property-access">onerror</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              <span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">error</span><span class="token punctuation">(</span><span class="token string">"SSE connection error"</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              eventSource<span class="token punctuation">.</span><span class="token method function property-access">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+              logContainer<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token embedded-code html">\nLog stream ended. Please refresh to view saved logs.\n</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span> <span class="token keyword control-flow">else</span> <span class="token punctuation">{</span>
+            <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/runs/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>uploadId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>service<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/logs/final</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token method function property-access">then</span><span class="token punctuation">(</span><span class="token parameter">res</span> <span class="token arrow operator">=></span> res<span class="token punctuation">.</span><span class="token method function property-access">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token method function property-access">then</span><span class="token punctuation">(</span><span class="token parameter">data</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+                <span class="token punctuation">(</span>data<span class="token punctuation">.</span><span class="token property-access">logs</span> <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">forEach</span><span class="token punctuation">(</span><span class="token parameter">log</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+                  logContainer<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token embedded-code html">[${log.timestamp}] ${log.log_level.toUpperCase()}: ${log.message}\n</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>body</span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> sans-serif<span class="token punctuation">;</span> <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token unit">em</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>h2</span><span class="token punctuation">></span></span>Live Log Viewer<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>h2</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>label</span><span class="token punctuation">></span></span>Upload ID: <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>input</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>uploadId<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>br</span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>label</span><span class="token punctuation">></span></span>Service: <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>input</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>service<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>br</span><span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>br</span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>button</span> <span class="token special-attr"><span class="token attr-name">onclick</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token function">startStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>Start<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;</span>pre</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>logs<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">background</span><span class="token punctuation">:</span><span class="token hexcode color">#111</span><span class="token punctuation">;</span><span class="token property">color</span><span class="token punctuation">:</span><span class="token hexcode color">#0f0</span><span class="token punctuation">;</span><span class="token property">padding</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token unit">em</span><span class="token punctuation">;</span><span class="token property">height</span><span class="token punctuation">:</span><span class="token number">400</span><span class="token unit">px</span><span class="token punctuation">;</span><span class="token property">overflow</span><span class="token punctuation">:</span>auto<span class="token punctuation">;</span><span class="token property">white-space</span><span class="token punctuation">:</span> pre-wrap<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>pre</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&#x3C;/</span>html</span><span class="token punctuation">></span></span>
+
+</code></pre>
+<p>Kelebihan pendekatan ini? Gak ada dependency frontend. Bisa langsung nyatu sama FastAPI. Dan gampang banget buat debugging.</p>
+<hr>
+<h2 id="sebelum-masuk-production-ada-pr">Sebelum Masuk Production, Ada PR<a aria-hidden="true" class="anchor-heading icon-link" href="#sebelum-masuk-production-ada-pr"></a></h2>
+<p>Sistem ini oke buat development, tapi buat jalan di Vercel, Railway, atau VM internal, lo mesti perhatiin beberapa hal.</p>
+<p>Pertama, keamanan. Lo belum ada auth. Upload ID dan service bisa dimainin. Jadi perlu validasi ID dan tambahin token atau session check. Akses SSE juga harus dibatasi ke user yang emang punya akses. Admin dan dev aja, misalnya.</p>
+<p>Kedua, skalabilitas. Logger sekarang disimpan di RAM. Kalau banyak user atau task, ini gak akan cukup. Lo bisa pindah ke Redis PubSub, atau Kafka kalau lo butuh multiple consumer yang konsumsi log-nya secara paralel.</p>
+<p>Ketiga, reliabilitas. Saat idle 30 detik, koneksi ditutup. Tapi kalau user gak sadar, mereka pikir server-nya hang. Lo harus edukasi user atau bikin fallback UX yang jelas. Dan pastikan SSE-nya bisa recover kalau disconnect.</p>
+<hr>
+<h2 id="yang-kita-pelajari-sepanjang-jalan">Yang Kita Pelajari Sepanjang Jalan<a aria-hidden="true" class="anchor-heading icon-link" href="#yang-kita-pelajari-sepanjang-jalan"></a></h2>
+<p>Ada beberapa hal yang terbukti berhasil.</p>
+<p>Mulai dari yang lo butuh dulu, itu kunci. Awalnya cuma pakai Streamlit, terus berevolusi ke FastAPI dan SSE. Logger-nya juga dipisah dari storage—kerja di RAM, baru simpen saat selesai. Ini ngurangin pressure ke Supabase.</p>
+<p>Async-nya juga beneran non-blocking. Lo bisa jalanin banyak request FastAPI lain tanpa terganggu sama log stream. Ini penting buat scalability.</p>
+<p>Tapi gak semua hal berjalan mulus.</p>
+<p>Pernah logger nyangkut karena client SSE disconnect tapi gak unsubscribe. Akhirnya logger-nya stay di RAM terus. Kadang juga log gak dikirim kalau gak ada log baru, dan user bingung. Fallback ke final logs juga gak otomatis, harus manual cek status dulu.</p>
+<hr>
+<h2 id="next-step-lo-pasti-tau-sendiri-arahannya">Next Step? Lo Pasti Tau Sendiri Arahannya<a aria-hidden="true" class="anchor-heading icon-link" href="#next-step-lo-pasti-tau-sendiri-arahannya"></a></h2>
+<p>Kalau lo mau lebih niat, UI-nya bisa pindah ke React, pake Refine.dev biar modular dan punya UX yang proper. Kalau SSE udah gak cukup, dan lo pengen user bisa submit perintah balik (misalnya kirim prompt ke LLM), berarti waktunya upgrade ke WebSocket.</p>
+<p>Dan biar log-nya makin berguna, lo bisa tambahin timestamp relatif, filter severity (INFO, ERROR), atau export ke file langsung.</p>
+<p>Tapi intinya, lo udah punya fondasi kuat: sistem log streaming yang bisa live, bisa nyimpen, dan bisa dibersihin otomatis.</p>
+<p>Kapan mau dipake di proyek lo yang berikutnya?</p>

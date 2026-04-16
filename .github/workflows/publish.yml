@@ -11,35 +11,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Restore Node modules cache
+    - name: Restore root Node modules cache
       uses: actions/cache@v3
       id: node-modules-cache
       with:
-        path: |
-          node_modules
-          .next/*
-          !.next/.next/cache
-          !.next/.env.*
-        key: ${{ runner.os }}-dendronv2-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+        path: node_modules
+        key: ${{ runner.os }}-dendron-${{ hashFiles('yarn.lock', 'package-lock.json') }}
 
-    - name: Install dependencies
+    - name: Install root dependencies
+      if: steps.node-modules-cache.outputs.cache-hit != 'true'
       run: yarn
 
     - name: Initialize or pull nextjs template
-      run: "(test -d .next) && (echo 'updating dendron next...' && cd .next && git reset --hard && git checkout 2026 && git pull origin 2026 && yarn && cd ..) || (echo 'init dendron next' && git clone -b 2026 https://github.com/zeihanaulia/nextjs-template.git .next && cd .next && yarn && cd ..)"
+      run: |
+        if git -C .next rev-parse --is-inside-work-tree 2>/dev/null; then
+          echo "updating dendron next..."
+          cd .next && git reset --hard && git checkout 2026 && git pull origin 2026
+        else
+          echo "init dendron next..."
+          rm -rf .next
+          git clone -b 2026 https://github.com/zeihanaulia/nextjs-template.git .next
+        fi
 
-    - name: Restore Next cache
+    - name: Restore nextjs-template Node modules cache
+      uses: actions/cache@v3
+      id: next-node-modules-cache
+      with:
+        path: .next/node_modules
+        key: ${{ runner.os }}-nextjs-deps-${{ hashFiles('.next/yarn.lock', '.next/package-lock.json') }}
+
+    - name: Install nextjs-template dependencies
+      if: steps.next-node-modules-cache.outputs.cache-hit != 'true'
+      run: cd .next && yarn
+
+    - name: Restore Next build cache
       uses: actions/cache@v3
       with:
-        path: |
-          .next/.next/cache
-          .next/server/bundle
-          .next/static/chunks
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('.next/yarn.lock', '.next/package-lock.json') }}-${{ hashFiles('.next/**.[jt]s', '.next/**.[jt]sx') }}
+        path: .next/.next/cache
+        key: ${{ runner.os }}-nextjs-build-${{ hashFiles('.next/yarn.lock', '.next/package-lock.json') }}-${{ hashFiles('.next/**.[jt]s', '.next/**.[jt]sx') }}
 
     - name: Check dendron version
       run: yarn dendron --version
@@ -48,7 +61,7 @@ jobs:
       run: |
         sed -i '/- fsPath: templates/,+3d' dendron.yml
         sed -i '/- fsPath: vault2/,+6d' dendron.yml
-  
+
     - name: Export notes
       run: yarn dendron publish export --target github --yes
 

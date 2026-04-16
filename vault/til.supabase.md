@@ -1,5 +1,5 @@
 ---
-id: 9x4m9ahwr0uiue1msm9kpw2
+id: til.supabase
 title: Supabase
 desc: ''
 updated: 1748257260289

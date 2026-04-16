@@ -1,5 +1,5 @@
 ---
-id: 6szjp3xq8zomb5lhyfxd3nz
+id: til.supabase.rls
 title: "RLS Supabase: Biar Data Lo Gak Jadi Konsumsi Publik"
 desc: ''
 updated: 1748257326562

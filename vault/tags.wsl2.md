@@ -1,5 +1,5 @@
 ---
-id: dkqx8ibgpx6udhieo5qvqot
+id: tags.wsl2
 title: Wsl2
 desc: ''
 updated: 1732280237718

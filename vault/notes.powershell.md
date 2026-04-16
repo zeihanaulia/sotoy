@@ -1,5 +1,5 @@
 ---
-id: 9hskm07l1ca4vnvdbdeo4uo
+id: notes.powershell
 title: Powershell
 desc: ''
 updated: 1756897468417

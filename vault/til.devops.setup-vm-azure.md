@@ -1,5 +1,5 @@
 ---
-id: 6w7soczd9kofolyr2tcgsgs
+id: til.devops.setup-vm-azure
 title: Setup Vm Azure
 desc: ''
 updated: 1748956058030

@@ -1,5 +1,5 @@
 ---
-id: eo4tsx2lyb5ek8fdofer98q
+id: til.coding.maximum-sum-of-distinct-subarrays-with-length-k
 title: Maximum Sum of Distinct Subarrays with Length K
 desc: ''
 updated: 1742788580503

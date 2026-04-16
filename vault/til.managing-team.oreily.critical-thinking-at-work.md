@@ -1,5 +1,5 @@
 ---
-id: x0x78wplldkhqugsia6u9kw
+id: til.managing-team.oreily.critical-thinking-at-work
 title: Critical Thinking at Work
 desc: ''
 updated: 1682562686824

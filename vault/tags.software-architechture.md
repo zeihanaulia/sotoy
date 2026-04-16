@@ -1,5 +1,5 @@
 ---
-id: 68iwuc6hvz6bq5i6l8r53qa
+id: tags.software-architechture
 title: Software Architechture
 desc: ''
 updated: 1666075418993

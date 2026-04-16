@@ -1,5 +1,5 @@
 ---
-id: i4qdpg3wjwnulk1by0ti8dm
+id: tags.diagram
 title: Diagram
 desc: ''
 updated: 1666075405282

@@ -1,5 +1,5 @@
 ---
-id: 85suwlt8zylgcra3sradjfs
+id: handbook.golang.5-custom-metrics-dengan-promteheus
 title: 5 Custom Metrics Dengan Promteheus
 desc: ''
 updated: 1668404817226

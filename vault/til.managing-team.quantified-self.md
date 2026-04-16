@@ -1,5 +1,5 @@
 ---
-id: bmnh-quantified-self
+id: til.managing-team.quantified-self
 title: Quantified Self
 desc: ''
 updated: 1741593785656

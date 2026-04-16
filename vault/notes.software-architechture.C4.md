@@ -1,5 +1,5 @@
 ---
-id: lkwby4sk4bgobls2xo80u8c
+id: notes.software-architechture.C4
 title: C4
 desc: ''
 updated: 1666077306710

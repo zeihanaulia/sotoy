@@ -1,5 +1,5 @@
 ---
-id: rjxkatct87nvbwz0whvl2hx
+id: book-summaries.an-elegant-puzzle
 title: An Elegant Puzzle
 desc: ''
 updated: 1721119936450

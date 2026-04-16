@@ -1,5 +1,5 @@
 ---
-id: 57q7jyz0wff078xaz4s6eea
+id: til.windows.recovering-from-a-broken-nix-wsl-setup
 title: Recovering from a Broken Nix Wsl Setup
 desc: 'Nix, WSL, Recovery, Mitchell Hashimoto Inspiration'
 updated: 1745902346611

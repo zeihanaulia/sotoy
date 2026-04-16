@@ -1,5 +1,5 @@
 ---
-id: qsjn6anz0awbgtdp59s2n0i
+id: handbook.rust
 title: Rust
 desc: ''
 updated: 1705884635260

@@ -1,5 +1,5 @@
 ---
-id: 0rn87jn6z3ie8lq11zqhi0n
+id: book-summaries.building-a-second-brain
 title: Building a Second Brain
 desc: ''
 updated: 1741665581566

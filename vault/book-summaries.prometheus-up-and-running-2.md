@@ -1,5 +1,5 @@
 ---
-id: nqq3uitnp95tv26gsrhskg1
+id: book-summaries.prometheus-up-and-running-2
 title: Prometheus up and Running 2
 desc: ''
 updated: 1721120033048

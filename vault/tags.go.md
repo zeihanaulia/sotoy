@@ -1,5 +1,5 @@
 ---
-id: 1l18nvi2v8de3tka75ibojn
+id: tags.go
 title: Go
 desc: ''
 updated: 1646862045751

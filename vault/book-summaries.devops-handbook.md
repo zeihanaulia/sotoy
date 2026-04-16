@@ -1,5 +1,5 @@
 ---
-id: o7lb3c5gi02ldvpohx3iywj
+id: book-summaries.devops-handbook
 title: Devops Handbook
 desc: ''
 updated: 1721120010166

@@ -1,5 +1,5 @@
 ---
-id: c6qsu6n64swoj5h8t1v0v6z
+id: notes.book
 title: Book
 desc: ''
 updated: 1721120135792

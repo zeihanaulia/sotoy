@@ -1,5 +1,5 @@
 ---
-id: wbb03dc3mk9zsxwuiwbhweg
+id: notes.infrastructure-as-code
 title: Infrastructure as Code
 desc: ''
 updated: 1721120167108

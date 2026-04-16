@@ -1,5 +1,5 @@
 ---
-id: 3e9942id79hw89ncudt79ok
+id: handbook.golang
 title: Golang
 desc: ''
 updated: 1646862611801

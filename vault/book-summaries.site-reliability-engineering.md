@@ -1,5 +1,5 @@
 ---
-id: ca73265p1ikzik579zv1ip1
+id: book-summaries.site-reliability-engineering
 title: Site Reliability Engineering
 desc: ''
 updated: 1682477476684

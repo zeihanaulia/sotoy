@@ -1,5 +1,5 @@
 ---
-id: j9mdqrlv7yp9h8r3lug53z9
+id: notes.api-management.kong
 title: Kong
 desc: ''
 updated: 1721120107656

@@ -1,5 +1,5 @@
 ---
-id: ov1jn2bwsgt3mj88r7ddiss
+id: til.nix.nixos-on-windows
 title: Nixos on Windows
 desc: ''
 updated: 1746161590837

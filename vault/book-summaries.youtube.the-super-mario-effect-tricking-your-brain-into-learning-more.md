@@ -1,5 +1,5 @@
 ---
-id: 7q7g9eix5c7adk4h8hy4vqp
+id: book-summaries.youtube.the-super-mario-effect-tricking-your-brain-into-learning-more
 title: The Super Mario Effect Tricking Your Brain into Learning More
 desc: ''
 updated: 1683596864482

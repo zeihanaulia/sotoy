@@ -1,5 +1,5 @@
 ---
-id: xvnfefwi9o4b10oxbk491wa
+id: book-summaries.the-compound-effect
 title: The Compound Effect
 desc: ''
 updated: 1646860250529

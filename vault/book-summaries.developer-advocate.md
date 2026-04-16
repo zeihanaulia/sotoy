@@ -1,5 +1,5 @@
 ---
-id: jljq4xao1aar28ec8sjucjn
+id: book-summaries.developer-advocate
 title: Developer Advocate
 desc: ''
 updated: 1721120005296

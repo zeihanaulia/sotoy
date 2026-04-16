@@ -1,5 +1,5 @@
 ---
-id: 5w0lto1q5ywc95uktplo5f5
+id: til.devops.setup-vm-azure-terraforn
 title: Setup Vm Azure Terraform
 desc: ''
 updated: 1749091726653

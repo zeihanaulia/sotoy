@@ -1,5 +1,5 @@
 ---
-id: nqcileafeym7dxnxgdjw469
+id: book-summaries.filosofi-teras
 title: Filosofi Teras
 desc: ''
 updated: 1647314727767

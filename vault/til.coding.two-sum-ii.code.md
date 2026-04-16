@@ -1,5 +1,5 @@
 ---
-id: 7ujwboqgqdxln6skhdzne9h
+id: til.coding.two-sum-ii.code
 title: Code
 desc: ''
 updated: 1742353016584

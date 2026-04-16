@@ -1,5 +1,5 @@
 ---
-id: itfg3kwzv6560orvl3nt79m
+id: til.coding.maximum-sum-of-distinct-subarrays-with-length-k.Coding
 title: Coding
 desc: ''
 updated: 1742790575627

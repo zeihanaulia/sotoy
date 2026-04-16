@@ -1,5 +1,5 @@
 ---
-id: oorvvxz032oov7psrw9ygte
+id: book-summaries.self-driving
 title: Self Driving
 updated: 1742029724968
 created: 1646854981225

@@ -1,5 +1,5 @@
 ---
-id: pviuhlbg2byizkycrj21y2e
+id: book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines.implementing-pipelines
 title: 7. Implementing Pipelines
 desc: ''
 updated: 1742029591960

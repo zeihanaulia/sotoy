@@ -1,5 +1,5 @@
 ---
-id: 2ado431wmr921exzhwlzxku
+id: til.frontend.open-graph-biar-ketika-sharelink-gan-makin-kece
 title: Open Graph Biar Ketika Sharelink Gan Makin Kece
 desc: ''
 updated: 1748255796152

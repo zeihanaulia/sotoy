@@ -1,5 +1,5 @@
 ---
-id: rte8tvva9nlsv7kqx6ost1u
+id: notes.book.software-requirements-essentials-core-practices-for-successful-business-analysis
 title: >-
   Software Requirements Essentials Core Practices for Successful Business
   Analysis

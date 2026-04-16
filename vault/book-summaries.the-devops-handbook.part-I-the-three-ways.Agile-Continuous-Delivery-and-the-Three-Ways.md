@@ -1,5 +1,5 @@
 ---
-id: 588eod7sssw7aq8rt2bqngf
+id: book-summaries.the-devops-handbook.part-I-the-three-ways.Agile-Continuous-Delivery-and-the-Three-Ways
 title: Agile Continuous Delivery and the Three Ways
 desc: ''
 updated: 1682058124603

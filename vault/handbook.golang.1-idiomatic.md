@@ -1,5 +1,5 @@
 ---
-id: gscpu1k5cvyqrwnobbyna8p
+id: handbook.golang.1-idiomatic
 title: 1 Idiomatic
 desc: ''
 updated: 1646861911437

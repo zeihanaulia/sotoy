@@ -1,5 +1,5 @@
 ---
-id: uwbakxc17t4suloc4pd38o3
+id: til.frontend.setup-refine
 title: Setup Refine UI sebagai Pengganti Streamlit
 desc: ''
 updated: 1748255812327

@@ -1,5 +1,5 @@
 ---
-id: owruqdc92klyd58a5eu27e6
+id: til.coding.two-sum-ii
 title: Two Sum II - Input Array Is Sorted
 desc: ''
 updated: 1742443122881

@@ -1,5 +1,5 @@
 ---
-id: 70q1ezq7oigziebyru4erni
+id: notes.api-management.traefik
 title: Traefik
 desc: ''
 updated: 1721120117344

@@ -1,5 +1,5 @@
 ---
-id: 4fz2scq95mxi4olfo4i9o5y
+id: notes.powershell.customize-poweshell
 title: Customize Poweshell
 desc: ''
 updated: 1746175911546

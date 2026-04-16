@@ -1,5 +1,5 @@
 ---
-id: mpnlvktv73e34y86gjdferd
+id: til.Golang
 title: Golang
 desc: ''
 updated: 1756897468418

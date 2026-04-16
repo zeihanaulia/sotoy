@@ -1,5 +1,5 @@
 ---
-id: j668eqsvty9mkv82lm7250s
+id: til.coding.valid-palindrome.Code
 title: Code
 desc: ''
 updated: 1742357322982

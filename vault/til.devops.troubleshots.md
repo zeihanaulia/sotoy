@@ -1,5 +1,5 @@
 ---
-id: nduo5g1yzk1s1fgijagbt64
+id: til.devops.troubleshots
 title: Troubleshots
 desc: ''
 updated: 1756897468425

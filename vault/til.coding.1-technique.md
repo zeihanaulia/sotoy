@@ -1,5 +1,5 @@
 ---
-id: aucxia5pujl6djrchgnpn3m
+id: til.coding.1-technique
 title: Technique
 desc: ''
 updated: 1742449551667

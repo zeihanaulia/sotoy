@@ -1,5 +1,5 @@
 ---
-id: 3ran15rs3c9gcyy4okxgy30
+id: notes.observability
 title: Observability
 desc: ''
 updated: 1721120185305

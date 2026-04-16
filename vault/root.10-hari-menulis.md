@@ -1,5 +1,5 @@
 ---
-id: sqhm53i4m7rpep9z6o18mbm
+id: root.10-hari-menulis
 title: 10 Hari Menulis
 desc: ''
 updated: 1742247546766

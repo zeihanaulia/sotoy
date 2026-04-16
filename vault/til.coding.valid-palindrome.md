@@ -1,5 +1,5 @@
 ---
-id: 5pnd7nalqztbktf5xkr3ibc
+id: til.coding.valid-palindrome
 title: Valid Palindrom
 desc: ''
 updated: 1742443210977

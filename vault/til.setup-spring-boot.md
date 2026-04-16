@@ -1,5 +1,5 @@
 ---
-id: co2rjq3ldux3qxdhx7dkbdf
+id: til.setup-spring-boot
 title: Setup Spring Boot
 desc: ''
 updated: 1746615097326

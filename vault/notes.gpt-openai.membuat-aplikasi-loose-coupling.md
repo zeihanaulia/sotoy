@@ -1,5 +1,5 @@
 ---
-id: ti5yycfamw6ogzxiqqnkrqc
+id: notes.gpt-openai.membuat-aplikasi-loose-coupling
 title: Membuat Aplikasi Loose Coupling
 desc: ''
 updated: 1674011619478

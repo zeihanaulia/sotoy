@@ -1,5 +1,5 @@
 ---
-id: tvdcga33h6hi7fxd9cwqd66
+id: til
 title: Today I Learned
 desc: ''
 updated: 1647490677387

@@ -1,5 +1,5 @@
 ---
-id: uftcxwjagb6qyz86je4gqkw
+id: notes.software-architechture
 title: Software Architechture
 desc: ''
 updated: 1682013795320

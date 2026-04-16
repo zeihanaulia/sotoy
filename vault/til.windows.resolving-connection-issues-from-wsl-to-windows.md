@@ -1,5 +1,5 @@
 ---
-id: w4ptpcefqr98mej5hjhs3m9
+id: til.windows.resolving-connection-issues-from-wsl-to-windows
 title: 'Notes: Resolving Connection Issues from WSL to Windows'
 desc: ''
 updated: 1734422343008

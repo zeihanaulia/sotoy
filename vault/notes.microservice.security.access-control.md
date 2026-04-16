@@ -1,5 +1,5 @@
 ---
-id: sr7cgg5swsdcrsxg43poc0x
+id: notes.microservice.security.access-control
 title: Access Control
 desc: ''
 updated: 1647288739700

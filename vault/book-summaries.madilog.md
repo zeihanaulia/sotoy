@@ -1,5 +1,5 @@
 ---
-id: madilog
+id: book-summaries.madilog
 title: Madilog
 desc: ''
 updated: 1741704456530

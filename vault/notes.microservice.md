@@ -1,5 +1,5 @@
 ---
-id: 32oadwuttrn541ymo6goqgl
+id: notes.microservice
 title: Microservice
 desc: ''
 updated: 1721120170874

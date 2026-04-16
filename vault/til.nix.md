@@ -1,5 +1,5 @@
 ---
-id: bgwu895vww7e5evg117ucl3
+id: til.nix
 title: Nix
 desc: ''
 updated: 1691471896227

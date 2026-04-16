@@ -1,5 +1,5 @@
 ---
-id: 2025-commitment
+id: notes.10-hari-menulis.2025.commitment
 title: Di Antara Ribuan
 desc: ''
 updated: 1742437722882

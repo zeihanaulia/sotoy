@@ -1,5 +1,5 @@
 ---
-id: ro7nzb092u06toxmg4iofya
+id: handbook.golang.2-membuat-http-server
 title: 2 Membuat HTTP Server
 desc: ''
 updated: 1646862123663

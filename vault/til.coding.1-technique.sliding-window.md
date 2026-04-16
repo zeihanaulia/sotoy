@@ -1,5 +1,5 @@
 ---
-id: r6nqqcsf7no99fxtly7yn18
+id: til.coding.1-technique.sliding-window
 title: Sliding Window
 desc: ''
 updated: 1742787737097

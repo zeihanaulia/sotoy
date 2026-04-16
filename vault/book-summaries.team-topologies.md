@@ -1,5 +1,5 @@
 ---
-id: z2knclhdtc45qgvhiv78nfx
+id: book-summaries.team-topologies
 title: Team Topologies
 desc: ''
 updated: 1683595554316

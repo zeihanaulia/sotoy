@@ -1,5 +1,5 @@
 ---
-id: k49ys33x1rdlqhb78830u7b
+id: til.coding.two-sum
 title: Two Sum
 desc: ''
 updated: 1742346484606

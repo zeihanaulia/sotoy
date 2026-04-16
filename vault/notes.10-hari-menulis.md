@@ -1,5 +1,5 @@
 ---
-id: kg0pjvvhr9oisfwxpdu8dtr
+id: notes.10-hari-menulis
 title: 10 Hari Menulis
 desc: ''
 updated: 1742250672407

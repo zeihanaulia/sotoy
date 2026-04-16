@@ -1,5 +1,5 @@
 ---
-id: 23znyhsi9lugmrcvhx4b5qr
+id: book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines
 title: Continuous Integration (CI) and Continuous Delivery (CD) a Practical Guide to Designing and Developing Pipelines
 desc: ''
 updated: 1721119995202

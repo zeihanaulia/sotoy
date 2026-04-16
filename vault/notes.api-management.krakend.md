@@ -1,5 +1,5 @@
 ---
-id: dd0wc0prbr3pdpaekn3fp45
+id: notes.api-management.krakend
 title: Krakend
 desc: 'Explorasi KrakenD as API Gateway'
 updated: 1721120112479

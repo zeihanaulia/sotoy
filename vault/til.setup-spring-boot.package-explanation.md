@@ -1,5 +1,5 @@
 ---
-id: idf3tarmf7z2bvtid79a0b3
+id: til.setup-spring-boot.package-explanation
 title: Package Explanation
 desc: ''
 updated: 1746616252103

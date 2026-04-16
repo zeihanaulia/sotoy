@@ -1,5 +1,5 @@
 ---
-id: 5rbi82qnchxua20px7l96qx
+id: notes.gpt-openai.software-architech
 title: Software Architect
 desc: ''
 updated: 1682012837977

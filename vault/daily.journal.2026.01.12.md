@@ -1,5 +1,5 @@
 ---
-id: 34j32rqq98iw0xfl48edqx4
+id: daily.journal.2026.01.12
 title: '2026-01-12'
 desc: ''
 updated: 1768230180475

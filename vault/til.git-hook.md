@@ -1,5 +1,5 @@
 ---
-id: tr5zhbf4ay1te9xwqvq00lf
+id: til.git-hook
 title: Git Hook
 desc: ''
 updated: 1733886891779

@@ -1,5 +1,5 @@
 ---
-id: ia5bmz82kr2m57t4b68lxm6
+id: til.managing-team.youtube.the-most-powerful-way-to-think-first-principles
 title: The Most Powerful Way to Think First Principles
 desc: ''
 updated: 1682563064475

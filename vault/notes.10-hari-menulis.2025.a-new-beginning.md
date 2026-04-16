@@ -1,5 +1,5 @@
 ---
-id: 2025-a-new-beginning
+id: notes.10-hari-menulis.2025.a-new-beginning
 title: 20 Tahun Setelahnya
 desc: ''
 updated: 1742251402186

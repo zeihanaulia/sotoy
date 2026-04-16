@@ -1,5 +1,5 @@
 ---
-id: 2jw8nj1c5iybgzw5bjuz4hu
+id: book-summaries.the-devops-handbook.part-I-the-three-ways
 title: Part I - The Three Ways
 desc: ''
 updated: 1682050411373

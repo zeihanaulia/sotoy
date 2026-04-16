@@ -1,5 +1,5 @@
 ---
-id: 3vy0eya1ih1ovj9csi7xwnu
+id: til.coding.remove-duplicates-from-sorted-array
 title: Remove Duplicates from Sorted Array
 desc: ''
 updated: 1742443390960

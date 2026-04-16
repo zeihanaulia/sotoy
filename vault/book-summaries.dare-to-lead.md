@@ -1,5 +1,5 @@
 ---
-id: qt1780a5r3yr1h7fcqql1by
+id: book-summaries.dare-to-lead
 title: Dare to Lead
 desc: ''
 updated: 1668415907766

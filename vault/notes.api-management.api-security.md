@@ -1,5 +1,5 @@
 ---
-id: fy9jga5mavlr9l2d8lp9qd8
+id: notes.api-management.api-security
 title: API Security
 desc: ''
 updated: 1682013292120

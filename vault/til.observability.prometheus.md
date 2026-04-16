@@ -1,5 +1,5 @@
 ---
-id: 87x3xiegfz6oofofhvflxms
+id: til.observability.prometheus
 title: Prometheus
 desc: ''
 updated: 1670220161406

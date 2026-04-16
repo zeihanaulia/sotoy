@@ -1,5 +1,5 @@
 ---
-id: tbz9r5q0jhld5v6so147hz0
+id: notes.software-architechture.software-architechture-tradeoff
 title: Software Architechture Tradeoff
 desc: ''
 updated: 1674110510897

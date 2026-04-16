@@ -1,5 +1,5 @@
 ---
-id: gftz68j3eoioq2s8uhw43o1
+id: til.python.building-sse
 title: Building a Robust Live Log Viewer with FastAPI and Server-Sent Events
 desc: ''
 updated: 1747852587739

@@ -1,5 +1,5 @@
 ---
-id: n01m9liv6drdlgd634ukjh0
+id: handbook.golang.5-dokumentasi-api-dengan-swaggo
 title: 5 Dokumentasi API Dengan Swaggo
 desc: ''
 updated: 1647343284618

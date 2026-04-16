@@ -1,5 +1,5 @@
 ---
-id: oihv5n0rca8xhqoon4efmh5
+id: notes.eventstorming
 title: Eventstorming
 desc: ''
 updated: 1660600415983

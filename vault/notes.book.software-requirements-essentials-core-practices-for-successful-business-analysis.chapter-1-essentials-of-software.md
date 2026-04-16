@@ -1,5 +1,5 @@
 ---
-id: 222bnee9b5g4e6equf4ma3b
+id: notes.book.software-requirements-essentials-core-practices-for-successful-business-analysis.chapter-1-essentials-of-software
 title: Chapter 1. Essentials of Software
 desc: ''
 updated: 1684345854731

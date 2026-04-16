@@ -1,5 +1,5 @@
 ---
-id: srk5yp21k268v0wmtsc2n8c
+id: notes.gpt-openai.casbin
 title: Casbin
 desc: ''
 updated: 1670392703734

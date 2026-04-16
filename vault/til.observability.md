@@ -1,5 +1,5 @@
 ---
-id: 5d2cqa7nfvu29o176w2f4g1
+id: til.observability
 title: Observability
 desc: ''
 updated: 1756897468420

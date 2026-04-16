@@ -1,5 +1,5 @@
 ---
-id: 7hpir84idoztmofa72t2ozc
+id: handbook.golang.4-setup-golang-ci
 title: 4 Setup Golang CI
 desc: ''
 updated: 1646862695992

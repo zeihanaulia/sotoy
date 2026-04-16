@@ -1,5 +1,5 @@
 ---
-id: e0lwlc5eqjh1l9jfh4g76p1
+id: notes.gpt-openai.recommender-service
 title: Recommender Service
 desc: ''
 updated: 1670344737169

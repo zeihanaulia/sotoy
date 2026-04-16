@@ -21,14 +21,20 @@ help:
 
 # Build metadata dan HTML untuk production
 build:
+	@echo "🔧 Menyiapkan template lokal..."
+	@rm -rf .next
+	@ln -s nextjs-template .next
 	@echo "🔨 Building metadata..."
-	npx dendron publish build
+	npx dendron publish build --dest .next
 	@echo "🏗️  Building HTML..."
 	cd .next && npm run build
 	@echo "✅ Build selesai!"
 
 # Install dependencies
 install:
+	@echo "🔧 Menyiapkan template lokal..."
+	@if [ -e ".next" ] && [ ! -L ".next" ]; then rm -rf .next; fi
+	@if [ ! -e ".next" ]; then ln -s nextjs-template .next; fi
 	@echo "📦 Installing dependencies..."
 	cd .next && npm install
 	@echo "✅ Dependencies terinstall!"
@@ -44,8 +50,15 @@ serve:
 
 # Jalankan development server
 dev:
+	@echo "🔧 Menyiapkan template lokal..."
+	@rm -rf .next
+	@ln -s nextjs-template .next
+	@echo "🔧 Menyiapkan dependencies template..."
+	@if [ ! -d ".next/node_modules" ]; then \
+		cd .next && npm install; \
+	fi
 	@echo "🔧 Menjalankan development server..."
-	npx dendron publish dev
+	npx dendron publish dev --dest .next
 
 # Preview dengan server static
 preview:
@@ -54,6 +67,12 @@ preview:
 		echo "❌ Folder docs tidak ditemukan. Jalankan 'make build' terlebih dahulu."; \
 		exit 1; \
 	fi
+	@cd docs && if [ -e "sotoy" ] && [ ! -L "sotoy" ]; then \
+		echo "❌ Path docs/sotoy sudah ada dan bukan symlink. Hapus atau ganti nama terlebih dahulu."; \
+		exit 1; \
+	fi
+	@cd docs && [ -L "sotoy" ] || ln -s . sotoy
+	@echo "👉 Buka http://localhost:8000/sotoy/ untuk melihat preview yang benar"
 	cd docs && npx serve -s -l 8000
 
 # Bersihkan build files

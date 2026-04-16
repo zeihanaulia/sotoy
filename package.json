@@ -1,5 +1,5 @@
 {
-  "name": "sotoy-dendron",
+  "name": "sotoy",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zeihanaulia/sotoy-dendron.git"
+    "url": "git+https://github.com/zeihanaulia/sotoy.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zeihanaulia/sotoy-dendron/issues"
+    "url": "https://github.com/zeihanaulia/sotoy/issues"
   },
-  "homepage": "https://github.com/zeihanaulia/sotoy-dendron#readme",
+  "homepage": "https://github.com/zeihanaulia/sotoy#readme",
   "dependencies": {
     "@dendronhq/dendron-cli": "^0.122.0"
   }

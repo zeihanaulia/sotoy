@@ -1,5 +1,5 @@
 ---
-id: n7oobf4m1pytfexf8scoxao
+id: book-summaries.14-habits-of-highly-productive-developers
 title: 14 Habits of Highly Productive Developers
 desc: ''
 updated: 1646860166161

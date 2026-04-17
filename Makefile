@@ -51,6 +51,8 @@ serve:
 # Jalankan development server
 dev:
 	@echo "🔧 Menyiapkan template lokal..."
+	@rm -rf nextjs-template/.next
+	@rm -rf nextjs-template/out
 	@rm -rf .next
 	@ln -s nextjs-template .next
 	@echo "🔧 Menyiapkan dependencies template..."

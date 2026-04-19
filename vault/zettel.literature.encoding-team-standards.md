@@ -15,7 +15,7 @@ tags:
 - **Penulis / Author**: Rahul Garg
 - **Tahun**: 2026
 - **Jenis**: artikel
-- **Link / ISBN**: Martin Fowler
+- **Link / ISBN**: https://martinfowler.com/articles/reduce-friction-ai/encoding-team-standards.html
 
 ---
 

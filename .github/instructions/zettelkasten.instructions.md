@@ -111,11 +111,29 @@ Jika tidak ada hubungan yang jelas, lebih baik tidak menambahkan link.
 ## Literature Note
 
 Untuk note yang berasal dari sumber eksternal:
-
 - bedakan dengan jelas mana isi sumber dan mana interpretasi pribadi,
 - jangan hanya membuat ringkasan pasif,
 - tangkap ide yang penting untuk jaringan catatanmu,
 - jika ada kutipan, hubungkan ke pemahaman atau pertanyaanmu sendiri.
+
+Sebelum menulis literature note dari buku, artikel, bab, kutipan, preface, paper, atau materi referensi lain, lakukan analisis mendalam terlebih dahulu.
+
+Gunakan alur berikut:
+1. Ekstrak 3–5 pertanyaan paling mendalam yang dibuka oleh teks.
+2. Pastikan pertanyaan tidak dangkal, tidak sekadar mengulang judul, dan tidak hanya menanyakan isi permukaan.
+3. Jawab tiap pertanyaan dengan explanation yang educational, jelas, bertahap, dan memakai bahasa sendiri.
+4. Hubungkan jawaban antar pertanyaan untuk menemukan pola, klaim utama, atau struktur pemikiran di balik teks.
+5. Setelah struktur pemahaman terbentuk, baru tentukan:
+   - apakah ini layak menjadi literature note,
+   - apakah ada satu atau lebih permanent note yang bisa lahir dari situ,
+   - atau apakah masih perlu tetap sebagai analisis sementara.
+
+Prinsip penting:
+- pertanyaan adalah alat untuk membongkar teks,
+- bukan sekadar aksesori untuk mempercantik note,
+- dan bukan tambahan yang muncul setelah ringkasan selesai.
+
+Jika hasil akhirnya masih bisa dibaca sebagai ringkasan biasa, berarti analisisnya belum cukup dalam.
 
 Literature note harus tetap berguna sebagai batu loncatan ke note lain, bukan sekadar arsip bacaan.
 
@@ -149,7 +167,6 @@ Nama harus:
 ## Kriteria Kualitas
 
 Sebuah Zettel dianggap baik jika:
-
 - hanya memuat satu gagasan utama,
 - punya judul yang tajam,
 - ditulis dengan bahasa sendiri,
@@ -159,7 +176,6 @@ Sebuah Zettel dianggap baik jika:
 ## Checklist Sebelum Menyimpan
 
 Sebelum note dianggap selesai, cek:
-
 - Apakah note ini punya satu gagasan utama?
 - Apakah judulnya berupa klaim atau insight?
 - Apakah body ditulis ulang dengan jelas?
@@ -170,9 +186,14 @@ Sebelum note dianggap selesai, cek:
 
 ## Template untuk Pertanyaan dan Jawaban Educational
 
-Untuk membuat Zettel lebih educational dan jelas, tambahkan bagian pertanyaan dan jawaban di akhir note. Ini membantu menjelaskan gagasan utama secara terstruktur, dengan explanation yang mendidik.
+Untuk membuat Zettel lebih educational dan jelas, pertanyaan dan jawaban bisa dipakai dalam dua tahap:
 
-Gunakan template berikut:
+1. **sebelum note jadi**, sebagai alat untuk membongkar teks atau pikiran sampai struktur pemahamannya muncul,
+2. **di dalam note**, sebagai cara menjelaskan gagasan utama secara educational.
+
+Jangan membatasi pertanyaan hanya sebagai bagian penutup note. Dalam banyak kasus, pertanyaan justru harus menjadi mesin utama yang membentuk note dari awal.
+
+Gunakan template berikut jika relevan:
 
 ```md
 ## Pertanyaan yang Membentuk Note Ini
@@ -195,26 +216,9 @@ Instruksi untuk jawaban:
 - **Relevan**: Jawaban harus langsung menjawab pertanyaan dan mendukung gagasan utama note.
 - **Singkat tapi lengkap**: Jangan terlalu panjang, tapi cukup untuk memahami.
 
-Contoh:
-
-```md
-## Pertanyaan yang Membentuk Note Ini
-
-### 1. Apa inti gagasan utama note ini?
-
-Gagasan utama adalah bahwa matematika berkembang melalui abstraksi yang tepat. Contoh: Dari menghitung benda konkret seperti "fish, fish, fish" ke angka abstrak "six". Ini penting karena abstraksi memungkinkan generalisasi, seperti menggunakan angka untuk apa saja, bukan hanya ikan. Implikasinya, matematika bukan sekadar rumus, tapi cara berpikir yang efisien untuk pola dunia nyata.
-
-### 2. Mengapa abstraksi ini penting?
-
-Abstraksi menghemat pikiran dengan fokus ke kuantitas, bukan detail. Tanpa ini, kita akan terjebak dalam deskripsi panjang. Di dunia modern, ini seperti algoritma yang menggeneralisasi data, memungkinkan AI belajar pola umum dari contoh spesifik.
-```
-
-Dengan template ini, note menjadi lebih interaktif dan berguna untuk pembelajaran.
-
 ## Default Sikap Penulisan
 
 Saat menulis Zettel:
-
 - utamakan kejelasan daripada panjang,
 - utamakan ketajaman daripada kelengkapan palsu,
 - utamakan hubungan ide daripada sekadar pengelompokan topik,

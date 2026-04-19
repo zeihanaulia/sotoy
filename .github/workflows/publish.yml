@@ -15,6 +15,11 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+
     - name: Restore root Node modules cache
       uses: actions/cache@v3
       id: node-modules-cache

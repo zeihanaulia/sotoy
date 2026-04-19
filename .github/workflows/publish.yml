@@ -42,17 +42,17 @@ jobs:
       id: next-node-modules-cache
       with:
         path: .next/node_modules
-        key: ${{ runner.os }}-nextjs-deps-${{ hashFiles('.next/yarn.lock', '.next/package-lock.json') }}
+        key: ${{ runner.os }}-nextjs-deps-${{ hashFiles('.next/package-lock.json') }}
 
     - name: Install nextjs-template dependencies
       if: steps.next-node-modules-cache.outputs.cache-hit != 'true'
-      run: cd .next && yarn
+      run: cd .next && npm ci --ignore-scripts
 
     - name: Restore Next build cache
       uses: actions/cache@v3
       with:
         path: .next/.next/cache
-        key: ${{ runner.os }}-nextjs-build-${{ hashFiles('.next/yarn.lock', '.next/package-lock.json') }}-${{ hashFiles('.next/**.[jt]s', '.next/**.[jt]sx') }}
+        key: ${{ runner.os }}-nextjs-build-${{ hashFiles('.next/package-lock.json') }}-${{ hashFiles('.next/**.[jt]s', '.next/**.[jt]sx') }}
 
     - name: Check dendron version
       run: yarn dendron --version

@@ -1,0 +1,161 @@
+<h1 id="zettelkasten-di-dendron--panduan-implementasi">Zettelkasten di Dendron — Panduan Implementasi<a aria-hidden="true" class="anchor-heading icon-link" href="#zettelkasten-di-dendron--panduan-implementasi"></a></h1>
+<h2 id="apa-itu-zettelkasten">Apa itu Zettelkasten?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-zettelkasten"></a></h2>
+<p>Zettelkasten (bahasa Jerman: "kotak catatan") adalah sistem pencatatan yang dikembangkan oleh sosiolog Niklas Luhmann. Dia menerbitkan <strong>50 buku dan 600+ artikel</strong> dengan bantuan sistem ini. Intinya bukan sekedar menyimpan catatan, tapi <strong>membangun jaring gagasan yang hidup</strong>.</p>
+<p>Tiga prinsip utama:</p>
+<ol>
+<li><strong>Atomicity</strong> — satu catatan = satu gagasan. Bukan satu bab, bukan satu topik besar.</li>
+<li><strong>Connectivity</strong> — setiap catatan baru harus dihubungkan ke catatan lain yang sudah ada.</li>
+<li><strong>Own words</strong> — tulis ulang dengan kata-katamu sendiri, bukan copy-paste.</li>
+</ol>
+<blockquote>
+<p>"A Zettelkasten is a personal tool for thinking and writing. The difference to other systems is that you create a <strong>web of thoughts</strong> instead of notes of arbitrary size, and emphasize <strong>connection</strong>, not a collection."</p>
+</blockquote>
+<hr>
+<h2 id="tiga-jenis-catatan">Tiga Jenis Catatan<a aria-hidden="true" class="anchor-heading icon-link" href="#tiga-jenis-catatan"></a></h2>
+<h3 id="1-fleeting-note-catatan-kilat">1. Fleeting Note (Catatan Kilat)<a aria-hidden="true" class="anchor-heading icon-link" href="#1-fleeting-note-catatan-kilat"></a></h3>
+<p>Tangkap dulu, proses nanti. Bisa dari ide yang tiba-tiba muncul, highlight saat membaca, atau pertanyaan dari diskusi.</p>
+<ul>
+<li><strong>Tempat</strong>: <code>vault2/</code> (private inbox) atau daily journal</li>
+<li><strong>Umur</strong>: sementara — harus diproses dalam 1-2 hari</li>
+<li><strong>Template</strong>: <code>templates.zettel.fleeting</code></li>
+</ul>
+<h3 id="2-literature-note-catatan-sumber">2. Literature Note (Catatan Sumber)<a aria-hidden="true" class="anchor-heading icon-link" href="#2-literature-note-catatan-sumber"></a></h3>
+<p>Catatan yang diambil dari sumber (buku, artikel, video, podcast). Ditulis <strong>dengan kata-katamu sendiri</strong>, bukan summary bab per bab.</p>
+<ul>
+<li><strong>Tempat</strong>: <code>vault/zettel.literature.*</code></li>
+<li><strong>Tujuan</strong>: jembatan antara sumber eksternal dan Zettel permanenmu</li>
+<li><strong>Template</strong>: <code>templates.zettel.literature</code></li>
+</ul>
+<h3 id="3-permanent-zettel-catatan-permanen">3. Permanent Zettel (Catatan Permanen)<a aria-hidden="true" class="anchor-heading icon-link" href="#3-permanent-zettel-catatan-permanen"></a></h3>
+<p>Ini inti dari sistem. Satu Zettel = satu gagasan yang dinyatakan sebagai <strong>klaim/pernyataan</strong>, bukan sekadar topik.</p>
+<ul>
+<li><strong>Tempat</strong>: <code>vault/zettel.YYYYMMDDHHMMSS.*</code></li>
+<li><strong>Nama file</strong>: timestamp 12-digit + slug pendek (contoh: <code>zettel.202604170001.ide-tanpa-catatan-sama-dengan-tidak-ada</code>)</li>
+<li><strong>Template</strong>: <code>templates.zettel.permanent</code></li>
+</ul>
+<h3 id="4-structure-note--moc">4. Structure Note / MOC<a aria-hidden="true" class="anchor-heading icon-link" href="#4-structure-note--moc"></a></h3>
+<p>Meta-catatan yang menjadi "peta" dari kumpulan Zettel. Bukan berisi konten, tapi <strong>daftar link</strong> ke Zettel yang saling berhubungan dalam satu tema.</p>
+<ul>
+<li><strong>Tempat</strong>: <code>vault/zettel.moc.*</code></li>
+<li><strong>Template</strong>: <code>templates.zettel.moc</code></li>
+</ul>
+<hr>
+<h2 id="mapping-ke-hierarki-dendron">Mapping ke Hierarki Dendron<a aria-hidden="true" class="anchor-heading icon-link" href="#mapping-ke-hierarki-dendron"></a></h2>
+<pre><code>vault/
+├── zettel.md                          ← root index
+├── zettel.YYYYMMDDHHMMSS.slug.md      ← permanent Zettel
+├── zettel.literature.source-slug.md   ← literature note
+└── zettel.moc.topic-slug.md           ← structure note / MOC
+</code></pre>
+<p>Catatan yang sudah ada (<code>book-summaries.*</code>) tetap bisa dipakai sebagai <strong>literature note kasar</strong> yang perlu diekstrak menjadi Zettel-Zettel individual.</p>
+<hr>
+<h2 id="workflow-end-to-end">Workflow End-to-End<a aria-hidden="true" class="anchor-heading icon-link" href="#workflow-end-to-end"></a></h2>
+<pre><code>Baca buku/artikel
+      ↓
+[Fleeting Note] — highlight &#x26; pertanyaan cepat
+      ↓
+[Literature Note] — proses: tulis ulang di kata-katamu sendiri
+      ↓
+[Permanent Zettel] — ekstrak 1 gagasan per Zettel, beri ID timestamp
+      ↓
+Hubungkan ke Zettel lain yang sudah ada (dengan menjelaskan MENGAPA dihubungkan)
+      ↓
+[Structure Note / MOC] — buat peta dari klaster Zettel yang terbentuk
+</code></pre>
+<hr>
+<h2 id="aturan-emas-linking">Aturan Emas Linking<a aria-hidden="true" class="anchor-heading icon-link" href="#aturan-emas-linking"></a></h2>
+<p>Saat membuat link ke Zettel lain, <strong>selalu tulis mengapa</strong> link itu dibuat. Bukan hanya <code>[[zettel.xxx]]</code>, tapi:</p>
+<pre><code>Second brain memperpanjang working memory kita [[zettel.202604170001]] karena
+ia memindahkan beban penyimpanan dari otak ke sistem eksternal, mirip dengan
+prinsip yang dibahas di [[zettel.202604170003]].
+</code></pre>
+<p>Link tanpa konteks = tidak ada pengetahuan yang diciptakan.</p>
+<hr>
+<h2 id="konvensi-penamaan">Konvensi Penamaan<a aria-hidden="true" class="anchor-heading icon-link" href="#konvensi-penamaan"></a></h2>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Jenis</th><th>Pola</th><th>Contoh</th></tr></thead><tbody><tr><td>Permanent Zettel</td><td><code>zettel.YYYYMMDDHHMMSS</code></td><td><code>zettel.202604170001</code></td></tr><tr><td>Literature Note</td><td><code>zettel.literature.author-judul</code></td><td><code>zettel.literature.building-a-second-brain</code></td></tr><tr><td>MOC</td><td><code>zettel.moc.topik</code></td><td><code>zettel.moc.personal-knowledge-management</code></td></tr></tbody></table></div>
+<hr>
+<h2 id="contoh-konkret">Contoh Konkret<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-konkret"></a></h2>
+<p>Lihat contoh mini-web Zettelkasten yang sudah dibuat di vault ini:</p>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.personal-knowledge-management">MOC: Personal Knowledge Management</a> — peta topik PKM</li>
+<li><a href="/sotoy/notes/zettel.literature.building-a-second-brain">Literature Note — Building a Second Brain</a> — literature note dari BASB</li>
+<li><a href="/sotoy/notes/zettel.202604170001">Second brain memperluas kapasitas berpikir dengan memindahkan beban memori ke sistem eksternal</a> — "Second brain perluasan kapasitas berpikir"</li>
+<li><a href="/sotoy/notes/zettel.202604170002">Ide yang tidak ditulis sama dengan ide yang tidak ada</a> — "Ide yang tak ditulis = ide yang tidak ada"</li>
+<li><a href="/sotoy/notes/zettel.202604170003">Koneksi antar gagasan lebih bernilai dari koleksi informasi</a> — "Koneksi lebih bernilai dari koleksi"</li>
+</ul>
+<hr>
+<h2 id="perbedaan-dari-cara-lama">Perbedaan dari Cara Lama<a aria-hidden="true" class="anchor-heading icon-link" href="#perbedaan-dari-cara-lama"></a></h2>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Cara Lama (book-summaries)</th><th>Cara Zettelkasten</th></tr></thead><tbody><tr><td>Satu file per buku</td><td>Satu file per <strong>gagasan</strong></td></tr><tr><td>Ringkasan bab per bab</td><td>Klaim yang bisa dibantah/dibuktikan</td></tr><tr><td>Pasif — disimpan, jarang dibuka</td><td>Aktif — selalu dihubungkan saat menulis</td></tr><tr><td>Koleksi informasi</td><td>Jaring pengetahuan</td></tr></tbody></table></div>
+<hr>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><a href="https://zettelkasten.de/introduction/">Introduction to the Zettelkasten Method</a></li>
+<li><a href="https://zettelkasten.de/posts/overview/">Zettelkasten Overview &#x26; Principles</a></li>
+</ul>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/notes.zettelkasten.cara-pakai">Cara Pakai Zettelkasten di Project Ini</a></li>
+</ol>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #de9dac;" href="/sotoy/notes/tags.zettelkasten">zettelkasten</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a class="color-tag" style="--tag-color: #c7fdb5;" href="/sotoy/notes/tags.dendron">dendron</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten (vault)</a></li>
+<li><a href="/sotoy/notes/notes.zettelkasten.cara-pakai">Cara Pakai Zettelkasten di Project Ini (vault)</a></li>
+</ul>

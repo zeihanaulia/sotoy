@@ -1,0 +1,638 @@
+<h1 id="chapter-5-division-and-its-discontents---pembagian-dan-krisis-pecahan-di-the-joy-of-x">Chapter 5: Division and Its Discontents - Pembagian dan Krisis Pecahan di The Joy of x<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-5-division-and-its-discontents---pembagian-dan-krisis-pecahan-di-the-joy-of-x"></a></h1>
+<p>Chapter 5 <em>The Joy of x</em> karya Steven Strogatz ini bahas division sebagai operasi yang bikin ribut, karena bikin kita perluas dunia bilangan ke fractions atau rationals. Nah, sharing gak selalu rapi di bilangan bulat, jadi matematika dipaksa bikin objek baru. Bab ini kupas krisis division, representasi pecahan yang bikin bingung, miskonsepsi quarter of a quarter, kenapa 0.999... sama dengan 1, dan irrational numbers yang lebih banyak.</p>
+<blockquote>
+<p>Intinya, division bukan cuma bagi-bagi, tapi pintu masuk ke part-whole relationship, rasio, proporsi, pecahan, persen, desimal. Krisis ini bikin semesta angka lebih luas lagi.</p>
+</blockquote>
+<h2 id="narasi-besar-aritmatika-evolusi-bilangan">Narasi Besar Aritmatika: Evolusi Bilangan<a aria-hidden="true" class="anchor-heading icon-link" href="#narasi-besar-aritmatika-evolusi-bilangan"></a></h2>
+<p>Gue suka framing ini, karena ini persis masalah besar pembelajaran matematika: orang belajar tekniknya, tapi tidak melihat cerita evolusinya.</p>
+<p>Cerita itu kira-kira begini:</p>
+<p>Bilangan asli / natural numbers cukup untuk menghitung
+Lalu subtraction memaksa muncul:
+zero
+negative numbers
+Tapi ketika masuk ke sharing/division, bilangan bulat masih tidak cukup
+Maka lahirlah fractions
+Fractions ini secara teknis adalah rational numbers
+Dan bahkan itu pun nanti masih belum cukup, karena ada desimal yang tidak bisa ditulis sebagai rasio bilangan bulat</p>
+<p>Jadi bilangan berkembang bukan karena orang iseng menambah koleksi, tapi karena operasi yang masuk akal menuntut semesta yang lebih luas.</p>
+<blockquote>
+<p>Pola yang konsisten: sistem kelihatan cukup, operasi sah muncul hasil aneh, matematika ekspansi. Ini sejarah krisis yang paksa perluasan dunia angka.</p>
+</blockquote>
+<h2 id="kenapa-division-lebih-ribet-daripada-additionsubtractionmultiplication">Kenapa Division Lebih Ribet daripada Addition/Subtraction/Multiplication?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-division-lebih-ribet-daripada-additionsubtractionmultiplication"></a></h2>
+<p>Division bawa kita ke part-whole relationship. Addition/subtraction masih bisa objek utuh (3 apel +2, -1). Division paksa terima benda utuh dibelah jadi bagian sama, dan satu ide punya banyak representasi (half, 1/2, 50%, 0.5). Orang bingung karena representasi gak terasa sama.</p>
+<p>Contoh kue dibelah dua: half, 1/2, 50%, 0.5. Satu nilai, banyak cara bilang. Itu sebabnya banyak oke di tambah-kurang-kali, goyang di bagi.</p>
+<blockquote>
+<p>Division buka pintu ke rasio, proporsi, pecahan, persen, desimal. Makanya banyak yang ambruk di sini.</p>
+</blockquote>
+<h2 id="visualisasi-division-sebagai-sharing">Visualisasi Division sebagai Sharing<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-division-sebagai-sharing"></a></h2>
+<h3 id="6--3-rata-hasil-bulat">6 ÷ 3: rata, hasil bulat<a aria-hidden="true" class="anchor-heading icon-link" href="#6--3-rata-hasil-bulat"></a></h3>
+<pre><code>● ● ● ● ● ●
+
+Dibagi ke 3 kelompok:
+● ●   ● ●   ● ●
+</code></pre>
+<p>Hasil: 2. Masih enak.</p>
+<h3 id="1--2-hasil-pecahan">1 ÷ 2: hasil pecahan<a aria-hidden="true" class="anchor-heading icon-link" href="#1--2-hasil-pecahan"></a></h3>
+<pre><code>[ whole cake ] → dibelah jadi dua bagian sama besar
+[ half ] [ half ]
+</code></pre>
+<p>Dunia lama mentok; perlu fractions.</p>
+<h2 id="kenapa-pecahan-bingungkan">Kenapa Pecahan Bingungkan?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-pecahan-bingungkan"></a></h2>
+<p>Banyak cara bilang bagian: half, 1/2, 50%, 0.5. Masing-masing punya bahasa sendiri: fraction (part-whole), percent (skala 100), decimal (place-value), kata (intuisi bahasa).</p>
+<blockquote>
+<p>Orang bingung pecahan bukan cuma nilai, tapi konflik representasi. Solusi: satukan representasi jadi satu makna mental, bukan latihan konversi doang.</p>
+</blockquote>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Fraction, percent, decimal bukan topik terpisah; tiga representasi besaran sama.</li>
+<li>Miskonsepsi: hafal konversi tanpa kesetaraan visual.</li>
+<li>Trade-off: pecahan bagus part-whole, persen perbandingan sosial/finansial, decimal place value/pengukuran.</li>
+<li>Failure mode: mengira kebingungan pecahan soal lemah hitung; padahal konflik representasi.</li>
+<li>Division terasa abstrak karena buka banyak pintu sekaligus.
+─────────────────────────────────────────────────</li>
+</ul>
+<h2 id="adegan-my-left-foot-you-cant-have-a-quarter-of-a-quarter">Adegan My Left Foot: “You Can’t Have a Quarter of a Quarter”<a aria-hidden="true" class="anchor-heading icon-link" href="#adegan-my-left-foot-you-cant-have-a-quarter-of-a-quarter"></a></h2>
+<p>Anak ditanya 25% dari 1/4. Ayah: “25% = 1/4, jadi gak bisa 1/4 dari 1/4.” Miskonsepsi umum: nganggap 1/4 benda utuh terakhir yang gak bisa dibelah.</p>
+<p>Padahal setiap bagian masih bisa dibagi lagi.</p>
+<h3 id="visualisasi-14-dari-14">Visualisasi: 1/4 dari 1/4<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-14-dari-14"></a></h3>
+<pre><code>[ whole ]
+→ split into 4: [1/4][1/4][1/4][1/4]
+→ take 1/4, split lagi into 4: [1/16][1/16][1/16][1/16]
+</code></pre>
+<p>Hasil: 1/16. Pecahan bukan benda utuh terakhir; operasi skala terhadap bagian.</p>
+<h2 id="intuisi-perkalian-pecahan">Intuisi Perkalian Pecahan<a aria-hidden="true" class="anchor-heading icon-link" href="#intuisi-perkalian-pecahan"></a></h2>
+<p>Kenapa 1/4 × 1/4 = 1/16? Orang pikir × harus bikin besar, tapi di pecahan × kurang dari 1 = bikin kecil (ambil fraksi dari fraksi).</p>
+<p>Contoh: 1/2 × 8 = 4 (ambil setengah dari 8), 1/4 × 20 = 5 (ambil 1/4 dari 20), 1/4 × 1/4 = 1/16 (ambil 1/4 dari 1/4).</p>
+<h3 id="visualisasi-bertingkat">Visualisasi bertingkat<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-bertingkat"></a></h3>
+<pre><code>whole
+→ split into 4 parts
+→ take 1 part
+→ split that 1 part into 4 again
+→ take 1 part
+</code></pre>
+<p>Hasil: 1 dari 16 bagian total.</p>
+<blockquote>
+<p>Operasi sama berubah makna tergantung domain bilangan. Di bilangan besar: × = bikin besar; di pecahan: × = bikin kecil.</p>
+</blockquote>
+<h2 id="contoh-verizon-theres-no-such-thing-as-002-dollars">Contoh Verizon: “There’s No Such Thing as .002 Dollars”<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-verizon-theres-no-such-thing-as-002-dollars"></a></h2>
+<p>Bingung .002 dollars karena gak ada koin fisik. Miskonsepsi: nilai uang harus subunit fisik.</p>
+<p>Secara matematis: .002 dollars = 0.2 cents. Sah sebagai besaran, meski tidak ada koin.</p>
+<blockquote>
+<p>Nyambung negatives: gak ada -4 cookies fisik, tapi konsep sah. Di sini: gak ada koin 0.2 cent, tapi nilai sah dalam sistem ukuran uang.</p>
+</blockquote>
+<h2 id="bagian-mind-blowing-1--0999">Bagian Mind-Blowing: 1 = 0.999...<a aria-hidden="true" class="anchor-heading icon-link" href="#bagian-mind-blowing-1--0999"></a></h2>
+<p>1/3 = 0.333..., ×3 = 1 = 0.999... Orang tolak karena rasa ada sisa 0.000...1, tapi tak hingga bukan angka besar; tidak ada posisi terakhir untuk digit 1.</p>
+<h3 id="cara-1-aljabar">Cara 1: Aljabar<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-1-aljabar"></a></h3>
+<p>x = 0.999..., 10x = 9.999..., 9x = 9, x = 1.</p>
+<h3 id="cara-2-deret-mendekat">Cara 2: Deret mendekat<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-2-deret-mendekat"></a></h3>
+<pre><code>0.9
+0.99
+0.999
+0.9999
+...
+</code></pre>
+<p>Limit mencapai 1, bukan mendekati tanpa sampai. Tidak ada gap.</p>
+<blockquote>
+<p>Penolakan bukan aljabar, tapi intuisi infinity. Tak hingga bukan langkah terakhir jauh; tidak ada langkah terakhir.</p>
+</blockquote>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Ketegangan “mendekati” vs “menjadi” siap untuk kalkulus.</li>
+<li>Trade-off penjelasan limit: abstrak, tapi satu-satunya cara bersih untuk tak hingga.</li>
+<li>Failure mode: mengira infinity seperti angka besar belum selesai.
+─────────────────────────────────────────────────</li>
+</ul>
+<h2 id="lalu-naik-level-irrational-numbers">Lalu Naik Level: Irrational Numbers<a aria-hidden="true" class="anchor-heading icon-link" href="#lalu-naik-level-irrational-numbers"></a></h2>
+<p>Setelah rationals, masih ada desimal tak terminate/tak repeating, seperti π. Tidak bisa rasio bilangan bulat.</p>
+<p>Hampir semua desimal irrational. Bilangan bulat/pecahan/decimal repeating spesial/langka; chaos tak berulang umum.</p>
+<h3 id="visualisasi-number-line">Visualisasi Number Line<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-number-line"></a></h3>
+<pre><code>0 ---- 1/2 ---- 0.7 ---- 0.7071... ---- 1
+</code></pre>
+<p>Di antara 0-1: 1/2, 1/3, 1/4, 0.7, 0.71, 0.7071..., tak hingga. Sebagian besar irrational.</p>
+<h2 id="cerita-besar-chapter">Cerita Besar Chapter<a aria-hidden="true" class="anchor-heading icon-link" href="#cerita-besar-chapter"></a></h2>
+<p>Division terlihat sederhana: sharing. Tapi masuk dalam: fractions → banyak bahasa → quarter of quarter → decimal kecil → 0.999... = 1 → irrationals → number line liar.</p>
+<p>Division meruntuhkan ilusi angka sederhana.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Addition ramah; division buka jurang konseptual.</li>
+<li>Eskalasi: sharing → fractions → decimals → repeating → infinity → irrationals.</li>
+<li>Trade-off perluasan: operasi lengkap, intuisi lama dibongkar.</li>
+<li>Ini jelaskan kenapa banyak baik sampai perkalian, ambruk pecahan: semesta bilangan berubah drastis.</li>
+<li>Matematika bukan skill hitung, tapi proses memperluas apa yang dianggap bilangan.
+─────────────────────────────────────────────────</li>
+</ul>
+<h2 id="sintesis-besar">Sintesis Besar<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-besar"></a></h2>
+<p>Division tidak selalu selesai rapi di bilangan bulat. Sharing lahirkan fractions, lalu dunia angka berubah: satu nilai banyak representasi, bagian dibagi lagi, desimal repeating, 0.999... = 1, sebagian besar bilangan irrational.</p>
+<p>Revolusi terbesar: dunia bilangan lebih kaya, liar, aneh.</p>
+<h2 id="naratif-evolusi-bilangan-dari-kebutuhan-dunia-ke-krisis-matematika">Naratif Evolusi Bilangan: Dari Kebutuhan Dunia ke Krisis Matematika<a aria-hidden="true" class="anchor-heading icon-link" href="#naratif-evolusi-bilangan-dari-kebutuhan-dunia-ke-krisis-matematika"></a></h2>
+<p>Gue suka bagian ini, karena Chapter 5 bukan cuma tentang teknik division, tapi cerita besar evolusi bilangan. Jenis bilangan baru lahir bukan karena matematikawan bosan, tapi karena dunia terus tanya pertanyaan yang semesta bilangan lama belum bisa jawab. Secara historis, matematika evolved dari counting, measuring, dan describing shapes of objects, jadi narasi Strogatz sesuai sejarah.</p>
+<p>Mekanisme kelahirannya: kebutuhan praktis atau logis, sistem lama mentok, lahir perluasan. "Natural → zero/negative → fractions/rationals → irrationals" itu serial expansion of legitimacy: apa yang tadinya bukan angka sungguhan pelan-pelan dipaksa masuk.</p>
+<p>Trade-off sejarah: representasi makin kuat, tapi intuisi manusia tertinggal. Itu kenapa setiap perluasan terasa aneh.</p>
+<p>Failure mode belajar sejarah matematika: lihat seperti museum fakta. Padahal pentingnya: krisis apa yang picu lompatan berikutnya.</p>
+<h3 id="drama-perluasan-semesta-angka">Drama Perluasan Semesta Angka<a aria-hidden="true" class="anchor-heading icon-link" href="#drama-perluasan-semesta-angka"></a></h3>
+<p>Anggap ini bukan timeline, tapi drama perluasan.</p>
+<pre><code>Tahap 1: "Kita cuma perlu menghitung."
+1, 2, 3, 4, 5, ...
+
+        ↓ krisis
+"Apa yang tersisa kalau semuanya diambil?"
+0
+"Apa kalau yang diambil lebih banyak dari yang ada?"
+-1, -2, -3, ...
+
+        ↓ krisis
+"Gimana kalau 1 roti dibagi 2 orang?"
+1/2, 1/3, 3/4, ...
+
+        ↓ krisis
+"Apa semua panjang / rasio bisa ditulis sebagai pecahan?"
+tidak → √2, π, ...
+</code></pre>
+<p>Dialog besar manusia vs dunia:</p>
+<p><strong>Dunia:</strong> "Hitung ternak, biji-bijian, hari, pajak."
+Manusia: "Oke, kita punya 1, 2, 3, 4…"</p>
+<p><strong>Dunia:</strong> "Catat kalau tidak ada barang."
+Manusia: "Hmm… kita butuh simbol ketiadaan. Muncul 0."</p>
+<p><strong>Dunia:</strong> "Catat utang dan rugi."
+Manusia: "Waduh, ada angka di bawah nol. Muncul bilangan negatif."</p>
+<p><strong>Dunia:</strong> "Bagikan roti, lahan, waktu, pajak adil."
+Manusia: "Bilangan bulat tidak cukup. Kita butuh pecahan."</p>
+<p><strong>Geometri:</strong> "Diagonal persegi sisi 1 berapa?"
+Manusia: "Tunggu. Kok tidak bisa pecahan?"
+Dan lahir krisis: irrational numbers.</p>
+<h3 id="simulasi-historis-per-fase">Simulasi Historis Per Fase<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-historis-per-fase"></a></h3>
+<h4 id="fase-natural-numbers--counting">Fase Natural Numbers / Counting<a aria-hidden="true" class="anchor-heading icon-link" href="#fase-natural-numbers--counting"></a></h4>
+<p>Tua, prasejarah sampai peradaban awal. Matematika dari praktik elemental counting dan measuring.</p>
+<p><strong>Simulasi: Sekitar masa awal peradaban, sebelum 3000 BCE:</strong></p>
+<p>Pedagang: "Gue punya 7 kambing."
+Petugas gudang: "Catat 7."
+Petani: "Panen 23 karung."
+Juru tulis: "Catat 23."
+Semua aman. Dunia benda diskret hadir. Tidak ada urgensi minus atau pecahan.</p>
+<h4 id="fase-fractions--sharing">Fase Fractions / Sharing<a aria-hidden="true" class="anchor-heading icon-link" href="#fase-fractions--sharing"></a></h4>
+<p>Mesir kuno dan Babylonia, milenium ke-3 sampai ke-2 BCE. Penting untuk tanah, pajak, distribusi, astronomi. Babylonia punya sistem base-60 untuk pecahan rapi.</p>
+<p><strong>Simulasi: Sekitar Mesir/Babylonia kuno:</strong></p>
+<p>Petugas lumbung: "1 roti untuk 2 pekerja. Gimana catatnya?"
+Juru tulis: "Kalau cuma 1,2,3, gak cukup."
+Petugas: "Tapi roti tetap dibagi."
+Juru tulis: "Berarti perlu angka untuk bagian. Bukan cuma utuh."</p>
+<p>Momen lahir pecahan dari distribusi adil.</p>
+<h4 id="fase-zero">Fase Zero<a aria-hidden="true" class="anchor-heading icon-link" href="#fase-zero"></a></h4>
+<p>Sejarah rumit, awalnya placeholder. India, Brahmagupta 628 CE beri aturan eksplisit untuk nol dan positif/negatif.</p>
+<p><strong>Simulasi: India, sekitar abad ke-7 CE:</strong></p>
+<p>Murid: "Guru, kalau tidak ada apa-apa, tulis apa?"
+Guru: "Kalau tidak ada simbol ketiadaan, susah bedakan 1,10,100 dalam posisi."
+Murid: "Jadi kosong punya peran notasi."
+Guru: "Betul. Ketiadaan bisa dihitung."</p>
+<p>Zero bukan cuma angka baru, tapi infrastruktur notasi.</p>
+<h4 id="fase-negative-numbers">Fase Negative Numbers<a aria-hidden="true" class="anchor-heading icon-link" href="#fase-negative-numbers"></a></h4>
+<p>Banyak peradaban lama terima utang praktis, tapi bukan angka sah. India, Brahmagupta 628 CE pakai "fortunes" dan "debts."</p>
+<p><strong>Simulasi:</strong></p>
+<p>Pedagang: "Gue punya 5 koin."
+Penagih utang: "Tapi lo utang 8."
+Pedagang: "Berarti gue bukan punya 0. Gue 3 di bawah 0."
+Juru hitung konservatif: "Itu bukan angka, itu keadaan."
+Matematikawan: "Kalau ikut aturan hitung, dia layak angka."</p>
+<p>Pertarungan filosofis: angka bukan selalu jumlah benda pegang. Kadang posisi relatif nol.</p>
+<h4 id="fase-irrational-numbers">Fase Irrational Numbers<a aria-hidden="true" class="anchor-heading icon-link" href="#fase-irrational-numbers"></a></h4>
+<p>Krisis Yunani. Pythagoreans percaya rasio bilangan bulat cukup. Tapi diagonal persegi sisi 1 = √2 irrational. Euclid 300 BCE beri penanganan geometris.</p>
+<p><strong>Simulasi: Yunani, abad ke-5 BCE:</strong></p>
+<p>Murid Pythagorean: "Semua bisa diukur bilangan bulat atau rasio."
+Guru: "Buat persegi sisi 1."
+Murid: "Sudah."
+Guru: "Diagonalnya?"
+Murid: "Mestinya ada pecahannya."
+Setelah cari…
+Murid: "Tidak ketemu."
+Guru: "Bukan belum ketemu. Memang tidak ada."</p>
+<p>Krisis besar: rational numbers tidak cukup untuk ukuran. Irrationals tak terelakkan.</p>
+<h3 id="rangkaian-naratif-evolusi">Rangkaian Naratif Evolusi<a aria-hidden="true" class="anchor-heading icon-link" href="#rangkaian-naratif-evolusi"></a></h3>
+<h4 id="babak-1--dunia-inventaris">Babak 1 — Dunia Inventaris<a aria-hidden="true" class="anchor-heading icon-link" href="#babak-1--dunia-inventaris"></a></h4>
+<p>"Berapa kambing? Karung? Hari?"
+Jawab: natural numbers.</p>
+<h4 id="babak-2--dunia-ketiadaan-dan-defisit">Babak 2 — Dunia Ketiadaan dan Defisit<a aria-hidden="true" class="anchor-heading icon-link" href="#babak-2--dunia-ketiadaan-dan-defisit"></a></h4>
+<p>"Kalau habis? Utang lebih besar?"
+Jawab: zero dan negative numbers.</p>
+<h4 id="babak-3--dunia-pembagian-adil">Babak 3 — Dunia Pembagian Adil<a aria-hidden="true" class="anchor-heading icon-link" href="#babak-3--dunia-pembagian-adil"></a></h4>
+<p>"Kalau satu benda dibagi rata?"
+Jawab: fractions, rational numbers.</p>
+<h4 id="babak-4--dunia-ukuran-membangkang">Babak 4 — Dunia Ukuran Membangkang<a aria-hidden="true" class="anchor-heading icon-link" href="#babak-4--dunia-ukuran-membangkang"></a></h4>
+<p>"Kalau panjang tak bisa rasio?"
+Jawab: irrational numbers.</p>
+<p>Visual hidup:</p>
+<pre><code>[Counting objects]
+sheep, sacks, days
+→ 1, 2, 3, 4, ...
+
+[Nothing / deficit appears]
+no apples left → 0
+owe 3 coins     → -3
+
+[Sharing begins]
+1 bread / 2 people → 1/2
+3 fields / 4 heirs → 3/4
+
+[Geometry rebels]
+square side = 1
+diagonal = ?
+not p/q → √2
+</code></pre>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Kebutuhan manusia duluan tidak selalu mudah diterima filosofis. Utang lama ada, tapi negative numbers lama bukan angka sah.</li>
+<li>Zero dan negative tidak sekonkret 3 apel, resistensi kuat.</li>
+<li>Fractions dari pembagian dan pengukuran; irrationals dari benturan geometri vs rasio.</li>
+<li>Trade-off: semesta makin luas, operasi rapi; tapi intuisi naik level.</li>
+<li>Pola sejarah: operasi buka krisis, krisis lahir tipe bilangan baru.
+─────────────────────────────────────────────────</li>
+</ul>
+<h3 id="sintesis-tajam">Sintesis Tajam<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-tajam"></a></h3>
+<p>Evolusi ini negosiasi dunia dan pikiran. Dunia beri situasi: hitung, habis, utang, bagi, ukur. Pikiran dipaksa tanya: angka apa yang diakui supaya konsisten?</p>
+<p>Natural numbers benar untuk menghitung.
+Integers untuk defisit.
+Rationals untuk pembagian.
+Irrationals untuk geometri.</p>
+<p>Narasi Strogatz kuat karena ajar kenapa semesta angka harus besar, bukan daftar tipe.</p>
+<h2 id="elaborasi-proof-0999--1-apa-itu-x-di-aljabar">Elaborasi Proof 0.999... = 1: Apa Itu x di Aljabar?<a aria-hidden="true" class="anchor-heading icon-link" href="#elaborasi-proof-0999--1-apa-itu-x-di-aljabar"></a></h2>
+<p>Ini titik yang sering bikin bingung, karena huruf x muncul tiba-tiba, dan kalau belum nyaman aljabar, rasanya kayak sulap. Padahal x cuma nama sementara untuk sesuatu yang mau dipegang.</p>
+<p>Di contoh, kita bahas angka 0.9999..., kasih label x = 0.9999... Artinya: mulai sekarang, gue kasih nama x untuk bilangan 0.9999...</p>
+<p>Jadi x bukan operasi, bukan "angka setelah x", bukan simbol aneh. Dia cuma placeholder / nama singkat. Mirip lo bilang: "gue sebut orang ini A", "gue sebut folder ini F", "gue sebut angka aneh ini x".</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Huruf di aljabar sering bikin takut karena dikira misterius. Padahal kadang cuma label sementara untuk mempermudah pembicaraan.</li>
+<li>Ada dua peran umum huruf: sebagai unknown yang dicari, atau sebagai nama untuk ekspresi. Di sini, x berperan sebagai nama.</li>
+<li>Pattern berpikir: kalau objek ribet ditulis berulang, beri nama, operasikan namanya.</li>
+<li>Trade-off notasi aljabar: ringkas kuat, tapi dingin kalau belum diberi intuisi bahwa huruf cuma alat kompresi.</li>
+<li>Failure mode: lihat x langsung pikir "waduh, persamaan." Padahal di sini lebih mirip alias.
+─────────────────────────────────────────────────</li>
+</ul>
+<h3 id="apa-maksud-x--09999">Apa Maksud x = 0.9999...?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-maksud-x--09999"></a></h3>
+<p>Maksudnya: "Anggap aja bilangan 0.9999... kita namai x." Jadi kalau tanya "berapa x?", jawab "x itu 0.9999..."</p>
+<p>Analog: kalau gue bilang nasi = makanan favorit gue, berarti setiap tulis "nasi", merujuk ke itu.</p>
+<p>Di aljabar: x = 0.9999..., setiap tulis "x", merujuk ke angka itu.</p>
+<h3 id="kenapa-pakai-x-kenapa-gak-langsung-09999">Kenapa Pakai x? Kenapa Gak Langsung 0.9999...?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-pakai-x-kenapa-gak-langsung-09999"></a></h3>
+<p>Karena mau manipulasi angka itu. Kalau tiap langkah nulis 0.9999..., panjang pusing. Jadi singkatan. Kayak di coding: assign ke variable.</p>
+<h3 id="langkah-proof-satu-per-satu">Langkah Proof Satu per Satu<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-proof-satu-per-satu"></a></h3>
+<p>Mulai dari x = 0.9999...</p>
+<h4 id="langkah-kalikan-kedua-sisi-dengan-10">Langkah: Kalikan Kedua Sisi dengan 10<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-kalikan-kedua-sisi-dengan-10"></a></h4>
+<p>10x = 9.9999... Karena desimal ×10, koma geser kanan. Contoh: 0.5×10=5, 0.27×10=2.7. Jadi 0.9999...×10=9.9999...</p>
+<p>Sekarang punya:
+x = 0.9999...
+10x = 9.9999...</p>
+<h4 id="langkah-kurangi-baris-kedua-dengan-pertama">Langkah: Kurangi Baris Kedua dengan Pertama<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-kurangi-baris-kedua-dengan-pertama"></a></h4>
+<p>10x - x = 9.9999... - 0.9999...</p>
+<p>Kiri: 10x - x = 9x</p>
+<p>Kanan: 9.9999... - 0.9999... = 9.0000... Karena .9999... sama, saling kurangi habis.</p>
+<p>Jadi 9x = 9</p>
+<h4 id="langkah-selesaikan-9x--9">Langkah: Selesaikan 9x = 9<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-selesaikan-9x--9"></a></h4>
+<p>9 kali x = 9, maka x = 1</p>
+<p>Tapi x = 0.9999..., jadi 0.9999... = 1</p>
+<h3 id="kenapa-terasa-curang">Kenapa Terasa "Curang"?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-terasa-curang"></a></h3>
+<p>Karena otak pikir: 0.9999... hampir 1, tapi belum 1. Masalah kata "belum". 0.9 belum, 0.99 belum, tapi 0.9999... bukan tiga/empat 9, tapi tak berhenti. Tidak ada digit terakhir yang sisakan celah.</p>
+<h3 id="visualisasi-mendekati">Visualisasi "Mendekati"<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-mendekati"></a></h3>
+<p>Bayangin jalan ke 1:
+1 - 0.9 = 0.1
+1 - 0.99 = 0.01
+1 - 0.999 = 0.001
+...
+Jarak makin kecil, kalau tak berhingga, jarak nol. Jadi angka itu 1.</p>
+<h3 id="x-bukan-angka-misterius-tapi-nama-sementara">x Bukan "Angka Misterius", Tapi "Nama Sementara"<a aria-hidden="true" class="anchor-heading icon-link" href="#x-bukan-angka-misterius-tapi-nama-sementara"></a></h3>
+<p>Di sini tidak cari x, tapi beri nama x untuk 0.9999... supaya gampang olah. Setelah olah, nama itu sama dengan 1.</p>
+<p>Analog non-matematika: "Gue males nulis 'anak kucing hitam yang suka tidur di sofa' terus. Mulai sekarang gue sebut K." Jadi K = anak kucing...</p>
+<p>x seperti itu, cuma alias.</p>
+<h3 id="bedain-dua-penggunaan-x">Bedain Dua Penggunaan x<a aria-hidden="true" class="anchor-heading icon-link" href="#bedain-dua-penggunaan-x"></a></h3>
+<h4 id="kasus-a--x-sebagai-unknown">Kasus A — x sebagai Unknown<a aria-hidden="true" class="anchor-heading icon-link" href="#kasus-a--x-sebagai-unknown"></a></h4>
+<p>Contoh: x + 2 = 5. x belum diketahui, cari nilainya.</p>
+<h4 id="kasus-b--x-sebagai-namalabel">Kasus B — x sebagai Nama/Label<a aria-hidden="true" class="anchor-heading icon-link" href="#kasus-b--x-sebagai-namalabel"></a></h4>
+<p>Contoh: x = 0.9999... x bukan misteri, nama baru untuk angka diketahui.</p>
+<p>Ini kasus B.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Jebakan umum: huruf sama peran berbeda konteks. Salah baca, langkah terasa sulap.</li>
+<li>Pattern sehat: lihat huruf, tanya "unknown, variable berubah, atau label?"</li>
+<li>Trade-off simbolik: efisien, tapi hilangkan cerita. Makanya kembalikan cerita.</li>
+<li>Paham x sebagai nama, proof aljabar lebih manusiawi.
+─────────────────────────────────────────────────</li>
+</ul>
+<h3 id="sintesis-singkat">Sintesis Singkat<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-singkat"></a></h3>
+<p>x = 0.9999... berarti "gue kasih nama x untuk 0.9999..."</p>
+<p>Operasikan: kalikan 10, kurangi, dapat 9x=9, x=1. Karena x=0.9999..., maka 0.9999...=1.</p>
+<h2 id="analog-x-dengan-variable-di-programming-9x-bukan-9--x">Analog x dengan Variable di Programming: 9x Bukan 9 + x<a aria-hidden="true" class="anchor-heading icon-link" href="#analog-x-dengan-variable-di-programming-9x-bukan-9--x"></a></h2>
+<p>Mirip banget dengan variable di bahasa pemrograman — tapi ada nuansa. Di contoh, x paling dekat dengan nama variable / alias di programming.</p>
+<p>Misalnya di Python: x = 0.9999... Intuisi: "gue simpan / gue sebut nilai ini dengan nama x."</p>
+<p>Analoginya valid sejauh itu. Tapi di matematika, simbol x bisa punya peran: label/nama, unknown, atau variable berubah. Di sini, label sementara.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Analogi ke programming bagus untuk masuk awal, karena x bukan misterius; cuma nama.</li>
+<li>Matematika lebih fleksibel: simbol sama bisa alias, unknown, variable dinamis tergantung konteks.</li>
+<li>Pattern: jangan tanya "x itu apa universal," tapi "di soal ini x berperan apa?"</li>
+<li>Trade-off analogi programming: intuisi awal bagus, tapi kalau dipaksakan, salah paham persamaan/fungsi.</li>
+<li>Failure mode: huruf sama, peran dikira selalu sama. Padahal konteks tentukan.
+─────────────────────────────────────────────────</li>
+</ul>
+<h3 id="apakah-9x-sama-dengan-9--09999">Apakah 9x Sama dengan 9 + 0.9999...?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-9x-sama-dengan-9--09999"></a></h3>
+<p>Bukan. 9x artinya 9 dikali x atau 9 × x. Dalam notasi matematika, angka nempel huruf hampir selalu perkalian.</p>
+<p>Jadi:</p>
+<ul>
+<li>2x = 2 × x</li>
+<li>5a = 5 × a</li>
+<li>9x = 9 × x</li>
+</ul>
+<p>Karena x = 0.9999..., maka 9x = 9 × 0.9999... Bukan 9 + 0.9999...</p>
+<h3 id="kenapa-gak-ditulis-9--x">Kenapa Gak Ditulis 9 * x?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-gak-ditulis-9--x"></a></h3>
+<p>Karena matematika singkat. Programming: 9 * x. Matematika: 9x. Terjemahan: 9x = 9 × x, 10x = 10 × x, ab = a × b.</p>
+<h3 id="substitusi-langsung">Substitusi Langsung<a aria-hidden="true" class="anchor-heading icon-link" href="#substitusi-langsung"></a></h3>
+<p>x = 0.9999..., maka 9x = 9 × 0.9999... = 0.9999... sembilan kali. Beda dengan 9 + 0.9999... (penjumlahan biasa).</p>
+<h3 id="kenapa-10x---x--9x">Kenapa 10x - x = 9x?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-10x---x--9x"></a></h3>
+<p>10x - x = 10 × x - 1 × x = (10 - 1)x = 9x. Kayak 10 apel - 1 apel = 9 apel.</p>
+<p>Analog programming: x = 4, 10<em>x - x = 10</em>4 - 4 = 36 = 9*4 = 9x.</p>
+<p>Bukan trik, pengelompokan perkalian normal.</p>
+<h3 id="beda-9x-vs-9--x">Beda 9x vs 9 + x<a aria-hidden="true" class="anchor-heading icon-link" href="#beda-9x-vs-9--x"></a></h3>
+<p>9x = 9 × x, 9 + x = 9 ditambah x. Contoh x=2: 9x=18, 9+x=11. Jelas beda.</p>
+<h3 id="proof-dengan-bahasa-biasa">Proof dengan Bahasa Biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#proof-dengan-bahasa-biasa"></a></h3>
+<p>x = 0.9999...
+10x = 9.9999...
+10x - x = 9.9999... - 0.9999...
+Kiri: 9x
+Kanan: 9
+9x = 9
+x = 1
+0.9999... = 1</p>
+<h3 id="jebakan-assignment-vs-equality">Jebakan Assignment vs Equality<a aria-hidden="true" class="anchor-heading icon-link" href="#jebakan-assignment-vs-equality"></a></h3>
+<p>Programming: x = 5 sebagai assignment/penyimpanan.
+Matematika: x = 5 sebagai equality/kesetaraan.
+Rasanya beda, tapi analogi variable tetap membantu intuisi awal.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Titik peralihan dari takut simbol ke baca notasi. Paham angka-nempel-huruf = perkalian, ekspresi ramah.</li>
+<li>Notasi matematika padat, hemat simbol, tapi butuh sadar konteks.</li>
+<li>Trade-off: matematika ringkas, programming eksplisit. Pemula nyaman eksplisit; manipulasi kuat ringkas.</li>
+<li>Langkah aman: expand notasi. Misal 9x baca 9 × x.</li>
+<li>Skill dasar penting bab berikutnya. Bukan hafal rumus, tapi terjemah simbol ke kalimat sederhana.
+─────────────────────────────────────────────────</li>
+</ul>
+<p>Jawaban singkat: Iya, x mirip variable/alias. Tidak, 9x bukan 9 + 0.9999..., tapi 9 × x.</p>
+<h2 id="simulasi-irrational-numbers-kenapa-2-tidak-bisa-pecahan">Simulasi Irrational Numbers: Kenapa √2 Tidak Bisa Pecahan?<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-irrational-numbers-kenapa-2-tidak-bisa-pecahan"></a></h2>
+<p>Irrational numbers sering bikin orang "iya iya" tapi belum kebayang. Masalah utama: otak terbiasa angka rapi. Irrational bilang: "gue angka valid, punya posisi jelas di number line, tapi gak bisa tulis sebagai pecahan dua bilangan bulat."</p>
+<p>Inti: irrational bukan samar, tetap titik pasti.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Salah paham: irrational "ngaco" atau "tidak logis." Padahal spesifik: tidak rasio integer.</li>
+<li>Pattern: pisah angka kompresi pecahan vs desimal tak berhenti tak berulang.</li>
+<li>Trade-off: definisi formal dingin; simulasi "jenis angka apa pecahan" lebih enak.</li>
+<li>Failure mode: samakan desimal panjang dengan irrational. Tidak selalu. 0.333... panjang tak hingga, tapi rational. Penting: berulang atau tidak.</li>
+<li>Pembeda bukan panjang/pendek, tapi bisa p/q atau tidak.
+─────────────────────────────────────────────────</li>
+</ul>
+<h3 id="bedain-tiga-kelompok-angka">Bedain Tiga Kelompok Angka<a aria-hidden="true" class="anchor-heading icon-link" href="#bedain-tiga-kelompok-angka"></a></h3>
+<h4 id="kelompok-a--bilangan-bulat">Kelompok A — Bilangan Bulat<a aria-hidden="true" class="anchor-heading icon-link" href="#kelompok-a--bilangan-bulat"></a></h4>
+<p>Contoh: 2, 7, -3. Jelas.</p>
+<h4 id="kelompok-b--rational-numbers">Kelompok B — Rational Numbers<a aria-hidden="true" class="anchor-heading icon-link" href="#kelompok-b--rational-numbers"></a></h4>
+<p>Angka tulis p/q, p dan q integer, q ≠ 0.</p>
+<p>Contoh: 1/2, 3/4, 5 (5/1), -2 (-2/1). Luas banget.</p>
+<h4 id="kelompok-c--irrational-numbers">Kelompok C — Irrational Numbers<a aria-hidden="true" class="anchor-heading icon-link" href="#kelompok-c--irrational-numbers"></a></h4>
+<p>Tidak bisa p/q. Contoh: √2, π, e.</p>
+<h3 id="simulasi-angka-sebagai-alamat-di-garis-bilangan">Simulasi Angka sebagai Alamat di Garis Bilangan<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-angka-sebagai-alamat-di-garis-bilangan"></a></h3>
+<p>Number line: 0---------1---------2---------3</p>
+<p>1/2 tengah 0-1, 3/4 dekat 1, 1.25 antara 1-2. Masih enak, semua dijatah.</p>
+<p>Irrational punya tempat jelas, tapi gak tulis pecahan. Bukan kabut, bukan kira-kira, tetap titik pasti.</p>
+<h3 id="simulasi-konkret-kenapa-2-aneh">Simulasi Konkret: Kenapa √2 Aneh?<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-konkret-kenapa-2-aneh"></a></h3>
+<p>Persegi sisi 1:</p>
+<p>+-----+
+|    /|
+|   / |
+|  /  |
+| /   |
+|/    |
++-----+</p>
+<p>sisi = 1
+diagonal = ?</p>
+<p>Pythagoras: diagonal² = 1² + 1² = 2, diagonal = √2.</p>
+<p>Apakah √2 pecahan? 3/2, 7/5, 99/70? Tidak.</p>
+<p>Diagonal nyata, jelas geometri — tapi tidak rasio integer.</p>
+<p>Momen mengguncang: semua panjang diharap rasio, ternyata enggak.</p>
+<h3 id="simulasi-intuitif-mencoba-tangkap-2-dengan-pecahan">Simulasi Intuitif: Mencoba Tangkap √2 dengan Pecahan<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-intuitif-mencoba-tangkap-2-dengan-pecahan"></a></h3>
+<p>√2 antara 1-2.</p>
+<p>Dekati: 1.4²=1.96, 1.41²=1.9881, 1.414²=1.999396, makin dekat.</p>
+<p>Bisa dekati rational tanpa batas, tapi tidak pernah persis rational.</p>
+<p>Rational seperti panah kerubungi target, tapi target bukan mereka.</p>
+<h3 id="simulasi-dialog-semua-angka-harus-pecahan">Simulasi Dialog: Semua Angka Harus Pecahan?<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-dialog-semua-angka-harus-pecahan"></a></h3>
+<p>Murid: "Kalau valid, harus pecahan dong?"</p>
+<p>Guru: "Kenapa?"</p>
+<p>Murid: "1/2 bisa, 3/4 bisa."</p>
+<p>Guru: "Coba tulis diagonal persegi sisi 1 sebagai pecahan."</p>
+<p>Murid: "p/q kuadrat =2, p²=2q²."</p>
+<p>Guru: "Iya."</p>
+<p>Murid: "p² genap, p genap. p=2k, 4k²=2q², q²=2k², q genap."</p>
+<p>Guru: "Kalau p dan q genap, pecahan belum sederhana. Kontradiksi."</p>
+<p>Murid: "Asumsi salah."</p>
+<p>Proof klasik: √2 = p/q mustahil.</p>
+<h3 id="kenapa-proof-penting-intuisi">Kenapa Proof Penting Intuisi?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-proof-penting-intuisi"></a></h3>
+<p>Tunjukkan aneh: paksa √2 pecahan, struktur genap-ganjil tolak.</p>
+<p>Bukan belum ketemu, memang mustahil.</p>
+<p>Pergeseran: search problem ke impossibility proof.</p>
+<p>Pattern: anggap bentuk sederhana, tunjukkan masih disederhanakan. Kontradiksi.</p>
+<p>Trade-off: kuat logika, abstrak pemula. Didampingi gambar diagonal.</p>
+<p>Geometri beri objek; logika beri kenapa rasio mustahil.</p>
+<p>Matematika butuh visual rasa, logika kepastian.</p>
+<h3 id="soal-desimal-mana-rational-mana-irrational">Soal Desimal: Mana Rational, Mana Irrational?<a aria-hidden="true" class="anchor-heading icon-link" href="#soal-desimal-mana-rational-mana-irrational"></a></h3>
+<h4 id="rational">Rational<a aria-hidden="true" class="anchor-heading icon-link" href="#rational"></a></h4>
+<p>Desimal berhenti atau berulang.</p>
+<p>Contoh: 1/2=0.5, 1/4=0.25, 1/3=0.333..., 2/7=0.285714285714...</p>
+<p>Rational punya desimal tak hingga, tapi pola berulang.</p>
+<h4 id="irrational">Irrational<a aria-hidden="true" class="anchor-heading icon-link" href="#irrational"></a></h4>
+<p>Desimal tidak berhenti, tidak berulang periodik.</p>
+<p>Contoh: √2=1.41421356237..., π=3.1415926535...</p>
+<p>Tidak blok berulang stabil seperti 333... atau 142857...</p>
+<h3 id="simulasi-sederhana-angka-mana-bisa-kompresi">Simulasi Sederhana: Angka Mana Bisa Kompresi?<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-sederhana-angka-mana-bisa-kompresi"></a></h3>
+<p>Mesin kompresi.</p>
+<p>Rational deskripsi pendek: 1/2, 3/7, 0.333...=1/3, 0.142857...=1/7.</p>
+<p>Irrational seperti √2 atau π tidak kompresi pecahan integer sederhana.</p>
+<p>Bukan gak definisi, tapi bukan rasio integer.</p>
+<p>Intuisi: rational = ditangkap pecahan, irrational = lolos jaring pecahan.</p>
+<h3 id="simulasi-visual-hidup-jaring-dan-ikan">Simulasi Visual Hidup: Jaring dan Ikan<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-visual-hidup-jaring-dan-ikan"></a></h3>
+<p>Pecahan seperti jaring lempar number line, tangkap banyak: 1/2, 3/4, 7/3, 22/7, 355/113.</p>
+<p>Ikan lolos: √2, π, e.</p>
+<p>Jaring makin rapat, dekati makin dekat. 22/7 dekati π, 355/113 lebih dekat, tapi π tetap bukan tangkapan rasio integer.</p>
+<p>Analogi: rational banyak, tapi jaring lubang. Irrational sela-sela.</p>
+<h3 id="hampir-semua-desimal-irrational-maksudnya-apa">Hampir Semua Desimal Irrational Maksudnya Apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#hampir-semua-desimal-irrational-maksudnya-apa"></a></h3>
+<p>Rational familiar: 1, 2, 1/2, 3/4, 0.25, 0.75.</p>
+<p>Tapi ambil angka sembarang, peluang besar irrational.</p>
+<p>Desimal berhenti atau berulang spesial. Desimal acak tidak pola berulang umum.</p>
+<p>Rational seperti lagu ritme berulang. Irrational seperti deretan not tidak loop sederhana.</p>
+<h3 id="simulasi-dialog-natural">Simulasi Dialog Natural<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-dialog-natural"></a></h3>
+<p>Murid: "Irrational angka jelek ya?"</p>
+<p>Guru: "Bukan. Sah, cuma gak pecahan."</p>
+<p>Murid: "Kayak π?"</p>
+<p>Guru: "Iya. Lingkaran nyata, rasio keliling/diameter gak p/q."</p>
+<p>Murid: "√2?"</p>
+<p>Guru: "Juga. Diagonal persegi sisi 1 nyata, gak rasio integer."</p>
+<p>Murid: "Rational bukan semua angka?"</p>
+<p>Guru: "Betul. Rational satu keluarga. Irrational keluarga lain sama nyata."</p>
+<h3 id="visualisasi-final-hierarchy">Visualisasi Final: Hierarchy<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-final-hierarchy"></a></h3>
+<p>Semua real numbers
+│
+├── Rational numbers
+│   ├── integers: ..., -2, -1, 0, 1, 2, ...
+│   ├── fractions: 1/2, 3/4, 7/5
+│   └── decimals that terminate or repeat
+│       0.5, 0.25, 0.333..., 0.142857...
+│
+└── Irrational numbers
+├── √2
+├── π
+├── e
+└── decimals that never terminate and never repeat periodically</p>
+<p>Irrational bukan lawan integer, tapi lawan rational.</p>
+<h3 id="sintesis-besar-1">Sintesis Besar<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-besar-1"></a></h3>
+<p>Irrational: angka nyata number line gak p/q.</p>
+<p>Cara ngerasain: geometri (diagonal persegi → √2), desimal (tak berhenti tak berulang).</p>
+<p>Rational kompresi pecahan, irrational gak muat bentuk itu.</p>
+<p>Filosofis: awal harap semua ukuran rasio bilangan bulat. Dunia: enggak, ada panjang valid tapi gak tunduk pecahan.</p>
+<p>Momen lahir irrational.</p>
+<h2 id="fondasi-notasi-51-pq--sebelum-irrational">Fondasi Notasi: 5/1, p/q, √ Sebelum Irrational<a aria-hidden="true" class="anchor-heading icon-link" href="#fondasi-notasi-51-pq--sebelum-irrational"></a></h2>
+<p>Reaksi bagus, mundur level. Yang kabur bukan irrational, tapi rantai notasi dasar. Jangan jargon dulu. Pelan: apa 5/1, p/q, √, baru irrational.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Rusak bukan pemahaman irrational, tapi rantai notasi dasar.</li>
+<li>Simbol p/q dan √2 muncul cepat, otak berhenti karena bahasa belum disepakati.</li>
+<li>Pattern: notasi dulu → contoh konkret → visualisasi → definisi.</li>
+<li>Trade-off langsung definisi formal: makin jauh intuisi. Sengaja lambat.</li>
+<li>Failure mode: guru jelaskan level 3, murid butuh level 0. Reset level 0.
+─────────────────────────────────────────────────</li>
+</ul>
+<h3 id="apa-maksud-51">Apa Maksud 5/1?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-maksud-51"></a></h3>
+<p>5/1 dibaca lima dibagi satu. Dibagi satu, hasil tetap dirinya.</p>
+<p>Contoh: 5 apel /1 orang =5, 7 roti /1 =7, -2/1=-2.</p>
+<p>Bukan trik. Bilang angka utuh tulis bentuk pecahan.</p>
+<p>Pecahan: sesuatu dibagi sesuatu. Pembagi 1, tetap utuh.</p>
+<p>5 rational karena 5=5/1, 7=7/1.</p>
+<h3 id="kenapa-penting">Kenapa Penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-penting"></a></h3>
+<p>Rational number: angka tulis pecahan dua bilangan bulat.</p>
+<p>Bukan cuma 1/2, 3/4, tapi juga 5,7,-2, karena 5/1,7/1,-2/1.</p>
+<p>Integer subset rational.</p>
+<p>Analog: semua kucing hewan. Kucing termasuk hewan bukan berubah, masuk kategori besar.</p>
+<p>5 tetap 5, tapi termasuk rational.</p>
+<h3 id="apa-pq-kenapa-huruf-tiba-tiba">Apa p/q? Kenapa Huruf Tiba-tiba?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-pq-kenapa-huruf-tiba-tiba"></a></h3>
+<p>p/q cara umum tulis pecahan apa saja.</p>
+<p>Misal 1/2, 3/4, 7/1, -5/3.</p>
+<p>Daripada semua satu-satu, pakai huruf p/q.</p>
+<p>p = angka atas, q = bawah, q ≠0.</p>
+<p>Template umum pecahan.</p>
+<p>Misal p=3 q=4 →3/4, p=7 q=1→7/1, p=-2 q=1→-2/1.</p>
+<p>Huruf bukan angka khusus, tempat kosong bilang ambil bilangan bulat apa pun atas bawah.</p>
+<p>Mirip template coding: user_id nilai 5,10,77.</p>
+<h3 id="visualisasi-pecahan-biar-pq-gak-abstrak">Visualisasi Pecahan, Biar p/q Gak Abstrak<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-pecahan-biar-pq-gak-abstrak"></a></h3>
+<p>Pizza utuh.</p>
+<p>1/2: bagi 2 bagian sama, ambil 1.</p>
+<p>[ whole pizza ] → bagi 2 [1/2][1/2]</p>
+<p>3/4: bagi 4, ambil 3.</p>
+<p>[1/4][1/4][1/4][1/4] ambil 3 →3/4</p>
+<p>Bentuk umum p/q: bagi q bagian sama, ambil p.</p>
+<p>1/2: bagi 2 ambil 1, 3/4: bagi 4 ambil 3, 7/1: bagi 1 ambil 7 whole unit → aneh pizza tunggal, tapi angka valid.</p>
+<p>Bilangan utuh: 7 whole units =7/1.</p>
+<h3 id="rational-apa-tanpa-jargon">Rational Apa Tanpa Jargon?<a aria-hidden="true" class="anchor-heading icon-link" href="#rational-apa-tanpa-jargon"></a></h3>
+<p>Rational = angka tulis pecahan.</p>
+<p>Contoh: 1/2, 3/4, 5=5/1, -2=-2/1, 0=0/1.</p>
+<p>Semua rational, tulis bentuk pecahan.</p>
+<h3 id="simbol--apa-bukan-logo-nike">Simbol √ Apa? Bukan Logo Nike<a aria-hidden="true" class="anchor-heading icon-link" href="#simbol--apa-bukan-logo-nike"></a></h3>
+<p>√ dibaca akar kuadrat atau square root.</p>
+<p>Angka berapa dikali dirinya sendiri hasil angka ini?</p>
+<p>√9=3, karena 3×3=9.</p>
+<p>√16=4, 4×4=16.</p>
+<p>√2: angka berapa × dirinya =2?</p>
+<p>1×1=1, 2×2=4, jadi antara 1-2. Berapa persis? Itulah √2.</p>
+<p>Bukan dekorasi, angka misterius kuadratnya 2.</p>
+<h3 id="visualisasi-2-dengan-persegi">Visualisasi √2 dengan Persegi<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-2-dengan-persegi"></a></h3>
+<p>Persegi sisi 1.</p>
+<p>+-----+
+|    /|
+|   / |
+|  /  |
+| /   |
+|/    |
++-----+</p>
+<p>sisi bawah=1, kiri=1, miring=diagonal.</p>
+<p>Pythagoras: diagonal²=1²+1²=1+1=2.</p>
+<p>Diagonal=√2, karena √2 kuadrat=2.</p>
+<h3 id="kenapa-2-bikin-masalah">Kenapa √2 Bikin Masalah?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-2-bikin-masalah"></a></h3>
+<p>Orang harap semua panjang pecahan: 3/2,7/5,99/70.</p>
+<p>Tapi tidak ada pas persis.</p>
+<p>√2 irrational.</p>
+<p>Bukan gak ada angkanya, gak tempatnya, kira-kira.</p>
+<p>Angka sungguhan, tapi gak tulis pecahan dua bilangan bulat.</p>
+<h3 id="visualisasi-garis-bilangan-supaya-kebayang">Visualisasi Garis Bilangan Supaya Kebayang<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-garis-bilangan-supaya-kebayang"></a></h3>
+<p>Garis 1 ke 2.</p>
+<p>1 ---------------------- 2</p>
+<p>√2 antara 1-2, 1²=1,2²=4.</p>
+<p>Dekati: 1.4²=1.96, 1.41²=1.9881, 1.414²≈1.999396, 1.4142²≈1.99996164.</p>
+<p>√2 kira-kira 1.4142...</p>
+<p>Posisi jelas.</p>
+<p>Tapi gak pecahan p/q persis sama.</p>
+<p>Kalimat: “angka lain punya tempat jelas, tapi gak tulis pecahan”</p>
+<p>Dibaca: tetap titik nyata, tapi bukan titik tulis p/q.</p>
+<h3 id="simulasi-dialog-super-sederhana">Simulasi Dialog Super Sederhana<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-dialog-super-sederhana"></a></h3>
+<p>Anak: “Semua angka pecahan kan?”</p>
+<p>Guru: “Coba 5.”</p>
+<p>Anak: “5/1.”</p>
+<p>Guru: “Bagus. Coba 7.”</p>
+<p>Anak: “7/1.”</p>
+<p>Guru: “Coba -2.”</p>
+<p>Anak: “-2/1.”</p>
+<p>Guru: “Bagus. Bilangan bulat tulis pecahan.”</p>
+<p>Anak: “Berarti semua bisa dong?”</p>
+<p>Guru: “Coba diagonal persegi sisi 1.”</p>
+<p>Anak: “√2.”</p>
+<p>Guru: “Tulis pecahan.”</p>
+<p>Anak: “14/10?” Guru: “1.4, belum.”</p>
+<p>Anak: “141/100?” Guru: “1.41, dekat, belum.”</p>
+<p>Anak: “Ada makin dekat?” Guru: “Iya.”</p>
+<p>Anak: “Tidak pas?” Guru: “Nah, irrational.”</p>
+<h3 id="definisi-versi-manusia">Definisi Versi Manusia<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi-versi-manusia"></a></h3>
+<p>Rational: angka tulis pecahan.</p>
+<p>Irrational: tidak bisa tulis pecahan.</p>
+<p>Contoh rational: 1/2,3/4,5,-2,0.25=1/4.</p>
+<p>Irrational: √2, π.</p>
+<h3 id="kenapa-desimal-berulang-rational">Kenapa Desimal Berulang Rational?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-desimal-berulang-rational"></a></h3>
+<p>0.333... rational, =1/3.</p>
+<p>Desimal panjang tak hingga belum tentu irrational.</p>
+<p>Beda: berulang → rational, tidak berhenti tidak berulang → irrational.</p>
+<h3 id="sintesis">Sintesis<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis"></a></h3>
+<p>Rapikan: 5/1 =5 dibagi 1=5. 5 tulis pecahan, rational.</p>
+<p>p/q template umum pecahan, p atas q bawah.</p>
+<p>√ akar kuadrat, √2 angka × dirinya =2.</p>
+<p>√2 tempat jelas garis bilangan ~1.4142..., tapi gak tulis pecahan p/q.</p>
+<p>Kenapa √2 irrational.</p>
+<p>★ Insight ─────────────────────────────────────</p>
+<ul>
+<li>Fondasi bentuk: pecahan, template p/q, simbol √.</li>
+<li>Irrational masuk akal setelah terima bilangan bulat tulis pecahan, tidak semua titik number line tunduk pecahan.</li>
+<li>Pattern: contoh spesifik ke kelas angka. Penting gak hafal contoh doang.</li>
+<li>Trade-off lambat: terasa lambat, tapi bikin rational/irrational gak jargon kosong.</li>
+<li>Langkah natural: visualisasikan kenapa √2 mustahil p/q pelan, atau peta semua jenis bilangan natural sampai irrational.
+─────────────────────────────────────────────────</li>
+</ul>
+<p>Relasi:</p>
+<ul>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-1.fish-to-infinity.md">Chapter 1 The Joy of x</a> (abstraksi angka)</li>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-2.rock-groups.md">Chapter 2 The Joy of x</a> (struktur angka)</li>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-3.the-enemy-of-my-enemy.md">Chapter 3 The Joy of x</a> (negatif dari subtraction)</li>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-4.commuting.md">Chapter 4 The Joy of x</a> (komutatif perkalian)</li>
+<li><a href="/sotoy/zettel.20260418182808.md">Pedagogi Matematika Anak</a> (ajar pecahan ke anak)</li>
+</ul>
+<p>Saran: Bedah lebih dalam 1/4 × 1/4, 0.999... = 1, irrational lebih banyak.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">steven-strogatz (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">mathematics (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">fractions (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">division (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rational-numbers (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">irrational-numbers (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten (vault)</a></li>
+</ul>

@@ -1,0 +1,68 @@
+<h1 id="executable-governance-di-copilot-butuh-dokumentasi-custom-instructions-skills-dan-agent-behavior">Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior<a aria-hidden="true" class="anchor-heading icon-link" href="#executable-governance-di-copilot-butuh-dokumentasi-custom-instructions-skills-dan-agent-behavior"></a></h1>
+<blockquote>
+<p>Untuk membuat judgement senior bisa digunakan secara konsisten, tim perlu membangun stack instruksi yang berlapis: dokumentasi untuk manusia, custom instructions untuk aturan umum, skills untuk workflow spesifik, dan agent behavior untuk task otonom.</p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li><code>documentation</code> tetap penting sebagai konteks panjang dan alasan. Ia membantu onboarding dan menjelaskan kenapa aturan ada.</li>
+<li><code>custom instructions</code> (<code>.github/copilot-instructions.md</code> dan <code>.github/instructions/*.instructions.md</code>) meng-encode aturan repo-wide dan context-specific yang hampir selalu berlaku.</li>
+<li><code>skills</code> adalah playbook task-specific yang dipanggil saat relevan, misalnya <code>systematic-debugging</code> atau <code>bug-reporting</code>.</li>
+<li><code>agent instructions</code> / <code>AGENTS.md</code> mendefinisikan perilaku Copilot agent saat task lebih otonom.</li>
+</ul>
+<h3 id="bentuk-praktis-instruksi">Bentuk praktis instruksi<a aria-hidden="true" class="anchor-heading icon-link" href="#bentuk-praktis-instruksi"></a></h3>
+<p>Praktik yang benar bukan "tulisan panjang di dalam prompt", tapi file artefak yang berfungsi sebagai kontrak operasi.</p>
+<ul>
+<li><code>.github/copilot-instructions.md</code> untuk hukum umum repo: tujuan utama, standar must/should/avoid, validasi akhir, dan dokumen onboarding yang harus dibaca.</li>
+<li><code>.github/instructions/*.instructions.md</code> untuk aturan domain atau path-specific: kapan berlaku, apa yang harus diikuti di area itu, dan output yang diharapkan.</li>
+<li><code>AGENTS.md</code> untuk agent behavior: bagaimana agent merencanakan, kapan berhenti, kapan eskalasi, dan kapan memprioritaskan bukti sebelum eksekusi.</li>
+<li><code>.github/skills/&#x3C;skill>/SKILL.md</code> untuk workflow task-specific: input yang diperlukan, langkah diagnosis/implementasi, dan format output yang konsisten.</li>
+<li>Konteks tambahan seperti <code>docs/onboarding/</code>, <code>docs/plans/tasks/</code>, dan tracker dipakai sebagai sumber niat dan batasan.</li>
+</ul>
+<p>Bentuk praktis ini menekankan empat hal:</p>
+<ol>
+<li>role dan orientasi keputusan (misalnya "bertindak sebagai senior engineer").</li>
+<li>konteks wajib baca sebelum mulai (misalnya onboarding+plan).  </li>
+<li>prioritas standar <code>Must / Should / Avoid</code> yang terstruktur.  </li>
+<li>output terformat yang bisa diaudit.</li>
+</ol>
+<h3 id="referensi-praktis">Referensi praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-praktis"></a></h3>
+<ul>
+<li>GitHub Docs: Adding repository custom instructions for GitHub Copilot
+<a href="https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot">https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot</a></li>
+<li>GitHub Docs: Your first custom instructions
+<a href="https://docs.github.com/en/copilot/tutorials/customization-library/custom-instructions/your-first-custom-instructions">https://docs.github.com/en/copilot/tutorials/customization-library/custom-instructions/your-first-custom-instructions</a></li>
+<li>GitHub Docs: Support for different types of custom instructions
+<a href="https://docs.github.com/en/copilot/reference/custom-instructions-support">https://docs.github.com/en/copilot/reference/custom-instructions-support</a></li>
+<li>GitHub Docs: Adding agent skills for GitHub Copilot
+<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/add-skills">https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/add-skills</a></li>
+<li>GitHub Docs: About agent skills
+<a href="https://docs.github.com/en/copilot/concepts/agents/about-agent-skills">https://docs.github.com/en/copilot/concepts/agents/about-agent-skills</a></li>
+<li>Martin Fowler: Encoding Team Standards
+<a href="https://martinfowler.com/articles/reduce-friction-ai/encoding-team-standards.html">https://martinfowler.com/articles/reduce-friction-ai/encoding-team-standards.html</a></li>
+</ul>
+<p>Implikasi:</p>
+<ul>
+<li>Ini jadi arsitektur governance, bukan sekadar prompt collection.</li>
+<li>Tanpa pemisahan ini, repo Copilot mudah jadi berantakan: aturan umum, aturan khusus, dan workflow bisa saling tumpang tindih.</li>
+<li>Paling baik mulai dari satu global instruction, satu atau dua path-specific instructions, dan satu skill penting. Setelah itu selalu kalibrasi berdasarkan penggunaan.</li>
+</ul>
+<p>→ Dikuatkan oleh <a href="/sotoy/notes/zettel.literature.encoding-team-standards">Encoding Team Standards — executable AI instruction untuk konsistensi tim</a>
+→ Berhubungan dengan <a href="/sotoy/notes/notes.copilot.custom-instructions-best-practices">Best Practices for Writing Copilot Custom Instructions</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">permanent-note (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">copilot (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">governance (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419192239">Executable governance adalah standar tim yang bukan hanya ditulis, tapi dijalankan oleh AI (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419194901">Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim (vault)</a></li>
+<li><a href="/sotoy/notes/notes.copilot.tacit-knowledge-extraction">Ekstraksi Tacit Knowledge Senior untuk AI dan Tim (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.literature.encoding-team-standards">Encoding Team Standards — executable AI instruction untuk konsistensi tim (vault)</a></li>
+</ul>

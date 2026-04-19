@@ -1,0 +1,124 @@
+<h1 id="encoding-team-standards--executable-ai-instruction-untuk-konsistensi-tim">Encoding Team Standards — executable AI instruction untuk konsistensi tim<a aria-hidden="true" class="anchor-heading icon-link" href="#encoding-team-standards--executable-ai-instruction-untuk-konsistensi-tim"></a></h1>
+<h2 id="tentang-sumber">Tentang Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#tentang-sumber"></a></h2>
+<ul>
+<li><strong>Judul</strong>: Encoding Team Standards</li>
+<li><strong>Penulis / Author</strong>: Rahul Garg</li>
+<li><strong>Tahun</strong>: 2026</li>
+<li><strong>Jenis</strong>: artikel</li>
+<li><strong>Link / ISBN</strong>: Martin Fowler</li>
+</ul>
+<hr>
+<h2 id="catatan-per-gagasan">Catatan Per Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-per-gagasan"></a></h2>
+<h3 id="1-problem-utama-kualitas-ai-tergantung-siapa-yang-menulis-instruksi">1. Problem utama: kualitas AI tergantung siapa yang menulis instruksi<a aria-hidden="true" class="anchor-heading icon-link" href="#1-problem-utama-kualitas-ai-tergantung-siapa-yang-menulis-instruksi"></a></h3>
+<blockquote>
+<p>“The gap is not in what the AI knows about the project. It is in what the AI is told to do with that knowledge.”</p>
+</blockquote>
+<p>Catatan gue: masalah utama bukan hanya model atau konteks repo. Masalahnya adalah bahwa judgement senior masih tersimpan di kepala seseorang, lalu diterjemahkan secara tidak konsisten lewat prompt.</p>
+<ul>
+<li>Senior tahu heuristic tim: arsitektur, error handling, folder placement, kapan refactor valid.</li>
+<li>Junior sering nulis prompt generik seperti “buat notification service” tanpa judgement tim.</li>
+<li>Hasil berbeda padahal tool, konteks, dan repo sama.</li>
+</ul>
+<h3 id="2-dokumentasi-biasa-tidak-cukup-karena-sifatnya-pasif">2. Dokumentasi biasa tidak cukup karena sifatnya pasif<a aria-hidden="true" class="anchor-heading icon-link" href="#2-dokumentasi-biasa-tidak-cukup-karena-sifatnya-pasif"></a></h3>
+<blockquote>
+<p>“A checklist on a wiki depends on someone reading it, remembering it, and applying it consistently under time pressure.”</p>
+</blockquote>
+<p>Catatan gue: wiki / guideline / checklist masih bergantung pada manusia untuk memindahkan aturan ke tindakan.</p>
+<ul>
+<li>Dokumentasi memberi tahu, tapi tidak mengeksekusi.</li>
+<li>Dalam workflow AI, aturan harus melekat ke prompt dan model, bukan disimpan di halaman terpisah.</li>
+<li>Ini mirip lint/CI/IaC: sukses karena sistem menjalankan aturan, bukan karena orang mengingatnya.</li>
+</ul>
+<h3 id="3-executable-governance--membuat-standar-tim-jadi-artefak-yang-dijalankan-ai">3. Executable governance = membuat standar tim jadi artefak yang dijalankan AI<a aria-hidden="true" class="anchor-heading icon-link" href="#3-executable-governance--membuat-standar-tim-jadi-artefak-yang-dijalankan-ai"></a></h3>
+<p>Eksekusi governance berarti standar tidak berhenti di tulisan. Ia harus:</p>
+<ul>
+<li>ditulis dan disimpan,</li>
+<li>direview oleh tim,</li>
+<li>di-PR-kan,</li>
+<li>lalu dipakai langsung oleh AI.</li>
+</ul>
+<p>Intinya:</p>
+<ul>
+<li>tacit judgment jadi explicit.</li>
+<li>dokumentasi jadi instruction set.</li>
+<li>instruksi itu sendiri adalah aplikasi dari governance.</li>
+</ul>
+<h3 id="4-bentuk-praktis-instruksi-standar-tim">4. Bentuk praktis instruksi standar tim<a aria-hidden="true" class="anchor-heading icon-link" href="#4-bentuk-praktis-instruksi-standar-tim"></a></h3>
+<p>Artikel mengusulkan empat elemen penting:</p>
+<ul>
+<li>Role definition: beri framing seperti "you are a senior engineer yang mengikuti pola arsitektur tim".</li>
+<li>Context requirements: sebutkan file, constraints, library, dan konteks yang diperlukan.</li>
+<li>Categorized standards: bagi cek ke level critical / important / advisory untuk menjaga prioritas.</li>
+<li>Output format: minta hasil yang terstruktur agar review konsisten.</li>
+</ul>
+<p>Catatan gue: ini bukan sekadar template prompt. Ini mengencode judgement yang biasanya ada di kepala senior.</p>
+<p>→ <a href="/sotoy/notes/zettel.20260419192541">Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format</a> — Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format</p>
+<h3 id="5-trade-off-dan-batasannya">5. Trade-off dan batasannya<a aria-hidden="true" class="anchor-heading icon-link" href="#5-trade-off-dan-batasannya"></a></h3>
+<p>Risiko utama:</p>
+<ul>
+<li>biaya awal tinggi: interview senior, drafting, kalibrasi.</li>
+<li>bisa terlalu preskriptif jika dibuat kaku.</li>
+<li>maintenance burden, karena tim dan arsitektur berubah.</li>
+<li>risiko over-engineering jika setiap hal kecil dibuat aturan khusus.</li>
+</ul>
+<p>Catatan gue: pendekatan ini cocok kalau tim sudah mulai bergantung pada prompt tertentu dan standar kualitas team output AI belum stabil.</p>
+<h3 id="6-batasan-use-case">6. Batasan use case<a aria-hidden="true" class="anchor-heading icon-link" href="#6-batasan-use-case"></a></h3>
+<p>Artikel menyebut cocok untuk:</p>
+<ul>
+<li>Generation: pencegahan misalignment sejak awal.</li>
+<li>Refactoring: encode filosofi tim tentang kontrak publik dan simplifikasi.</li>
+<li>Security: threat model tim sendiri, bukan checklist generik.</li>
+<li>Review: quality gate dengan severity konsisten.</li>
+<li>Optional CI: kalau bisa dibuat cepat dan tidak noisy.</li>
+</ul>
+<h3 id="7-implementasi-copilot-dokumentasi-custom-instructions-skills-agent-behavior">7. Implementasi Copilot: dokumentasi, custom instructions, skills, agent behavior<a aria-hidden="true" class="anchor-heading icon-link" href="#7-implementasi-copilot-dokumentasi-custom-instructions-skills-agent-behavior"></a></h3>
+<p>Catatan gue: kalau ingin menerapkan prinsip artikel secara nyata di GitHub Copilot, lo perlu memetakan fungsi tiap layer.</p>
+<ul>
+<li><code>documentation</code> menjelaskan alasan dan konteks untuk manusia.</li>
+<li><code>custom instructions</code> (<code>.github/copilot-instructions.md</code>, <code>.github/instructions/*.instructions.md</code>) meng-encode aturan yang hampir selalu berlaku.</li>
+<li><code>skills</code> adalah workflow task-specific yang dipanggil saat relevan.</li>
+<li><code>agent instructions</code> / <code>AGENTS.md</code> mendefinisikan cara agent bertindak ketika pekerjaan lebih otonom.</li>
+</ul>
+<p>Ini membuat struktur tim menjadi lebih rapi: docs untuk "kenapa", instructions untuk "apa yang harus diikuti", skills untuk "bagaimana melakukan", dan agent behavior untuk "bagaimana seharusnya agent mengambil keputusan".</p>
+<h2 id="zettels-yang-dibuat-dari-sumber-ini">Zettels yang Dibuat dari Sumber Ini<a aria-hidden="true" class="anchor-heading icon-link" href="#zettels-yang-dibuat-dari-sumber-ini"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260419190800">Judgement senior harus di-infrastrukturkan sebagai executable instruction AI</a> — Judgement senior harus di-infrastrukturkan sebagai executable instruction AI</li>
+<li><a href="/sotoy/notes/zettel.20260419192040">Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior</a> — Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior</li>
+<li><a href="/sotoy/notes/zettel.20260419192239">Executable governance adalah standar tim yang bukan hanya ditulis, tapi dijalankan oleh AI</a> — Executable governance adalah standar tim yang bukan hanya ditulis, tapi dijalankan oleh AI</li>
+<li><a href="/sotoy/notes/zettel.20260419192541">Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format</a> — Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format</li>
+<li><a href="/sotoy/notes/zettel.20260419192952">Plan, onboarding, dan tracker adalah artefak governance AI, bukan dokumentasi pasif</a> — Plan, onboarding, dan tracker adalah artefak governance AI, bukan dokumentasi pasif</li>
+<li><a href="/sotoy/notes/zettel.20260419193541">Plan AI bukan sekadar to-do list; ia adalah artefak governance operasional</a> — Plan AI bukan sekadar to-do list; ia adalah artefak governance operasional</li>
+<li><a href="/sotoy/notes/zettel.20260419193542">Onboarding docs penting untuk agent karena mereka menyediakan mental model repo</a> — Onboarding docs penting untuk agent karena mereka menyediakan mental model repo</li>
+<li><a href="/sotoy/notes/zettel.20260419193543">Tracker adalah artefak observabilitas untuk workflow AI dan developer</a> — Tracker adalah artefak observabilitas untuk workflow AI dan developer</li>
+<li><a href="/sotoy/notes/zettel.20260419193544">Agent eksplorasi codebase harus struktural, bukan sekadar search random</a> — Agent eksplorasi codebase harus struktural, bukan sekadar search random</li>
+</ul>
+<h2 id="pertanyaan-terbuka">Pertanyaan Terbuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-terbuka"></a></h2>
+<ul>
+<li>Apa struktur terbaik untuk menaruh instruction this repo? (misal <code>ai/instructions/generation.md</code>, <code>review.md</code>, <code>security.md</code>)</li>
+<li>Bagaimana tim menjaga fleksibilitas tanpa jadi kaku saat semua instruksi di-commit ke repo?</li>
+<li>Kapan sebuah instruction sebaiknya dipisah menjadi beberapa unit kecil?</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #154406;" href="/sotoy/notes/tags.literature-note">literature-note</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">engineering-judgment (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">governance (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419190800">Judgement senior harus di-infrastrukturkan sebagai executable instruction AI (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419192040">Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419192239">Executable governance adalah standar tim yang bukan hanya ditulis, tapi dijalankan oleh AI (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419192541">Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419192952">Plan, onboarding, dan tracker adalah artefak governance AI, bukan dokumentasi pasif (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419193541">Plan AI bukan sekadar to-do list; ia adalah artefak governance operasional (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419193542">Onboarding docs penting untuk agent karena mereka menyediakan mental model repo (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419193543">Tracker adalah artefak observabilitas untuk workflow AI dan developer (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419193544">Agent eksplorasi codebase harus struktural, bukan sekadar search random (vault)</a></li>
+<li><a href="/sotoy/notes/zettel.20260419194901">Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim (vault)</a></li>
+<li><a href="/sotoy/notes/notes.copilot.tacit-knowledge-extraction">Ekstraksi Tacit Knowledge Senior untuk AI dan Tim (vault)</a></li>
+</ul>

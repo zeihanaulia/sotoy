@@ -1,0 +1,37 @@
+<h1 id="package-explanation">Package Explanation<a aria-hidden="true" class="anchor-heading icon-link" href="#package-explanation"></a></h1>
+<h1 id="penamaan-package-java--spring-boot-kenapa-harus-seribet-itu">Penamaan Package Java &#x26; Spring Boot: Kenapa Harus Seribet Itu?<a aria-hidden="true" class="anchor-heading icon-link" href="#penamaan-package-java--spring-boot-kenapa-harus-seribet-itu"></a></h1>
+<p>Kalau lo datang dari dunia Go atau Node.js yang cenderung simple dan flat, struktur package Java kelihatan ribet banget. Kenapa mesti ada <code>id.mycompany.adm</code> segala? Kenapa gak cukup <code>app</code>, <code>service</code>, atau <code>main</code> aja?</p>
+<p>Nah, ini gue jelasin secara naratif dan pakai logika, bukan sekadar ikut-ikutan best practice.</p>
+<h2 id="package-itu-bukan-sekadar-folder">Package Itu Bukan Sekadar Folder<a aria-hidden="true" class="anchor-heading icon-link" href="#package-itu-bukan-sekadar-folder"></a></h2>
+<p>Di Java, package itu bukan cuma struktur folder buat nyimpan file <code>.java</code>. Package itu juga berfungsi sebagai namespace yang ngatur akses antar class, dan jadi identitas unik suatu bagian dari aplikasi lo.</p>
+<p>Jadi kalau lo punya class <code>UserService</code> di dua tempat berbeda, misalnya:</p>
+<ul>
+<li><code>id.mycompany.billing.UserService</code></li>
+<li><code>id.mycompany.userprofile.UserService</code></li>
+</ul>
+<p>Itu sah-sah aja karena beda package. Gak bakal bentrok. Java compiler tahu mana yang mana. Di Go, namespace biasanya ngikut dari import path (misal: <code>github.com/myorg/userprofile/service</code>), dan konsepnya mirip walaupun lebih fleksibel.</p>
+<h2 id="kenapa-harus-idmycompany">Kenapa Harus "id.mycompany"?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-harus-idmycompany"></a></h2>
+<p>Nama package di Java umumnya pakai domain perusahaan dalam bentuk terbalik (<code>reverse domain name</code>). Jadi kalau domain lo <code>mycompany.id</code>, lo tulis <code>id.mycompany</code>.</p>
+<p>Kenapa dibalik? Karena di dunia Java, ini udah jadi cara umum buat bikin namespace yang unik. Google misalnya pakai <code>com.google</code>, Apache pakai <code>org.apache</code>, Spring pakai <code>org.springframework</code>, dan seterusnya.</p>
+<p>Tujuannya biar gak bentrok. Bayangin semua orang pakai <code>app.service</code> — kacau nanti kalau semua library campur di satu project.</p>
+<h2 id="tambahan-modul-di-akhir">Tambahan Modul di Akhir<a aria-hidden="true" class="anchor-heading icon-link" href="#tambahan-modul-di-akhir"></a></h2>
+<p>Setelah <code>id.mycompany</code>, lo tambahin nama aplikasi atau modulnya. Misalnya <code>adm</code> buat <code>ADMInfoHandlerWrapper</code>. Jadi lengkapnya:</p>
+<pre><code>id.mycompany.adm
+</code></pre>
+<p>Kalau mau lebih rapi, lo bisa strukturin lagi kayak:</p>
+<pre><code>id.mycompany.adm.controller
+id.mycompany.adm.service
+id.mycompany.adm.repository
+</code></pre>
+<p>Mirip banget sama layered architecture yang dipakai di mana-mana: controller buat HTTP layer, service buat business logic, repository buat database access.</p>
+<h2 id="tapi-gue-cuma-pake-buat-service-kecil-emang-perlu">Tapi Gue Cuma Pake Buat Service Kecil, Emang Perlu?<a aria-hidden="true" class="anchor-heading icon-link" href="#tapi-gue-cuma-pake-buat-service-kecil-emang-perlu"></a></h2>
+<p>Kalau lo lagi nulis microservice kecil buat internal, dan yakin itu gak bakal digabung ke sistem besar, ya boleh aja lo flatten semua jadi satu package: <code>app</code> misalnya. Spring Boot gak bakal ngambek.</p>
+<p>Tapi kalau lo main di monorepo, enterprise system, atau ngembangin open source lib, pake struktur <code>id.mycompany.module</code> itu penting banget. Framework kayak Spring Boot juga scan komponen berdasarkan package. Jadi kalau lo nyebar bean lo ke package yang gak kerelasi sama root package, Spring bisa gak nemu komponen lo. Trust me, itu pain point yang umum banget di project Java.</p>
+<h2 id="kesimpulan">Kesimpulan<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan"></a></h2>
+<p>Penamaan package <code>id.mycompany.adm</code> itu bukan buat gaya-gayaan. Itu cara Java ngebuat struktur yang scalable, traceable, dan gak bentrok kalau proyek lo makin besar. Lo boleh aja mulai dari yang simple, tapi seiring waktu lo bakal ngerasa sendiri kenapa struktur itu jadi penting. Beda konteks, beda kebutuhan.</p>
+<p>Kalau lo mau ngulik lebih dalam soal konvensi ini, ini beberapa referensi yang bisa lo baca:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html">Oracle Java Package Naming Guide</a></li>
+<li><a href="https://docs.spring.io/spring-boot/reference/using/structuring-your-code.html">Structuring Code in Spring Boot</a></li>
+<li><a href="https://www.baeldung.com/java-packages">Baeldung: Java Packages</a></li>
+</ul>

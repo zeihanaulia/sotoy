@@ -1,0 +1,124 @@
+<h1 id="chapter-4-commuting---urutan-dalam-perkalian-di-the-joy-of-x">Chapter 4: Commuting - Urutan dalam Perkalian di The Joy of x<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-4-commuting---urutan-dalam-perkalian-di-the-joy-of-x"></a></h1>
+<p>Chapter 4 <em>The Joy of x</em> karya Steven Strogatz membahas hukum komutatif perkalian: <code>a × b = b × a</code>. Tapi bukan hafalan, dia kupas kenapa hukum ini tidak obvious, padahal dunia sehari-hari non-komutatif. Mulai dari PR anak, bahasa ambigu, repeated addition, array visual, aplikasi pajak/diskon, intuisi hidup, contoh gelap Gell-Mann, hingga fisika kuantum.</p>
+<blockquote>
+<p>Bab ini ajar jangan terima obvious tanpa bongkar; ganti representasi untuk pemahaman struktural; pisahkan matematika inti dari keribetan dunia nyata.</p>
+</blockquote>
+<h2 id="kenapa-judul-commuting">Kenapa Judul “Commuting”?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-judul-commuting"></a></h2>
+<p>“Commuting” dari commutative: urutan tidak ubah hasil. Judul juga nuansa tukar posisi, bertanya apa yang boleh bertukar tanpa ubah hasil.</p>
+<h2 id="lapisan-pertama-kebingungan-bahasa">Lapisan Pertama: Kebingungan Bahasa<a aria-hidden="true" class="anchor-heading icon-link" href="#lapisan-pertama-kebingungan-bahasa"></a></h2>
+<p>“Seven times three” ambigu: tujuh ditambah tiga kali, atau tiga ditambah tujuh kali? Definisi repeated addition buat komutatif belum obvious.</p>
+<h2 id="visualisasi-repeated-addition-sebagai-lompatan-di-number-line">Visualisasi: Repeated Addition sebagai Lompatan di Number Line<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-repeated-addition-sebagai-lompatan-di-number-line"></a></h2>
+<h3 id="7--3-tiga-lompatan-7">7 × 3: Tiga lompatan 7<a aria-hidden="true" class="anchor-heading icon-link" href="#7--3-tiga-lompatan-7"></a></h3>
+<pre><code>0 ----7----14----21
+</code></pre>
+<h3 id="3--7-tujuh-lompatan-3">3 × 7: Tujuh lompatan 3<a aria-hidden="true" class="anchor-heading icon-link" href="#3--7-tujuh-lompatan-3"></a></h3>
+<pre><code>0 --3--6--9--12--15--18--21
+</code></pre>
+<p>Proses beda, hasil sama. Komutatif terasa kejutan, bukan jelas.</p>
+<h2 id="representasi-kedua-array-titik">Representasi Kedua: Array Titik<a aria-hidden="true" class="anchor-heading icon-link" href="#representasi-kedua-array-titik"></a></h2>
+<h3 id="7--3-sebagai-7-baris-3-kolom">7 × 3 sebagai 7 baris, 3 kolom<a aria-hidden="true" class="anchor-heading icon-link" href="#7--3-sebagai-7-baris-3-kolom"></a></h3>
+<pre><code>● ● ●
+● ● ●
+● ● ●
+● ● ●
+● ● ●
+● ● ●
+● ● ●
+</code></pre>
+<p>Putar jadi 3 baris, 7 kolom:</p>
+<pre><code>● ● ● ● ● ● ●
+● ● ● ● ● ● ●
+● ● ● ● ● ● ●
+</code></pre>
+<p>Objek sama, cuma diputar. Komutatif jadi konsekuensi simetri.</p>
+<h2 id="visualisasi-ketiga-area-persegi-panjang">Visualisasi Ketiga: Area Persegi Panjang<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-ketiga-area-persegi-panjang"></a></h2>
+<h3 id="7--3-rectangle">7 × 3 rectangle<a aria-hidden="true" class="anchor-heading icon-link" href="#7--3-rectangle"></a></h3>
+<pre><code>+-------------+
+|             |
+|             | 3
+|             |
++-------------+
+      7
+</code></pre>
+<p>Diputar jadi 3 × 7:</p>
+<pre><code>+---+
+|   |
+|   |
+|   |
+|   |
+|   |
+|   |
+|   |
++---+
+  3 (tinggi 7)
+</code></pre>
+<p>Luas sama, orientasi ubah tapi isi tidak.</p>
+<h2 id="aplikasi-jeans-diskon-dulu-atau-pajak-dulu">Aplikasi Jeans: Diskon Dulu atau Pajak Dulu?<a aria-hidden="true" class="anchor-heading icon-link" href="#aplikasi-jeans-diskon-dulu-atau-pajak-dulu"></a></h2>
+<p>$50, diskon 20% (×0.80), pajak 8% (×1.08).</p>
+<h3 id="urutan-a-pajak-dulu-lalu-diskon">Urutan A: Pajak dulu lalu diskon<a aria-hidden="true" class="anchor-heading icon-link" href="#urutan-a-pajak-dulu-lalu-diskon"></a></h3>
+<p>50 × 1.08 × 0.80 = 54 × 0.80 = 43.2</p>
+<h3 id="urutan-b-diskon-dulu-lalu-pajak">Urutan B: Diskon dulu lalu pajak<a aria-hidden="true" class="anchor-heading icon-link" href="#urutan-b-diskon-dulu-lalu-pajak"></a></h3>
+<p>50 × 0.80 × 1.08 = 40 × 1.08 = 43.2</p>
+<p>Hasil sama. Tunjukkan berpikir multiplikatif vs aditif.</p>
+<h2 id="beda-berpikir-aditif-vs-multiplikatif">Beda Berpikir Aditif vs Multiplikatif<a aria-hidden="true" class="anchor-heading icon-link" href="#beda-berpikir-aditif-vs-multiplikatif"></a></h2>
+<p>Aditif: tambah/kurang absolut. Multiplikatif: kali faktor relatif (persen). Pajak/diskon lebih natural multiplikatif.</p>
+<h2 id="non-komutatif-di-hidup-sehari-hari">Non-Komutatif di Hidup Sehari-hari<a aria-hidden="true" class="anchor-heading icon-link" href="#non-komutatif-di-hidup-sehari-hari"></a></h2>
+<p>Kaus kaki lalu sepatu ≠ sepatu lalu kaus kaki. Hidup latih intuisi urutan penting.</p>
+<h2 id="contoh-gell-mann-pergi-ke-mit-lalu-bunuh-diri">Contoh Gell-Mann: Pergi ke MIT lalu Bunuh Diri<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-gell-mann-pergi-ke-mit-lalu-bunuh-diri"></a></h2>
+<p>A = pergi ke MIT, B = bunuh diri. A lalu B ≠ B lalu A. Operasi hidup non-komutatif.</p>
+<h2 id="penutup-fisika-kuantum-non-komutatif">Penutup: Fisika Kuantum Non-Komutatif<a aria-hidden="true" class="anchor-heading icon-link" href="#penutup-fisika-kuantum-non-komutatif"></a></h2>
+<p>Posisi × momentum ≠ momentum × posisi. Fundamental; tanpa itu atom runtuh. Komutatif spesial di bilangan biasa.</p>
+<h2 id="peta-visual-seluruh-chapter">Peta Visual Seluruh Chapter<a aria-hidden="true" class="anchor-heading icon-link" href="#peta-visual-seluruh-chapter"></a></h2>
+<pre><code>Repeated addition
+7×3 = 7+7+7
+3×7 = 3+3+3+3+3+3+3
+-> hasil sama, tapi belum jelas
+
+        ↓ ganti representasi
+
+Array / rectangle
+7 rows × 3 columns
+3 rows × 7 columns
+-> objek sama, diputar
+-> komutatif terlihat
+
+        ↓ aplikasikan
+
+Tax and discount
+×1.08 lalu ×0.80
+atau ×0.80 lalu ×1.08
+-> hasil sama
+
+        ↓ contrast
+
+Shoes and socks / life / quantum
+A lalu B ≠ B lalu A
+-> tidak semua commute
+</code></pre>
+<p>Alur: definisi → visualisasi → aplikasi → batas konsep.</p>
+<h2 id="sintesis-bab">Sintesis Bab<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-bab"></a></h2>
+<p>Bab ini hidupkan heran komutatif: dari repeated addition tidak transparan, array buat jelas, aplikasi finansial, intuisi hidup non-komutatif, hingga quantum. Inti: kapan urutan boleh diabaikan, kapan segalanya?</p>
+<p>Relasi:</p>
+<ul>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-1.fish-to-infinity.md">Chapter 1 The Joy of x</a> (abstraksi angka)</li>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-2.rock-groups.md">Chapter 2 The Joy of x</a> (struktur angka)</li>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-3.the-enemy-of-my-enemy.md">Chapter 3 The Joy of x</a> (perluasan ke negatif)</li>
+<li><a href="/sotoy/zettel.literature.joy-of-x.chapter-5.division-and-its-discontents.md">Chapter 5 The Joy of x</a> (perluasan ke pecahan)</li>
+<li><a href="/sotoy/zettel.20260418182808.md">Pedagogi Matematika Anak</a> (ajar perkalian ke anak)</li>
+</ul>
+<p>Saran: Buat versi lebih visual lagi dengan diagram ASCII tambahan, atau lanjut Chapter 5.</p>
+<p>Saran: Bedah beda berpikir aditif vs multiplikatif, atau lanjut Chapter 5.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">steven-strogatz (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">mathematics (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">multiplication (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">commutative-law (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">visual-representation (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten (vault)</a></li>
+</ul>

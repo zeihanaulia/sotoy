@@ -1,0 +1,133 @@
+<h1 id="tacit-knowledge-senior-diubah-jadi-artefak-operasional-untuk-ai-dan-tim">Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim<a aria-hidden="true" class="anchor-heading icon-link" href="#tacit-knowledge-senior-diubah-jadi-artefak-operasional-untuk-ai-dan-tim"></a></h1>
+<blockquote>
+<p>Tacit knowledge senior bukan sekadar pengalaman umum; ia adalah judgement konkret yang aktif saat melihat kasus nyata, dan nilai terbaiknya muncul ketika diubah menjadi artefak operasional.</p>
+</blockquote>
+<h2 id="pertanyaan-yang-dijawab">Pertanyaan yang dijawab<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dijawab"></a></h2>
+<ol>
+<li>Bagaimana jenis tacit knowledge senior yang bisa diekstrak?</li>
+<li>Bagaimana cara mengambilnya dari kepala senior secara sistematis?</li>
+<li>Bagaimana menjadikannya artefak yang bisa dipakai oleh AI dan developer lain?</li>
+<li>Bagaimana kaitannya dengan custom instructions, skills, dan agent behavior?</li>
+</ol>
+<h2 id="definisi-penting">Definisi penting<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi-penting"></a></h2>
+<ul>
+<li><strong>Tacit knowledge</strong>: pengetahuan yang dipakai lewat insting dan pengalaman, tapi belum tertulis jelas. Biasanya muncul sebagai judgement cepat terhadap PR, debugging, atau desain.</li>
+<li><strong>Explicit knowledge</strong>: pengetahuan yang sudah dituliskan secara gamblang, bisa dibaca orang lain, dan bisa diikuti langsung. Contoh: aturan kode, instruksi, checklist, dokumentasi.</li>
+<li><strong>Tribal knowledge</strong>: pengetahuan tim yang hidup sebagai kebiasaan atau budaya bersama. Lebih sempit dari tacit, karena berhubungan dengan cara kerja kelompok tertentu.</li>
+</ul>
+<p>Contoh perbedaan:</p>
+<ul>
+<li>tacit: "gue tahu service ini terlalu banyak tanggung jawab"</li>
+<li>explicit: "controller tidak boleh mengandung business rule; pindahkan ke service layer"</li>
+<li>tribal: "di tim ini, perubahan API harus selalu didiskusikan di standup sebelum di-merge"</li>
+</ul>
+<h2 id="inti-klaim">Inti klaim<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-klaim"></a></h2>
+<p>Tacit knowledge senior paling efektif diambil lewat <strong>case-based decision mining</strong>: gunakan PR, bug, incident, atau desain nyata sebagai pemicu, lalu bongkar judgement senior menjadi:</p>
+<ul>
+<li>rule operasional</li>
+<li>smell detection</li>
+<li>severity/prioritas</li>
+<li>exception dan batas penggunaan</li>
+<li>verification yang bisa diuji</li>
+</ul>
+<p>Setelah itu, artefak ini bisa dipindahkan ke custom instructions, skill workflow, atau review rubric.</p>
+<h2 id="langkah-ekstraksi-yang-praktis">Langkah ekstraksi yang praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-ekstraksi-yang-praktis"></a></h2>
+<h3 id="1-mulai-dari-kasus-nyata">1. Mulai dari kasus nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#1-mulai-dari-kasus-nyata"></a></h3>
+<p>Pilih sesuatu yang konkret:</p>
+<ul>
+<li>PR yang ditolak atau direview ketat</li>
+<li>bug yang lolos ke production</li>
+<li>flaky test yang sulit direproduksi</li>
+<li>desain arsitektur yang diperdebatkan</li>
+<li>incident postmortem</li>
+</ul>
+<p>Ini memaksa proses pola menjadi jelas, karena senior beroperasi dalam mode pattern recognition.</p>
+<h3 id="2-tanyakan-terhadap-bukti-bukan-teori">2. Tanyakan terhadap bukti, bukan teori<a aria-hidden="true" class="anchor-heading icon-link" href="#2-tanyakan-terhadap-bukti-bukan-teori"></a></h3>
+<p>Daripada bertanya "apa best practice?", tanyakan:</p>
+<ul>
+<li>apa yang pertama membuat lo pause?</li>
+<li>masalah apa yang lo lihat?</li>
+<li>kenapa ini berisiko?</li>
+<li>kapan ini harus ditolak?</li>
+<li>kapan ini boleh dilanggar?</li>
+<li>bukti minimalnya apa?</li>
+</ul>
+<h3 id="3-uraikan-jawaban-jadi-unit-kecil">3. Uraikan jawaban jadi unit kecil<a aria-hidden="true" class="anchor-heading icon-link" href="#3-uraikan-jawaban-jadi-unit-kecil"></a></h3>
+<p>Jangan simpan sebagai narasi panjang. Ubah menjadi:</p>
+<ul>
+<li><strong>Rule</strong>: keputusan yang bisa diikuti</li>
+<li><strong>Smell</strong>: tanda awal masalah</li>
+<li><strong>Verify</strong>: bukti bahwa aturan sudah dipatuhi</li>
+<li><strong>Exception</strong>: kapan aturan tidak berlaku</li>
+<li><strong>Severity</strong>: blocking / important / suggestion</li>
+</ul>
+<h3 id="4-kalibrasi-lewat-perbandingan-kasus">4. Kalibrasi lewat perbandingan kasus<a aria-hidden="true" class="anchor-heading icon-link" href="#4-kalibrasi-lewat-perbandingan-kasus"></a></h3>
+<p>Bandingkan aturan dengan beberapa situasi lain agar tidak menjadi terlalu kaku atau generik.</p>
+<p>Contoh:</p>
+<ul>
+<li>apakah aturan ini berlaku untuk endpoint internal dan public?</li>
+<li>apakah ini berlaku untuk service kecil dan arsitektur monolit?</li>
+<li>apakah ini masih masuk ketika dependency berubah?</li>
+</ul>
+<h3 id="5-turunkan-menjadi-artifact-operasional">5. Turunkan menjadi artifact operasional<a aria-hidden="true" class="anchor-heading icon-link" href="#5-turunkan-menjadi-artifact-operasional"></a></h3>
+<p>Artifact yang ideal:</p>
+<ul>
+<li><code>custom instructions</code> untuk aturan yang konsisten</li>
+<li><code>skills</code> untuk workflow investigasi/debugging</li>
+<li><code>AGENTS.md</code> untuk agent behavior dan eskalasi</li>
+<li><code>review rubric</code> atau checklist untuk reviewer manusia</li>
+<li><code>onboarding docs</code> untuk mental model tim</li>
+</ul>
+<h2 id="contoh-hasil-ekstraksi">Contoh hasil ekstraksi<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-hasil-ekstraksi"></a></h2>
+<p>Jika senior bilang tentang PR API:</p>
+<ul>
+<li>controller terlalu gemuk</li>
+<li>auth tidak eksplisit</li>
+<li>response contract berubah tanpa diskusi</li>
+<li>test hanya happy path</li>
+</ul>
+<p>Maka hasil ekstraksinya bisa menjadi:</p>
+<ul>
+<li>Rule: authorization eksplisit wajib untuk endpoint state-changing</li>
+<li>Smell: auth bergantung ke middleware implicit</li>
+<li>Verify: tunjukkan jalur auth dan contract impact</li>
+<li>Exception: boleh skip untuk endpoint public terdokumentasi</li>
+<li>Severity: missing auth = blocking</li>
+</ul>
+<h2 id="mengapa-ini-penting-untuk-ai">Mengapa ini penting untuk AI<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting-untuk-ai"></a></h2>
+<p>AI dan Copilot bisa menjawab lebih konsisten ketika tacit knowledge senior tidak lagi tersimpan hanya di kepala, melainkan tersusun sebagai artefak yang bisa dibaca dan dieksekusi.</p>
+<p>Ini sejalan dengan praktik di:</p>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260419192040">Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior</a> — executable governance di Copilot</li>
+<li><a href="/sotoy/notes/zettel.20260419192541">Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format</a> — instruksi standar tim untuk AI: role, konteks, prioritas, output</li>
+<li><a href="/sotoy/notes/zettel.literature.encoding-team-standards">Encoding Team Standards — executable AI instruction untuk konsistensi tim</a> — konsep executable AI instruction sebagai prasyarat konsistensi tim</li>
+<li><a href="/sotoy/notes/notes.copilot.custom-instructions-best-practices">Best Practices for Writing Copilot Custom Instructions</a> — jenis file instruksi dan struktur yang efektif</li>
+<li><a href="/sotoy/notes/notes.copilot.tacit-knowledge-extraction">Ekstraksi Tacit Knowledge Senior untuk AI dan Tim</a> — dokumentasi praktis untuk ekstraksi tacit knowledge senior</li>
+</ul>
+<h2 id="implisit-yang-harus-digarisbawahi">Implisit yang harus digarisbawahi<a aria-hidden="true" class="anchor-heading icon-link" href="#implisit-yang-harus-digarisbawahi"></a></h2>
+<ul>
+<li>Tacit knowledge jarang bisa ditangkap lewat “tolong tulis best practice”.</li>
+<li>Ia keluar paling baik lewat diskusi langsung tentang kasus nyata.</li>
+<li>Artefak yang baik tidak hanya menulis aturan; ia juga menulis kapan aturan boleh dilanggar dan bagaimana membuktikannya.</li>
+</ul>
+<h2 id="langkah-berikutnya">Langkah berikutnya<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-berikutnya"></a></h2>
+<ul>
+<li>Buat <code>decision mining</code> session untuk satu PR atau bug nyata.</li>
+<li>Ubah hasilnya langsung menjadi <code>custom instructions</code> dan <code>skill checklist</code>.</li>
+<li>Validasi artefak tersebut dengan developer lain atau agent AI.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">permanent-note (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">tacit-knowledge (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">copilot (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">governance (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten (vault)</a></li>
+<li><a href="/sotoy/notes/notes.copilot.tacit-knowledge-extraction">Ekstraksi Tacit Knowledge Senior untuk AI dan Tim (vault)</a></li>
+</ul>

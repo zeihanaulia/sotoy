@@ -1,0 +1,82 @@
+<h1 id="feature-document-adalah-memori-dinamis-level-pekerjaan-yang-sedang-berlangsung">Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung<a aria-hidden="true" class="anchor-heading icon-link" href="#feature-document-adalah-memori-dinamis-level-pekerjaan-yang-sedang-berlangsung"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Feature document itu tempat kerja yang nyimpen konteks fitur selama proses berlangsung.</p>
+<blockquote>
+<p>Catatan ini dimaksudkan sebagai anchor permanen untuk konsep feature document dalam konteks AI-collaboration dan context anchoring.</p>
+</blockquote>
+<h2 id="apa-itu-feature-document">Apa itu Feature Document<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-feature-document"></a></h2>
+<p>Feature document adalah dokumen hidup untuk satu fitur atau pekerjaan yang sedang berjalan. Ia mencatat keputusan, alasan di baliknya, alternatif yang ditolak, batasan yang berlaku, dan apa yang masih terbuka. Tujuannya bukan membuat spesifikasi final, tetapi menjaga konteks sesi agar dapat diakses ulang di sesi berikutnya.</p>
+<p>Contoh isi feature document:</p>
+<ul>
+<li>Decision: gunakan BullMQ langsung untuk retry handling</li>
+<li>Why: lebih sederhana, lebih mudah dipahami, cukup untuk v1</li>
+<li>Rejected: <code>RetryQueue</code> wrapper karena menambah indirection tanpa benefit nyata</li>
+<li>Constraints: all queries must include <code>tenantId</code>, email-only v1, jangan ubah auth middleware</li>
+<li>Open questions: rate limiting strategy, monitoring alert thresholds</li>
+<li>State: design approved, handler + renderer implementasi selesai, delivery tracker belum</li>
+</ul>
+<h2 id="contoh-use-case">Contoh Use Case<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-use-case"></a></h2>
+<p>Sesi pertama membuat keputusan desain untuk notifikasi v1. Sesi kedua dimulai dengan feature document, sehingga AI tidak lagi menebak apakah <code>RetryQueue</code> sudah dipertimbangkan atau apakah feature masih menerima SMS. Sesi baru bisa langsung membaca konteks: keputusan sudah dibuat, alasan sudah tercatat, dan hanya menyelesaikan item yang belum tuntas.</p>
+<h2 id="contoh-implementasi-nyata">Contoh Implementasi Nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-implementasi-nyata"></a></h2>
+<p>Martin Fowler menulis kasus nyata di artikel "Context Anchoring" tentang fitur Notification Service v1. Di sana, dokumen fitur yang berisi keputusan <code>BullMQ langsung</code>, <code>Email-only v1</code>, dan <code>state</code> implementasi disimpan sebagai working record sepanjang beberapa sesi. Dokumen itu singkat—sekitar 50 baris—dan diperbarui di akhir setiap momen keputusan penting.</p>
+<p>Praktik ini setara dengan:</p>
+<ul>
+<li>menaruh file live di repo, misalnya <code>docs/feature-context/notification-service-v1.md</code></li>
+<li>memperbarui section <code>Decisions</code>, <code>Constraints</code>, <code>Open Questions</code>, dan <code>State</code></li>
+<li>menggunakan dokumen itu sebagai sumber otoritatif saat memulai sesi AI baru</li>
+</ul>
+<p>Ini bukan PRD final. Ini lebih mirip ADR yang hidup, tapi fokusnya pada fitur berjalan dan konteks sesi.</p>
+<h2 id="artikel-tambahan-dan-referensi">Artikel Tambahan dan Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#artikel-tambahan-dan-referensi"></a></h2>
+<ul>
+<li><code>Martin Fowler, "Context Anchoring"</code> — real case feature document dan alasan mengapa konteks harus keluar dari chat
+<a href="https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html">https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html</a></li>
+<li><code>Martin Fowler, "Knowledge Priming"</code> — pola praktis untuk membangun proyek context sebagai infrastructure
+<a href="https://martinfowler.com/articles/reduce-friction-ai/knowledge-priming.html">https://martinfowler.com/articles/reduce-friction-ai/knowledge-priming.html</a></li>
+<li><code>Michael Nygard, "Documenting Architecture Decisions"</code> — akar sejarah ADR dan kenapa keputusan perlu dicatat singkat
+<a href="https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions.html">https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions.html</a></li>
+<li><code>ADR.org</code> — template dan tooling untuk decision record yang bisa diadaptasi jadi feature document
+<a href="https://adr.github.io/">https://adr.github.io/</a></li>
+<li><code>Open Practice Library, Architectural Decision Records (ADR)</code> — praktik umum untuk membuat keputusan arsitektur yang mudah dibaca dan dikelola
+<a href="https://openpracticelibrary.com/practice/architectural-decision-records-adr/">https://openpracticelibrary.com/practice/architectural-decision-records-adr/</a></li>
+</ul>
+<h2 id="apakah-ini-sama-dengan-prdfsdtsdrfc">Apakah Ini Sama dengan PRD/FSD/TSD/RFC?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-ini-sama-dengan-prdfsdtsdrfc"></a></h2>
+<p>Tidak persis.</p>
+<ul>
+<li>PRD (Product Requirements Document) fokus pada "apa" dan "kenapa" dari perspektif produk. Ia biasanya lebih luas, mencakup kebutuhan pengguna, value proposition, dan batasan bisnis.</li>
+<li>FSD (Functional Specification Document) sering menjelaskan "bagaimana" fungsi akan bekerja dari sudut pandang fungsional, termasuk alur pengguna, input/output, dan behavior.</li>
+<li>TSD (Technical Specification Document) biasanya mendetailkan implementasi teknis: arsitektur, API, data flow, dan komponen.</li>
+<li>RFC (Request for Comments) adalah proposal formal untuk perubahan atau penambahan, biasanya dipakai untuk diskusi dan persetujuan sebelum implementasi.</li>
+</ul>
+<p>Feature document berbeda karena:</p>
+<ul>
+<li>sifatnya lebih ringan dan iteratif;</li>
+<li>ditulis selama proses, bukan sebagai dokumen akhir;</li>
+<li>fokusnya pada konteks keputusan dan keadaan saat ini, bukan proposal formal;</li>
+<li>ia menjadi external memory untuk sesi AI dan tim, bukan hanya dokumentasi internal.</li>
+</ul>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Ini bikin productivity lebih aman, karena konteks fitur nggak lagi terjebak di chat.</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 15.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 15</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

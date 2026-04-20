@@ -1,0 +1,48 @@
+<h1 id="nilai-anchoring-muncul-saat-sesi-baru-bisa-warm-start">Nilai anchoring muncul saat sesi baru bisa warm start<a aria-hidden="true" class="anchor-heading icon-link" href="#nilai-anchoring-muncul-saat-sesi-baru-bisa-warm-start"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Warm start itu berarti nggak perlu rebuild konteks dari nol.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Itu juga alasan kenapa dokumen harus dipelihara, tidak cukup hanya sekali dibuat.</p>
+<h2 id="apa-maksud-warm-start">Apa Maksud Warm Start<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-maksud-warm-start"></a></h2>
+<p>Warm start berarti sesi baru bisa mulai dengan context yang sudah terbangun—bukan dari keadaan kosong. Jadi alih-alih harus:</p>
+<ol>
+<li>menjelaskan lagi mengapa kita memilih <code>BullMQ</code>,</li>
+<li>mengulang constraint <code>email-only v1</code>,</li>
+<li>atau mengingat bahwa <code>RetryQueue</code> sudah ditolak,</li>
+</ol>
+<p>kita cukup membuka feature document yang berisi keputusan, alasan, open question, dan status implementasi.</p>
+<h2 id="contoh-nyata">Contoh Nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-nyata"></a></h2>
+<ul>
+<li>Sesi pertama membuat keputusan desain untuk fitur notifikasi.</li>
+<li>Feature document dibuat sebagai working record.</li>
+<li>Sesi kedua dimulai beberapa hari setelahnya.</li>
+<li>Alih-alih menelusuri kembali seluruh chat, AI dan developer membaca dokumen itu.</li>
+<li>Hasilnya: sesi baru langsung tahu kondisi sekarang dan bisa melanjutkan pekerjaan tanpa membangun ulang semua asumsi.</li>
+</ul>
+<h2 id="kenapa-dokumen-perlu-dipelihara">Kenapa Dokumen Perlu Dipelihara<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-dokumen-perlu-dipelihara"></a></h2>
+<p>Kalau feature document hanya dibuat sekali dan tidak di-update, warm start jadi bohong. Dokumen yang sudah usang bisa menyesatkan AI sama seperti chat history yang kadung panjang.</p>
+<p>Warm start efektif hanya bila dokumen itu terus mencerminkan keputusan terbaru dan status aktual dari feature.</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 29.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 29</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

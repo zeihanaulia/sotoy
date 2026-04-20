@@ -1,0 +1,108 @@
+<h1 id="software-architecture-guide--fowler-arsitektur-sebagai-keputusan-penting-dan-mahal-kalau-salah">Software Architecture Guide — Fowler: arsitektur sebagai keputusan penting dan mahal kalau salah<a aria-hidden="true" class="anchor-heading icon-link" href="#software-architecture-guide--fowler-arsitektur-sebagai-keputusan-penting-dan-mahal-kalau-salah"></a></h1>
+<h2 id="tentang-sumber">Tentang Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#tentang-sumber"></a></h2>
+<ul>
+<li>halaman panduan Martin Fowler tentang software architecture</li>
+<li>fokus: peta topik, bukan definisi teknis sempit</li>
+<li>inti: arsitektur adalah keputusan tentang hal-hal paling penting dan paling mahal kalau salah</li>
+</ul>
+<h2 id="pertanyaan-yang-dibuka-oleh-halaman-ini">Pertanyaan yang dibuka oleh halaman ini<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka-oleh-halaman-ini"></a></h2>
+<ol>
+<li>Apa sebenarnya yang dimaksud “software architecture”?</li>
+<li>Kenapa architecture penting secara bisnis, bukan cuma teknis?</li>
+<li>Apa beda application architecture vs enterprise architecture?</li>
+<li>Kalau mau belajar lanjut, cabang topik apa yang paling relevan?</li>
+</ol>
+<h2 id="jawaban-inti">Jawaban Inti<a aria-hidden="true" class="anchor-heading icon-link" href="#jawaban-inti"></a></h2>
+<ol>
+<li>Arsitektur adalah keputusan tentang hal-hal yang paling penting dan paling sulit dibalik; keputusan yang dampaknya besar pada perubahan, reliabilitas, koordinasi tim, dan umur sistem. Fowler menolak definisi yang terlalu formal seperti "struktur paling fundamental" karena yang fundamental sering baru terlihat setelah sistem berkembang.</li>
+<li>Architecture penting karena dia menentukan <code>speed of future change</code>. Cruft dan kompleksitas tersembunyi bikin biaya perubahan melejit; internal quality yang baik justru mempercepat delivery. Arsitektur adalah modal untuk menjaga kemampuan evolusi sistem, bukan sekadar estetika teknis.</li>
+<li>Application architecture fokus pada boundary satu unit yang dianggap satu aplikasi oleh tim, bisnis, dan pemilik budget. Enterprise architecture looks architecture across a large enterprise; organisasi sebesar itu biasanya terlalu besar untuk mengelompokkan semua perangkat lunaknya secara kohesif, sehingga masalah utama berubah menjadi koordinasi antar tim dengan banyak codebase, pendanaan yang terpisah, dan pengguna yang berbeda. EA yang sehat membangun interoperabilitas dan pembelajaran bersama tanpa mengorbankan otonomi lokal. EA juga paling efektif ketika arsitek terhubung ke tim pengembangan dan organisasi, bukan terpisah dari realitas delivery.</li>
+<li>Cabang topik yang relevan meliputi:
+<ul>
+<li>microservices dan application boundary sebagai cara memikirkan satu aplikasi</li>
+<li>micro frontends dan GUI/UI architectures untuk kompleksitas frontend</li>
+<li>serverless sebagai trade-off antara operasional dan vendor dependency</li>
+<li>presentation/domain/data layering dan distributed systems patterns untuk modularitas internal</li>
+<li>feature toggles sebagai mekanisme perubahan yang aman untuk aplikasi berskala</li>
+<li>enterprise architecture, Architect Elevator, Lean Enterprise EA, dan enterprise REST integration</li>
+<li>enterprise architects join the team, business-technology strategy, product mode, dan learning system organisasi</li>
+<li>legacy modernization dan Patterns of Legacy Displacement untuk migrasi bertahap</li>
+</ul>
+</li>
+</ol>
+<h2 id="struktur-halaman">Struktur Halaman<a aria-hidden="true" class="anchor-heading icon-link" href="#struktur-halaman"></a></h2>
+<ul>
+<li>definisi arsitektur sebagai “important stuff” dan shared understanding antara expert developer</li>
+<li>alasan kenapa architecture penting: internal quality, cruft, dan speed of future change</li>
+<li>pembagian ke application architecture dan enterprise architecture</li>
+<li>link-card ke topik turunan yang relevan untuk eksplorasi lebih lanjut</li>
+</ul>
+<h2 id="insight-utama">Insight Utama<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-utama"></a></h2>
+<ul>
+<li>Arsitektur bukan layer di atas coding; arsitektur hidup dalam praktik sehari-hari.</li>
+<li>Keputusan arsitektur yang baik adalah soal <code>mana keputusan yang layak dipikirkan keras, dan mana yang jangan dibesar-besarkan</code>.</li>
+<li>Banyak tim salah kaprah: mereka merasa "bergerak cepat" dengan memotong kualitas, padahal sebenarnya meminjam kecepatan dari masa depan.</li>
+<li>Fowler membagi medan masalah jadi dua peta utama: desain internal aplikasi dan koordinasi organisasi. Di masing-masing peta ada trade-off nyata, bukan jawaban gaung seperti "microservices harus".</li>
+</ul>
+<h2 id="relevansi-dengan-konsep-lain">Relevansi dengan konsep lain<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi-dengan-konsep-lain"></a></h2>
+<ul>
+<li>sangat dekat dengan evolutionary architecture dan architecture as enabling change</li>
+<li>menekankan internal quality, refactoring, dan modularity sebagai cara menjaga opsi perubahan tetap terbuka</li>
+<li>Monolith First, Microservice Trade-Offs, dan Patterns of Legacy Displacement adalah cabang penting dari peta ini</li>
+</ul>
+<h2 id="hubungan-ke-catatan-lain">Hubungan ke catatan lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-catatan-lain"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260420055738">Software architecture adalah jaringan keputusan trade-off, bukan sekadar diagram</a> — inti sama: arsitektur adalah jaringan keputusan trade-off, bukan sekadar diagram</li>
+<li><a href="/sotoy/notes/zettel.literature.architecture-decision-records">Architecture Decision Record — Martin Fowler</a> — praktik pencatatan dan alasan keputusan arsitektur</li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a> — entry point MOC untuk topik ini</li>
+<li><a href="/sotoy/notes/zettel.literature.architecture-important-stuff">Arsitektur adalah apa yang paling penting, bukan hanya struktur tinggi</a> — definisi arsitektur sebagai keputusan mahal bila salah</li>
+<li><a href="/sotoy/notes/zettel.literature.architecture-not-a-blueprint">Arsitektur bukan blueprint terpisah dari programming</a> — arsitektur bukan blueprint terpisah dari kode</li>
+<li><a href="/sotoy/notes/zettel.literature.internal-quality-is-speed">Kualitas internal adalah infrastruktur kecepatan delivery</a> — internal quality sebagai infrastruktur kecepatan</li>
+<li><a href="/sotoy/notes/zettel.literature.application-boundary-social-construction">Application boundary adalah konstruksi sosial</a> — boundary aplikasi sebagai konstruksi sosial</li>
+<li><a href="/sotoy/notes/zettel.literature.enterprise-architecture-coordination-cost">Enterprise architecture adalah soal biaya koordinasi, bukan kontrol total</a> — EA sebagai biaya koordinasi dan pembelajaran bersama</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #154406;" href="/sotoy/notes/tags.literature-note">literature-note</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-architecture (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">martin-fowler (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">decision-making (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260420060847">Arsitektur adalah penentu biaya perubahan masa depan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420060928">Arsitektur bukan kasta; dia harus hidup bersama kode</a></li>
+<li><a href="/sotoy/notes/zettel.20260420061007">Halaman Software Architecture Guide adalah peta keputusan, bukan tutorial implementasi</a></li>
+<li><a href="/sotoy/notes/zettel.20260420061232">Fowler memulai definisi arsitektur dengan kritik terhadap ‘fundamental organization’</a></li>
+<li><a href="/sotoy/notes/zettel.20260420061259">Arsitektur nyata adalah shared understanding expert developer</a></li>
+<li><a href="/sotoy/notes/zettel.20260420061356">Arsitektur bukan sekadar keputusan awal proyek</a></li>
+<li><a href="/sotoy/notes/zettel.20260420061530">Architecture adalah seni memilah keputusan penting</a></li>
+<li><a href="/sotoy/notes/zettel.20260420062009">Architect bukan jabatan; dia adalah kemampuan judgment desain</a></li>
+<li><a href="/sotoy/notes/zettel.20260420062120">Cruft adalah utang kebingungan yang memperlambat perubahan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420085349">Keputusan arsitektural penting bergantung pada skala sistem</a></li>
+<li><a href="/sotoy/notes/zettel.20260420085507">Boundary aplikasi adalah konstruksi sosial, bukan fakta alam</a></li>
+<li><a href="/sotoy/notes/zettel.20260420085714">Aplikasi tetap ada karena boundary adalah unit sosial dan ekonomi</a></li>
+<li><a href="/sotoy/notes/zettel.20260420085834">Microservices adalah trade-off machine, bukan arsitektur modern otomatis</a></li>
+<li><a href="/sotoy/notes/zettel.20260420090017">Modernisasi yang matang adalah displacement bertahap, bukan rewrite besar</a></li>
+<li><a href="/sotoy/notes/zettel.20260420090203">Micro Frontends menunjukkan arsitektur juga soal koordinasi tim</a></li>
+<li><a href="/sotoy/notes/zettel.20260420090327">GUI Architectures: pattern harus diikuti prinsip, bukan label familiar</a></li>
+<li><a href="/sotoy/notes/zettel.20260420090627">Serverless mengurangi operasi tapi menambah ketergantungan platform</a></li>
+<li><a href="/sotoy/notes/zettel.20260420090829">Presentation Domain Data Layering adalah baseline, bukan arsitektur kuno</a></li>
+<li><a href="/sotoy/notes/zettel.20260420091101">Aplikasi juga arsitektur delivery, consistency, dan frontend structure</a></li>
+<li><a href="/sotoy/notes/zettel.20260420091306">Enterprise architecture bergeser ke koordinasi antar-pulau, bukan lagi modularitas kode</a></li>
+<li><a href="/sotoy/notes/zettel.20260420091825">Enterprise architecture adalah soal apakah biaya koordinasi pusat layak</a></li>
+<li><a href="/sotoy/notes/zettel.20260420092009">Sentralisasi total di EA melambatkan keputusan dan kehilangan konteks lokal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420092459">Otonomi tanpa koordinasi di EA berubah jadi fragmentasi mahal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420092652">Fowler condong ke desentralisasi tetapi tetap waspada terhadap chaos</a></li>
+<li><a href="/sotoy/notes/zettel.20260420092900">Enterprise architects lebih efektif ketika ikut masuk ke tim pengembangan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420092901">Enterprise architecture Fowler: organisasi, funding, komunikasi, dan learning system</a></li>
+<li><a href="/sotoy/notes/zettel.literature.application-boundary-social-construction">Application boundary adalah konstruksi sosial</a></li>
+<li><a href="/sotoy/notes/zettel.literature.architecture-important-stuff">Arsitektur adalah apa yang paling penting, bukan hanya struktur tinggi</a></li>
+<li><a href="/sotoy/notes/zettel.literature.architecture-not-a-blueprint">Arsitektur bukan blueprint terpisah dari programming</a></li>
+<li><a href="/sotoy/notes/zettel.literature.enterprise-architecture-coordination-cost">Enterprise architecture adalah soal biaya koordinasi, bukan kontrol total</a></li>
+<li><a href="/sotoy/notes/zettel.literature.internal-quality-is-speed">Kualitas internal adalah infrastruktur kecepatan delivery</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

@@ -1,0 +1,71 @@
+<h1 id="architecture-decision-record--martin-fowler">Architecture Decision Record — Martin Fowler<a aria-hidden="true" class="anchor-heading icon-link" href="#architecture-decision-record--martin-fowler"></a></h1>
+<h2 id="tentang-sumber">Tentang Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#tentang-sumber"></a></h2>
+<ul>
+<li><strong>Judul</strong>: Architecture Decision Record</li>
+<li><strong>Penulis / Author</strong>: Martin Fowler</li>
+<li><strong>Tahun</strong>: 2011 / revisi artikel Bliki</li>
+<li><strong>Jenis</strong>: artikel web</li>
+<li><strong>Link / ISBN</strong>: <a href="https://martinfowler.com/bliki/ArchitectureDecisionRecord.html">https://martinfowler.com/bliki/ArchitectureDecisionRecord.html</a></li>
+</ul>
+<hr>
+<h2 id="catatan-per-gagasan">Catatan Per Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-per-gagasan"></a></h2>
+<h3 id="1-adr-itu-sebenarnya-apa-dan-kenapa-harus-pendek">1. ADR itu sebenarnya apa, dan kenapa harus pendek?<a aria-hidden="true" class="anchor-heading icon-link" href="#1-adr-itu-sebenarnya-apa-dan-kenapa-harus-pendek"></a></h3>
+<blockquote>
+<p>ADR adalah dokumen singkat yang menjelaskan satu keputusan arsitektur, konteksnya, dan konsekuensinya.</p>
+</blockquote>
+<p>Catatan gue: ADR bukan dokumentasi teknis yang lengkap; ia adalah sistem rekaman alasan. Kalau dokumen terlalu panjang, ia berubah dari alat bantu keputusan jadi beban baca. Itulah alasan Fowler mendorong gaya "inverted pyramid": inti keputusan di depan, detail pendukung di belakang.</p>
+<h3 id="2-kenapa-satu-keputusan-per-dokumen">2. Kenapa satu keputusan per dokumen?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-satu-keputusan-per-dokumen"></a></h3>
+<blockquote>
+<p>Satu ADR per keputusan membantu menjaga batasan yang jelas, timeline yang bersih, dan diskusi tim yang fokus.</p>
+</blockquote>
+<p>Catatan gue: kalau satu file menggabungkan banyak keputusan, riwayat jadi kabur dan supersede jadi rumit. Satu file = satu unit keputusan yang mudah dipindai dan gampang dilacak.</p>
+<h3 id="3-kenapa-adr-tidak-boleh-diedit-sembarangan-tapi-harus-di-supersede">3. Kenapa ADR tidak boleh diedit sembarangan, tapi harus di-supersede?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-kenapa-adr-tidak-boleh-diedit-sembarangan-tapi-harus-di-supersede"></a></h3>
+<blockquote>
+<p>Setelah accepted, ADR harus dibiarkan utuh. Perubahan dibuat lewat ADR baru yang supersede.</p>
+</blockquote>
+<p>Catatan gue: ini menjaga nilai histori. Keputusan lama mencatat konteks, constraint, dan asumsi saat itu. Mengubah ADR lama sama dengan menghapus jejak pikiran yang pernah memimpin tim.</p>
+<h3 id="4-apa-hubungan-adr-dengan-kolaborasi-tim-bukan-cuma-dokumentasi">4. Apa hubungan ADR dengan kolaborasi tim, bukan cuma dokumentasi?<a aria-hidden="true" class="anchor-heading icon-link" href="#4-apa-hubungan-adr-dengan-kolaborasi-tim-bukan-cuma-dokumentasi"></a></h3>
+<blockquote>
+<p>Fowler menempatkan ADR sebagai medium diskusi dan alignment, bukan sekadar arsip setelah keputusan.</p>
+</blockquote>
+<p>Catatan gue: proses menulis ADR memaksa tim menimbang alternatif, trade-off, dan masukan. ADR yang sehat adalah scaffold untuk negosiasi keputusan, bukan rasionalisasi setelah fakta.</p>
+<h3 id="5-adr-ini-nyambung-ke-praktik-lain-apa-saja-di-luar-artikel-fowler">5. ADR ini nyambung ke praktik lain apa saja di luar artikel Fowler?<a aria-hidden="true" class="anchor-heading icon-link" href="#5-adr-ini-nyambung-ke-praktik-lain-apa-saja-di-luar-artikel-fowler"></a></h3>
+<blockquote>
+<p>ADR modern terkait dengan praktik seperti MADR, decision log, dan tools ADR.</p>
+</blockquote>
+<p>Catatan gue: Fowler memberi prinsip ringkas dan riwayat. MADR memberi format Markdown yang konsisten. Sementara praktik decision log menekankan bahwa riwayat keputusan bernilai untuk tim baru, audit, dan adaptasi.</p>
+<hr>
+<h2 id="zettels-yang-dibuat-dari-sumber-ini">Zettels yang Dibuat dari Sumber Ini<a aria-hidden="true" class="anchor-heading icon-link" href="#zettels-yang-dibuat-dari-sumber-ini"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260420055413">ADR adalah decision log yang merekam alasan, bukan dokumentasi desain</a> — ADR adalah decision log yang merekam alasan, bukan dokumentasi desain</li>
+<li><a href="/sotoy/notes/zettel.20260420055414">Satu keputusan per ADR menjaga batasan dan riwayat yang bersih</a> — Satu keputusan per ADR menjaga batasan dan riwayat yang bersih</li>
+<li><a href="/sotoy/notes/zettel.20260420055415">ADR accepted harus disupersede, bukan diedit ulang</a> — ADR accepted harus disupersede, bukan diedit ulang</li>
+<li><a href="/sotoy/notes/zettel.20260420055619">ADR sehat memaksa maintainer mengubah perilaku, bukan sekadar menambah dokumen</a> — ADR sehat memaksa maintainer mengubah perilaku, bukan sekadar menambah dokumen</li>
+<li><a href="/sotoy/notes/zettel.20260420055738">Software architecture adalah jaringan keputusan trade-off, bukan sekadar diagram</a> — Software architecture adalah jaringan keputusan trade-off, bukan sekadar diagram</li>
+</ul>
+<h2 id="pertanyaan-terbuka">Pertanyaan Terbuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-terbuka"></a></h2>
+<ul>
+<li>Kapan keputusan arsitektur layak di-ADR-kan, dan kapan cukup diarahkan lewat dokumentasi lain?</li>
+<li>Bagaimana tim menjaga ADR tetap ringan tanpa kehilangan nilai historis?</li>
+<li>Apa batas praktis antara "keputusan arsitektur signifikan" dan "keputusan implementasi biasa"?</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #154406;" href="/sotoy/notes/tags.literature-note">literature-note</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">adr (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">decision-making (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260420055413">ADR adalah decision log yang merekam alasan, bukan dokumentasi desain</a></li>
+<li><a href="/sotoy/notes/zettel.20260420055414">Satu keputusan per ADR menjaga batasan dan riwayat yang bersih</a></li>
+<li><a href="/sotoy/notes/zettel.20260420055415">ADR accepted harus disupersede, bukan diedit ulang</a></li>
+<li><a href="/sotoy/notes/zettel.20260420055619">ADR sehat memaksa maintainer mengubah perilaku, bukan sekadar menambah dokumen</a></li>
+<li><a href="/sotoy/notes/zettel.20260420055738">Software architecture adalah jaringan keputusan trade-off, bukan sekadar diagram</a></li>
+<li><a href="/sotoy/notes/zettel.literature.software-architecture-guide">Software Architecture Guide — Fowler: arsitektur sebagai keputusan penting dan mahal kalau salah</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

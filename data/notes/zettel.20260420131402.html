@@ -1,0 +1,55 @@
+<h1 id="context-window-besar-tetap-cepat-habis-dalam-praktik-engineering">Context window besar tetap cepat habis dalam praktik engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#context-window-besar-tetap-cepat-habis-dalam-praktik-engineering"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Context window model besar tetap cepat habis saat sesi development penuh kode, diskusi desain, dan reasoning.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Ini membongkar ilusi bahwa context window besar berarti masalah selesai. Di praktik, banyak hal yang langsung makan ruang.</p>
+<h2 id="kenapa-ini-terjadi">Kenapa Ini Terjadi<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-terjadi"></a></h2>
+<p>Artikel "Context Anchoring" menjelaskan bahwa model modern memang punya batas token besar, tetapi sesi pengembangan penuh kode, diskusi desain, dan reasoning cepat mengisi window tersebut. Kutipan relevan:</p>
+<blockquote>
+<p>"Every model has a finite context window: a hard limit on how many tokens it can attend to at once. Current models offer windows ranging from hundreds of thousands to over a million tokens. These numbers sound generous, but a productive development session generates context quickly: code snippets, design discussions, decision rationale, file contents. The window fills faster than most developers expect."</p>
+</blockquote>
+<p>It berarti konteks panjang bukan masalah kapasitas semata; ia juga masalah konsumsi konteks nyata yang cepat.</p>
+<h2 id="riset-komunitas-dan-contoh-model">Riset Komunitas dan Contoh Model<a aria-hidden="true" class="anchor-heading icon-link" href="#riset-komunitas-dan-contoh-model"></a></h2>
+<p>Komunitas riset juga mencatat fenomena serupa. Paper "Lost in the Middle: How Language Models Use Long Contexts" (Liu et al., 2023) menunjukkan bahwa model long-context masih mengalami degradasi signifikan ketika informasi relevan berada di tengah konteks panjang.</p>
+<ul>
+<li>Referensi: <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
+</ul>
+<p>Paper ini menguji beberapa model long-context dan menemukan bahwa performa biasanya paling baik saat informasi penting muncul di awal atau akhir window, bukan di tengah. Jadi masalahnya bukan hanya jumlah token, tetapi juga distribusi dan penggunaan informasi dalam window.</p>
+<h2 id="literatur-dan-model-terbaru-20252026">Literatur dan Model Terbaru 2025/2026<a aria-hidden="true" class="anchor-heading icon-link" href="#literatur-dan-model-terbaru-20252026"></a></h2>
+<p>Ada juga riset dan laporan terbaru yang menunjukkan tren long-context terus berkembang:</p>
+<ul>
+<li>Survey 2025: "A Comprehensive Survey on Long Context Language Modeling" — <a href="https://arxiv.org/abs/2503.17407">https://arxiv.org/abs/2503.17407</a></li>
+<li>Laporan produk/model 2026 menyebut model dengan konteks panjang besar, misalnya:
+<ul>
+<li>Gemini 3 dengan klaim 1M token context (blog/product reporting 2026)</li>
+<li>GPT-5.2 / GPT-5.3 dengan fokus pada long-context coding dan dokumen</li>
+<li>Claude Opus 4.7 sebagai model long-context yang diuji untuk performa stabil</li>
+</ul>
+</li>
+<li>Paper 2026 yang relevan: token-efficient attention, explicit memory retrieval, dan long-context adaptation.</li>
+</ul>
+<p>Ini menguatkan bahwa topik long-context masih aktif dan penting, tetapi bukan bukti bahwa sesi development panjang bisa diandalkan tanpa external memory.</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 5.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 5</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

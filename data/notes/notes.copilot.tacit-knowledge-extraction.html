@@ -1,0 +1,263 @@
+<h1 id="ekstraksi-tacit-knowledge-senior-untuk-ai-dan-tim">Ekstraksi Tacit Knowledge Senior untuk AI dan Tim<a aria-hidden="true" class="anchor-heading icon-link" href="#ekstraksi-tacit-knowledge-senior-untuk-ai-dan-tim"></a></h1>
+<h2 id="tujuan">Tujuan<a aria-hidden="true" class="anchor-heading icon-link" href="#tujuan"></a></h2>
+<p>Panduan ini menjelaskan bagaimana mengambil tacit knowledge senior dari kasus nyata, lalu mentransformasikannya menjadi artefak operasional untuk:</p>
+<ul>
+<li>custom instructions (<code>.github/copilot-instructions.md</code>, <code>.github/instructions/*.instructions.md</code>)</li>
+<li>skills (<code>.github/skills/*/SKILL.md</code>)</li>
+<li>agent behavior (<code>AGENTS.md</code>)</li>
+<li>review rubric dan checklist tim</li>
+</ul>
+<p>Dokumentasi ini fokus pada proses, format, dan contoh penerapan yang bisa langsung dipakai tim dan agent.</p>
+<h2 id="mengapa-ini-penting">Mengapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Tacit knowledge senior sering berupa judgement cepat yang baru bisa dijelaskan setelah melihat contoh konkret.</p>
+<p>Jika tidak diambil dengan benar, pengetahuan ini akan tetap:</p>
+<ul>
+<li>hanya di kepala senior,</li>
+<li>dijelaskan secara terlalu umum,</li>
+<li>atau diubah jadi "best practice" yang sulit dipakai.</li>
+</ul>
+<p>Tujuan dokumen ini adalah menjadikan tacit knowledge senior:</p>
+<ol>
+<li>lebih mudah ditangkap,</li>
+<li>lebih mudah dipakai oleh developer lain,</li>
+<li>lebih mudah dijadikan petunjuk untuk AI/agent.</li>
+</ol>
+<h2 id="kapan-gunakan-proses-ini">Kapan gunakan proses ini<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-gunakan-proses-ini"></a></h2>
+<p>Gunakan metodologi ini ketika tim ingin:</p>
+<ul>
+<li>membuat custom instruction tim dari pengalaman review nyata,</li>
+<li>mengubah feedback senior menjadi rule yang bisa dijalankan,</li>
+<li>menulis skill debugging berdasarkan pola senior,</li>
+<li>mendokumentasikan batas penggunaan dan pengecualian suatu aturan.</li>
+</ul>
+<h2 id="proses-ekstraksi">Proses ekstraksi<a aria-hidden="true" class="anchor-heading icon-link" href="#proses-ekstraksi"></a></h2>
+<h3 id="1-pilih-kasus-nyata-sebagai-sumber">1. Pilih kasus nyata sebagai sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pilih-kasus-nyata-sebagai-sumber"></a></h3>
+<p>Ambil sumber dari contoh konkret, seperti:</p>
+<ul>
+<li>PR yang ditolak atau dikomentari ketat</li>
+<li>bug atau incident nyata</li>
+<li>test flaky atau issue yang sulit direproduksi</li>
+<li>desain arsitektur yang diperdebatkan</li>
+<li>postmortem setelah produksi</li>
+</ul>
+<p>Jangan mulai dari pertanyaan abstrak seperti "apa best practice?".</p>
+<h3 id="2-tanyakan-bukti-bukan-teori">2. Tanyakan bukti, bukan teori<a aria-hidden="true" class="anchor-heading icon-link" href="#2-tanyakan-bukti-bukan-teori"></a></h3>
+<p>Strukturkan sesi menggunakan pertanyaan berikut:</p>
+<ul>
+<li>Apa yang pertama membuat kamu pause?</li>
+<li>Masalah apa yang segera terlihat?</li>
+<li>Kenapa ini berisiko?</li>
+<li>Apa failure mode utamanya?</li>
+<li>Kapan ini harus ditolak?</li>
+<li>Kapan ini boleh dilanggar?</li>
+<li>Bukti minimalnya apa untuk menunjukkan aturan ini dipenuhi?</li>
+</ul>
+<h3 id="3-ubah-jawaban-jadi-unit-kecil">3. Ubah jawaban jadi unit kecil<a aria-hidden="true" class="anchor-heading icon-link" href="#3-ubah-jawaban-jadi-unit-kecil"></a></h3>
+<p>Ambil jawaban senior dan pisahkan menjadi unit yang bisa dipakai ulang:</p>
+<ul>
+<li><strong>Rule</strong>: aturan operasional yang bisa diikuti.</li>
+<li><strong>Smell</strong>: sinyal awal bahwa sesuatu mungkin salah.</li>
+<li><strong>Severity</strong>: blocking / important / suggestion.</li>
+<li><strong>Exception</strong>: kapan aturan tidak berlaku.</li>
+<li><strong>Verification</strong>: bukti yang harus ada untuk membuktikan kepatuhan.</li>
+</ul>
+<p>Contoh:</p>
+<ul>
+<li>Rule: authorization eksplisit wajib pada endpoint yang mengubah state.</li>
+<li>Smell: auth hanya bergantung pada middleware implisit.</li>
+<li>Severity: blocking.</li>
+<li>Exception: endpoint public yang sudah terdokumentasi dengan jelas.</li>
+<li>Verification: diagram jalur auth atau explicit code path.</li>
+</ul>
+<h3 id="4-kalibrasi-dengan-beberapa-kasus">4. Kalibrasi dengan beberapa kasus<a aria-hidden="true" class="anchor-heading icon-link" href="#4-kalibrasi-dengan-beberapa-kasus"></a></h3>
+<p>Uji kembali aturan dengan situasi lain:</p>
+<ul>
+<li>endpoint public vs internal</li>
+<li>service kecil vs komponen domain</li>
+<li>refactor kecil vs perubahan besar</li>
+<li>legacy code vs kode baru</li>
+</ul>
+<p>Tujuannya adalah memastikan aturan tidak terlalu kaku dan tidak terlalu longgar.</p>
+<h3 id="5-terjemahkan-ke-artefak-operasional">5. Terjemahkan ke artefak operasional<a aria-hidden="true" class="anchor-heading icon-link" href="#5-terjemahkan-ke-artefak-operasional"></a></h3>
+<p>Gunakan hasil ekstraksi untuk membuat atau memperbarui:</p>
+<ul>
+<li><code>custom instructions</code> untuk kebijakan yang konsisten</li>
+<li><code>skills</code> untuk workflow investigasi atau debugging</li>
+<li><code>AGENTS.md</code> untuk agent behavior dan eskalasi</li>
+<li>review rubric atau checklist untuk reviewer manusia</li>
+<li>onboarding docs untuk mental model tim</li>
+</ul>
+<h2 id="use-case-yang-paling-cocok">Use case yang paling cocok<a aria-hidden="true" class="anchor-heading icon-link" href="#use-case-yang-paling-cocok"></a></h2>
+<p>Metode ini paling efektif pada situasi di mana AI output bergantung pada judgement, bukan sekadar kemampuan teknis:</p>
+<ul>
+<li><strong>Code generation fitur baru</strong>
+<ul>
+<li>Ketika tim sering membuat endpoint/service baru dan output awal harus selaras dengan pola arsitektur, auth, error handling, dan testing tim.</li>
+</ul>
+</li>
+<li><strong>Refactoring yang berisiko jadi liar</strong>
+<ul>
+<li>Saat perubahan perlu terjaga kontrak publik, limited scope, dan tidak boleh menambah abstraksi prematur.</li>
+</ul>
+</li>
+<li><strong>Security review yang team-specific</strong>
+<ul>
+<li>Saat threat model tim berbeda dari checklist generik dan aturan autorisasi, multi-tenant, atau audit harus tertanam dalam standar.</li>
+</ul>
+</li>
+<li><strong>Code review dengan severity konsisten</strong>
+<ul>
+<li>Saat review harus memisahkan blocking/important/suggestion agar AI tidak memberi komentar acak.</li>
+</ul>
+</li>
+<li><strong>Onboarding developer dan agent</strong>
+<ul>
+<li>Saat konteks repo besar atau domain kompleks, sehingga dokumentasi saja tidak cukup; harus ada artefak yang bisa dipakai langsung.</li>
+</ul>
+</li>
+<li><strong>Bug investigation / systematic debugging</strong>
+<ul>
+<li>Saat masalah memerlukan urutan diagnosis yang konsisten dan bukan sekadar patch cepat.</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-menghubungkan-ke-sumber-dan-bukti-praktik">6. Menghubungkan ke sumber dan bukti praktik<a aria-hidden="true" class="anchor-heading icon-link" href="#6-menghubungkan-ke-sumber-dan-bukti-praktik"></a></h3>
+<p>Beberapa catatan penting tentang sumber:</p>
+<ul>
+<li>Artikel <em>Encoding Team Standards</em> memberi kerangka konsep dan contoh ilustratif, bukan demo publik end-to-end.</li>
+<li>Bagian ini lebih berupa praktik yang disarankan dan anekdot, terutama tentang bagaimana tim bisa memindahkan judgement senior ke artefak.</li>
+<li>GitHub Docs mendukung model ini dengan fitur custom instructions, path-specific instructions, code review customization, dan agent skills.</li>
+<li>Komunitas <code>awesome-copilot</code> menunjukkan banyak contoh nyata penggunaan instruction dan skill, walaupun bukan demo dari narasumber asli.</li>
+</ul>
+<p>Referensi yang langsung mendukung use case ini:</p>
+<ul>
+<li>GitHub Docs: <strong>Repository Custom Instructions</strong></li>
+<li>GitHub Docs: <strong>Custom instructions for code review</strong></li>
+<li>GitHub Docs: <strong>Agent skills and workflows</strong></li>
+<li>GitHub <code>awesome-copilot</code> examples</li>
+</ul>
+<h2 id="format-sesi-decision-mining">Format sesi decision mining<a aria-hidden="true" class="anchor-heading icon-link" href="#format-sesi-decision-mining"></a></h2>
+<p>Gunakan template ini untuk menjalankan sesi dengan senior:</p>
+<pre class="language-md"><code class="language-md"><span class="token title important"><span class="token punctuation">#</span> Tacit Knowledge Extraction Session</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Context</span>
+<span class="token list punctuation">-</span> Area: [API / review / debugging / testing / architecture]
+<span class="token list punctuation">-</span> Case: [PR / bug / incident / design change]
+<span class="token list punctuation">-</span> Senior: [name]
+<span class="token list punctuation">-</span> Facilitator: [name]
+
+<span class="token title important"><span class="token punctuation">##</span> 1. Trigger</span>
+<span class="token list punctuation">-</span> Apa yang pertama membuat kamu pause?
+<span class="token list punctuation">-</span> Sinyal apa yang terlihat "salah"?
+
+<span class="token title important"><span class="token punctuation">##</span> 2. Diagnosis</span>
+<span class="token list punctuation">-</span> Masalah ini masuk kategori apa?
+<span class="token list punctuation">-</span> Failure mode utamanya apa?
+
+<span class="token title important"><span class="token punctuation">##</span> 3. Severity</span>
+<span class="token list punctuation">-</span> Blocking / Important / Suggestion?
+<span class="token list punctuation">-</span> Kenapa?
+
+<span class="token title important"><span class="token punctuation">##</span> 4. Rule extraction</span>
+<span class="token list punctuation">-</span> Jika ini dijadikan aturan tim, bunyinya apa?
+<span class="token list punctuation">-</span> Apakah ini hard rule atau default heuristic?
+
+<span class="token title important"><span class="token punctuation">##</span> 5. Exceptions</span>
+<span class="token list punctuation">-</span> Kapan aturan ini boleh dilanggar?
+<span class="token list punctuation">-</span> Apa syaratnya?
+
+<span class="token title important"><span class="token punctuation">##</span> 6. Verification</span>
+<span class="token list punctuation">-</span> Evidence minimum apa yang menunjukkan aturan ini dipatuhi?
+<span class="token list punctuation">-</span> Test/check apa yang wajib ada?
+
+<span class="token title important"><span class="token punctuation">##</span> 7. Artifact mapping</span>
+<span class="token list punctuation">-</span> custom instruction:
+<span class="token list punctuation">-</span> skill/workflow:
+<span class="token list punctuation">-</span> review rubric:
+<span class="token list punctuation">-</span> onboarding doc:
+</code></pre>
+<h2 id="contoh-konkret">Contoh konkret<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-konkret"></a></h2>
+<h3 id="kasus-pr-endpoint-update-profile">Kasus: PR endpoint update profile<a aria-hidden="true" class="anchor-heading icon-link" href="#kasus-pr-endpoint-update-profile"></a></h3>
+<p>Senior komentar:</p>
+<ul>
+<li>controller terlalu gemuk</li>
+<li>auth tidak eksplisit</li>
+<li>response contract berubah tanpa diskusi</li>
+<li>test hanya happy path</li>
+</ul>
+<p>Hasil ekstraksi:</p>
+<ul>
+<li>Rule: authorization eksplisit wajib untuk state-changing endpoint.</li>
+<li>Smell: auth tersembunyi lewat middleware implisit.</li>
+<li>Severity: blocking.</li>
+<li>Exception: public endpoint yang terdokumentasi jelas.</li>
+<li>Verification: dokumentasi jalur auth dan hasil test failure path.</li>
+</ul>
+<p>Artefak operasional:</p>
+<ul>
+<li>custom instruction: <code>Authorization harus eksplisit pada endpoint state-changing.</code></li>
+<li>review rubric: <code>Periksa apakah auth path jelas dan contract response tidak berubah diam-diam.</code></li>
+<li>onboarding note: <code>Mengapa auth implicit berbahaya di API.</code></li>
+</ul>
+<h3 id="kasus-debugging-flaky-test">Kasus: debugging flaky test<a aria-hidden="true" class="anchor-heading icon-link" href="#kasus-debugging-flaky-test"></a></h3>
+<p>Senior workflow:</p>
+<ul>
+<li>pastikan reproduksi stabil dulu</li>
+<li>sempitkan layer sebelum edit code</li>
+<li>cari bukti sebelum membuat hipotesis</li>
+<li>hindari perubahan ganda</li>
+</ul>
+<p>Hasil ekstraksi:</p>
+<ul>
+<li>Rule: mulai dari reproduksi, bukan refactor.</li>
+<li>Smell: symptom berubah-ubah dan dependent async/shared state.</li>
+<li>Verification: proof of concept kecil yang menegaskan hipotesis.</li>
+</ul>
+<p>Artefak operasional:</p>
+<ul>
+<li>skill: <code>systematic-debugging</code> untuk investigative workflow.</li>
+<li>AGENTS.md: <code>Stop and ask if blast radius terlalu besar atau ketika kontrak publik berubah.</code></li>
+</ul>
+<h2 id="hubungan-ke-artefak-lain">Hubungan ke artefak lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-artefak-lain"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260419192040">Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior</a> — executable governance di Copilot</li>
+<li><a href="/sotoy/notes/zettel.20260419194901">Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim</a> — tacit knowledge senior jadi artefak operasional</li>
+<li><a href="/sotoy/notes/zettel.20260419192541">Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format</a> — instruksi standar tim untuk AI: role, konteks, prioritas, output</li>
+<li><a href="/sotoy/notes/notes.copilot.custom-instructions-best-practices">Best Practices for Writing Copilot Custom Instructions</a> — struktur dan jenis file instruksi Copilot</li>
+<li><a href="/sotoy/notes/zettel.literature.encoding-team-standards">Encoding Team Standards — executable AI instruction untuk konsistensi tim</a> — literatur dasar executable AI instruction</li>
+</ul>
+<h2 id="langkah-berikutnya">Langkah berikutnya<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-berikutnya"></a></h2>
+<ol>
+<li>Pilih satu kasus nyata dari PR atau bug.</li>
+<li>Jalankan sesi decision mining dengan senior.</li>
+<li>Tuliskan hasilnya sebagai aturan kecil.</li>
+<li>Terapkan langsung ke <code>custom instructions</code> atau <code>skill</code>.</li>
+<li>Validasi dengan developer lain atau agent.</li>
+</ol>
+<h2 id="referensi-dan-bukti-praktik">Referensi dan bukti praktik<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-dan-bukti-praktik"></a></h2>
+<ul>
+<li>Artikel <em>Encoding Team Standards</em> memberi kerangka dan ilustrasi use case; bukan demo publik end-to-end.</li>
+<li>GitHub Docs mendukung penerapan ini melalui custom instructions, path-specific instructions, code review customization, dan agent skills.</li>
+<li>Repository <code>github/awesome-copilot</code> menunjukkan praktik nyata custom instructions dan skills, walau bukan demo dari penulis artikel.</li>
+</ul>
+<p>Sumber penting:</p>
+<ul>
+<li><a href="https://martinfowler.com/articles/reduce-friction-ai/encoding-team-standards.html">https://martinfowler.com/articles/reduce-friction-ai/encoding-team-standards.html</a></li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions">https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions</a></li>
+<li><a href="https://docs.github.com/en/copilot/tutorials/customize-code-review">https://docs.github.com/en/copilot/tutorials/customize-code-review</a></li>
+<li><a href="https://github.com/github/awesome-copilot">https://github.com/github/awesome-copilot</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">copilot (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">tacit-knowledge (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">documentation (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.copilot">Copilot</a></li>
+<li><a href="/sotoy/notes/zettel.20260419194901">Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim</a></li>
+</ul>

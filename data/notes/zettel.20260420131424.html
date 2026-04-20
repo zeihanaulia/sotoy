@@ -1,0 +1,68 @@
+<h1 id="feature-document-yang-efektif-itu-ringkas-dan-operasional">Feature document yang efektif itu ringkas dan operasional<a aria-hidden="true" class="anchor-heading icon-link" href="#feature-document-yang-efektif-itu-ringkas-dan-operasional"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Jika dokumen terlalu tebal, orang bakal ngerasa itu cuma dokumentasi formal lagi.</p>
+<p>Dalam praktik, thresholdnya biasanya sekitar 1–2 halaman atau sekitar 300–800 kata. Kalau sebuah feature document membutuhkan lebih dari itu untuk dipahami, besar kemungkinan orang akan menganggapnya sebagai dokumentasi berat dan enggan membacanya.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Jadi nilai efektif feature document ada di kegunaan, bukan panjangnya.</p>
+<p>Feature document yang efektif punya dua ciri utama:</p>
+<ul>
+<li>langsung jawab "apa yang harus dibangun" dan "kenapa" tanpa harus menggali berlembar-lembar latar belakang;</li>
+<li>mudah di-update dan dipakai tim saat keputusan berubah.</li>
+</ul>
+<p>Kalau dokumen panjangnya hanya untuk menampilkan kompleksitas, itu biasanya menjadi beban baca dan berhenti jadi sumber kebenaran.</p>
+<h2 id="contoh">Contoh<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh"></a></h2>
+<h3 id="efektif">Efektif<a aria-hidden="true" class="anchor-heading icon-link" href="#efektif"></a></h3>
+<ul>
+<li>Satu halaman ringkas yang berisi masalah pengguna, tujuan bisnis, batasan utama, dan kriteria berhasil.</li>
+<li>Contoh: issue atau PR yang punya "Goal", "What", "Why", "Out of Scope", dan "Open Questions".</li>
+<li>Itu cukup untuk tim sadar apa yang harus dilanjutkan dan mengapa keputusan dibuat.</li>
+</ul>
+<h3 id="kurang-efektif">Kurang efektif<a aria-hidden="true" class="anchor-heading icon-link" href="#kurang-efektif"></a></h3>
+<ul>
+<li>Dokumen 5 halaman yang memuat semua alternatif solusi, sejarah diskusi panjang, dan output riset mendetail.</li>
+<li>Orang sering baca setengah, lalu menyerah karena "ini terlalu banyak untuk segera diputuskan".</li>
+<li>Akhirnya, konteks berantakan dan tim kembali ke chat atau meeting untuk klarifikasi.</li>
+</ul>
+<h3 id="intinya">Intinya<a aria-hidden="true" class="anchor-heading icon-link" href="#intinya"></a></h3>
+<ul>
+<li>Dokumentasi formal yang tebal membuat dokumen berubah status dari "alat kolaborasi" menjadi "arsip pasif".</li>
+<li>Lebih baik sedikit informasi yang operasional dan bisa langsung dipakai, daripada banyak informasi yang cuma membuat orang bingung.</li>
+</ul>
+<h2 id="level-koneksi-konteks">Level Koneksi Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#level-koneksi-konteks"></a></h2>
+<p>Artikel "Context Anchoring" membedakan beberapa lapisan konteks yang berbeda:</p>
+<ul>
+<li><code>Project-level</code> / priming document: konteks stabil proyek — tech stack, arsitektur umum, naming convention, pola integrasi. Ini adalah foundation yang jarang berubah dan dibagikan ke semua fitur dan sesi.</li>
+<li><code>Feature-level</code> / feature document: konteks spesifik fitur — keputusan yang dibuat, alasan, constraint, alternatif yang ditolak, open questions, dan status implementasi. Ini bersifat dinamis dan diperbarui setiap sesi atau setiap kali keputusan penting diambil.</li>
+<li><code>Session-level</code>: percakapan AI itu sendiri. Berguna untuk berpikir dan eksplorasi, tapi rapuh karena konteksnya hilang saat sesi ditutup. Itulah yang harus ditambatkan ke dokumen jika harus menjadi permanen.</li>
+</ul>
+<p>Pada praktiknya:</p>
+<ul>
+<li>project-level membantu AI memahami "bagaimana proyek bekerja" sebelum sesi dimulai.</li>
+<li>feature-level menjelaskan "di mana fitur ini sekarang dan kenapa kita memilih jalur ini".</li>
+<li>session-level adalah tempat berpikir sementara; keputusan penting harus keluar dari sini dan masuk ke feature document.</li>
+</ul>
+<p>Ini membantu menjelaskan mengapa dokumen yang efisien itu tidak hanya ringkas, tapi juga berada di level yang tepat. Kelebihan 5 halaman biasanya terjadi ketika dokumen mencoba menutupi semua level sekaligus — mulai dari latar belakang proyek sampai detail sesi — sehingga kehilangan fokus operasional.</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 27.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 27</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

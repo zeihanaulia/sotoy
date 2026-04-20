@@ -1,0 +1,2124 @@
+{
+  "roots": [
+    {
+      "key": "book-summaries",
+      "title": "Book Summaries",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "book-summaries.14-habits-of-highly-productive-developers",
+          "title": "14 Habits of Highly Productive Developers",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.building-a-second-brain",
+          "title": "Building a Second Brain",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines",
+          "title": "Continuous Integration (CI) and Continuous Delivery (CD) a Practical Guide to Designing and Developing Pipelines",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines.implementing-pipelines",
+              "title": "7. Implementing Pipelines",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "book-summaries.dare-to-lead",
+          "title": "Dare to Lead",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.filosofi-teras",
+          "title": "Filosofi Teras",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.madilog",
+          "title": "Madilog",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.measure-what-matters",
+          "title": "Measure What Matters",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.self-driving",
+          "title": "Self Driving",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.team-topologies",
+          "title": "Team Topologies",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "book-summaries.team-topologies.the-problem-with-org-charts",
+              "title": "The Problem with Org Charts",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "book-summaries.the-compound-effect",
+          "title": "The Compound Effect",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "book-summaries.the-devops-handbook",
+          "title": "The Devops Handbook",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "book-summaries.the-devops-handbook.part-I-the-three-ways",
+              "title": "Part I - The Three Ways",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "book-summaries.the-devops-handbook.part-I-the-three-ways.Agile-Continuous-Delivery-and-the-Three-Ways",
+                  "title": "Agile Continuous Delivery and the Three Ways",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "book-summaries.youtube",
+          "title": "Youtube",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "book-summaries.youtube.how-to-stand-out-in-an-insanely-competitive-tech-market",
+              "title": "How To Stand Out In An Insanely Competitive Tech Market (Ex-Amazon Principal Engineer)",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "book-summaries.youtube.mbah-nun-kerja-itu-ibadah",
+              "title": "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "book-summaries.youtube.the-super-mario-effect-tricking-your-brain-into-learning-more",
+              "title": "The Super Mario Effect Tricking Your Brain into Learning More",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "daily",
+      "title": "Daily",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "daily.journal",
+          "title": "Journal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "daily.journal.2026",
+              "title": "2026",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "daily.journal.2026.01",
+                  "title": "01",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": [
+                    {
+                      "key": "daily.journal.2026.01.12",
+                      "title": "2026-01-12",
+                      "icon": null,
+                      "hasTitleNumberOutlined": false,
+                      "vaultName": "vault",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "handbook",
+      "title": "Handbook",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "handbook.golang",
+          "title": "Golang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "handbook.golang.1-idiomatic",
+              "title": "1 Idiomatic",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "handbook.golang.2-membuat-http-server",
+              "title": "2 Membuat HTTP Server",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "handbook.golang.3-build-image-dengan-docker",
+              "title": "3 Build Image Dengan Docker",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "handbook.golang.4-setup-golang-ci",
+              "title": "4 Setup Golang CI",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "handbook.golang.5-custom-metrics-dengan-promteheus",
+              "title": "5 Custom Metrics Dengan Promteheus",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "handbook.rust",
+          "title": "Rust",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        }
+      ]
+    },
+    {
+      "key": "notes",
+      "title": "Notes",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "notes.10-hari-menulis",
+          "title": "10 Hari Menulis",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.10-hari-menulis.2025",
+              "title": "2025",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "notes.10-hari-menulis.2025.a-new-beginning",
+                  "title": "20 Tahun Setelahnya",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                },
+                {
+                  "key": "notes.10-hari-menulis.2025.commitment",
+                  "title": "Di Antara Ribuan",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "notes.api-management",
+          "title": "API Management",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "notes.continous-delivery",
+          "title": "Continous Delivery",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "notes.copilot",
+          "title": "Copilot",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.copilot.custom-instructions-best-practices",
+              "title": "Best Practices for Writing Copilot Custom Instructions",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "notes.copilot.tacit-knowledge-extraction",
+              "title": "Ekstraksi Tacit Knowledge Senior untuk AI dan Tim",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "notes.eventstorming",
+          "title": "Eventstorming",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "notes.powershell",
+          "title": "Powershell",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.powershell.customize-poweshell",
+              "title": "Customize Poweshell",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "notes.prompt-engineering",
+          "title": "Prompt Engineering",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.prompt-engineering.xml-vs-json",
+              "title": "XML vs JSON dalam AI Coding Tools: Analisis Mendalam Prompt Engineering",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "notes.software-architechture",
+          "title": "Software Architechture",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.software-architechture.C4",
+              "title": "C4",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "notes.software-architechture.software-architechture-tradeoff",
+              "title": "Software Architechture Tradeoff",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "rf9qrdab1b4rms0tuan0m45",
+          "title": "Sotoy",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.sotoy.dependabot-audit",
+              "title": "Sotoy Dependabot & npm audit analysis",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "notes.zettelkasten",
+          "title": "Zettelkasten di Dendron — Panduan Implementasi",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "notes.zettelkasten.cara-pakai",
+              "title": "Cara Pakai Zettelkasten di Project Ini",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "til",
+      "title": "Today I Learned",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "til.Golang",
+          "title": "Golang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.Golang.bagaimana-instrumentasi-golang-dengan-elastic-APM",
+              "title": "Bagaimana instrumentasi golang dengan elastic APM",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.coding",
+          "title": "Coding",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.coding.1-technique",
+              "title": "Technique",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.coding.1-technique.sliding-window",
+                  "title": "Sliding Window",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "til.coding.maximum-sum-of-distinct-subarrays-with-length-k",
+              "title": "Maximum Sum of Distinct Subarrays with Length K",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.coding.maximum-sum-of-distinct-subarrays-with-length-k.Coding",
+                  "title": "Coding",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "til.coding.remove-duplicates-from-sorted-array",
+              "title": "Remove Duplicates from Sorted Array",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.coding.remove-duplicates-from-sorted-array.Code",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "til.coding.two-sum",
+              "title": "Two Sum",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.coding.two-sum.code",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "til.coding.two-sum-ii",
+              "title": "Two Sum II - Input Array Is Sorted",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.coding.two-sum-ii.code",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "til.coding.valid-palindrome",
+              "title": "Valid Palindrom",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.coding.valid-palindrome.Code",
+                  "title": "Code",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "til.devops",
+          "title": "Devops",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.devops.setup-vm-azure",
+              "title": "Setup Vm Azure",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.devops.setup-vm-azure-terraforn",
+              "title": "Setup Vm Azure Terraform",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.devops.terraform",
+              "title": "Terraform",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.devops.troubleshots",
+              "title": "Troubleshots",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.devops.troubleshots.terraform-on-m1",
+                  "title": "Terraform on M1",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "til.frontend",
+          "title": "Frontend",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.frontend.conditional-spread",
+              "title": "Conditional Spread in JavaScript/TypeScript",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.frontend.open-graph-biar-ketika-sharelink-gan-makin-kece",
+              "title": "Open Graph Biar Ketika Sharelink Gan Makin Kece",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.frontend.setup-refine",
+              "title": "Setup Refine UI sebagai Pengganti Streamlit",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.managing-team",
+          "title": "Managing Team",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.managing-team.belajar-coaching",
+              "title": "Belajar Coaching",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.managing-team.oreily",
+              "title": "Oreily",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.managing-team.oreily.critical-thinking-at-work",
+                  "title": "Critical Thinking at Work",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "key": "til.managing-team.preparing-performance-review",
+              "title": "Preparing Performance Review",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.managing-team.quantified-self",
+              "title": "Quantified Self",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.managing-team.youtube",
+              "title": "Youtube",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": [
+                {
+                  "key": "til.managing-team.youtube.3-ways-to-express-your-thoughts-so-that-everyone-will-understand-you",
+                  "title": "3 Ways to Express Your Thoughts so That Everyone Will Understand You",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                },
+                {
+                  "key": "til.managing-team.youtube.the-most-powerful-way-to-think-first-principles",
+                  "title": "The Most Powerful Way to Think First Principles",
+                  "icon": null,
+                  "hasTitleNumberOutlined": false,
+                  "vaultName": "vault",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "til.nix",
+          "title": "Nix",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.nix.nixos-on-windows",
+              "title": "Nixos on Windows",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.observability",
+          "title": "Observability",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.observability.prometheus",
+              "title": "Prometheus",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.python",
+          "title": "Python",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.python.building-sse",
+              "title": "Building a Robust Live Log Viewer with FastAPI and Server-Sent Events",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.setup-spring-boot",
+          "title": "Setup Spring Boot",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.setup-spring-boot.package-explanation",
+              "title": "Package Explanation",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.supabase",
+          "title": "Supabase",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.supabase.rls",
+              "title": "RLS Supabase: Biar Data Lo Gak Jadi Konsumsi Publik",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.windows",
+          "title": "Windows",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.windows.beres-beres-disk",
+              "title": "Beres Beres Disk",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.windows.recovering-from-a-broken-nix-wsl-setup",
+              "title": "Recovering from a Broken Nix Wsl Setup",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "til.windows.resolving-connection-issues-from-wsl-to-windows",
+              "title": "Notes: Resolving Connection Issues from WSL to Windows",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "til.writing",
+          "title": "Writing",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "til.writing.belajar-menulis",
+              "title": "Belajar Menulis",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "zettel",
+      "title": "Zettelkasten",
+      "icon": null,
+      "hasTitleNumberOutlined": false,
+      "vaultName": "vault",
+      "children": [
+        {
+          "key": "zettel.202604170001",
+          "title": "Second brain memperluas kapasitas berpikir dengan memindahkan beban memori ke sistem eksternal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.202604170002",
+          "title": "Ide yang tidak ditulis sama dengan ide yang tidak ada",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.202604170003",
+          "title": "Koneksi antar gagasan lebih bernilai dari koleksi informasi",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419190800",
+          "title": "Judgement senior harus di-infrastrukturkan sebagai executable instruction AI",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419192040",
+          "title": "Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419192239",
+          "title": "Executable governance adalah standar tim yang bukan hanya ditulis, tapi dijalankan oleh AI",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419192541",
+          "title": "Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419192952",
+          "title": "Plan, onboarding, dan tracker adalah artefak governance AI, bukan dokumentasi pasif",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419193541",
+          "title": "Plan AI bukan sekadar to-do list; ia adalah artefak governance operasional",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419193542",
+          "title": "Onboarding docs penting untuk agent karena mereka menyediakan mental model repo",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419193543",
+          "title": "Tracker adalah artefak observabilitas untuk workflow AI dan developer",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419193544",
+          "title": "Agent eksplorasi codebase harus struktural, bukan sekadar search random",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260419194901",
+          "title": "Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420055413",
+          "title": "ADR adalah decision log yang merekam alasan, bukan dokumentasi desain",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420055414",
+          "title": "Satu keputusan per ADR menjaga batasan dan riwayat yang bersih",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420055415",
+          "title": "ADR accepted harus disupersede, bukan diedit ulang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420055619",
+          "title": "ADR sehat memaksa maintainer mengubah perilaku, bukan sekadar menambah dokumen",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420055738",
+          "title": "Software architecture adalah jaringan keputusan trade-off, bukan sekadar diagram",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420060847",
+          "title": "Arsitektur adalah penentu biaya perubahan masa depan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420060928",
+          "title": "Arsitektur bukan kasta; dia harus hidup bersama kode",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420061007",
+          "title": "Halaman Software Architecture Guide adalah peta keputusan, bukan tutorial implementasi",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420061232",
+          "title": "Fowler memulai definisi arsitektur dengan kritik terhadap ‘fundamental organization’",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420061259",
+          "title": "Arsitektur nyata adalah shared understanding expert developer",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420061356",
+          "title": "Arsitektur bukan sekadar keputusan awal proyek",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420061530",
+          "title": "Architecture adalah seni memilah keputusan penting",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420062009",
+          "title": "Architect bukan jabatan; dia adalah kemampuan judgment desain",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420062120",
+          "title": "Cruft adalah utang kebingungan yang memperlambat perubahan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420062331",
+          "title": "Internal quality adalah infrastruktur kecepatan delivery",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420085220",
+          "title": "Shortcut kualitas adalah pinjaman dari masa depan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420085349",
+          "title": "Keputusan arsitektural penting bergantung pada skala sistem",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420085507",
+          "title": "Boundary aplikasi adalah konstruksi sosial, bukan fakta alam",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420085714",
+          "title": "Aplikasi tetap ada karena boundary adalah unit sosial dan ekonomi",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420085834",
+          "title": "Microservices adalah trade-off machine, bukan arsitektur modern otomatis",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420090017",
+          "title": "Modernisasi yang matang adalah displacement bertahap, bukan rewrite besar",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420090203",
+          "title": "Micro Frontends menunjukkan arsitektur juga soal koordinasi tim",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420090327",
+          "title": "GUI Architectures: pattern harus diikuti prinsip, bukan label familiar",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420090627",
+          "title": "Serverless mengurangi operasi tapi menambah ketergantungan platform",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420090829",
+          "title": "Presentation Domain Data Layering adalah baseline, bukan arsitektur kuno",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420091101",
+          "title": "Aplikasi juga arsitektur delivery, consistency, dan frontend structure",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420091306",
+          "title": "Enterprise architecture bergeser ke koordinasi antar-pulau, bukan lagi modularitas kode",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420091825",
+          "title": "Enterprise architecture adalah soal apakah biaya koordinasi pusat layak",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420092009",
+          "title": "Sentralisasi total di EA melambatkan keputusan dan kehilangan konteks lokal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420092459",
+          "title": "Otonomi tanpa koordinasi di EA berubah jadi fragmentasi mahal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420092652",
+          "title": "Fowler condong ke desentralisasi tetapi tetap waspada terhadap chaos",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420092900",
+          "title": "Enterprise architects lebih efektif ketika ikut masuk ke tim pengembangan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420092901",
+          "title": "Enterprise architecture Fowler: organisasi, funding, komunikasi, dan learning system",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131310",
+          "title": "Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131311",
+          "title": "Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131312",
+          "title": "AI memory tools sekarang kebanyakan project-level, bukan feature-level",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131400",
+          "title": "Kecemasan menutup chat adalah indikator context leakage",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131401",
+          "title": "Erosi konteks AI adalah isu arsitektural, bukan bug acak",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131402",
+          "title": "Context window besar tetap cepat habis dalam praktik engineering",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131403",
+          "title": "Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131404",
+          "title": "Dalam erosi konteks, why hilang sebelum what",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131405",
+          "title": "Kalau medium lupa, pindahkan memori ke luar medium itu",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131406",
+          "title": "Summarization otomatis menyelamatkan what, bukan why",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131407",
+          "title": "Alignment tanpa persistence tetap rapuh",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131408",
+          "title": "Context anchoring adalah durability layer untuk alignment manusia-AI",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131409",
+          "title": "Decision context harus menjadi external state, bukan jejak chat",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131410",
+          "title": "Project context dan feature context punya fungsi berbeda",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131411",
+          "title": "Priming document adalah memori stabil level proyek",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131412",
+          "title": "Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131413",
+          "title": "Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131414",
+          "title": "Membaca codebase tidak sama dengan memahami keputusan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131415",
+          "title": "Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131416",
+          "title": "Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131417",
+          "title": "Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131418",
+          "title": "Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131419",
+          "title": "Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131420",
+          "title": "Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131421",
+          "title": "Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131422",
+          "title": "Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131423",
+          "title": "Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131424",
+          "title": "Feature document yang efektif itu ringkas dan operasional",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131425",
+          "title": "Struktur minimal feature document jelas dan praktis",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131426",
+          "title": "Nilai anchoring muncul saat sesi baru bisa warm start",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131427",
+          "title": "Maintenance dokumen harus menempel ke ritme kerja alami",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131428",
+          "title": "Feature document memaksa reasoning menjadi lebih jelas",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131429",
+          "title": "Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131430",
+          "title": "Context anchoring adalah alat yang harus dikalibrasi, bukan default universal",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131431",
+          "title": "Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131432",
+          "title": "Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131433",
+          "title": "Keinginan mempertahankan chat adalah indikator anchoring belum cukup",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131434",
+          "title": "Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "zettel.20260420131435",
+          "title": "Keberhasilan context anchoring diukur dari murahnya restart",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": []
+        },
+        {
+          "key": "ae3bw38eg7l5p3ntry27x87",
+          "title": "Literature",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "zettel.literature.application-boundary-social-construction",
+              "title": "Application boundary adalah konstruksi sosial",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.architecture-decision-records",
+              "title": "Architecture Decision Record — Martin Fowler",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.architecture-important-stuff",
+              "title": "Arsitektur adalah apa yang paling penting, bukan hanya struktur tinggi",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.architecture-not-a-blueprint",
+              "title": "Arsitektur bukan blueprint terpisah dari programming",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.building-a-second-brain",
+              "title": "Literature Note — Building a Second Brain",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.context-anchoring",
+              "title": "Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.encoding-team-standards",
+              "title": "Encoding Team Standards — executable AI instruction untuk konsistensi tim",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.enterprise-architecture-coordination-cost",
+              "title": "Enterprise architecture adalah soal biaya koordinasi, bukan kontrol total",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.internal-quality-is-speed",
+              "title": "Kualitas internal adalah infrastruktur kecepatan delivery",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.literature.software-architecture-guide",
+              "title": "Software Architecture Guide — Fowler: arsitektur sebagai keputusan penting dan mahal kalau salah",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        },
+        {
+          "key": "6ie1ckeu7jfftzq54vt9e44",
+          "title": "Moc",
+          "icon": null,
+          "hasTitleNumberOutlined": false,
+          "vaultName": "vault",
+          "children": [
+            {
+              "key": "zettel.moc.context-anchoring",
+              "title": "MOC: Context Anchoring — Praktik, Template, dan Integrasi",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.moc.personal-knowledge-management",
+              "title": "MOC: Personal Knowledge Management",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            },
+            {
+              "key": "zettel.moc.software-architecture",
+              "title": "MOC: Software Architecture",
+              "icon": null,
+              "hasTitleNumberOutlined": false,
+              "vaultName": "vault",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "child2parent": {
+    "book-summaries": null,
+    "book-summaries.14-habits-of-highly-productive-developers": "book-summaries",
+    "book-summaries.building-a-second-brain": "book-summaries",
+    "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines": "book-summaries",
+    "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines.implementing-pipelines": "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines",
+    "book-summaries.dare-to-lead": "book-summaries",
+    "book-summaries.filosofi-teras": "book-summaries",
+    "book-summaries.madilog": "book-summaries",
+    "book-summaries.measure-what-matters": "book-summaries",
+    "book-summaries.self-driving": "book-summaries",
+    "book-summaries.team-topologies": "book-summaries",
+    "book-summaries.team-topologies.the-problem-with-org-charts": "book-summaries.team-topologies",
+    "book-summaries.the-compound-effect": "book-summaries",
+    "book-summaries.the-devops-handbook": "book-summaries",
+    "book-summaries.the-devops-handbook.part-I-the-three-ways": "book-summaries.the-devops-handbook",
+    "book-summaries.the-devops-handbook.part-I-the-three-ways.Agile-Continuous-Delivery-and-the-Three-Ways": "book-summaries.the-devops-handbook.part-I-the-three-ways",
+    "book-summaries.youtube": "book-summaries",
+    "book-summaries.youtube.how-to-stand-out-in-an-insanely-competitive-tech-market": "book-summaries.youtube",
+    "book-summaries.youtube.mbah-nun-kerja-itu-ibadah": "book-summaries.youtube",
+    "book-summaries.youtube.the-super-mario-effect-tricking-your-brain-into-learning-more": "book-summaries.youtube",
+    "daily": null,
+    "daily.journal": "daily",
+    "daily.journal.2026": "daily.journal",
+    "daily.journal.2026.01": "daily.journal.2026",
+    "daily.journal.2026.01.12": "daily.journal.2026.01",
+    "handbook": null,
+    "handbook.golang": "handbook",
+    "handbook.golang.1-idiomatic": "handbook.golang",
+    "handbook.golang.2-membuat-http-server": "handbook.golang",
+    "handbook.golang.3-build-image-dengan-docker": "handbook.golang",
+    "handbook.golang.4-setup-golang-ci": "handbook.golang",
+    "handbook.golang.5-custom-metrics-dengan-promteheus": "handbook.golang",
+    "handbook.rust": "handbook",
+    "notes": null,
+    "notes.10-hari-menulis": "notes",
+    "notes.10-hari-menulis.2025": "notes.10-hari-menulis",
+    "notes.10-hari-menulis.2025.a-new-beginning": "notes.10-hari-menulis.2025",
+    "notes.10-hari-menulis.2025.commitment": "notes.10-hari-menulis.2025",
+    "notes.api-management": "notes",
+    "notes.continous-delivery": "notes",
+    "notes.copilot": "notes",
+    "notes.copilot.custom-instructions-best-practices": "notes.copilot",
+    "notes.copilot.tacit-knowledge-extraction": "notes.copilot",
+    "notes.eventstorming": "notes",
+    "notes.powershell": "notes",
+    "notes.powershell.customize-poweshell": "notes.powershell",
+    "notes.prompt-engineering": "notes",
+    "notes.prompt-engineering.xml-vs-json": "notes.prompt-engineering",
+    "notes.software-architechture": "notes",
+    "notes.software-architechture.C4": "notes.software-architechture",
+    "notes.software-architechture.software-architechture-tradeoff": "notes.software-architechture",
+    "rf9qrdab1b4rms0tuan0m45": "notes",
+    "notes.sotoy.dependabot-audit": "rf9qrdab1b4rms0tuan0m45",
+    "notes.zettelkasten": "notes",
+    "notes.zettelkasten.cara-pakai": "notes.zettelkasten",
+    "til": null,
+    "til.Golang": "til",
+    "til.Golang.bagaimana-instrumentasi-golang-dengan-elastic-APM": "til.Golang",
+    "til.coding": "til",
+    "til.coding.1-technique": "til.coding",
+    "til.coding.1-technique.sliding-window": "til.coding.1-technique",
+    "til.coding.maximum-sum-of-distinct-subarrays-with-length-k": "til.coding",
+    "til.coding.maximum-sum-of-distinct-subarrays-with-length-k.Coding": "til.coding.maximum-sum-of-distinct-subarrays-with-length-k",
+    "til.coding.remove-duplicates-from-sorted-array": "til.coding",
+    "til.coding.remove-duplicates-from-sorted-array.Code": "til.coding.remove-duplicates-from-sorted-array",
+    "til.coding.two-sum": "til.coding",
+    "til.coding.two-sum.code": "til.coding.two-sum",
+    "til.coding.two-sum-ii": "til.coding",
+    "til.coding.two-sum-ii.code": "til.coding.two-sum-ii",
+    "til.coding.valid-palindrome": "til.coding",
+    "til.coding.valid-palindrome.Code": "til.coding.valid-palindrome",
+    "til.devops": "til",
+    "til.devops.setup-vm-azure": "til.devops",
+    "til.devops.setup-vm-azure-terraforn": "til.devops",
+    "til.devops.terraform": "til.devops",
+    "til.devops.troubleshots": "til.devops",
+    "til.devops.troubleshots.terraform-on-m1": "til.devops.troubleshots",
+    "til.frontend": "til",
+    "til.frontend.conditional-spread": "til.frontend",
+    "til.frontend.open-graph-biar-ketika-sharelink-gan-makin-kece": "til.frontend",
+    "til.frontend.setup-refine": "til.frontend",
+    "til.managing-team": "til",
+    "til.managing-team.belajar-coaching": "til.managing-team",
+    "til.managing-team.oreily": "til.managing-team",
+    "til.managing-team.oreily.critical-thinking-at-work": "til.managing-team.oreily",
+    "til.managing-team.preparing-performance-review": "til.managing-team",
+    "til.managing-team.quantified-self": "til.managing-team",
+    "til.managing-team.youtube": "til.managing-team",
+    "til.managing-team.youtube.3-ways-to-express-your-thoughts-so-that-everyone-will-understand-you": "til.managing-team.youtube",
+    "til.managing-team.youtube.the-most-powerful-way-to-think-first-principles": "til.managing-team.youtube",
+    "til.nix": "til",
+    "til.nix.nixos-on-windows": "til.nix",
+    "til.observability": "til",
+    "til.observability.prometheus": "til.observability",
+    "til.python": "til",
+    "til.python.building-sse": "til.python",
+    "til.setup-spring-boot": "til",
+    "til.setup-spring-boot.package-explanation": "til.setup-spring-boot",
+    "til.supabase": "til",
+    "til.supabase.rls": "til.supabase",
+    "til.windows": "til",
+    "til.windows.beres-beres-disk": "til.windows",
+    "til.windows.recovering-from-a-broken-nix-wsl-setup": "til.windows",
+    "til.windows.resolving-connection-issues-from-wsl-to-windows": "til.windows",
+    "til.writing": "til",
+    "til.writing.belajar-menulis": "til.writing",
+    "zettel": null,
+    "zettel.202604170001": "zettel",
+    "zettel.202604170002": "zettel",
+    "zettel.202604170003": "zettel",
+    "zettel.20260419190800": "zettel",
+    "zettel.20260419192040": "zettel",
+    "zettel.20260419192239": "zettel",
+    "zettel.20260419192541": "zettel",
+    "zettel.20260419192952": "zettel",
+    "zettel.20260419193541": "zettel",
+    "zettel.20260419193542": "zettel",
+    "zettel.20260419193543": "zettel",
+    "zettel.20260419193544": "zettel",
+    "zettel.20260419194901": "zettel",
+    "zettel.20260420055413": "zettel",
+    "zettel.20260420055414": "zettel",
+    "zettel.20260420055415": "zettel",
+    "zettel.20260420055619": "zettel",
+    "zettel.20260420055738": "zettel",
+    "zettel.20260420060847": "zettel",
+    "zettel.20260420060928": "zettel",
+    "zettel.20260420061007": "zettel",
+    "zettel.20260420061232": "zettel",
+    "zettel.20260420061259": "zettel",
+    "zettel.20260420061356": "zettel",
+    "zettel.20260420061530": "zettel",
+    "zettel.20260420062009": "zettel",
+    "zettel.20260420062120": "zettel",
+    "zettel.20260420062331": "zettel",
+    "zettel.20260420085220": "zettel",
+    "zettel.20260420085349": "zettel",
+    "zettel.20260420085507": "zettel",
+    "zettel.20260420085714": "zettel",
+    "zettel.20260420085834": "zettel",
+    "zettel.20260420090017": "zettel",
+    "zettel.20260420090203": "zettel",
+    "zettel.20260420090327": "zettel",
+    "zettel.20260420090627": "zettel",
+    "zettel.20260420090829": "zettel",
+    "zettel.20260420091101": "zettel",
+    "zettel.20260420091306": "zettel",
+    "zettel.20260420091825": "zettel",
+    "zettel.20260420092009": "zettel",
+    "zettel.20260420092459": "zettel",
+    "zettel.20260420092652": "zettel",
+    "zettel.20260420092900": "zettel",
+    "zettel.20260420092901": "zettel",
+    "zettel.20260420131310": "zettel",
+    "zettel.20260420131311": "zettel",
+    "zettel.20260420131312": "zettel",
+    "zettel.20260420131400": "zettel",
+    "zettel.20260420131401": "zettel",
+    "zettel.20260420131402": "zettel",
+    "zettel.20260420131403": "zettel",
+    "zettel.20260420131404": "zettel",
+    "zettel.20260420131405": "zettel",
+    "zettel.20260420131406": "zettel",
+    "zettel.20260420131407": "zettel",
+    "zettel.20260420131408": "zettel",
+    "zettel.20260420131409": "zettel",
+    "zettel.20260420131410": "zettel",
+    "zettel.20260420131411": "zettel",
+    "zettel.20260420131412": "zettel",
+    "zettel.20260420131413": "zettel",
+    "zettel.20260420131414": "zettel",
+    "zettel.20260420131415": "zettel",
+    "zettel.20260420131416": "zettel",
+    "zettel.20260420131417": "zettel",
+    "zettel.20260420131418": "zettel",
+    "zettel.20260420131419": "zettel",
+    "zettel.20260420131420": "zettel",
+    "zettel.20260420131421": "zettel",
+    "zettel.20260420131422": "zettel",
+    "zettel.20260420131423": "zettel",
+    "zettel.20260420131424": "zettel",
+    "zettel.20260420131425": "zettel",
+    "zettel.20260420131426": "zettel",
+    "zettel.20260420131427": "zettel",
+    "zettel.20260420131428": "zettel",
+    "zettel.20260420131429": "zettel",
+    "zettel.20260420131430": "zettel",
+    "zettel.20260420131431": "zettel",
+    "zettel.20260420131432": "zettel",
+    "zettel.20260420131433": "zettel",
+    "zettel.20260420131434": "zettel",
+    "zettel.20260420131435": "zettel",
+    "ae3bw38eg7l5p3ntry27x87": "zettel",
+    "zettel.literature.application-boundary-social-construction": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.architecture-decision-records": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.architecture-important-stuff": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.architecture-not-a-blueprint": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.building-a-second-brain": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.context-anchoring": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.encoding-team-standards": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.enterprise-architecture-coordination-cost": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.internal-quality-is-speed": "ae3bw38eg7l5p3ntry27x87",
+    "zettel.literature.software-architecture-guide": "ae3bw38eg7l5p3ntry27x87",
+    "6ie1ckeu7jfftzq54vt9e44": "zettel",
+    "zettel.moc.context-anchoring": "6ie1ckeu7jfftzq54vt9e44",
+    "zettel.moc.personal-knowledge-management": "6ie1ckeu7jfftzq54vt9e44",
+    "zettel.moc.software-architecture": "6ie1ckeu7jfftzq54vt9e44"
+  },
+  "notesLabelById": {
+    "book-summaries": "Book Summaries",
+    "book-summaries.14-habits-of-highly-productive-developers": "14 Habits of Highly Productive Developers",
+    "book-summaries.building-a-second-brain": "Building a Second Brain",
+    "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines": "Continuous Integration (CI) and Continuous Delivery (CD) a Practical Guide to Designing and Developing Pipelines",
+    "book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines.implementing-pipelines": "7. Implementing Pipelines",
+    "book-summaries.dare-to-lead": "Dare to Lead",
+    "book-summaries.filosofi-teras": "Filosofi Teras",
+    "book-summaries.madilog": "Madilog",
+    "book-summaries.measure-what-matters": "Measure What Matters",
+    "book-summaries.self-driving": "Self Driving",
+    "book-summaries.team-topologies": "Team Topologies",
+    "book-summaries.team-topologies.the-problem-with-org-charts": "The Problem with Org Charts",
+    "book-summaries.the-compound-effect": "The Compound Effect",
+    "book-summaries.the-devops-handbook": "The Devops Handbook",
+    "book-summaries.the-devops-handbook.part-I-the-three-ways": "Part I - The Three Ways",
+    "book-summaries.the-devops-handbook.part-I-the-three-ways.Agile-Continuous-Delivery-and-the-Three-Ways": "Agile Continuous Delivery and the Three Ways",
+    "book-summaries.youtube": "Youtube",
+    "book-summaries.youtube.how-to-stand-out-in-an-insanely-competitive-tech-market": "How To Stand Out In An Insanely Competitive Tech Market (Ex-Amazon Principal Engineer)",
+    "book-summaries.youtube.mbah-nun-kerja-itu-ibadah": "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006",
+    "book-summaries.youtube.the-super-mario-effect-tricking-your-brain-into-learning-more": "The Super Mario Effect Tricking Your Brain into Learning More",
+    "daily": "Daily",
+    "daily.journal": "Journal",
+    "daily.journal.2026": "2026",
+    "daily.journal.2026.01": "01",
+    "daily.journal.2026.01.12": "2026-01-12",
+    "handbook": "Handbook",
+    "handbook.golang": "Golang",
+    "handbook.golang.1-idiomatic": "1 Idiomatic",
+    "handbook.golang.2-membuat-http-server": "2 Membuat HTTP Server",
+    "handbook.golang.3-build-image-dengan-docker": "3 Build Image Dengan Docker",
+    "handbook.golang.4-setup-golang-ci": "4 Setup Golang CI",
+    "handbook.golang.5-custom-metrics-dengan-promteheus": "5 Custom Metrics Dengan Promteheus",
+    "handbook.rust": "Rust",
+    "notes": "Notes",
+    "notes.10-hari-menulis": "10 Hari Menulis",
+    "notes.10-hari-menulis.2025": "2025",
+    "notes.10-hari-menulis.2025.a-new-beginning": "20 Tahun Setelahnya",
+    "notes.10-hari-menulis.2025.commitment": "Di Antara Ribuan",
+    "notes.api-management": "API Management",
+    "notes.continous-delivery": "Continous Delivery",
+    "notes.copilot": "Copilot",
+    "notes.copilot.custom-instructions-best-practices": "Best Practices for Writing Copilot Custom Instructions",
+    "notes.copilot.tacit-knowledge-extraction": "Ekstraksi Tacit Knowledge Senior untuk AI dan Tim",
+    "notes.eventstorming": "Eventstorming",
+    "notes.powershell": "Powershell",
+    "notes.powershell.customize-poweshell": "Customize Poweshell",
+    "notes.prompt-engineering": "Prompt Engineering",
+    "notes.prompt-engineering.xml-vs-json": "XML vs JSON dalam AI Coding Tools: Analisis Mendalam Prompt Engineering",
+    "notes.software-architechture": "Software Architechture",
+    "notes.software-architechture.C4": "C4",
+    "notes.software-architechture.software-architechture-tradeoff": "Software Architechture Tradeoff",
+    "rf9qrdab1b4rms0tuan0m45": "Sotoy",
+    "notes.sotoy.dependabot-audit": "Sotoy Dependabot & npm audit analysis",
+    "notes.zettelkasten": "Zettelkasten di Dendron — Panduan Implementasi",
+    "notes.zettelkasten.cara-pakai": "Cara Pakai Zettelkasten di Project Ini",
+    "til": "Today I Learned",
+    "til.Golang": "Golang",
+    "til.Golang.bagaimana-instrumentasi-golang-dengan-elastic-APM": "Bagaimana instrumentasi golang dengan elastic APM",
+    "til.coding": "Coding",
+    "til.coding.1-technique": "Technique",
+    "til.coding.1-technique.sliding-window": "Sliding Window",
+    "til.coding.maximum-sum-of-distinct-subarrays-with-length-k": "Maximum Sum of Distinct Subarrays with Length K",
+    "til.coding.maximum-sum-of-distinct-subarrays-with-length-k.Coding": "Coding",
+    "til.coding.remove-duplicates-from-sorted-array": "Remove Duplicates from Sorted Array",
+    "til.coding.remove-duplicates-from-sorted-array.Code": "Code",
+    "til.coding.two-sum": "Two Sum",
+    "til.coding.two-sum.code": "Code",
+    "til.coding.two-sum-ii": "Two Sum II - Input Array Is Sorted",
+    "til.coding.two-sum-ii.code": "Code",
+    "til.coding.valid-palindrome": "Valid Palindrom",
+    "til.coding.valid-palindrome.Code": "Code",
+    "til.devops": "Devops",
+    "til.devops.setup-vm-azure": "Setup Vm Azure",
+    "til.devops.setup-vm-azure-terraforn": "Setup Vm Azure Terraform",
+    "til.devops.terraform": "Terraform",
+    "til.devops.troubleshots": "Troubleshots",
+    "til.devops.troubleshots.terraform-on-m1": "Terraform on M1",
+    "til.frontend": "Frontend",
+    "til.frontend.conditional-spread": "Conditional Spread in JavaScript/TypeScript",
+    "til.frontend.open-graph-biar-ketika-sharelink-gan-makin-kece": "Open Graph Biar Ketika Sharelink Gan Makin Kece",
+    "til.frontend.setup-refine": "Setup Refine UI sebagai Pengganti Streamlit",
+    "til.managing-team": "Managing Team",
+    "til.managing-team.belajar-coaching": "Belajar Coaching",
+    "til.managing-team.oreily": "Oreily",
+    "til.managing-team.oreily.critical-thinking-at-work": "Critical Thinking at Work",
+    "til.managing-team.preparing-performance-review": "Preparing Performance Review",
+    "til.managing-team.quantified-self": "Quantified Self",
+    "til.managing-team.youtube": "Youtube",
+    "til.managing-team.youtube.3-ways-to-express-your-thoughts-so-that-everyone-will-understand-you": "3 Ways to Express Your Thoughts so That Everyone Will Understand You",
+    "til.managing-team.youtube.the-most-powerful-way-to-think-first-principles": "The Most Powerful Way to Think First Principles",
+    "til.nix": "Nix",
+    "til.nix.nixos-on-windows": "Nixos on Windows",
+    "til.observability": "Observability",
+    "til.observability.prometheus": "Prometheus",
+    "til.python": "Python",
+    "til.python.building-sse": "Building a Robust Live Log Viewer with FastAPI and Server-Sent Events",
+    "til.setup-spring-boot": "Setup Spring Boot",
+    "til.setup-spring-boot.package-explanation": "Package Explanation",
+    "til.supabase": "Supabase",
+    "til.supabase.rls": "RLS Supabase: Biar Data Lo Gak Jadi Konsumsi Publik",
+    "til.windows": "Windows",
+    "til.windows.beres-beres-disk": "Beres Beres Disk",
+    "til.windows.recovering-from-a-broken-nix-wsl-setup": "Recovering from a Broken Nix Wsl Setup",
+    "til.windows.resolving-connection-issues-from-wsl-to-windows": "Notes: Resolving Connection Issues from WSL to Windows",
+    "til.writing": "Writing",
+    "til.writing.belajar-menulis": "Belajar Menulis",
+    "zettel": "Zettelkasten",
+    "zettel.202604170001": "Second brain memperluas kapasitas berpikir dengan memindahkan beban memori ke sistem eksternal",
+    "zettel.202604170002": "Ide yang tidak ditulis sama dengan ide yang tidak ada",
+    "zettel.202604170003": "Koneksi antar gagasan lebih bernilai dari koleksi informasi",
+    "zettel.20260419190800": "Judgement senior harus di-infrastrukturkan sebagai executable instruction AI",
+    "zettel.20260419192040": "Executable governance di Copilot butuh dokumentasi, custom instructions, skills, dan agent behavior",
+    "zettel.20260419192239": "Executable governance adalah standar tim yang bukan hanya ditulis, tapi dijalankan oleh AI",
+    "zettel.20260419192541": "Praktisnya instruksi standar tim untuk AI: role, konteks, prioritas, dan format",
+    "zettel.20260419192952": "Plan, onboarding, dan tracker adalah artefak governance AI, bukan dokumentasi pasif",
+    "zettel.20260419193541": "Plan AI bukan sekadar to-do list; ia adalah artefak governance operasional",
+    "zettel.20260419193542": "Onboarding docs penting untuk agent karena mereka menyediakan mental model repo",
+    "zettel.20260419193543": "Tracker adalah artefak observabilitas untuk workflow AI dan developer",
+    "zettel.20260419193544": "Agent eksplorasi codebase harus struktural, bukan sekadar search random",
+    "zettel.20260419194901": "Tacit knowledge senior diubah jadi artefak operasional untuk AI dan tim",
+    "zettel.20260420055413": "ADR adalah decision log yang merekam alasan, bukan dokumentasi desain",
+    "zettel.20260420055414": "Satu keputusan per ADR menjaga batasan dan riwayat yang bersih",
+    "zettel.20260420055415": "ADR accepted harus disupersede, bukan diedit ulang",
+    "zettel.20260420055619": "ADR sehat memaksa maintainer mengubah perilaku, bukan sekadar menambah dokumen",
+    "zettel.20260420055738": "Software architecture adalah jaringan keputusan trade-off, bukan sekadar diagram",
+    "zettel.20260420060847": "Arsitektur adalah penentu biaya perubahan masa depan",
+    "zettel.20260420060928": "Arsitektur bukan kasta; dia harus hidup bersama kode",
+    "zettel.20260420061007": "Halaman Software Architecture Guide adalah peta keputusan, bukan tutorial implementasi",
+    "zettel.20260420061232": "Fowler memulai definisi arsitektur dengan kritik terhadap ‘fundamental organization’",
+    "zettel.20260420061259": "Arsitektur nyata adalah shared understanding expert developer",
+    "zettel.20260420061356": "Arsitektur bukan sekadar keputusan awal proyek",
+    "zettel.20260420061530": "Architecture adalah seni memilah keputusan penting",
+    "zettel.20260420062009": "Architect bukan jabatan; dia adalah kemampuan judgment desain",
+    "zettel.20260420062120": "Cruft adalah utang kebingungan yang memperlambat perubahan",
+    "zettel.20260420062331": "Internal quality adalah infrastruktur kecepatan delivery",
+    "zettel.20260420085220": "Shortcut kualitas adalah pinjaman dari masa depan",
+    "zettel.20260420085349": "Keputusan arsitektural penting bergantung pada skala sistem",
+    "zettel.20260420085507": "Boundary aplikasi adalah konstruksi sosial, bukan fakta alam",
+    "zettel.20260420085714": "Aplikasi tetap ada karena boundary adalah unit sosial dan ekonomi",
+    "zettel.20260420085834": "Microservices adalah trade-off machine, bukan arsitektur modern otomatis",
+    "zettel.20260420090017": "Modernisasi yang matang adalah displacement bertahap, bukan rewrite besar",
+    "zettel.20260420090203": "Micro Frontends menunjukkan arsitektur juga soal koordinasi tim",
+    "zettel.20260420090327": "GUI Architectures: pattern harus diikuti prinsip, bukan label familiar",
+    "zettel.20260420090627": "Serverless mengurangi operasi tapi menambah ketergantungan platform",
+    "zettel.20260420090829": "Presentation Domain Data Layering adalah baseline, bukan arsitektur kuno",
+    "zettel.20260420091101": "Aplikasi juga arsitektur delivery, consistency, dan frontend structure",
+    "zettel.20260420091306": "Enterprise architecture bergeser ke koordinasi antar-pulau, bukan lagi modularitas kode",
+    "zettel.20260420091825": "Enterprise architecture adalah soal apakah biaya koordinasi pusat layak",
+    "zettel.20260420092009": "Sentralisasi total di EA melambatkan keputusan dan kehilangan konteks lokal",
+    "zettel.20260420092459": "Otonomi tanpa koordinasi di EA berubah jadi fragmentasi mahal",
+    "zettel.20260420092652": "Fowler condong ke desentralisasi tetapi tetap waspada terhadap chaos",
+    "zettel.20260420092900": "Enterprise architects lebih efektif ketika ikut masuk ke tim pengembangan",
+    "zettel.20260420092901": "Enterprise architecture Fowler: organisasi, funding, komunikasi, dan learning system",
+    "zettel.20260420131310": "Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan",
+    "zettel.20260420131311": "Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama",
+    "zettel.20260420131312": "AI memory tools sekarang kebanyakan project-level, bukan feature-level",
+    "zettel.20260420131400": "Kecemasan menutup chat adalah indikator context leakage",
+    "zettel.20260420131401": "Erosi konteks AI adalah isu arsitektural, bukan bug acak",
+    "zettel.20260420131402": "Context window besar tetap cepat habis dalam praktik engineering",
+    "zettel.20260420131403": "Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang",
+    "zettel.20260420131404": "Dalam erosi konteks, why hilang sebelum what",
+    "zettel.20260420131405": "Kalau medium lupa, pindahkan memori ke luar medium itu",
+    "zettel.20260420131406": "Summarization otomatis menyelamatkan what, bukan why",
+    "zettel.20260420131407": "Alignment tanpa persistence tetap rapuh",
+    "zettel.20260420131408": "Context anchoring adalah durability layer untuk alignment manusia-AI",
+    "zettel.20260420131409": "Decision context harus menjadi external state, bukan jejak chat",
+    "zettel.20260420131410": "Project context dan feature context punya fungsi berbeda",
+    "zettel.20260420131411": "Priming document adalah memori stabil level proyek",
+    "zettel.20260420131412": "Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung",
+    "zettel.20260420131413": "Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal",
+    "zettel.20260420131414": "Membaca codebase tidak sama dengan memahami keputusan",
+    "zettel.20260420131415": "Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana",
+    "zettel.20260420131416": "Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode",
+    "zettel.20260420131417": "Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR",
+    "zettel.20260420131418": "Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta",
+    "zettel.20260420131419": "Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal",
+    "zettel.20260420131420": "Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu",
+    "zettel.20260420131421": "Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model",
+    "zettel.20260420131422": "Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori",
+    "zettel.20260420131423": "Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya",
+    "zettel.20260420131424": "Feature document yang efektif itu ringkas dan operasional",
+    "zettel.20260420131425": "Struktur minimal feature document jelas dan praktis",
+    "zettel.20260420131426": "Nilai anchoring muncul saat sesi baru bisa warm start",
+    "zettel.20260420131427": "Maintenance dokumen harus menempel ke ritme kerja alami",
+    "zettel.20260420131428": "Feature document memaksa reasoning menjadi lebih jelas",
+    "zettel.20260420131429": "Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat",
+    "zettel.20260420131430": "Context anchoring adalah alat yang harus dikalibrasi, bukan default universal",
+    "zettel.20260420131431": "Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang",
+    "zettel.20260420131432": "Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks",
+    "zettel.20260420131433": "Keinginan mempertahankan chat adalah indikator anchoring belum cukup",
+    "zettel.20260420131434": "Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan",
+    "zettel.20260420131435": "Keberhasilan context anchoring diukur dari murahnya restart",
+    "ae3bw38eg7l5p3ntry27x87": "Literature",
+    "zettel.literature.application-boundary-social-construction": "Application boundary adalah konstruksi sosial",
+    "zettel.literature.architecture-decision-records": "Architecture Decision Record — Martin Fowler",
+    "zettel.literature.architecture-important-stuff": "Arsitektur adalah apa yang paling penting, bukan hanya struktur tinggi",
+    "zettel.literature.architecture-not-a-blueprint": "Arsitektur bukan blueprint terpisah dari programming",
+    "zettel.literature.building-a-second-brain": "Literature Note — Building a Second Brain",
+    "zettel.literature.context-anchoring": "Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup",
+    "zettel.literature.encoding-team-standards": "Encoding Team Standards — executable AI instruction untuk konsistensi tim",
+    "zettel.literature.enterprise-architecture-coordination-cost": "Enterprise architecture adalah soal biaya koordinasi, bukan kontrol total",
+    "zettel.literature.internal-quality-is-speed": "Kualitas internal adalah infrastruktur kecepatan delivery",
+    "zettel.literature.software-architecture-guide": "Software Architecture Guide — Fowler: arsitektur sebagai keputusan penting dan mahal kalau salah",
+    "6ie1ckeu7jfftzq54vt9e44": "Moc",
+    "zettel.moc.context-anchoring": "MOC: Context Anchoring — Praktik, Template, dan Integrasi",
+    "zettel.moc.personal-knowledge-management": "MOC: Personal Knowledge Management",
+    "zettel.moc.software-architecture": "MOC: Software Architecture"
+  }
+}

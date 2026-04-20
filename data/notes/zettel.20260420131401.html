@@ -1,0 +1,44 @@
+<h1 id="erosi-konteks-ai-adalah-isu-arsitektural-bukan-bug-acak">Erosi konteks AI adalah isu arsitektural, bukan bug acak<a aria-hidden="true" class="anchor-heading icon-link" href="#erosi-konteks-ai-adalah-isu-arsitektural-bukan-bug-acak"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Erosi konteks di AI bukan kebetulan; ini memang konsekuensi cara LLM memproses konteks.</p>
+<p>Model transformer mengkonsumsi konteks sebagai rangkaian token yang dihadapkan ke attention layer. Dalam praktik, itu berarti:</p>
+<ul>
+<li>informasi awal dan akhir cenderung mendapat bobot lebih tinggi,</li>
+<li>informasi yang berada di tengah konteks panjang mudah "terlupakan",</li>
+<li>reasoning dan alasan panjang adalah konten yang paling rentan hilang,</li>
+<li>context window besar bukan solusi magis karena degradasi perhatian tetap terjadi.</li>
+</ul>
+<p>Penelitian seperti "Lost in the Middle" menunjukkan bahwa model language melakukan jauh lebih buruk pada informasi yang muncul di tengah konteks panjang dibandingkan yang ada di awal atau akhir.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Kehilangan konteks pada AI adalah konsekuensi arsitektural, bukan kebetulan. Jadi solusinya harus arsitektural juga.</p>
+<p>Dalam konteks transformer, ini berarti kita tidak bisa berharap percakapan panjang tetap menjadi tempat penyimpanan keputusan yang andal. Chat adalah medium berpikir. Jika konteks penting hanya ada di dalamnya, maka setiap sesi baru berisiko mengulang asumsi atau kehilangan alasan. External memory seperti feature document adalah cara untuk memindahkan konteks dari medium yang rapuh ke medium yang lebih tahan lama.</p>
+<h2 id="literatur-pendukung">Literatur Pendukung<a aria-hidden="true" class="anchor-heading icon-link" href="#literatur-pendukung"></a></h2>
+<ul>
+<li>"Context Anchoring" — Rahul Garg, Martin Fowler (2026): <a href="https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html">https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html</a></li>
+<li>"Lost in the Middle: How Language Models Use Long Contexts" — Liu et al. (2023): <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
+<li>"Attention Is All You Need" — Vaswani et al. (2017): <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
+</ul>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 4.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 4</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

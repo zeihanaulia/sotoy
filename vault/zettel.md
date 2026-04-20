@@ -21,6 +21,7 @@ Hierarki `zettel.*` adalah implementasi Zettelkasten di vault ini.
 - [[zettel.literature.building-a-second-brain]] — Building a Second Brain (Tiago Forte)
 - [[zettel.literature.encoding-team-standards]] — Executable AI instruction sebagai prasyarat konsistensi tim
 - [[zettel.literature.architecture-decision-records]] — Martin Fowler tentang Architecture Decision Record
+- [[zettel.literature.context-anchoring]] — Context Anchoring (Rahul Garg) tentang external memory untuk keputusan fitur
 - [[zettel.literature.software-architecture-guide]] — Martin Fowler: Software Architecture Guide sebagai peta keputusan arsitektur
 - [[zettel.literature.architecture-important-stuff]] — Arsitektur adalah apa yang paling penting, bukan hanya struktur tinggi
 - [[zettel.literature.architecture-not-a-blueprint]] — Arsitektur bukan blueprint terpisah dari programming
@@ -62,7 +63,45 @@ Hierarki `zettel.*` adalah implementasi Zettelkasten di vault ini.
 - [[zettel.20260420062120]] — Cruft adalah utang kebingungan yang memperlambat perubahan
 - [[zettel.20260420062331]] — Internal quality adalah infrastruktur kecepatan delivery
 - [[zettel.20260420085220]] — Shortcut kualitas adalah pinjaman dari masa depan
-
+- [[zettel.20260420131310]] — Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan
+- [[zettel.20260420131311]] — Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama
+- [[zettel.20260420131312]] — AI memory tools sekarang kebanyakan project-level, bukan feature-level
+- [[zettel.20260420131400]] — Kecemasan menutup chat adalah indikator context leakage
+- [[zettel.20260420131401]] — Erosi konteks AI adalah isu arsitektural, bukan bug acak
+- [[zettel.20260420131402]] — Context window besar tetap cepat habis dalam praktik engineering
+- [[zettel.20260420131403]] — Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang
+- [[zettel.20260420131404]] — Dalam erosi konteks, "why" hilang sebelum "what"
+- [[zettel.20260420131405]] — Kalau medium lupa, pindahkan memori ke luar medium itu
+- [[zettel.20260420131406]] — Summarization otomatis menyelamatkan what, bukan why
+- [[zettel.20260420131407]] — Alignment tanpa persistence tetap rapuh
+- [[zettel.20260420131408]] — Context anchoring adalah durability layer untuk alignment manusia-AI
+- [[zettel.20260420131409]] — Decision context harus menjadi external state, bukan jejak chat
+- [[zettel.20260420131410]] — Project context dan feature context punya fungsi berbeda
+- [[zettel.20260420131411]] — Priming document adalah memori stabil level proyek
+- [[zettel.20260420131412]] — Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung
+- [[zettel.20260420131413]] — Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal
+- [[zettel.20260420131414]] — Membaca codebase tidak sama dengan memahami keputusan
+- [[zettel.20260420131415]] — Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana
+- [[zettel.20260420131416]] — Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode
+- [[zettel.20260420131417]] — Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR
+- [[zettel.20260420131418]] — Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta
+- [[zettel.20260420131419]] — Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal
+- [[zettel.20260420131420]] — Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu
+- [[zettel.20260420131421]] — Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model
+- [[zettel.20260420131422]] — Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori
+- [[zettel.20260420131423]] — Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya
+- [[zettel.20260420131424]] — Feature document yang efektif itu ringkas dan operasional
+- [[zettel.20260420131425]] — Struktur minimal feature document jelas dan praktis
+- [[zettel.20260420131426]] — Nilai anchoring muncul saat sesi baru bisa warm start
+- [[zettel.20260420131427]] — Maintenance dokumen harus menempel ke ritme kerja alami
+- [[zettel.20260420131428]] — Feature document memaksa reasoning menjadi lebih jelas
+- [[zettel.20260420131429]] — Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat
+- [[zettel.20260420131430]] — Context anchoring adalah alat yang harus dikalibrasi, bukan default universal
+- [[zettel.20260420131431]] — Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang
+- [[zettel.20260420131432]] — Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks
+- [[zettel.20260420131433]] — Keinginan mempertahankan chat adalah indikator anchoring belum cukup
+- [[zettel.20260420131434]] — Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan
+- [[zettel.20260420131435]] — Keberhasilan context anchoring diukur dari murahnya restart
 - [[zettel.202604170001]] — Second brain memperluastu kapasitas berpikir dengan offloading memori
 - [[zettel.202604170002]] — Ide yang tidak ditulis sama dengan ide yang tidak ada
 - [[zettel.202604170003]] — Koneksi antar gagasan lebih bernilai dari sekadar koleksi informasi

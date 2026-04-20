@@ -1,7 +1,7 @@
 ---
 id: zettel.literature.context-anchoring
 title: "Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup"
-desc: "Literature note dari artikel "Context Anchoring" oleh Rahul Garg yang membahas mengapa chat tidak cukup untuk menyimpan keputusan engineering dan bagaimana feature document menjadi external memory." 
+desc: "Literature note dari artikel Context Anchoring oleh Rahul Garg yang membahas mengapa chat tidak cukup untuk menyimpan keputusan engineering dan bagaimana feature document menjadi external memory." 
 tags:
   - literature-note
   - ai-collaboration

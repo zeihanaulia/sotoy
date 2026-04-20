@@ -1,6 +1,6 @@
 ---
 id: zettel.20260420131404
-title: "Dalam erosi konteks, "why" hilang sebelum "what""
+title: "Dalam erosi konteks, why hilang sebelum what"
 desc: "Alasan keputusan biasanya hilang lebih dulu daripada fakta permukaan."
 tags:
   - zettel

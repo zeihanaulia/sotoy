@@ -44,6 +44,32 @@ Software architecture adalah tentang keputusan yang mempertimbangkan trade-off a
 - [[zettel.literature.internal-quality-is-speed]] — internal quality sebagai kecepatan delivery
 - [[zettel.literature.application-boundary-social-construction]] — aplikasi sebagai konstruksi sosial
 - [[zettel.literature.enterprise-architecture-coordination-cost]] — enterprise architecture sebagai biaya koordinasi
+- [[zettel.20260421161001]] — AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan
+- [[zettel.20260421162253]] — Classic, Modern, dan AI-native Software Engineering adalah tiga mode kerja, bukan disiplin formal
+- [[zettel.20260421162310]] — AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI
+- [[zettel.20260421162320]] — AI-native Software Engineering membutuhkan fondasi Modern SE agar tidak mempercepat chaos
+- [[zettel.20260421163750]] — Thoughtworks: AI-native engineering adalah operating model untuk mengorkestrasikan AI, bukan sekadar AI coding
+- [[zettel.20260421170516]] — BMAD adalah framework workflow AI-native engineering yang mengganti prompt chaos dengan peran dan fase terstruktur
+- [[zettel.20260421170812]] — BMAD Getting Started mengajarkan workflow awal AI-native engineering, bukan sekadar installasi
+- [[zettel.20260421171457]] — BMAD analysis phase menghentikan ketidakjelasan sebelum berubah jadi PRD dan architecture
+- [[zettel.20260421171633]] — BMAD brainstorming memperjelas ide sebelum requirement
+- [[zettel.20260421173600]] — simulasi BMAD brainstorming: dari keresahan tim kecil AI coding tools ke problem definition
+- [[zettel.20260421174751]] — Quick Dev diagram: node-by-node diagnosis layer dan alur koreksi
+- [[zettel.20260421175034]] — simulasi Quick Dev: reset password via email menunjukkan PATCH, BAD SPEC, dan INTENT GAP
+- [[zettel.20260421173427]] — AI brainstorming terbaik adalah fasilitasi kondisi insight, bukan generator ide
+- [[zettel.20260421174123]] — BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model
+- [[zettel.20260421171634]] — BMAD market research menangkap realitas eksternal sebelum planning
+- [[zettel.20260421171635]] — BMAD domain research memaksa pemahaman logika industri sebelum solusi
+- [[zettel.20260421171636]] — BMAD technical research memvalidasi feasibility sebelum architecture
+- [[zettel.20260421171637]] — BMAD product brief merapikan visi produk sebelum PRD
+- [[zettel.20260421171638]] — BMAD PRFAQ menguji ide dengan pendekatan adversarial sebelum planning
+- [[zettel.20260421171823]] — BMAD analysis phase sebagai epistemic filter sebelum PRD
+- [[zettel.20260421171824]] — BMAD Product Brief vs PRFAQ: klarifikasi lembut versus pengujian adversarial
+- [[zettel.20260421171825]] — Simulasi BMAD analysis phase: invoice app untuk freelancer
+- [[zettel.20260421172430]] — BMAD named agents membangun AI coworker model, bukan sekadar persona lucu
+- [[zettel.20260421172636]] — BMAD activation flow dan customization: menyusun agent dari template, konteks, dan kebiasaan tim
+- [[zettel.20260421172800]] — BMAD project context adalah konstitusi implementasi untuk AI agents, bukan dokumentasi biasa
+- [[zettel.moc.ai-native]] — MOC AI-native engineering
 - [[zettel.20260420060847]] — arsitektur adalah penentu biaya perubahan masa depan
 - [[zettel.20260420060928]] — arsitektur bukan kasta; dia harus hidup bersama kode
 - [[zettel.20260420061007]] — halaman ini adalah peta keputusan, bukan tutorial implementasi

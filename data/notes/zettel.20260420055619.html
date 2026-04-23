@@ -1,0 +1,93 @@
+<h1 id="adr-sehat-memaksa-maintainer-mengubah-perilaku-bukan-sekadar-menambah-dokumen">ADR sehat memaksa maintainer mengubah perilaku, bukan sekadar menambah dokumen<a aria-hidden="true" class="anchor-heading icon-link" href="#adr-sehat-memaksa-maintainer-mengubah-perilaku-bukan-sekadar-menambah-dokumen"></a></h1>
+<blockquote>
+<p>ADR yang sehat bukan dokumen rapih; ia adalah mekanisme yang mengubah cara maintainer review, link issue/PR, dan buat supersede saat konteks berubah.</p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li>Ketika sebuah repo memiliki kasus nyata seperti OpsTrack dengan Laravel + Blade + Alpine, ADR bukan sekadar "catatan frontend".</li>
+<li>ADR yang benar akan memaksa tim menyatakan:
+<ul>
+<li>masalah konkret yang dihadapi,</li>
+<li>keputusan spesifik yang diambil,</li>
+<li>alternatif yang benar-benar dipertimbangkan,</li>
+<li>trigger kapan keputusan perlu direvisi.</li>
+</ul>
+</li>
+<li>Hal paling penting: setelah ADR diterima, maintainer harus menerjemahkannya jadi aturan review dan referensi kerja.</li>
+</ul>
+<p>Simulasi nyata:</p>
+<ol>
+<li>
+<p>Situasi proyek:</p>
+<ul>
+<li>Produk SaaS internal: OpsTrack.</li>
+<li>Stack: Laravel monolith, Blade + Alpine.js, PostgreSQL.</li>
+<li>Tim: 5 engineer, mayoritas backend.</li>
+<li>Problem: dashboard makin interaktif, tim bingung apakah harus pindah ke React SPA.</li>
+</ul>
+</li>
+<li>
+<p>ADR yang expected:</p>
+<ul>
+<li>File: <code>doc/adr/0007-use-htmx-for-high-interactivity-server-rendered-pages.md</code></li>
+<li>Isi: context, decision, alternatives, consequences, revisit triggers, related PR/RFC.</li>
+<li>Keputusan: pakai HTMX untuk interaksi kaya di halaman server-rendered.</li>
+</ul>
+</li>
+<li>
+<p>Apa maintainer lakukan setelah ADR accepted:</p>
+<ul>
+<li>link ADR ke PR implementasi (<code>#1842</code>), issue, dan frontend guideline.</li>
+<li>pakai ADR sebagai dasar review: tolak PR React yang melanggar keputusan.</li>
+<li>buat guardrail operasional: HTMX untuk partial update dan modal, bukan untuk shared client state.</li>
+<li>monitoring: amati duplikasi fragment dan konsistensi pola.</li>
+<li>jika kondisi berubah, buat ADR baru dan supersede ADR lama.</li>
+</ul>
+</li>
+<li>
+<p>Implementasi bagus vs jelek:</p>
+<ul>
+<li>Bagus: ADR menjadi referensi review, ada guideline HTMX vs SPA, dan ada trigger revisi.</li>
+<li>Jelek: ADR dibuat belakangan, tidak dirujuk saat PR, atau diedit diam-diam tanpa supersede.</li>
+</ul>
+</li>
+<li>
+<p>Indikator ADR sehat:</p>
+<ul>
+<li>decisions dipakai dalam review dan issue.</li>
+<li>ada referensi PR/issue/RFC.</li>
+<li>ada batasan scope yang jelas.</li>
+<li>ada trigger revisi yang eksplisit.</li>
+<li>tim bisa menjelaskan apakah ADR ini masih valid.</li>
+</ul>
+</li>
+</ol>
+<p>Failure mode paling umum:</p>
+<ul>
+<li>ADR hanya kosmetik: dokumen dibuat, tapi maintainer tetap pakai pola campur-aduk.</li>
+<li>ADR ditulis setelah implementasi selesai: jadi rasionalisasi, bukan keputusan.</li>
+<li>ADR diedit ulang: sejarah alasan hilang.</li>
+<li>ADR terlalu generic atau terlalu banyak: noise, bukan signal.</li>
+</ul>
+<p>Implikasi:</p>
+<ul>
+<li>ADR harus dilekatkan ke perilaku maintainer, bukan cuma ke folder <code>doc/adr</code>.</li>
+<li>Review, issue, dan PR adalah area di mana ADR sehat tampil.</li>
+<li>Jika repo tidak berubah setelah ADR, berarti ADR itu belum bekerja.</li>
+</ul>
+<p>→ Dikuatkan oleh <a href="/sotoy/notes/zettel.literature.architecture-decision-records">Architecture Decision Record — Martin Fowler</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">permanent-note (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">adr (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">process (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.architecture-decision-records">Architecture Decision Record — Martin Fowler</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

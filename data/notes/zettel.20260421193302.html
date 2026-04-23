@@ -1,0 +1,71 @@
+<h1 id="context-engineering-adalah-menyusun-constraint-lokal-bukan-sekadar-menambahkan-informasi">Context engineering adalah menyusun constraint lokal, bukan sekadar menambahkan informasi<a aria-hidden="true" class="anchor-heading icon-link" href="#context-engineering-adalah-menyusun-constraint-lokal-bukan-sekadar-menambahkan-informasi"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Apa itu context engineering dalam AI-native workflows?</li>
+<li>Kenapa context bukan sekadar informasi tambahan?</li>
+<li>Bagaimana context menjadi constraint system untuk agent?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Context engineering bukan hanya memberi AI lebih banyak data. Ia adalah praktik memilih pengetahuan lokal yang relevan, unobvious, dan membatasi, agar agent bekerja selaras dengan lingkungan spesifik.</p>
+<h2 id="perbedaan-konteks-dan-informasi">Perbedaan konteks dan informasi<a aria-hidden="true" class="anchor-heading icon-link" href="#perbedaan-konteks-dan-informasi"></a></h2>
+<ul>
+<li>Informasi tambahan bisa berupa data luas tanpa struktur.</li>
+<li>Context engineering memilih hal-hal yang membuat keputusan agent berbeda dari inferensi generik.</li>
+</ul>
+<h2 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h2>
+<p>Tanpa context, AI cenderung:</p>
+<ul>
+<li>default ke best practice generik,</li>
+<li>atau inferensi dari potongan kode terbatas,</li>
+<li>sehingga solusi jadi salah arah untuk proyek tertentu.</li>
+</ul>
+<p>Context engineering menjawab: "bagaimana perubahan ini harus dibangun di lingkungan ini?" bukan hanya "apa yang sedang dikerjakan?"</p>
+<h2 id="context-sebagai-constraint-system">Context sebagai constraint system<a aria-hidden="true" class="anchor-heading icon-link" href="#context-sebagai-constraint-system"></a></h2>
+<p>Context yang baik bersifat:</p>
+<ul>
+<li>terpilih, bukan semua informasi,</li>
+<li>relevan untuk keputusan lokal,</li>
+<li>membatasi perilaku agent,</li>
+<li>menghindari inference generik yang salah.</li>
+</ul>
+<p>Ini termasuk:</p>
+<ul>
+<li>stack dan versi spesifik,</li>
+<li>naming convention dan pola helper,</li>
+<li>security guardrails,</li>
+<li>architecture-specific rules,</li>
+<li>feature flags dan tooling lokal.</li>
+</ul>
+<h2 id="kesalahan-umum">Kesalahan umum<a aria-hidden="true" class="anchor-heading icon-link" href="#kesalahan-umum"></a></h2>
+<ul>
+<li>Mengira context semakin bagus kalau semakin banyak.</li>
+<li>Menambahkan konteks yang terlalu umum atau tidak relevan.</li>
+<li>Mengabaikan bahwa context yang tidak selektif bisa mencemari fokus model.</li>
+</ul>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>Context engineering adalah dasar agar agent tidak berubah jadi "fitur AI generik".</li>
+<li>Ia penting untuk menskalakan AI dalam repo nyata dan brownfield.</li>
+<li>Ia menempatkan knowledge institusional ke dalam ruang kerja agent.</li>
+</ul>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421172800">BMAD project context adalah konstitusi implementasi untuk AI agents, bukan dokumentasi biasa</a> — BMAD project context adalah konstitusi implementasi untuk AI agents, bukan dokumentasi biasa</li>
+<li><a href="/sotoy/notes/zettel.20260419193544">Agent eksplorasi codebase harus struktural, bukan sekadar search random</a> — Agent eksplorasi codebase harus struktural, bukan sekadar search random</li>
+<li><a href="/sotoy/notes/zettel.20260421193301">Methodology wajib ada supaya AI-assisted development tidak jadi chaos yang efisien</a> — Methodology wajib ada supaya AI-assisted development tidak jadi chaos yang efisien</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">constraint (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260421193303">BMAD duduk di lapisan methodology dan orchestration, bukan sekadar prompt atau persona</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

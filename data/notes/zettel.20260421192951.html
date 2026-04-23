@@ -1,0 +1,53 @@
+<h1 id="spec-semakin-penting-ketika-ai-bisa-menulis-kode-bukan-hanya-karena-kode-lebih-murah">Spec semakin penting ketika AI bisa menulis kode, bukan hanya karena kode lebih murah<a aria-hidden="true" class="anchor-heading icon-link" href="#spec-semakin-penting-ketika-ai-bisa-menulis-kode-bukan-hanya-karena-kode-lebih-murah"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Mengapa kemampuan AI menulis kode memindahkan hambatan utama dari implementasi ke spesifikasi?</li>
+<li>Apa risiko kunci ketika spesifikasi lemah dalam workflow AI-native?</li>
+<li>Bagaimana spesifikasi berfungsi sebagai boundary antara niat manusia dan aksi agent?</li>
+</ol>
+<h2 id="jawaban">Jawaban<a aria-hidden="true" class="anchor-heading icon-link" href="#jawaban"></a></h2>
+<p>Kemampuan AI menulis kode membuat pekerjaan implementasi teknis menjadi lebih murah. Ketika biaya pembuatan kode turun, kesalahan paling mahal tidak lagi terjadi pada tulisan kode itu sendiri, tetapi pada ketidaksesuaian antara apa yang diminta dan apa yang dihasilkan.</p>
+<p>Spec menjadi boundary operasional yang menjawab:</p>
+<ul>
+<li>apa yang sedang dibangun,</li>
+<li>apa batasnya,</li>
+<li>apa acceptance criteria-nya,</li>
+<li>apa constraint pentingnya,</li>
+<li>dan apa yang jangan dilakukan.</li>
+</ul>
+<p>Tanpa spec yang jelas, AI akan mengisi kekosongan dengan tebakan yang tampak valid secara syntaksis tapi salah arah secara domain.</p>
+<h3 id="risiko-utama-jika-spec-lemah">Risiko utama jika spec lemah<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-utama-jika-spec-lemah"></a></h3>
+<ul>
+<li>AI menghasilkan kode yang terlihat benar namun tidak memenuhi tujuan.</li>
+<li>Perubahan cepat menjadi false confidence: banyak commit baik, tapi tidak tepat.</li>
+<li>Review manusia jadi lebih sulit karena output sudah tersebar di banyak file.</li>
+<li>Rework meningkat karena masalahnya bukan kode, tapi definisi tugas.</li>
+</ul>
+<h3 id="peran-spec-sebagai-boundary">Peran spec sebagai boundary<a aria-hidden="true" class="anchor-heading icon-link" href="#peran-spec-sebagai-boundary"></a></h3>
+<p>Spesifikasi adalah jembatan antara intent manusia dan aksi agent. Ia memberitahu agent bukan hanya "lakukan ini", tetapi juga "lakukan ini dalam batas yang ini." Jika agent diberi ruang tanpa boundary, ia cenderung mengisi ruang itu dengan solusi generik yang tidak relevan.</p>
+<p>Spec adalah kontrol operasional: semakin otonom agent, semakin penting spec sebagai guardrail.</p>
+<h2 id="mengapa-ini-penting-untuk-ai-native-engineering">Mengapa ini penting untuk AI-native engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting-untuk-ai-native-engineering"></a></h2>
+<p>Karena AI-native bukan sekadar mempermudah penulisan kode. Ini soal memindahkan pusat gravitasi kerja dari "menulis kode" ke "mendefinisikan kebutuhan dan membuat batas yang dapat dieksekusi." </p>
+<p>Jika AI hanya dilihat sebagai penulis kode, maka focus masih di level lamanya. Jika AI dipandang sebagai pelaku operasional, maka spec menjadi kotak kendali yang menentukan arah, bukan sekadar catatan awal.</p>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421161001">AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</a> — AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</li>
+<li><a href="/sotoy/notes/zettel.20260421162310">AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI</a> — AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI</li>
+<li><a href="/sotoy/notes/zettel.20260421172800">BMAD project context adalah konstitusi implementasi untuk AI agents, bukan dokumentasi biasa</a> — BMAD project context adalah konstitusi implementasi untuk AI agents, bukan dokumentasi biasa</li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">spec (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">boundary (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260421193756">Spec Kit tetap relevan sebagai pipeline spesifikasi meski banyak framework AI-native muncul</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

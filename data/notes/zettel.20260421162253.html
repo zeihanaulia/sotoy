@@ -1,0 +1,131 @@
+<h1 id="classic-modern-dan-ai-native-software-engineering-adalah-tiga-mode-kerja-bukan-disiplin-formal">Classic, Modern, dan AI-native Software Engineering adalah tiga mode kerja, bukan disiplin formal<a aria-hidden="true" class="anchor-heading icon-link" href="#classic-modern-dan-ai-native-software-engineering-adalah-tiga-mode-kerja-bukan-disiplin-formal"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Apa beda inti cara berpikir dari Classic, Modern, dan AI-native Software Engineering?</li>
+<li>Dalam workflow nyata, siapa yang melakukan apa di tiap mode?</li>
+<li>Kalau dikasih tugas yang sama, hasilnya akan berbeda di mana?</li>
+<li>Trade-off dan failure mode masing-masing apa?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Classic, Modern, dan AI-native Software Engineering bukan tiga disiplin formal yang punya definisi universal. Mereka adalah tiga mode kerja engineering yang dibedakan oleh di mana letak tenaga utama engineering dikeluarkan.</p>
+<h2 id="definisi-atomik">Definisi atomik<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi-atomik"></a></h2>
+<h3 id="classic-software-engineering">Classic Software Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#classic-software-engineering"></a></h3>
+<ul>
+<li>Pelaku utama: manusia.</li>
+<li>Coding, testing, dokumentasi, debugging, deployment banyak dilakukan manual atau semi-manual.</li>
+<li>Proses cenderung linear: requirement → design → code → test → release.</li>
+<li>Knowledge sering tersimpan di senior engineer dan dokumen formal.</li>
+</ul>
+<p>Model mental: <strong>software dibangun oleh manusia, dengan tool sebagai alat bantu pasif.</strong></p>
+<h3 id="modern-software-engineering">Modern Software Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#modern-software-engineering"></a></h3>
+<ul>
+<li>Pelaku utama tetap manusia, tetapi delivery sangat diotomasi.</li>
+<li>CI/CD, cloud, observability, test automation, trunk-based development, infra-as-code, dan platform engineering menjadi norma.</li>
+<li>Feedback loop lebih cepat.</li>
+</ul>
+<p>Model mental: <strong>software dibangun oleh manusia, dibantu sistem automasi yang menjaga kualitas dan kecepatan.</strong></p>
+<h3 id="ai-native-software-engineering">AI-native Software Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-native-software-engineering"></a></h3>
+<ul>
+<li>Manusia tidak lagi menulis semua perubahan langsung.</li>
+<li>AI agent/model menjadi aktor aktif dalam analisis, implementasi, test generation, dokumentasi, refactor, dan eksplorasi codebase.</li>
+<li>Tugas engineer bergeser ke orkestrasi intent, context, constraint, workflow, dan verifikasi output AI.</li>
+</ul>
+<p>Model mental: <strong>software dibangun oleh manusia + AI sebagai co-worker operasional, di bawah constraint dan review yang didefinisikan manusia.</strong></p>
+<h2 id="perbedaan-inti-cara-berpikir">Perbedaan inti cara berpikir<a aria-hidden="true" class="anchor-heading icon-link" href="#perbedaan-inti-cara-berpikir"></a></h2>
+<ul>
+<li>Classic = engineer sebagai pembuat langsung.</li>
+<li>Modern = engineer sebagai perancang dan pemelihara delivery system.</li>
+<li>AI-native = engineer sebagai orchestrator AI dan penyusun konteks.</li>
+</ul>
+<h2 id="siapa-melakukan-apa">Siapa melakukan apa<a aria-hidden="true" class="anchor-heading icon-link" href="#siapa-melakukan-apa"></a></h2>
+<h3 id="classic">Classic<a aria-hidden="true" class="anchor-heading icon-link" href="#classic"></a></h3>
+<ul>
+<li>Engineer menulis kode dan tes.</li>
+<li>QA melakukan verifikasi manual.</li>
+<li>Release engineer atau ops menjalankan deployment.</li>
+<li>Tool hanya membantu editing, version control, dan eksekusi manual.</li>
+</ul>
+<h3 id="modern">Modern<a aria-hidden="true" class="anchor-heading icon-link" href="#modern"></a></h3>
+<ul>
+<li>Engineer menulis kode dan tes.</li>
+<li>Sistem otomatis menjalankan CI, build, test, security scan, deploy.</li>
+<li>Platform engineer menjaga pipeline dan observability.</li>
+<li>Manual review fokus pada desain dan kualitas.</li>
+</ul>
+<h3 id="ai-native">AI-native<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-native"></a></h3>
+<ul>
+<li>Engineer menulis spec, acceptance criteria, context, dan guardrail.</li>
+<li>AI agent menganalisis codebase, mengenerate kode, membuat tes, dan menyiapkan PR.</li>
+<li>Sistem otomatis masih melakukan validasi dan deployment.</li>
+<li>Engineer review hasil AI dan memutuskan aksi final.</li>
+</ul>
+<h2 id="skenario-yang-sama-fitur-reset-password">Skenario yang sama: fitur reset password<a aria-hidden="true" class="anchor-heading icon-link" href="#skenario-yang-sama-fitur-reset-password"></a></h2>
+<h3 id="classic-1">Classic<a aria-hidden="true" class="anchor-heading icon-link" href="#classic-1"></a></h3>
+<ul>
+<li>Requirement turun lewat tiket.</li>
+<li>Engineer implement manual endpoint, token, email, UI, validasi.</li>
+<li>QA mengetes manual/staging.</li>
+<li>Deploy prosedural.</li>
+</ul>
+<p>Beban utama: ingatan engineer, navigasi codebase, komunikasi manusia, checklist manual.</p>
+<h3 id="modern-1">Modern<a aria-hidden="true" class="anchor-heading icon-link" href="#modern-1"></a></h3>
+<ul>
+<li>Engineer masih menulis mayoritas kode.</li>
+<li>Namun kode diuji, dibuild, dan dideploy oleh pipeline otomatis.</li>
+<li>Observability dan rollback tersedia.</li>
+</ul>
+<p>Beban utama: desain sistem, kualitas delivery, pipeline sehat.</p>
+<h3 id="ai-native-1">AI-native<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-native-1"></a></h3>
+<ul>
+<li>Engineer mendefinisikan spec, context, constraint, dan workflow.</li>
+<li>AI agent scan codebase, generate perubahan, dan jalankan tes.</li>
+<li>Engineer fokus pada review kualitas dan domain.</li>
+</ul>
+<p>Beban utama: orkestrasi intent, context, guardrail, dan verifikasi AI.</p>
+<h2 id="trade-off-dan-failure-mode">Trade-off dan failure mode<a aria-hidden="true" class="anchor-heading icon-link" href="#trade-off-dan-failure-mode"></a></h2>
+<h3 id="classic-2">Classic<a aria-hidden="true" class="anchor-heading icon-link" href="#classic-2"></a></h3>
+<ul>
+<li>Kelebihan: kontrol manusia tinggi, reasoning eksplisit.</li>
+<li>Kekurangan: lambat, costly, knowledge bottleneck, mudah lupa.</li>
+<li>Failure mode: proses manual berat, release kaku, human error.</li>
+</ul>
+<h3 id="modern-2">Modern<a aria-hidden="true" class="anchor-heading icon-link" href="#modern-2"></a></h3>
+<ul>
+<li>Kelebihan: lebih cepat, stabil, feedback loop pendek.</li>
+<li>Kekurangan: masih bergantung pada jam manusia untuk implementasi besar.</li>
+<li>Failure mode: tooling kompleks tanpa tujuan, pipeline rapuh, developer experience buruk.</li>
+</ul>
+<h3 id="ai-native-2">AI-native<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-native-2"></a></h3>
+<ul>
+<li>Kelebihan: perubahan multi-file cepat, eksplorasi murah, dokumentasi/test paralel.</li>
+<li>Kekurangan: spesifikasi jelek cepat jadi masalah, context miskin, overtrust AI.</li>
+<li>Failure mode: solusi terlihat rapi tapi salah domain/security/architecture; false confidence.</li>
+</ul>
+<h2 id="catatan-penting">Catatan penting<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-penting"></a></h2>
+<ul>
+<li>AI-native bukan sekadar modern SE plus Copilot.</li>
+<li>Jika engineer masih menulis sebagian besar kode sendiri dan AI hanya autocomplete, itu lebih tepat disebut <strong>modern engineering with AI assistance</strong>.</li>
+<li>AI-native sehat dibangun di atas fondasi modern: repo rapi, test ada, observability hidup, boundary jelas.</li>
+</ul>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421161001">AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</a> — AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">modern-software-engineering (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260421162310">AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI</a></li>
+<li><a href="/sotoy/notes/zettel.20260421162320">AI-native Software Engineering membutuhkan fondasi Modern SE agar tidak mempercepat chaos</a></li>
+<li><a href="/sotoy/notes/zettel.20260421163750">Thoughtworks: AI-native engineering adalah operating model untuk mengorkestrasikan AI, bukan sekadar AI coding</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

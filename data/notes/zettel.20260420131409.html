@@ -1,0 +1,39 @@
+<h1 id="decision-context-harus-menjadi-external-state-bukan-jejak-chat">Decision context harus menjadi external state, bukan jejak chat<a aria-hidden="true" class="anchor-heading icon-link" href="#decision-context-harus-menjadi-external-state-bukan-jejak-chat"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Konteks keputusan harus diperlakukan seperti state yang bisa diakses ulang, bukan jejak samar dalam chat.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Ini nyerang langsung problem utama: chat tidak cukup karena bukan sistem penyimpanan.</p>
+<p>Chat adalah medium sesi untuk berpikir. Itu bagus untuk eksplorasi, tapi setiap kali sesi berakhir, konteks yang penting sering hilang atau hanya tersisa sebagai jejak samar. Agar keputusan tetap bisa dipakai ulang, konteks harus dipindahkan ke bentuk yang eksplisit dan terstruktur: external state.</p>
+<h2 id="contoh">Contoh<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh"></a></h2>
+<ul>
+<li>tanpa external state: sesi awal memutuskan <code>pakai BullMQ</code>. Sesi berikutnya, AI mungkin hanya melihat "retry" dan mengusulkan kembali <code>RetryQueue</code>.</li>
+<li>dengan external state: dokumen fitur menyimpan <code>Decision: BullMQ</code>, <code>Why: low overhead, multi-tenant</code>, <code>Rejected: RetryQueue</code>. Sesi baru bisa mengakses state ini dan melanjutkan tanpa ulang logika.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 12</li>
+</ul>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 12.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber-1">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber-1"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 12</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

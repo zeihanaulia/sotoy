@@ -1,0 +1,67 @@
+<h1 id="patch-bad-spec-dan-intent-gap-diagnosis-kegagalan-dalam-workflow-ai-native">PATCH, BAD SPEC, dan INTENT GAP: diagnosis kegagalan dalam workflow AI-native<a aria-hidden="true" class="anchor-heading icon-link" href="#patch-bad-spec-dan-intent-gap-diagnosis-kegagalan-dalam-workflow-ai-native"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Apa bedanya PATCH, BAD SPEC, dan INTENT GAP dalam AI-native workflow?</li>
+<li>Kenapa penting memperbaiki layer yang tepat saat review atau koreksi?</li>
+<li>Bagaimana konsekuensinya jika masalah di-layer salah justru diperbaiki?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Tidak semua kegagalan berasal dari kode. Dalam AI-native engineering, ada tiga layer diagnosis yang berbeda:</p>
+<ul>
+<li>PATCH: implementasi lokal perlu diperbaiki,</li>
+<li>BAD SPEC: boundary atau spec eksekusi perlu direvisi,</li>
+<li>INTENT GAP: pemahaman awal tentang maksud user perlu diklarifikasi ulang.</li>
+</ul>
+<p>Memperbaiki pada layer yang salah sering membuat rework jadi lebih besar daripada manfaatnya.</p>
+<h2 id="definisi">Definisi<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi"></a></h2>
+<h3 id="patch">PATCH<a aria-hidden="true" class="anchor-heading icon-link" href="#patch"></a></h3>
+<p>Masalahnya ada di level implementasi lokal. Intent dan spec sudah benar, tetapi detail implementasi, bug, atau edge case belum ditangani.</p>
+<p>Contoh: error handling tidak meliputi kondisi tertentu, test case terlewat, atau helper dipanggil dengan argumen yang salah.</p>
+<h3 id="bad-spec">BAD SPEC<a aria-hidden="true" class="anchor-heading icon-link" href="#bad-spec"></a></h3>
+<p>Intent awal benar, tetapi spesifikasi yang dibekukan terlalu lemah atau tidak lengkap. Agent menerjemahkan spec secara konsisten, tetapi spec itu sendiri tidak memuat constraint yang penting.</p>
+<p>Contoh: acceptance criteria tidak mencakup keamanan, format response salah, atau precondition tidak ditentukan.</p>
+<h3 id="intent-gap">INTENT GAP<a aria-hidden="true" class="anchor-heading icon-link" href="#intent-gap"></a></h3>
+<p>Masalah lebih dalam: tim atau agent salah memahami apa yang sebenarnya diminta. Baik spec maupun implementasi bisa konsisten, tapi terhadap pemahaman yang keliru.</p>
+<p>Contoh: fitur dibuat sesuai pengertian awal, tetapi user sebenarnya menginginkan behavior lain.</p>
+<h2 id="mengapa-perbedaan-ini-penting">Mengapa perbedaan ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-perbedaan-ini-penting"></a></h2>
+<p>AI-native workflows seperti Quick Dev mengandalkan agen yang dapat melakukan banyak perubahan cepat. Ini memperbesar biaya jika perbaikan dipaksa pada layer yang salah.</p>
+<ul>
+<li>Jika PATCH dilakukan saat BAD SPEC asli, kode bisa jadi valid tapi terus gagal di use case yang tepat.</li>
+<li>Jika BAD SPEC diubah saat sebenarnya ada INTENT GAP, tim kehilangan arah karena batas yang diperbaiki masih salah.</li>
+<li>Jika INTENT GAP ditangani sebagai PATCH, tim akan terus mengejar gejala tanpa menyelesaikan kebutuhan bisnis.</li>
+</ul>
+<h2 id="prinsip-yang-harus-dipegang">Prinsip yang harus dipegang<a aria-hidden="true" class="anchor-heading icon-link" href="#prinsip-yang-harus-dipegang"></a></h2>
+<ol>
+<li>Temukan level kegagalan pertama kali masuk.</li>
+<li>Perbaiki di layer itu.</li>
+<li>Jika diperlukan, dorong koreksi ke layer yang lebih dalam, bukan hanya tambal di atasnya.</li>
+</ol>
+<h2 id="hubungan-ke-quick-dev">Hubungan ke Quick Dev<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-quick-dev"></a></h2>
+<p>Quick Dev menempatkan review sebagai triage. Ia memisahkan respons menjadi:</p>
+<ul>
+<li>PATCH untuk kesalahan lokal,</li>
+<li>BAD SPEC untuk koreksi boundary,</li>
+<li>INTENT GAP untuk klarifikasi ulang mogul.</li>
+</ul>
+<p>Ini membuat workflow lebih disiplin: output yang tampak baik tidak otomatis dibiarkan. Review harus menentukan apakah masalahnya di kode, spec, atau pemahaman dasar.</p>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421174123">BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</a> — BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</li>
+<li><a href="/sotoy/notes/zettel.20260421175034">Simulasi Quick Dev: reset password via email menunjukkan PATCH, BAD SPEC, dan INTENT GAP</a> — Simulasi Quick Dev: reset password via email menunjukkan PATCH, BAD SPEC, dan INTENT GAP</li>
+<li><a href="/sotoy/notes/zettel.20260421174751">Quick Dev diagram: node-by-node diagnosis layer dan alur koreksi</a> — Quick Dev diagram: node-by-node diagnosis layer dan alur koreksi</li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">quick-dev (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">review (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">failure-mode (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

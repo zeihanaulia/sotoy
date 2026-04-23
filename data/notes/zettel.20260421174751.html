@@ -1,0 +1,114 @@
+<h1 id="quick-dev-diagram-node-by-node-diagnosis-layer-dan-alur-koreksi">Quick Dev diagram: node-by-node diagnosis layer dan alur koreksi<a aria-hidden="true" class="anchor-heading icon-link" href="#quick-dev-diagram-node-by-node-diagnosis-layer-dan-alur-koreksi"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Apa fungsi setiap node utama dalam diagram Quick Dev?</li>
+<li>Bagaimana node-node itu membedakan jenis kegagalan berdasarkan layer?</li>
+<li>Mengapa review Quick Dev membutuhkan jalur PATCH, BAD SPEC, INTENT GAP, DEFER, dan VOID?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Diagram Quick Dev adalah sistem kompresi keputusan: setiap node berfungsi sebagai stasiun penyaringan yang memetakan input kasar ke hasil yang dapat diterima.</p>
+<p>Review bukan hanya QA. Review adalah diagnosis untuk menentukan apakah koreksi harus dilakukan di implementasi, spec, atau intent.</p>
+<h2 id="node-breakdown">Node breakdown<a aria-hidden="true" class="anchor-heading icon-link" href="#node-breakdown"></a></h2>
+<h3 id="initial-intent">Initial Intent<a aria-hidden="true" class="anchor-heading icon-link" href="#initial-intent"></a></h3>
+<p>State awal, bukan aksi.</p>
+<p>Fungsi: menandai bahwa input manusia biasanya masih kabur dan bukan goal eksekusi langsung.
+Input: request awal apa pun.
+Output: bahan baku untuk klarifikasi.
+Failure mode: memperlakukan intent awal sebagai spesifikasi yang cukup.</p>
+<h3 id="clarify--route">Clarify &#x26; Route<a aria-hidden="true" class="anchor-heading icon-link" href="#clarify--route"></a></h3>
+<p>Node ini memurnikan intent dan memilih jalur.</p>
+<p>Fungsi: menjadikan niat coherent dan memutuskan apakah task aman ke one-shot atau perlu plan.
+Input: Initial Intent, interview manusia.
+Output: intent lebih jelas dan rute eksekusi.
+Failure mode: under-clarification atau misrouting.</p>
+<h3 id="plan">Plan<a aria-hidden="true" class="anchor-heading icon-link" href="#plan"></a></h3>
+<p>Node aksi untuk task berisiko.</p>
+<p>Fungsi: membentuk strategi kerja terkompresi dan area yang akan disentuh.
+Input: intent yang diklarifikasi.
+Output: arah kerja untuk spec.
+Failure mode: plan terlalu dangkal, terlalu berat, atau berbasis framing yang salah.</p>
+<h3 id="spec">Spec<a aria-hidden="true" class="anchor-heading icon-link" href="#spec"></a></h3>
+<p>Artefak boundary yang dibeku.</p>
+<p>Fungsi: membekukan pemahaman yang cukup matang menjadi referensi eksekusi.
+Input: plan.
+Output: spec yang disetujui.
+Failure mode: spec lemah atau salah, memicu jalur BAD SPEC.</p>
+<h3 id="implement">Implement<a aria-hidden="true" class="anchor-heading icon-link" href="#implement"></a></h3>
+<p>Eksekusi model terhadap spec atau intent one-shot.</p>
+<p>Fungsi: menerjemahkan boundary ke perubahan nyata.
+Input: spec atau intent.
+Output: hasil implementasi.
+Failure mode: bug lokal, atau kegagalan yang sebenarnya berasal dari spec/intent.</p>
+<h3 id="review">Review<a aria-hidden="true" class="anchor-heading icon-link" href="#review"></a></h3>
+<p>Pusat diagnosis dan routing koreksi.</p>
+<p>Fungsi: menilai hasil implementasi dan menentukan layer koreksi.
+Input: produk implementasi dan temuan reviewer.
+Output: PATCH, BAD SPEC, INTENT GAP, DEFER, atau REJECT.
+Failure mode: salah diagnosis atau triage buruk.</p>
+<h3 id="present">Present<a aria-hidden="true" class="anchor-heading icon-link" href="#present"></a></h3>
+<p>Packaging hasil untuk keputusan manusia.</p>
+<p>Fungsi: mengubah artefak teknis menjadi ringkasan yang bisa dinilai.
+Input: hasil review yang lolos.
+Output: presentasi hasil.
+Failure mode: presentasi buruk membuat decision expensive.</p>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421174123">BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</a> — BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</li>
+<li><a href="/sotoy/notes/zettel.20260421175034">Simulasi Quick Dev: reset password via email menunjukkan PATCH, BAD SPEC, dan INTENT GAP</a> — simulasi Quick Dev: reset password via email menunjukkan PATCH, BAD SPEC, dan INTENT GAP</li>
+</ul>
+<h3 id="result">Result<a aria-hidden="true" class="anchor-heading icon-link" href="#result"></a></h3>
+<p>Keputusan akhir manusia.</p>
+<p>Fungsi: titik terima/tolak akhir.
+Input: presentasi hasil.
+Output: keputusan run.
+Failure mode: informasi tidak cukup jelas atau artefak sulit dinilai.</p>
+<h2 id="review-helper-nodes">Review helper nodes<a aria-hidden="true" class="anchor-heading icon-link" href="#review-helper-nodes"></a></h2>
+<h3 id="reviewers--subagents">Reviewers / Subagents<a aria-hidden="true" class="anchor-heading icon-link" href="#reviewers--subagents"></a></h3>
+<p>Fungsi: menyediakan sudut pandang spesifik tanpa membebani Review utama.</p>
+<h3 id="patch">PATCH<a aria-hidden="true" class="anchor-heading icon-link" href="#patch"></a></h3>
+<p>Fungsi: perbaikan lokal untuk masalah implementasi.</p>
+<h3 id="bad-spec">BAD SPEC<a aria-hidden="true" class="anchor-heading icon-link" href="#bad-spec"></a></h3>
+<p>Fungsi: kembali ke Spec saat boundary eksekusi salah.</p>
+<h3 id="intent-gap">INTENT GAP<a aria-hidden="true" class="anchor-heading icon-link" href="#intent-gap"></a></h3>
+<p>Fungsi: kembali ke Clarify &#x26; Route saat goal awal disalahtafsirkan.</p>
+<h3 id="defer">DEFER<a aria-hidden="true" class="anchor-heading icon-link" href="#defer"></a></h3>
+<p>Fungsi: menunda temuan incidental yang tidak kausal terhadap run saat ini.</p>
+<h3 id="deferred_workmd">deferred_work.md<a aria-hidden="true" class="anchor-heading icon-link" href="#deferred_workmd"></a></h3>
+<p>Fungsi: menyimpan temuan deferred agar tidak hilang.</p>
+<h3 id="reject--void">REJECT / VOID<a aria-hidden="true" class="anchor-heading icon-link" href="#reject--void"></a></h3>
+<p>Fungsi: menghentikan run yang tidak layak diteruskan.</p>
+<h2 id="sistem-kompresi-keputusan">Sistem kompresi keputusan<a aria-hidden="true" class="anchor-heading icon-link" href="#sistem-kompresi-keputusan"></a></h2>
+<p>Diagram Quick Dev mengompres layer kegagalan:</p>
+<ul>
+<li>kabut awal menjadi intent,</li>
+<li>intent menjadi plan/spec,</li>
+<li>spec menjadi perubahan kode,</li>
+<li>perubahan kode menjadi keputusan akhir.</li>
+</ul>
+<p>Itu membuat workflow lebih disiplin: jika salah, dia tahu di mana harus kembali.</p>
+<h2 id="lihat-juga-1">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga-1"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421174123">BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</a> — BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</li>
+<li><a href="/sotoy/notes/zettel.20260421171633">BMAD brainstorming memperjelas ide sebelum requirement</a> — BMAD brainstorming memperjelas ide sebelum requirement</li>
+<li><a href="/sotoy/notes/zettel.20260421172430">BMAD named agents membangun AI coworker model, bukan sekadar persona lucu</a> — BMAD named agents membangun AI coworker model, bukan sekadar persona lucu</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">bmad (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">quick-dev (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">review (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260421174123">BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</a></li>
+<li><a href="/sotoy/notes/zettel.20260421175034">Simulasi Quick Dev: reset password via email menunjukkan PATCH, BAD SPEC, dan INTENT GAP</a></li>
+<li><a href="/sotoy/notes/zettel.20260421180059">Checkpoint Preview membuat review manusia fokus pada pemahaman, bukan sekadar diff</a></li>
+<li><a href="/sotoy/notes/zettel.20260421193440">PATCH, BAD SPEC, dan INTENT GAP: diagnosis kegagalan dalam workflow AI-native</a></li>
+<li><a href="/sotoy/notes/zettel.literature.bmad-quick-dev">BMAD Quick Dev sebagai literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

@@ -1,0 +1,49 @@
+<h1 id="summarization-otomatis-menyelamatkan-what-bukan-why">Summarization otomatis menyelamatkan what, bukan why<a aria-hidden="true" class="anchor-heading icon-link" href="#summarization-otomatis-menyelamatkan-what-bukan-why"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Auto compaction cenderung menjaga apa yang terjadi, tapi bukan kenapa itu terjadi.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Itu berarti tool memory otomatis bisa bikin kita percaya konteks aman, padahal reasoning sudah hilang.</p>
+<p>Ringkasan otomatis biasanya fokus pada "what" karena itu paling mudah diekstrak: keputusan akhir, aksi, hasil. Alasan, asumsi, dan trade-off sering disingkat atau dihilangkan karena terlalu verbose dan tidak selalu tampak eksplisit.</p>
+<h2 id="simulasi">Simulasi<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi"></a></h2>
+<p>Bayangkan sesi chat coding seperti ini:</p>
+<ol>
+<li>Chat: "Kita akan pakai BullMQ, bukan RetryQueue, karena kita butuh minimal overhead dan cross-tenant isolation." </li>
+<li>Chat: "Kalau pakai RetryQueue, implementasinya akan butuh state manager tambahan dan mengganggu scaling multi-tenant." </li>
+<li>Chat: "Kita setuju untuk langsung panggil BullMQ dalam service saja." </li>
+</ol>
+<p>Kalau tool ringkas otomatis, outputnya mungkin jadi:</p>
+<ul>
+<li>Keputusan: pakai BullMQ.</li>
+<li>Next step: implement retry di service.</li>
+</ul>
+<p>Yang hilang:</p>
+<ul>
+<li>kenapa BullMQ? (overhead rendah, cocok multi-tenant)</li>
+<li>alasan tolak RetryQueue (state manager, scaling problem)</li>
+<li>asumsi penting (jangan buat wrapper ekstra untuk fase pertama)</li>
+</ul>
+<p>Karena itu, ringkasan bisa terlihat lengkap padahal reasoning sudah lenyap. Maka nilai external memory bukan hanya menyimpan hasil, tapi juga menyimpan "kenapa".</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 9.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 9</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

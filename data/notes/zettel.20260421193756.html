@@ -1,0 +1,73 @@
+<h1 id="spec-kit-tetap-relevan-sebagai-pipeline-spesifikasi-meski-banyak-framework-ai-native-muncul">Spec Kit tetap relevan sebagai pipeline spesifikasi meski banyak framework AI-native muncul<a aria-hidden="true" class="anchor-heading icon-link" href="#spec-kit-tetap-relevan-sebagai-pipeline-spesifikasi-meski-banyak-framework-ai-native-muncul"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Apa yang membuat Spec Kit relevan di tengah BMAD dan workflow AI-native lainnya?</li>
+<li>Di mana titik tumpu Spec Kit dalam alur antara intent dan implementasi?</li>
+<li>Kapan Spec Kit pantas dipakai, dan kapan cukup mengambil prinsipnya saja?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Spec Kit masih relevan karena ia fokus pada satu problem yang tidak hilang dengan munculnya BMAD atau framework AI-native lain: AI perlu artefak spesifikasi yang cukup kuat agar tidak bekerja dari prompt mentah.</p>
+<blockquote>
+<p>Spesifikasi bukan sekadar dokumen. Ia adalah boundary operasional antara niat manusia dan aksi agent.</p>
+</blockquote>
+<h2 id="apa-yang-spec-kit-tawarkan">Apa yang Spec Kit tawarkan<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-spec-kit-tawarkan"></a></h2>
+<p>Spec Kit memberikan pipeline spesifikasi yang eksplisit dan terikat ke artefak:</p>
+<ul>
+<li>define — capture intent dan requirement,</li>
+<li>specify — buat boundary dan acceptance criteria,</li>
+<li>kit — siapkan task-level artefak dan implementasi yang dapat dieksekusi.</li>
+</ul>
+<p>Dalam praktiknya, ini setara dengan pipeline Constitution → Specify → Plan → Task → Implement yang membuat proses planning dan solutioning lebih konkret.</p>
+<p>Ini melengkapi AI-native engineering dengan prinsip yang sama: lawan vibe coding dengan struktur yang bisa dieksekusi.</p>
+<h2 id="mengapa-relevan-di-era-ai-native">Mengapa relevan di era AI-native<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-relevan-di-era-ai-native"></a></h2>
+<p>Karena kemampuan AI menulis kode tidak menghilangkan kebutuhan untuk:</p>
+<ul>
+<li>menjelaskan apa yang harus dibangun,</li>
+<li>menetapkan batas eksekusi,</li>
+<li>memecah pekerjaan menjadi artefak yang bisa diverifikasi.</li>
+</ul>
+<p>Tanpa lapisan ini, AI cenderung mengisi celah dengan tebakan generik, drift dari tujuan, atau menghasilkan output yang plausible tetapi tidak tepat.</p>
+<h2 id="hubungan-dengan-bmad">Hubungan dengan BMAD<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-dengan-bmad"></a></h2>
+<p>BMAD dan Spec Kit bukan dua pilihan yang saling eksklusif. Mereka berdiri di poros yang sama:</p>
+<ul>
+<li>BMAD lebih kuat sebagai operating model dan fase workflow,</li>
+<li>Spec Kit lebih kuat sebagai pipeline artefak spesifikasi.</li>
+</ul>
+<p>Spec Kit bisa dilihat sebagai salah satu cara untuk membuat fase planning dan solutioning BMAD lebih konkret dan terukur.</p>
+<h2 id="kesalahan-umum">Kesalahan umum<a aria-hidden="true" class="anchor-heading icon-link" href="#kesalahan-umum"></a></h2>
+<ul>
+<li>Mengira Spec Kit hanya untuk tim yang butuh dokumentasi berat.</li>
+<li>Mengira Spec Kit menandakan "lebih banyak proses" daripada yang diperlukan.</li>
+<li>Mengira Spec Kit kalah relevan karena "BMAD sudah punya workflow." Faktanya, kunci yang sama—spesifikasi kuat—masih valid.</li>
+</ul>
+<h2 id="kapan-spec-kit-pantas-dipakai">Kapan Spec Kit pantas dipakai<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-spec-kit-pantas-dipakai"></a></h2>
+<p>Spec Kit paling layak ketika:</p>
+<ul>
+<li>task punya blast radius menengah sampai besar,</li>
+<li>ada banyak aspek cross-cutting (API, security, data schema),</li>
+<li>output harus konsisten dengan artefak lain,</li>
+<li>ada beberapa agent atau orang yang perlu berbagi pemahaman.</li>
+</ul>
+<h2 id="kapan-cukup-ambil-prinsipnya-saja">Kapan cukup ambil prinsipnya saja<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-cukup-ambil-prinsipnya-saja"></a></h2>
+<p>Spec Kit bisa terlalu berat untuk task kecil, lokal, atau sangat jelas. Dalam situasi seperti itu, prinsipnya tetap berguna: tuliskan boundary yang cukup jelas, pilih artefak yang bisa diverifikasi, tapi jangan paksa pipeline penuh.</p>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421161001">AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</a> — AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</li>
+<li><a href="/sotoy/notes/zettel.20260421162310">AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI</a> — AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI</li>
+<li><a href="/sotoy/notes/zettel.20260421192951">Spec semakin penting ketika AI bisa menulis kode, bukan hanya karena kode lebih murah</a> — Spec semakin penting ketika AI bisa menulis kode, bukan hanya karena kode lebih murah</li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">spec (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">methodology (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

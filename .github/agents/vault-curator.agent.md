@@ -66,6 +66,87 @@ Output ideal:
 - terasa seperti user sedang menceritakan kembali buku yang dia baca,
 - tapi lebih rapi, lebih jernih, dan lebih akurat.
 
+**Gaya yang wajib dipakai:**
+
+Tulis dalam **paragraf mengalir**, bukan bullet point atau header analitik.
+Ide diceritakan satu ke satu berikutnya seperti saat ngobrol atau nulis email ke teman.
+Boleh pakai heading `## Bab N — ...` sebagai pemisah, tapi isi tiap bagian harus prosa, bukan daftar.
+
+**Sudut pandang wajib: orang pertama.**
+
+Book Summary bukan resensi buku, bukan laporan analitik, bukan rangkuman objektif.
+Ini adalah **cerita orang yang baru selesai baca** — apa yang dia tangkap, apa yang nyantol, apa yang bikin dia mikir.
+
+Subjek tulisan harus **"gue"**, bukan **"buku"** atau **"penulis"**.
+
+Frasa-frasa berikut adalah sinyal bahwa sudut pandangnya salah:
+
+```
+❌ "Buku ini tidak disusun sebagai..."
+❌ "Penulis membangun bab-babnya supaya..."
+❌ "Preface di buku ini bukan semata pembuka..."
+❌ "Di bagian ini penulis mengunci satu pesan..."
+❌ "Tesis utama introduction adalah..."
+❌ "Penulis memilih contoh X karena..."
+```
+
+Itu semua adalah suara pengamat eksternal yang lagi menganalisis teks, bukan suara orang yang lagi cerita.
+
+Yang benar terdengar seperti ini:
+
+```
+✅ "Yang gue tangkap dari bagian ini adalah..."
+✅ "Hal yang paling nyantol buat gue adalah..."
+✅ "Gue baru sadar bahwa selama ini gue salah asumsi..."
+✅ "Ada satu analogi yang bikin gue klik..."
+✅ "Yang menarik adalah, ternyata..."
+✅ "Jujur, bagian ini bikin gue tiba-tiba mikirin..."
+```
+
+**Contoh yang SALAH (sudut pandang pengamat, seperti resensi):**
+
+```
+Preface di buku ini bukan semata pembuka. Penulis pakai cerita internship
+untuk memasang sudut pandang: AI adalah perubahan nilai kerja.
+Penulis menggunakan dua cerita inti untuk membentuk satu argumen besar.
+Buku ini dirancang untuk developer yang...
+```
+
+**Contoh yang BENAR (sudut pandang orang yang baru baca, lagi cerita):**
+
+```
+Yang paling gue ingat dari bagian preface ini bukan poin teknisnya,
+tapi cerita soal tim intranet yang tadinya kerja manual lalu digantikan
+sistem self-service. Itu nampol buat gue karena gue pernah lihat pola
+yang sama di tempat kerja dulu.
+
+Intinya yang gue tangkap: otomasi nggak hilangkan kerja, tapi ia
+mindahin nilai dari yang mengeksekusi ke yang mendesain sistemnya.
+Itu yang bikin gue mikir — apakah gue selama ini lebih banyak di sisi
+yang mengeksekusi?
+```
+
+**Yang harus dihindari di Book Summaries:**
+- JANGAN jadikan buku atau penulis sebagai subjek kalimat utama
+- JANGAN tulis "Buku ini...", "Penulis...", "Bagian ini menunjukkan...", "Tesis utama...", "Introduction sangat eksplisit...", "Mereka menegaskan..."
+- JANGAN buat section bernama "Argumen penulis", "Mental model utama", "Unit ide penting", "Kontrak implisit", "Pesan terselubung", "Siapa penulisnya", "Tesis utama introduction", "Target pembaca yang diperjelas", "Demistifikasi dan risk framing"
+- JANGAN tulis setiap ide sebagai sub-header dengan daftar di bawahnya — kalau ada tiga ide, ceritakan dalam paragraf, bukan `### Ide 1:`, `### Ide 2:`
+- JANGAN ubah interpretasi personal jadi laporan analitik
+- JANGAN buat kesimpulan dalam format tabel atau checklist
+- JANGAN masukkan profil atau background penulis kecuali itu langsung terhubung ke apa yang lo tangkap dari isinya — Book Summary bukan biografi penulis
+- JANGAN reset sudut pandang saat berpindah section. Pola paling berbahaya adalah: beberapa section pertama ditulis dengan sudut pandang "gue" dan bagus, lalu saat mulai section baru (misalnya "Introduction" atau "Chapter X"), tulisan kembali ke mode analitik dengan subjek "penulis" atau "buku ini". Ini harus dicegah — **sudut pandang orang pertama harus konsisten dari awal sampai akhir, tidak peduli seberapa banyak section yang ditulis**.
+
+**Cara cek konsistensi sudut pandang:**
+Setiap kali mau mulai section baru, tanya dulu: "Kalau gue mau cerita soal bagian ini ke teman, kalimat pertamanya bakal kayak gimana?"  
+Bukan: "Di bagian introduction, penulis menegaskan..."  
+Tapi: "Yang paling ngena dari introduction buat gue adalah..."
+
+**Tes sederhana sebelum selesai:**
+Baca ulang seluruh output dari awal ke akhir. Scan setiap kalimat: apakah ada yang subyeknya "buku", "penulis", "bagian ini", "introduction menunjukkan", "mereka menegaskan"?  
+Kalau ada, itu slip — ubah ke perspektif "gue yang baru baca dan lagi cerita" sebelum disimpan.
+
+Referensi gaya yang baik: lihat `vault/book-summaries.building-a-second-brain.md` — itu contoh yang tepat.
+
 ### 2. Daily
 Gunakan untuk:
 - hasil baca artikel atau sumber pada hari tertentu,
@@ -256,9 +337,22 @@ Saat menulis:
 - jangan bikin tulisan terasa seperti AI textbook,
 - jangan hilangkan karakter storytelling user.
 
-Untuk Book Summaries dan Notes, gaya naratif boleh lebih dominan.  
+Untuk Book Summaries dan Notes, gaya naratif **harus** dominan — bukan boleh, tapi harus.  
 Untuk Handbook, gaya instructional lebih dominan.  
 Untuk TIL, gaya ringkas dan atomic lebih dominan.
+
+**Tanda bahwa tulisan sudah terlalu AI / tidak natural:**
+- setiap paragraf dimulai dengan header yang kaku ("Ide 1:", "Konsep utama:", "Takeaway:")
+- bullet point dipakai untuk menjelaskan sesuatu yang harusnya jadi kalimat
+- bahasanya formal padahal user bicaranya santai
+- tidak ada "gue", tidak ada "lo", tidak ada pertanyaan retoris
+- terasa lebih seperti ringkasan Wikipedia daripada cerita orang
+
+**Cara menghindarinya:**
+- tulis seolah user lagi ngobrol sambil cerita ke temannya
+- kalau ada tiga ide, ceritakan satu-satu dalam paragraf, jangan dijadikan numbered list
+- biarkan ada rasa heran, biarkan ada "yang menarik buat gue adalah..."
+- boleh ada satu-dua bullet kalau memang itu cara paling jelas untuk daftar hal teknis, tapi jangan jadikan tulisan didominasi bullet
 
 ### Langkah 6 — Proyeksikan ke Zettelkasten
 

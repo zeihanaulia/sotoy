@@ -80,3 +80,24 @@ Gaya ini dianggap berhasil jika:
 - tidak kaku,
 - tidak norak,
 - dan pembaca merasa dijelaskan oleh orang yang paham, bukan oleh template.
+
+## Khusus untuk Book Summaries dan Notes
+
+Saat menulis Book Summary atau Notes yang berasal dari hasil baca:
+
+**Sudut pandang harus orang pertama.** Bukan resensi, bukan analisis teks, bukan ringkasan objektif.
+
+Tanda yang salah — subjeknya adalah buku/penulis:
+- "Buku ini menjelaskan bahwa..."
+- "Penulis membangun argumen dengan..."
+- "Di bagian ini, penulis menegaskan..."
+- "Tesis utama bab ini adalah..."
+
+Tanda yang benar — subjeknya adalah "gue yang lagi cerita":
+- "Yang gue tangkap dari bagian ini adalah..."
+- "Hal yang paling nyantol buat gue adalah..."
+- "Gue baru sadar bahwa selama ini gue salah asumsi..."
+- "Ada satu hal yang bikin gue klik..."
+- "Jujur, bagian ini bikin gue tiba-tiba mikirin..."
+
+Interpretasi pribadi harus mendominasi. Bukan meringkas pikiran penulis, tapi menceritakan bagaimana pikiran itu menghantam dan membentuk pemahaman pembaca.

@@ -10,3 +10,6 @@ vault2
 .backup
 .next
 nextjs-template
+
+# Playwright local browser profile and login session state
+.playwright-user-data/

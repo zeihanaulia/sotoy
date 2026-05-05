@@ -9,7 +9,7 @@ tags:
   - ai-billing
 created: 1777981824408
 
-updated: 1777986631924
+updated: 1777993308007
 traitIds:
   - journalNote
 ---
@@ -93,3 +93,56 @@ traitIds:
 - long-running task masih butuh diperhitungkan berdasarkan total token yang dikonsumsi.
 - billing baru akan membuat pemakaian panjang / model berat kelihatan lebih mahal.
 - peralihan annual plan penting untuk pengguna tahunan yang belum habis masa langganannya.
+
+## Thread X Guillermo Rauch: `deepsec`
+### Konteks
+
+- gue lagi baca thread [Guillermo Rauch](https://x.com/rauchg/status/2051386798899888539) tentang `npx deepsec`.
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">𝚗𝚙𝚡 𝚍𝚎𝚎𝚙𝚜𝚎𝚌<br><br>We&#39;re introducing an open-source agent orchestrator for deep security reviews.<br><br>We built it for internal use, and after running it against some major OSS projects, we gained conviction to share it with the world.<br><br>Coding agents can now find critical… <a href="https://t.co/pl8rPc2rNG">https://t.co/pl8rPc2rNG</a></p>&mdash; Guillermo Rauch (@rauchg) <a href="https://twitter.com/rauchg/status/2051386798899888539?ref_src=twsrc%5Etfw">May 4, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+### Apa itu `deepsec`?
+- ini adalah "open-source agent orchestrator for deep security reviews", bukan sekadar SAST atau vulnerability scanner.
+- fokusnya di harness: CLI-first, sandbox-based scaling, pluggable coding agents, support repo besar, BYO model/subscription.
+- intinya `deepsec` lebih mirip kerangka kerja yang menjalankan banyak coding agent paralel, lalu mengumpulkan dan memfilter hasilnya.
+
+### Kenapa "agent orchestrator" penting?
+- agent tunggal punya batasan context window, waktu, dan fokus eksplorasi.
+- kalau banyak agent jalan paralel, masing-masing bisa ngejar hipotesis berbeda: auth bypass, SSRF, deserialization, dependency misuse, dll.
+- orchestration menjawab masalah praktis: agent mana dijalankan, prompt apa, branch/commit mana, output disimpan di mana, duplicate bagaimana, dan bagaimana hasilnya diverifikasi.
+- ini sejalan dengan komentar Dr. Nripanka Das di thread itu: yang berguna bukan agent, tapi harness-nya.
+
+### Nilai utama: agent atau harness?
+- agent adalah headline: "AI menemukan vulnerability." Tapi dia juga paling rawan hype dan halusinasi.
+- harness adalah yang bikin hasilnya bisa diulang, diukur, dan diaudit.
+- tanpa harness, 100 finding dari agent cuma jadi tumpukan noise. dengan harness, lo bisa tahu run mana, prompt mana, model mana, environment mana, dan bukti apa yang mendukung.
+- thread ini lebih menunjukkan transisi ke review keamanan berbasis orkestrasi agent, bukan AI security scanner monolitik.
+
+### Mengapa false positive, triage, dan signal-to-noise langsung muncul?
+- security review yang bagus bukan cuma banyak menemukan issue, tapi juga membantu maintainer melakukan [triage](til.security.triage): menyaring mana yang valid, mana yang false positive, mana yang paling berbahaya, dan mana yang harus ditangani dulu.
+  - contoh triage: dari 40 finding, 8 bisa valid critical/high, 12 valid medium/low, 10 false positive, dan 10 lainnya perlu investigasi lanjutan. Dengan begitu, tim tahu mana yang harus dikerjain sekarang dan mana yang bisa ditunda.
+    - kalau agent ngeluarin 40 finding dan 90% noise, maintainer malah kewalahan.
+- signal-to-noise ratio jadi ukuran best practice: Intinya, dari banyak alert yang keluar, berapa yang beneran berguna dan bukan cuma noise.
+- klaim deepsec adalah punya "very high signal to noise ratio", tapi yang benar-benar meyakinkan adalah benchmark: repo besar apa, berapa confirmed, berapa false positive, dan berapa waktu triage.
+
+### Relasi dengan Swival dan kompetitor
+- diskusi di thread sempat menyinggung Swival karena konsepnya tampak mirip: multi-phase audit dengan triage, verification, patch generation.
+- Guillermo menekankan pembeda arsitektural: open source, parallel cloud sandbox, large repo testing, BYO agent/model/key, dan CLI-first.
+- yang jadi pertanyaan bukan siapa duluan, tapi apakah orchestration dan packaging operasionalnya berbeda.
+
+### Kenapa ini relevan buat gue
+- thread ini mengingatkan bahwa manusia bukan hilang, tapi pekerjaannya bergeser: dari nyari bug ke mendesain scope, membaca bukti, memvalidasi exploitability, menentukan severity, dan men-triage.
+- ini juga terhubung dengan catatan `[[notes.security.overtrust]]`: selain ngecek codebase, kita harus ingat bahwa workstation dan tool lokal bisa jadi boundary risiko sendiri.
+- catatan lain yang relevan:
+  - `[[notes.security.deepsec-docs]]` untuk cara kerja Deepsec sebagai harness audit dan bukan cuma scanner.
+  - `[[notes.security.deepsec-harness]]` untuk konsep orchestration agentic review dan bagaimana hasil harus masuk workflow.
+  - `[[notes.security.deepsec-challenges]]` untuk kritik operasional: false positive, cost, dan apakah outputnya actionable.
+  - `[[notes.security.agentic-coding-permission-boundary]]` untuk fokus pada izin lokal dan filesystem access dalam agentic coding.
+- pertanyaan yang bener bukan lagi "model apa?" melainkan "bagaimana finding diverifikasi, direproduksi, dan di-triage?"
+- pendekatan ini lebih cocok untuk scheduled audit, area sensitif, atau repo besar, bukan PR hook setiap commit.
+
+### Insight kunci
+- `deepsec` menarik karena dia mengangkat orkestrasi agentic review sebagai produk, bukan hanya agentnya.
+- nilai jadi dari sandbox + parallelism + reproducibility + triage.
+- ini lebih dekat ke fuzzing atau CI security gate dalam hal skala dan eksplorasi, tapi bedanya hasilnya perlu penilaian semantik dan verifikasi manual.
+- kalau orang baca thread ini hanya sebagai "AI security review bisa dilepas", itu risiko besar. versi yang lebih pas adalah: "AI bisa memperluas coverage, tapi manusia tetap penting untuk bukti dan keputusan."

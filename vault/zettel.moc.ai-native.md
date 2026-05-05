@@ -74,6 +74,22 @@ Catatan ini mengumpulkan semua literatur, konsep, dan simulasi BMAD / AI-native 
 * [[zettel.20260421184907]] — Constraint removal mengecek apakah batasan itu nyata atau sekadar asumsi
 * [[zettel.20260421172800]] — BMAD project context adalah konstitusi implementasi untuk AI agents, bukan dokumentasi biasa
 
+## Agentic security dan boundary risk
+
+* [[zettel.20260505179972]] — Secret exposure bisa terjadi tanpa commit Git
+* [[zettel.20260505179973]] — Parallel agents hanya berguna jika hasilnya didedup dan dikonsolidasikan
+* [[zettel.20260505179974]] — Tooling keamanan gagal jika hanya menambah dashboard dan handoff
+* [[zettel.20260505179975]] — Rule-based checks tetap penting di era AI-native security
+* [[zettel.20260505179976]] — Context AI harus ringkas dan spesifik untuk menjaga signal
+* [[zettel.20260505179977]] — Custom matcher mengubah temuan menjadi aturan yang bisa dipakai ulang
+* [[zettel.20260505179978]] — CI security gate butuh threshold dan baseline, bukan fail-on-any-finding
+* [[zettel.20260505179979]] — Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class
+* [[zettel.20260505179980]] — Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan
+* [[zettel.20260505179981]] — Finding keamanan butuh bukti yang actionable kapan pun bisa
+* [[zettel.20260505179982]] — Ownership adalah bagian dari penyelesaian security finding
+* [[zettel.20260505179983]] — Sandbox dan boundary adalah persyaratan untuk tool agentic aman
+* [[zettel.literature.overtrust]] — literature note Overtrust sebagai trust boundary audit
+
 ## Link penting ke mana selanjutnya
 
 * [[zettel.moc.software-architecture]] — entry point arsitektur yang lebih luas

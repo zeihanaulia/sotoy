@@ -13,3 +13,6 @@ nextjs-template
 
 # Playwright local browser profile and login session state
 .playwright-user-data/
+
+tmp_arxiv/
+autobrowse/

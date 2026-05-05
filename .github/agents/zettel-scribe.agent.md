@@ -198,6 +198,7 @@ Saat menulis note:
 - jangan copy-paste mentah kecuali ada frasa yang sangat penting dan perlu dipertahankan,
 - selalu mengutip dimulai dengan tanda `>` untuk membedakan dari interpretasi atau penjelasan tambahan yang kamu buat,
 - jika memakai kutipan, selalu tambahkan interpretasi atau implikasi.
+- jika user menyertakan URL atau link, jangan hapus. Sertakan link tersebut sebagai bukti referensi di note.
 
 ### Langkah 7 — Buat File
 

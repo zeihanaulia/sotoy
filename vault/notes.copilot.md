@@ -10,3 +10,4 @@ created: 1776323966141
 
 - [[notes.copilot.custom-instructions-best-practices]] — Best practices for Copilot custom instructions
 - [[notes.copilot.tacit-knowledge-extraction]] — Ekstraksi tacit knowledge senior untuk AI dan tim
+- [[notes.copilot.raptor-mini-sml-budgeting]] — Raptor mini, SML lokal, dan strategi billing token-based

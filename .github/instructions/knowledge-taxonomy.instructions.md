@@ -54,6 +54,7 @@ Aturan:
 - group by date,
 - boleh ada beberapa section per hari,
 - boleh ada beberapa artikel atau tema dalam satu file,
+- gunakan header markdown untuk topik utama dan subtopik (`##`, `###`, dst); jangan hanya pakai bullet list sebagai section divider,
 - pertahankan opini user,
 - jika berasal dari artikel, rapikan isi dari kepala user dan verifikasi pemahamannya.
 
@@ -169,6 +170,7 @@ Lakukan jika:
 Jika output berasal dari sumber eksternal:
 - bedakan isi sumber dan interpretasi user,
 - jangan copy-paste sumber mentah sebagai isi utama,
+- jika user menyertakan URL atau link, jangan hapus. Sertakan link itu sebagai bukti referensi untuk klaim dan konteks yang dibuat,
 - verifikasi bahwa pemahaman user tidak menyimpang,
 - kalau ada koreksi, lakukan dengan menjaga voice user.
 

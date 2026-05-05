@@ -94,6 +94,20 @@ traitIds:
 - billing baru akan membuat pemakaian panjang / model berat kelihatan lebih mahal.
 - peralihan annual plan penting untuk pengguna tahunan yang belum habis masa langganannya.
 
+## Insight lain: Chris Parsons "How I Use AI to Code"
+- gue catet artikel ini sebagai case study agentic engineering: bukan sekadar model, tapi harness, verification, dan feedback loop.
+- inti argumennya: AI bikin produksi kode murah, tapi verifikasi dan judgement jadi makin mahal.
+- `AGENTS.md`, skill file, dan portable Markdown knowledge lebih penting daripada prompt yang panjang.
+- senior engineer idealnya jadi trainer harness, bukan reviewer diff manual.
+- artikel ini juga ngasih kontras antara vibe coding (terima output AI tanpa cukup cek) dan agentic engineering (AI dipakai agresif tapi dalam sistem guardrail dan test).
+- buat detail lebih lengkap, gue pindahin ringkasan ke [[notes.agentic-engineering.how-i-use-ai-to-code]].
+- ada nota baru soal next wave: cloud agents + autonomous orchestration di [[notes.agentic-engineering.next-wave-cloud-agents]].
+- ada nota baru soal bagaimana judgement senior dipindahkan ke harness di [[notes.agentic-engineering.senior-judgement-to-harness]].
+- ada nota before-after workflow tim dan harness untuk N+1 query di [[notes.agentic-engineering.before-after-judgement-harness]].
+- ada nota tentang OpenClaw sebagai personal agent orchestration di [[notes.agentic-engineering.openclaw-personal-agent-orchestration]].
+- ada nota hands-on self-hosted VM agent runner di [[notes.agentic-engineering.self-hosted-agent-runner]].
+- ada nota GitLab MR review agent di Coolify di [[notes.agentic-engineering.gitlab-mr-review-agent-coolify]].
+
 ## Thread X Guillermo Rauch: `deepsec`
 ### Konteks
 

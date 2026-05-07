@@ -23,3 +23,5 @@ Why it matters:
 See also:
 - [[zettel.20260507101500]]
 - [[zettel.20260507101400]]
+- [[zettel.moc.agentic-engineering]]
+- [[notes.agentic-engineering.senior-judgement-to-harness]]

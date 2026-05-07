@@ -26,6 +26,8 @@ Karpathy menunjukkan bahwa AI membuat detail implementasi bisa didelegasikan, te
 ## Related notes
 - [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[daily.journal.2026.05.07]]
+- [[zettel.moc.agentic-engineering]]
+- [[notes.agentic-engineering.how-i-use-ai-to-code]]
 - [[zettel.20260507100000]]
 - [[zettel.20260507100100]]
 - [[zettel.20260507100200]]

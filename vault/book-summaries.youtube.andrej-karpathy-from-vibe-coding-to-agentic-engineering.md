@@ -115,3 +115,13 @@ Dia membayangkan dunia di mana agent memiliki representasi untuk orang/organisas
 - Biar agent bisa bantu, manusia harus tetap pegang understanding. Tanpa itu, output agent cuma sekilas "jalan" tapi bisa punya masalah serius.
 - Ide AI production-ready bukan sekadar mempercepat coding, tapi menjaga spec, verifikasi, keamanan, dan observability.
 - Untuk startup: domain yang bisa diverifikasi dan punya feedback loop spesifik adalah area yang paling menjanjikan.
+
+## Related notes
+
+- [[notes.agentic-engineering.how-i-use-ai-to-code]]
+- [[notes.agentic-engineering.senior-judgement-to-harness]]
+- [[notes.agentic-engineering.single-verification-entrypoint]]
+- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.next-wave-cloud-agents]]
+- [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[zettel.moc.agentic-engineering]]

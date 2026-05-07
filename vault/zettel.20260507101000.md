@@ -25,3 +25,5 @@ See also:
 - [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507100100]]
+- [[zettel.moc.agentic-engineering]]
+- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]

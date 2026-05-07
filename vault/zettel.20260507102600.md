@@ -23,3 +23,5 @@ Why it matters:
 
 See also:
 - [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[zettel.moc.agentic-engineering]]
+- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]

@@ -15,7 +15,7 @@ Claim: Ketika output AI mulai sering "came out fine," manusia mengubah workflow 
 
 Evidence:
 - Karpathy: "I kept asking for more and it just came out fine and then I can't remember the last time I corrected it."
-- Dia menyebut perubahan ini terjadi sekitar Desember, saat agentic coherent workflow mulai bekerja secara fundamental berbeda dari pengalaman ChatGPT-adjacent sebelumnya.
+- Dia menyebut perubahan ini terjadi sekitar Desember 2025, saat agentic coherent workflow mulai bekerja secara fundamental berbeda dari pengalaman ChatGPT-adjacent sebelumnya.
 
 Why it matters:
 - Menjelaskan perbedaan antara AI sebagai autocomplete/snippet dan AI sebagai partner produksi.

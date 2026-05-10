@@ -20,12 +20,15 @@ Yang gue tangkap dari talk ini adalah bahwa Karpathy enggak sekadar ngomong soal
 
 Kalimat yang paling nempel buat gue adalah: "You can outsource your thinking but you can’t outsource your understanding." Itu bukan sekadar soundbite. Itu menegaskan batas antara apa yang bisa diserahkan ke agent dan apa yang harus tetap ada dalam kepala manusia.
 
+Gue juga catet bahwa talk April 2026 merujuk pada fase shift yang Karpathy lihat di akhir **Desember 2025**. Business Insider dan sumber lain menguatkan bahwa perubahan workflow tersebut sudah terasa sebelum talk dan bukan sekadar framing pasca-event.
+
 ## Highlights
 
 - **Vibe coding** muncul ketika model mulai memberikan kode yang "langsung benar" cukup sering. Bukan karena AI sempurna, tapi karena trust threshold manusia terlewati. Awalnya agent bantu potongan kode, lalu berubah jadi workflow di mana manusia hanya mengalirkan intent.
 - **Software 3.0** adalah perubahan paradigma komputasi. Karpathy membagi era software menjadi 1.0 (kode eksplisit), 2.0 (neural network dilatih), dan 3.0 (prompt + context window). Dalam era ini, context window menjadi instruksi operasional utama.
 - Contoh praktisnya adalah Menugen, eksperimen Karpathy untuk bikin app foto menu restoran yang mengubah teks menu jadi gambar makanan. Versi lama pakai pipeline upload foto, OCR, generate gambar, render UI, deploy. Versi Software 3.0 cukup beri input foto ke model lalu minta overlay visual langsung. Kesimpulannya: beberapa app lama mungkin artefak paradigma lama.
 - **Verifiability** jadi kunci. Model kuat pada domain yang outputnya bisa diperiksa: math, code, tests, security, benchmark. Tapi ia masih "jagged": bisa refactor codebase besar, tapi bisa salah dalam reasoning sehari-hari.
+- **LLM knowledge base** bukan sekadar RAG atau vector DB. Karpathy melihatnya sebagai cara agar LLM mengambil dokumen mentah dan mengompilasinya ulang menjadi struktur yang membantu pemahaman manusia—wiki, outline, Q&A, dan reframing informasi—bukan hanya menyajikan potongan jawaban.
 - **RL circuits matter.** Jika use case lo berada di area yang masuk training/RL loop, lo bisa "fly." Kalau keluar dari distribusi itu, lo akan struggle dan perlu fine-tuning sendiri.
 - **Vibe coding menaikkan floor, agentic engineering menaikkan ceiling.** Vibe coding memudahkan banyak orang masuk ke software. Agentic engineering memastikan pekerjaan profesional tetap punya quality bar: secure, maintainable, testable, observability jelas.
 - **Skill manusia yang naik nilainya** adalah judgment, taste, spec, dan oversight. Agent bisa isi detail, tapi manusia harus menjaga invariants sistem, misalnya user identity harus persistent ID, bukan cocok-cocokan email.
@@ -37,13 +40,14 @@ Kalimat yang paling nempel buat gue adalah: "You can outsource your thinking but
 2. Vibe coding adalah mode eksplorasi cepat yang berguna untuk prototyping, bukan pengganti disiplin quality assurance.
 3. Dalam Software 3.0, prompt dan context window menjadi source code sementara untuk interpreter LLM.
 4. Agent bisa menggantikan sebagian scripting eksplisit dengan instruksi adaptif yang melihat environment dan debug sendiri.
-5. Dokumentasi operasi bisa berubah fungsi menjadi input executable-ish untuk agent.
-6. Beberapa aplikasi lama bisa menjadi artefak paradigma lama, karena model sekarang dapat menelan pipeline yang sebelumnya diperlukan.
-7. Peluang terbesar ada pada hal yang tidak mungkin dilakukan sebelumnya, bukan sekadar mempercepat workflow lama.
-8. Verifikasi adalah bahan bakar otomasi LLM; capability model sering puncak di domain yang bisa diverifikasi.
-9. LLM capability itu jagged, bukan merata, sehingga manusia harus tetap berada dalam loop dan menggunakan model sebagai alat.
-10. Agentic engineering menjaga quality bar profesional sambil memanfaatkan kecepatan AI.
-11. Skill manusia yang paling penting adalah taste, judgment, spec, oversight, dan maintenance of system invariants.
+5. LLM knowledge base bisa membuat dokumen mentah direcompile menjadi struktur pemahaman baru—wiki, outline, Q&A, timeline—sehingga manusia dapat insight, bukan hanya jawaban.
+6. Dokumentasi operasi bisa berubah fungsi menjadi input executable-ish untuk agent.
+7. Beberapa aplikasi lama bisa menjadi artefak paradigma lama, karena model sekarang dapat menelan pipeline yang sebelumnya diperlukan.
+8. Peluang terbesar ada pada hal yang tidak mungkin dilakukan sebelumnya, bukan sekadar mempercepat workflow lama.
+9. Verifikasi adalah bahan bakar otomasi LLM; capability model sering puncak di domain yang bisa diverifikasi.
+10. LLM capability itu jagged, bukan merata, sehingga manusia harus tetap berada dalam loop dan menggunakan model sebagai alat.
+11. Agentic engineering menjaga quality bar profesional sambil memanfaatkan kecepatan AI.
+12. Skill manusia yang paling penting adalah taste, judgment, spec, oversight, dan maintenance of system invariants.
 12. AI bisa mengambil alih hafalan detail API, tapi tidak bisa menggantikan pemahaman fundamental.
 13. Kode yang jalan tidak sama dengan kode yang baik: simplification dan taste masih butuh evaluasi manusia karena tidak selalu muncul dalam RL circuits.
 14. LLM bukan animal intelligence; lebih tepat dipahami sebagai statistical simulation circuits plus RL.

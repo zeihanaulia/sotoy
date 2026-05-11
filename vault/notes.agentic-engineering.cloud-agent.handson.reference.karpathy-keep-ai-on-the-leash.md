@@ -13,6 +13,8 @@ tags:
   - ai-coding
   - transcript
   - talk
+  - x
+  - twitter
 ---
 
 ## Why this reference matters

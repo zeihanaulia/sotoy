@@ -8,6 +8,8 @@ published: true
 tags:
   - Self Improvement
   - Zeno Rocha
+  - x
+  - twitter
 ---
 
 #self-improvement

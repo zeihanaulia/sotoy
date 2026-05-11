@@ -4,6 +4,11 @@ title: Managing Team
 desc: ''
 updated: 1682532916719
 created: 1682526271728
+tags:
+  - til
+  - team
+  - x
+  - twitter
 ---
 
 Malem ini gw kembali melek karena ada diskusi menarik dari thread hrd bacot tentang managing teams.

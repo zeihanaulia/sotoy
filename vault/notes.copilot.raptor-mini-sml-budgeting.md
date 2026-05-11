@@ -9,6 +9,8 @@ tags:
   - copilot
   - billing
   - raptor
+  - x
+  - twitter
 ---
 
 Istilah yang gue pakai: SML = Small Language Model, model lokal yang masih realistis jalan di mesin pribadi. Bukan Standard ML.

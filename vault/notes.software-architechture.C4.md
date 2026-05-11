@@ -4,6 +4,9 @@ title: C4
 desc: ''
 updated: 1666077306710
 created: 1666072852463
+tags:
+  - x
+  - twitter
 ---
 <!-- markdownlint-disable no-missing-space-atx -->
 #software-architechture

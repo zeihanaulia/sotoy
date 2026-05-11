@@ -4,6 +4,9 @@ title: Hello and Welcome! 👋
 desc: ''
 updated: 1742030256619
 created: 1646842475821
+tags:
+  - x
+  - twitter
 ---
 
 Welcome to the homepage! I use Dendron to store and organize notes, ideas, and experiments I’m working on. Here are the main sections you’ll find on this site:

@@ -9,6 +9,8 @@ tags:
   - agentic-engineering
   - ai-coding
   - boundary-discipline
+  - x
+  - twitter
 ---
 
 ## Overview

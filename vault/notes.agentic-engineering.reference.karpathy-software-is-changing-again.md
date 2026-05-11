@@ -11,6 +11,8 @@ tags:
   - youtube
   - transcript
   - talk
+  - x
+  - twitter
 ---
 
 ## Why this reference matters

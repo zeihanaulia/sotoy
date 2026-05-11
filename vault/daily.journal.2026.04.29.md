@@ -4,6 +4,10 @@ title: '2026-04-29'
 desc: ''
 updated: 1777451676269
 created: 1777451676269
+tags:
+  - daily
+  - x
+  - twitter
 traitIds:
   - journalNote
 ---

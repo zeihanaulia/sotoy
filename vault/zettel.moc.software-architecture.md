@@ -44,6 +44,12 @@ Software architecture adalah tentang keputusan yang mempertimbangkan trade-off a
 - [[zettel.literature.internal-quality-is-speed]] — internal quality sebagai kecepatan delivery
 - [[zettel.literature.application-boundary-social-construction]] — aplikasi sebagai konstruksi sosial
 - [[zettel.literature.enterprise-architecture-coordination-cost]] — enterprise architecture sebagai biaya koordinasi
+- [[zettel.1778772993732]] — borrow checker sebagai review desain ownership
+- [[zettel.1778772993733]] — clone/Rc<RefCell> sebagai sinyal ownership unclear
+- [[zettel.1778772993734]] — think in Rust, not memorize patterns
+- [[zettel.1778772993735]] — design transformation lebih penting daripada syntax mastery
+- [[zettel.1778772993736]] — Bad Calculator → Correct Calculator → Samsa sebagai pedagogical progression
+- [[zettel.literature.design-patterns-and-best-practices-in-rust]] — Rust-native design thinking and pattern translation
 - [[zettel.20260421161001]] — AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan
 - [[zettel.20260421162253]] — Classic, Modern, dan AI-native Software Engineering adalah tiga mode kerja, bukan disiplin formal
 - [[zettel.20260421162310]] — AI-native Software Engineering memindahkan gravitasi kerja engineering ke orkestrasi dan verifikasi AI

@@ -21,4 +21,4 @@ Why it matters:
 - Menyediakan basis untuk kurikulum AI-native yang fokus pada konsep dasar.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]

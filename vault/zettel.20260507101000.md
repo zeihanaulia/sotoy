@@ -22,7 +22,7 @@ Why it matters:
 - Menegaskan bahwa nilai engineering di era agentic AI bergeser ke desain konteks dan instruksi, bukan hanya ke detail kode.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507100100]]
 - [[zettel.moc.agentic-engineering]]

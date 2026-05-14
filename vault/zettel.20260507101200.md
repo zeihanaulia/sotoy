@@ -22,7 +22,7 @@ Why it matters:
 - Menjelaskan bahwa kompetisi AI yang paling berharga bukan selalu di domain labor-intensive lama, melainkan di domain yang membuka jenis pekerjaan baru.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507100500]]
 - [[zettel.moc.agentic-engineering]]

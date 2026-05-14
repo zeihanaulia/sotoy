@@ -22,7 +22,7 @@ Why it matters:
 - Mengingatkan bahwa flow ini produktif untuk eksplorasi, tetapi berbahaya untuk production tanpa layer verifikasi.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507100800]]
 - [[zettel.20260507100200]]
 - [[zettel.moc.agentic-engineering]]

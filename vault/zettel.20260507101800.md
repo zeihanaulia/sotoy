@@ -21,6 +21,6 @@ Why it matters:
 - Memfokuskan produktivitas AI pada domain yang memiliki evaluator jelas.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.moc.agentic-engineering]]
 - [[notes.agentic-engineering.single-verification-entrypoint]]

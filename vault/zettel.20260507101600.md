@@ -21,7 +21,7 @@ Why it matters:
 - Mendorong desain evaluasi yang memisahkan kemampuan domain-spesifik dari common-sense reasoning.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507101500]]
 - [[zettel.moc.agentic-engineering]]
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]

@@ -23,4 +23,4 @@ Why it matters:
 
 See also:
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]

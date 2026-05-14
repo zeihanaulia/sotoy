@@ -21,4 +21,4 @@ Why it matters:
 - Membantu mendesain workflow dengan asumsi yang benar tentang sifat model.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]

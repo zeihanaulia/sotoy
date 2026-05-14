@@ -1,5 +1,5 @@
 ---
-id: book-summaries.youtube.how-to-stand-out-in-an-insanely-competitive-tech-market
+id: notes.youtube.how-to-stand-out-in-an-insanely-competitive-tech-market
 title: How To Stand Out In An Insanely Competitive Tech Market (Ex-Amazon Principal Engineer)
 desc: ''
 updated: 1741243321249

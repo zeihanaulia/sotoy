@@ -21,4 +21,4 @@ Why it matters:
 - Mengubah hiring process dari soal puzzle ke soal sistem.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]

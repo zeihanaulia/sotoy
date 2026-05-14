@@ -1,5 +1,5 @@
 ---
-id: book-summaries.youtube.mbah-nun-kerja-itu-ibadah
+id: notes.youtube.mbah-nun-kerja-itu-ibadah
 title: "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006"
 desc: ''
 updated: 1750398829041

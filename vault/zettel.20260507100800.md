@@ -22,7 +22,7 @@ Why it matters:
 - Menandai pentingnya trust threshold dalam memindahkan peran manusia dari penulis kode detail ke pengarah sistem.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.moc.agentic-engineering]]
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]

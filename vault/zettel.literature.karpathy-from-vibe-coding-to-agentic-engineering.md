@@ -11,7 +11,7 @@ tags:
   - karpathy
 ---
 
-Link: [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+Link: [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 
 ## Claim
 Karpathy menunjukkan bahwa AI membuat detail implementasi bisa didelegasikan, tetapi justru meningkatkan nilai understanding, taste, spec, verifikasi, dan judgment manusia.
@@ -45,7 +45,7 @@ Karpathy menunjukkan bahwa AI membuat detail implementasi bisa didelegasikan, te
 - https://karpathy.medium.com/?utm_source=chatgpt.com
 
 ## Related notes
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[daily.journal.2026.05.07]]
 - [[zettel.moc.agentic-engineering]]
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]

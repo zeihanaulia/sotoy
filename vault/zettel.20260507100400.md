@@ -22,4 +22,4 @@ Why it matters:
 - Menegaskan bahwa oversight manusia bukan semata-mata karena ketidakpercayaan, tetapi karena karakter intelligence itu sendiri.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]

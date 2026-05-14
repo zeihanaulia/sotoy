@@ -28,4 +28,4 @@ Pembacaan ini juga penting karena talk April 2026 merefleksikan fase shift yang 
 - Manusia masih jadi bottleneck understanding: kita masih harus tahu apa yang mau dibangun, kenapa, dan bagaimana mengarahkan agent.
 
 ### Action
-- Detailnya gue pindah ke note terpisah: [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]].
+- Detailnya gue pindah ke note terpisah: [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]].

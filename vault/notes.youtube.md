@@ -1,5 +1,5 @@
 ---
-id: book-summaries.youtube
+id: notes.youtube
 title: Youtube
 desc: ''
 updated: 1683597737332

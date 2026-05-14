@@ -1,5 +1,5 @@
 ---
-id: book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering
+id: notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering
 title: "Andrej Karpathy: From Vibe Coding to Agentic Engineering"
 desc: "Ringkasan talk YouTube Karpathy tentang pergeseran dari vibe coding ke agentic engineering dan Software 3.0."
 updated: 1778122369000

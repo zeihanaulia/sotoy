@@ -22,7 +22,7 @@ Why it matters:
 - Mengurangi beban engineering pada variasi platform dan konfigurasi, sambil tetap menjaga tanggung jawab atas hasil.
 
 See also:
-- [[book-summaries.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
+- [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507101000]]
 - [[zettel.moc.agentic-engineering]]
 - [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]

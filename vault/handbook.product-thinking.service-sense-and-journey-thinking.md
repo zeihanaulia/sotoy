@@ -30,7 +30,7 @@ Ini cara paksa otak pindah dari "fitur" ke "pengalaman".
 
 Jangan mulai dari "user butuh dashboard." Mulai dari: **"dia lagi di kondisi apa?"**
 
-Contoh untuk SDLC Studio: PO habis meeting dengan stakeholder, catatan masih berantakan, deadline PRD besok, dev team butuh task yang jelas, dan dia takut requirement salah nangkep.
+Contoh produk SaaS: PO habis meeting dengan stakeholder, catatan masih berantakan, deadline PRD besok, dev team butuh task yang jelas, dan dia takut requirement salah nangkep.
 
 Dari sini kelihatan bahwa pain-nya bukan "belum ada generator PRD." Pain-nya adalah **ketidakpastian berubah jadi dokumen yang bisa dipercaya**.
 
@@ -77,7 +77,7 @@ Banyak MVP gagal karena cuma mikir first use. Service yang baik mikir ritual: se
 
 Pakai ini setiap kali mau desain service dari awal.
 
-| Komponen | Pertanyaan | Contoh (SDLC Studio) |
+| Komponen | Pertanyaan | Contoh (produk SaaS) |
 |---|---|---|
 | **Moment** | User sedang di momen apa? | PO baru selesai meeting, catatan berantakan |
 | **Promise** | Service lo menjanjikan perubahan apa? | Dalam 5 menit, catatan mentah jadi draft requirement yang bisa direview |
@@ -135,7 +135,7 @@ Yang kedua punya aliran. Ada cerita. Ada progress. Ada trust.
 
 ---
 
-## Contoh Service Flow yang Smooth (SDLC Studio)
+## Contoh Service Flow yang Smooth
 
 User masuk bukan disambut dashboard kosong, tapi ditanya:
 > *"Lo mau mulai dari meeting notes, existing PRD, Jira issue, atau repo?"*
@@ -189,7 +189,7 @@ Dari satu kalimat ini saja, lo bisa bikin 5 ide fitur — dan karena dimulai dar
 
 ## Tiga Ritual sebagai Tulang Belakang
 
-Untuk SDLC Studio, sense service bisa mulai dari 3 ritual utama, bukan dari 30 fitur:
+Untuk produk SaaS, sense service bisa mulai dari 3 ritual utama, bukan dari 30 fitur:
 
 1. **Setelah requirement meeting** — meeting note → structured requirement
 2. **Sebelum sprint planning** — requirement → task breakdown + review
@@ -233,4 +233,4 @@ Kalau tidak bisa dijawab dengan konkret, idenya belum jadi service.
 ## Lihat Juga
 
 - [[handbook.product-thinking.from-feature-to-service-design]] — learning path buku untuk keluar dari build trap
-- [[notes.saas.sdlc-studio-service-vs-product]] — konteks penerapan di SDLC Studio
+- [[notes.saas.product-vs-service]] — konteks penerapan di produk SaaS

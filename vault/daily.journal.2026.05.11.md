@@ -1,7 +1,7 @@
 ---
 id: daily.journal.2026.05.11
 title: '2026-05-11'
-desc: "Refleksi public tentang service-centric SaaS dan perbandingan product vs service di konteks HRIS, CRM, dan SDLC Studio."
+desc: "Refleksi public tentang service-centric SaaS dan perbandingan product vs service di konteks HRIS, CRM, dan contoh produk SaaS internal."
 updated: 1778453509273
 created: 1778453509273
 tags:
@@ -14,12 +14,12 @@ tags:
 ---
 
 ## Baca dan catat hari ini
-Hari ini gue bikin note baru yang menjelaskan perbedaan product vs service di SaaS B2B dengan contoh HRIS, CRM, dan SDLC Studio.
+Hari ini gue bikin note baru yang menjelaskan perbedaan product vs service di SaaS B2B dengan contoh HRIS, CRM, dan contoh produk SaaS internal.
 
 Intinya: product adalah capability inti, service adalah experience berkelanjutan yang bikin tenant betah.
 
 ## Apa yang dibuat
-- [[notes.saas.product-vs-service]] — contoh public untuk HRIS, CRM, dan SDLC Studio.
+- [[notes.saas.product-vs-service]] — contoh public untuk HRIS, CRM, dan produk SaaS internal.
 - [[book-summaries.building-multi-tenant-saas-architectures.chapter-1]] — summary Chapter 1 tentang mindset SaaS.
 - [[book-summaries.building-multi-tenant-saas-architectures.chapter-1.close-reading]] — close reading Chapter 1 dengan paragraf, quotes, dan sketch.
 - [[notes.prompt-engineering.lee-robinson-hiring-signals]] — catatan thread Lee Robinson tentang paket aplikasi engineering signal-first.

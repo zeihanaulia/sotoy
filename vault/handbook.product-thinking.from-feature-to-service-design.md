@@ -66,7 +66,7 @@ Possible Solutions
 Assumption Tests
 ```
 
-Contoh untuk SDLC Studio:
+Contoh untuk produk SaaS:
 
 ```
 Outcome:
@@ -180,5 +180,6 @@ Tapi jangan tiru permukaannya: "cepat bikin banyak produk." Yang perlu ditiru ad
 
 ## Lihat Juga
 
-- [[notes.saas.sdlc-studio-service-vs-product]] — perbedaan product vs service untuk SDLC Studio
+- [[notes.saas.product-vs-service]] — perbedaan product vs service untuk HRIS dan CRM serta produk SaaS internal
+- [[book-summaries.escaping-the-build-trap]] — ringkasan bacaan dan insight utama dari Melissa Perri
 - [[handbook.product-thinking.service-sense-and-journey-thinking]] — framework 5 lapis + Moment→Promise→Path→Proof→Loop untuk membangun service sense

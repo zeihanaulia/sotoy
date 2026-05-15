@@ -202,7 +202,7 @@ Contoh:
   → Rust alternative: enum state machine atau typestate pattern
   → trade-off: mudah dibaca vs lebih strict secara type-level
 
-4. Di Part 3, ambil ide yang bisa dipakai ke proyek nyata. Contoh: untuk SDLC Studio atau agent architecture, refleksikan pola yang relevan untuk agent runtime, scheduler, parser, atau CLI.
+4. Di Part 3, ambil ide yang bisa dipakai ke proyek nyata. Contoh: untuk produk SaaS atau agent architecture, refleksikan pola yang relevan untuk agent runtime, scheduler, parser, atau CLI.
 
 ## Dari OOP ke Rust Native
 

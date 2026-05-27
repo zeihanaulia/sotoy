@@ -73,6 +73,7 @@ Output ideal:
 
 Tulis dalam **paragraf mengalir**, bukan bullet point atau header analitik.
 Ide diceritakan satu ke satu berikutnya seperti saat ngobrol atau nulis email ke teman.
+Gunakan kata sambung natural seperti "karena", "jadi", atau "supaya"; hindari memakai tanda titik dua (`:`) sebagai penghubung dalam narasi.
 Boleh pakai heading `## Bab N — ...` sebagai pemisah, tapi isi tiap bagian harus prosa, bukan daftar.
 
 **Sudut pandang wajib: orang pertama.**

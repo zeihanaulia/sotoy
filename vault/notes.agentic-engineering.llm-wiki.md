@@ -2,7 +2,7 @@
 id: notes.agentic-engineering.llm-wiki
 title: "Karpathy LLM Wiki: compiled knowledge base vs RAG"
 desc: "Ringkasan pattern Karpathy LLM Wiki sebagai knowledge compilation loop dan artikel penunjang yang menguatkan perbedaan dengan RAG."
-updated: 1778130600000
+updated: 1779859715875
 created: 1778130600000
 tags:
   - notes
@@ -115,9 +115,9 @@ Kalau gue mau coba cepat:
 ## Sources
 
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- https://denser.ai/blog/llm-wiki-karpathy-knowledge-base/?utm_source=chatgpt.com
-- https://academy.dair.ai/blog/llm-knowledge-bases-karpathy?utm_source=chatgpt.com
-- https://anthemcreation.com/en/artificial-intelligence/karpathy-llm-wiki-claude-obsidian/?utm_source=chatgpt.com
+- https://denser.ai/blog/llm-wiki-karpathy-knowledge-base/
+- https://academy.dair.ai/blog/llm-knowledge-bases-karpathy
+- https://anthemcreation.com/en/artificial-intelligence/karpathy-llm-wiki-claude-obsidian/
 
 ## Related notes
 

@@ -2,7 +2,7 @@
 id: daily.journal.2026.05.26
 title: "2026-05-26"
 desc: Ringkasan harian dari membaca Smart Money Strategy oleh Luke Smith.
-updated: 1779763198525
+updated: 1779859715877
 created: 1779763198525
 ---
 
@@ -96,4 +96,4 @@ Buku ini bukan pengganti planner, tapi bikin obrolan gue dengan advisor jadi leb
 - Jadikan ini referensi kalau mau nulis checklist perencanaan finansial pribadi.
 
 Referensi utama [[book-summaries.smart-money-strategy]]
-- [Smart Money Strategy di O'Reilly](https://learning.oreilly.com/library/view/smart-money-strategy/9781394176946/?utm_source=chatgpt.com)
+- [Smart Money Strategy di O'Reilly](https://learning.oreilly.com/library/view/smart-money-strategy/9781394176946/)

@@ -2,7 +2,7 @@
 id: daily.journal.2026.04.29
 title: '2026-04-29'
 desc: ''
-updated: 1777451676269
+updated: 1779859715879
 created: 1777451676269
 tags:
   - daily
@@ -44,7 +44,7 @@ traitIds:
   - Bisa juga bikin checklist audit platform lain: bagaimana mereka memetakan push metadata ke internal service.
   - Untuk saat ini, kesimpulan utamanya: ini RCE di pipeline `git push` GitHub, bukan remote code execution di setiap repo Git.
 
-- [Warp open source: fokus bukan cuma client, tapi orchestration & agent platform](https://www.warp.dev/blog/warp-is-now-open-source?utm_source=chatgpt.com)
+- [Warp open source: fokus bukan cuma client, tapi orchestration & agent platform](https://www.warp.dev/blog/warp-is-now-open-source)
   - Arti yang gue pilih: mereka buka client codebase, tapi nilai bisnis utama mereka sekarang lebih ke Oz/orchestration, cloud agents, credits/usage, dan enterprise controls.
   - Ini bukan sinyal “ADE gampang, jadi kami menyerah”. Ini lebih ke reposisi: client open source untuk distribusi, sedangkan proprietary value ada di platform agentic dan enterprise layer.
   - Yang eksplisit dari artikel:

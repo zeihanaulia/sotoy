@@ -2,7 +2,7 @@
 id: zettel.20260507153000
 title: "Karpathy LLM Wiki as knowledge compilation loop"
 desc: "Karpathy's LLM Wiki pattern turns raw documents into a persistent markdown knowledge base rather than a one-shot RAG query."
-updated: 1777649400000
+updated: 1779859715880
 created: 1777649400000
 tags:
   - zettel
@@ -27,13 +27,13 @@ Why it matters:
 
 Sources:
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- https://denser.ai/blog/llm-wiki-karpathy-knowledge-base/?utm_source=chatgpt.com
-- https://academy.dair.ai/blog/llm-knowledge-bases-karpathy?utm_source=chatgpt.com
-- https://www.capitalnewstoday.com/article/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an-evolving-markdown-library--9i1xh8?utm_source=chatgpt.com
-- https://anthemcreation.com/en/artificial-intelligence/karpathy-llm-wiki-claude-obsidian/?utm_source=chatgpt.com
-- https://github.com/Pratiyush/llm-wiki?utm_source=chatgpt.com
-- https://github.com/topics/llm-wiki?utm_source=chatgpt.com
-- https://www.reddit.com/r/ClaudeCode/comments/1sm374u/turned_andrej_karpathys_llm_wiki_gist_into_a/?utm_source=chatgpt.com
+- https://denser.ai/blog/llm-wiki-karpathy-knowledge-base/
+- https://academy.dair.ai/blog/llm-knowledge-bases-karpathy
+- https://www.capitalnewstoday.com/article/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an-evolving-markdown-library--9i1xh8
+- https://anthemcreation.com/en/artificial-intelligence/karpathy-llm-wiki-claude-obsidian/
+- https://github.com/Pratiyush/llm-wiki
+- https://github.com/topics/llm-wiki
+- https://www.reddit.com/r/ClaudeCode/comments/1sm374u/turned_andrej_karpathys_llm_wiki_gist_into_a/
 
 Related notes:
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]

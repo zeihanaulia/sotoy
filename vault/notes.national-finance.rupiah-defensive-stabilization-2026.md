@@ -2,7 +2,7 @@
 id: notes.national-finance.rupiah-defensive-stabilization-2026
 title: "Rupiah: Tekanan Global, Respons BI, dan Strategi Hedge Bertahap"
 desc: "Catatan analitis tentang pelemahan rupiah Mei 2026, respons Bank Indonesia, dan implikasi hedge aset."
-updated: 1778575865097
+updated: 1779859715870
 created: 1778575865097
 tags:
   - notes
@@ -76,9 +76,9 @@ Kalau USD/IDR naik tapi BI Rate dan yield juga naik, itu tanda BI sedang membaya
 Kesimpulan gue: pelemahan rupiah kali ini bukan isu lokal sederhana. Ini gabungan geopolitik, dolar kuat, oil shock, arus modal keluar emerging market, dan kekhawatiran domestik. Jadi langkah untuk menyebar aset masuk akal, asalkan dilakukan secara bertahap dan tidak karena panik.
 
 Referensi:
-- [The Edge Malaysia](https://theedgemalaysia.com/node/803209?utm_source=chatgpt.com)
-- [Bloomberg Technoz: BI tentang ketidakpastian global](https://www.bloombergtechnoz.com/detail-news/106938/bi-pelemahan-rupiah-ke-rp17-300-us-imbas-ketidapastian-global?utm_source=chatgpt.com)
-- [CNA: BI janji intervensi besar](https://www.channelnewsasia.com/business/indonesia-central-bank-make-big-interventions-stabilise-rupiah-governor-says-6106946?utm_source=chatgpt.com)
-- [Bloomberg Technoz: IHSG dan rupiah](https://www.bloombergtechnoz.com/detail-news/108701/penyebab-ihsg-ditutup-melemah-0-92?utm_source=chatgpt.com)
-- [Tempo: potensi BI rate 5%](https://en.tempo.co/read/2103196/bank-indonesia-may-lift-benchmark-rate-to-5-as-rupiah-weakens?utm_source=chatgpt.com)
-- [Bloomberg Technoz: rupiah undervalued](https://www.bloombergtechnoz.com/detail-news/100106/bi-pandang-rupiah-sudah-terlalu-lemah-alias-undervalued?utm_source=chatgpt.com)
+- [The Edge Malaysia](https://theedgemalaysia.com/node/803209)
+- [Bloomberg Technoz: BI tentang ketidakpastian global](https://www.bloombergtechnoz.com/detail-news/106938/bi-pelemahan-rupiah-ke-rp17-300-us-imbas-ketidapastian-global)
+- [CNA: BI janji intervensi besar](https://www.channelnewsasia.com/business/indonesia-central-bank-make-big-interventions-stabilise-rupiah-governor-says-6106946)
+- [Bloomberg Technoz: IHSG dan rupiah](https://www.bloombergtechnoz.com/detail-news/108701/penyebab-ihsg-ditutup-melemah-0-92)
+- [Tempo: potensi BI rate 5%](https://en.tempo.co/read/2103196/bank-indonesia-may-lift-benchmark-rate-to-5-as-rupiah-weakens)
+- [Bloomberg Technoz: rupiah undervalued](https://www.bloombergtechnoz.com/detail-news/100106/bi-pandang-rupiah-sudah-terlalu-lemah-alias-undervalued)

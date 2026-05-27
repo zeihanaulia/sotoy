@@ -2,7 +2,7 @@
 id: zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering
 title: "Karpathy — From Vibe Coding to Agentic Engineering"
 desc: "Literature note tentang talk YouTube Andrej Karpathy dan pergeseran dari AI-asisten ke agentic engineering."
-updated: 1778126769000
+updated: 1779859715876
 created: 1778126769000
 tags:
   - zettel
@@ -39,10 +39,10 @@ Karpathy menunjukkan bahwa AI membuat detail implementasi bisa didelegasikan, te
 - Referensi tambahan yang relevan: paper arXiv tentang vibe coding, agentic coding, dan trust/flow; TechRadar tentang bottleneck delivery; Denser.ai tentang ide LLM Wiki.
 
 ## Sources
-- https://www.businessinsider.com/openai-founding-member-never-felt-so-behind-programmer-2025-12?utm_source=chatgpt.com
-- https://www.businessinsider.com/andrej-karpathy-claude-code-manual-skills-atrophy-software-engineering-tesla-2026-1?utm_source=chatgpt.com
-- https://www.youtube.com/live/LCEmiRjPEtQ?utm_source=chatgpt.com
-- https://karpathy.medium.com/?utm_source=chatgpt.com
+- https://www.businessinsider.com/openai-founding-member-never-felt-so-behind-programmer-2025-12
+- https://www.businessinsider.com/andrej-karpathy-claude-code-manual-skills-atrophy-software-engineering-tesla-2026-1
+- https://www.youtube.com/live/LCEmiRjPEtQ
+- https://karpathy.medium.com/
 
 ## Related notes
 - [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]

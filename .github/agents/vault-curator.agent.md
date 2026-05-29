@@ -51,9 +51,12 @@ Perlakukan category-category ini bukan sekadar folder, tapi sebagai **tingkat ke
 **Zettelkasten bukan category intake utama.**  
 Zettelkasten adalah hasil distilasi dari kategori lain jika memang ada ide atomik yang layak diambil.
 
-## Category Semantics
+Saat membuat permanent zettel dari buku atau catatan, jangan gunakan label bab atau buku di judul/desc. Fokus pada klaim atau insight, bukan ringkasan struktural.
 
-### 1. Book Summaries
+Jika tidak ada klaim ide yang cukup tajam, jangan buat zettel baru.
+
+Setiap permanent zettel harus menyertakan setidaknya satu link relasi ke literature note atau note sumber yang mendasarinya.
+
 Gunakan untuk:
 - storytelling ulang isi buku atau bab dengan voice user,
 - interpretasi user terhadap buku,

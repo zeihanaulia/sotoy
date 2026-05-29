@@ -14,7 +14,9 @@ Gue langsung nyadar bahwa daftar isi Jay Winter bukan otomatis struktur asli 1 E
 
 Gue juga tarik pelan bahwa untuk teks kuno, "asli" jarang berarti satu file utuh. Biasanya kita punya rantai transmisi: fragmen Aramaic dari Qumran → fragmen Greek/Latin → versi Ge'ez/Ethiopic yang lebih lengkap → terjemahan modern. Itu bikin cara baca gue berubah dari "ini benar atau salah" jadi "lapisan mana yang sedang gue baca."
 
-Intinya: *bukan murni tulisan asli Enoch dalam arti autograph/asal langsung, tapi juga bukan sekadar interpretasi penemu modern.* Yang beredar sekarang adalah rekonstruksi dan terjemahan dari tradisi manuskrip kuno. Itulah mengapa saya merasa posisi paling aman adalah menyebut teks modern ini sebagai hasil *textual transmission* dengan elemen editorial.
+Intinya: *bukan murni tulisan asli Enoch dalam arti autograph/asal langsung, tapi juga bukan sekadar interpretasi penemu modern.* Yang beredar sekarang adalah rekonstruksi dan terjemahan dari tradisi manuskrip kuno. Itulah mengapa gue merasa posisi paling aman adalah menyebut teks modern ini sebagai hasil *textual transmission* dengan elemen editorial.
+
+Dari halaman Dead Sea Scrolls yang gue buka, 4Q Enoch diperkirakan 150–50 BCE pada era Hasmonean dan ditulis dalam Aramaic. Itu memberi anchor kuno untuk cerita Watchers/fallen angels, tapi fragmennya tidak lengkap untuk verifikasi setiap kalimat versi lengkap.
 
 ## Lapisan yang gue pakai hari ini
 
@@ -23,6 +25,10 @@ Intinya: *bukan murni tulisan asli Enoch dalam arti autograph/asal langsung, tap
 3. **Manuskrip sumber**: fragmen Aramaic Dead Sea Scrolls yang paling tua, plus versi Ethiopic yang paling lengkap.
 
 Kalau bacanya campur, gue bisa keliru. Misalnya, bagian "Book 4 - Kingdom of Heaven" di Jay Winter terasa lebih teologis dan nge-blend beberapa materi yang dalam literatur akademik dipisah jadi Astronomical Book, Dream Visions, dan Heavenly Tablets.
+
+## Cara baca yang gue pakai
+
+Sekarang gue lebih suka baca Book of Enoch sebagai arsip berlapis, bukan sebagai teks tunggal yang sekali jalan. Pertama, cek mana yang punya core kuno (dukungan Qumran/Aramaic). Kedua, sigap apakah bagian itu datang lewat tradisi Ethiopic/Ge'ez. Ketiga, waspada kalau bahasa Inggris modern sudah menambahkan kategori teologis seperti "Elect One," "Son of Man," atau "Kingdom of Heaven." Keempat, catat framing editorial: judul, pembagian bab, dan susunan logis bisa dibuat supaya terasa rapi untuk pembaca modern.
 
 ## Insight penting hari ini
 

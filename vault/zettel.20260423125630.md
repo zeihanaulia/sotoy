@@ -1,7 +1,7 @@
 ---
 id: zettel.20260423125630
-title: "Chapter 2 mengajarkan AI app sebagai service dependency"
-desc: "Chapter 2 membentuk mental model AI app sebagai arsitektur service yang menghubungkan UI, API, dan model." 
+title: "AI app paling efektif dilihat sebagai service dependency"
+desc: "AI app biasanya adalah aplikasi biasa yang memanggil model sebagai dependency, bukan produk model itu sendiri." 
 updated: 1776923790167
 created: 1776923790167
 tags:
@@ -10,7 +10,7 @@ tags:
   - application-architecture
 ---
 
-Chapter 2 tidak sedang mengajarkan model detail. Ia sedang mengajarkan bahwa AI app paling sering adalah aplikasi web biasa yang memiliki model sebagai dependency:
+AI app tidak sedang mengajarkan model detail. Ia sedang mengajarkan bahwa AI app paling sering adalah aplikasi web biasa yang memiliki model sebagai dependency:
 
 * user input diproses dulu di service layer,
 * service memilih model dan menyusun prompt,

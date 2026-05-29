@@ -57,12 +57,17 @@ Judul jangan berupa topik umum. Judul harus menyatakan:
 - posisi,
 - atau hubungan yang bisa dijelaskan dan diuji.
 
+Judul Zettel tidak boleh ditulis seperti ringkasan chapter atau buku. Hindari frasa seperti "Chapter 4..." atau "Book 1..." di title atau desc.
+
 Contoh:
 - ❌ `Catatan dan Memori`
 - ✅ `Otak manusia lebih cocok menghasilkan ide daripada menyimpannya`
 
 - ❌ `Zettelkasten`
 - ✅ `Zettelkasten bekerja lebih baik sebagai jaringan ide daripada arsip catatan`
+
+- ❌ `Chapter 3 Book of Watchers: ...`
+- ✅ `Korupsi dunia di Enoch berakar pada pelanggaran batas surgawi`
 
 Jika note belum bisa diberi judul berbentuk klaim atau insight, kemungkinan idenya belum cukup matang.
 
@@ -93,6 +98,8 @@ Setiap link harus disertai konteks yang menjelaskan relasinya, misalnya:
 - memberi prasyarat,
 - memberi contoh,
 - membuka pertanyaan baru.
+
+Untuk permanent zettel khususnya, sertakan setidaknya satu link relasi ke literature note atau note sumber yang mendasari ide. Link ini harus menjelaskan posisi zettel terhadap sumber tersebut, bukan hanya menempatkan referensi pasif.
 
 Contoh:
 

@@ -3,7 +3,7 @@ id: daily.journal.2026.05.29
 title: '2026-05-29'
 desc: "Refleksi eksperimen Codex macOS sandboxing dan praktik shell bersih untuk menghindari secret env kebocoran."
 created: 1780042623130
-updated: 1780042623130
+updated: 1780043749000
 tags:
   - daily
   - security
@@ -44,6 +44,60 @@ env -i \
 ```
 
 Dan solusi gampangnya: buat `codex-safe` di `~/.zshrc`, lalu jalankan Codex lewat situ. Itu yang harus jadi kebiasaan untuk repo yang belum sepenuhnya gue percaya.
+
+## Setup Codex lokal yang gue simpan
+
+Gue juga nyimpen konfigurasi user-level di `~/.codex/config.toml` supaya perilaku Codex CLI/IDE lebih mirip eksperimen `sandbox-exec`:
+
+```toml
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+approvals_reviewer = "user"
+
+[sandbox_workspace_write]
+network_access = false
+writable_roots = []
+exclude_tmpdir_env_var = true
+exclude_slash_tmp = true
+
+[shell_environment_policy]
+inherit = "core"
+ignore_default_excludes = false
+exclude = [
+  "*KEY*",
+  "*TOKEN*",
+  "*SECRET*",
+  "*PASSWORD*",
+  "*CREDENTIAL*",
+  "AWS_*",
+  "OPENAI_API_KEY",
+  "GITHUB_TOKEN",
+  "GH_TOKEN",
+  "NPM_TOKEN",
+  "DATABASE_URL",
+  "PGPASSWORD"
+]
+include_only = []
+set = {}
+```
+
+Itu adalah baseline yang gue pake: workspace masih bisa dikerjain, network dimatikan, env sensitif tidak diwariskan, dan root tambahan cuma dibuka kalau perlu.
+
+Kalau repo asing, gue lebih ketat lagi dengan `inherit = "none"` dan `include_only` minimal. Baru kalau ada tool yang benar-benar butuh env spesifik, gue tambahkan satu per satu.
+
+## Global vs per repo/project
+Gue sekarang melihatnya sebagai layer konfigurasi Codex, bukan setting sandbox macOS mentah. Global config di `~/.codex/config.toml` adalah sabuk pengaman default yang harus konservatif. Per-project config di `.codex/config.toml` adalah izin kerja khusus untuk repo tertentu, dan hanya boleh dipakai kalau repo itu dipercaya.
+
+Profile config `~/.codex/.config.toml` berguna untuk mode kerja yang berbeda—misalnya `paranoid` untuk repo asing atau `internal` untuk repo kantor. CLI flags paling kuat; pakai untuk override satu sesi tanpa mengubah config.
+
+Jadi prinsipnya:
+
+- global = baseline aman
+- per-project = exception spesifik
+- profile = mode kerja
+- CLI flag = override sementara
+
+Itu yang bikin setup Codex lebih sehat daripada sekadar nge-DIY `sandbox-exec`.
 
 ## Hasil eksperimen yang gue ingat
 

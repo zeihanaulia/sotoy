@@ -1,7 +1,9 @@
 ---
 id: zettel.20260507101100
-title: "Agent instructions replace deterministic scripting in variable environments"
-desc: "Karpathy: dalam Software 3.0, agent dapat menyesuaikan detail operasional sehingga tidak perlu menulis semua cabang logika eksplisit."
+title: Agent instructions replace deterministic scripting in variable environments
+desc: >-
+  Karpathy: dalam Software 3.0, agent dapat menyesuaikan detail operasional
+  sehingga tidak perlu menulis semua cabang logika eksplisit.
 updated: 1778127121000
 created: 1778127121000
 tags:
@@ -25,4 +27,4 @@ See also:
 - [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507101000]]
 - [[zettel.moc.agentic-engineering]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]

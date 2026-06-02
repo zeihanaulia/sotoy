@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.how-i-use-ai-to-code
-title: "How I Use AI to Code"
-desc: "Ringkasan artikel Chris Parsons tentang agent CLI, harness, dan pergeseran dari prompt ke verifikasi dalam AI coding."
+title: How I Use AI to Code
+desc: >-
+  Ringkasan artikel Chris Parsons tentang agent CLI, harness, dan pergeseran
+  dari prompt ke verifikasi dalam AI coding.
 updated: 1777997562846
 created: 1777997562846
 tags:
@@ -163,7 +165,7 @@ Buat gue, nilai utama artikel ini bukan sekadar "Claude Code vs Copilot." Ini te
 ## Related notes
 
 - [[notes.agentic-engineering.next-wave-cloud-agents]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.senior-judgement-to-harness]]
 - [[notes.agentic-engineering.cloud-agent.handson.references]]
 - [[zettel.moc.agentic-engineering]]

@@ -1,7 +1,9 @@
 ---
 id: zettel.literature.how-i-use-ai-to-code
-title: "How I Use AI to Code — literature note"
-desc: "Literature note untuk artikel Chris Parsons tentang AI coding yang didukung oleh harness, verification, dan agentic workflow."
+title: How I Use AI to Code — literature note
+desc: >-
+  Literature note untuk artikel Chris Parsons tentang AI coding yang didukung
+  oleh harness, verification, dan agentic workflow.
 updated: 1778000377280
 created: 1778000377280
 tags:
@@ -44,7 +46,7 @@ https://www.chrismdp.com/coding-with-ai/
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]
 - [[notes.agentic-engineering.gitlab-mr-review-agent-coolify]]
 - [[notes.agentic-engineering.cloud-agent.handson.gitlab-mr-comment-formatting]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.next-wave-cloud-agents]]
 - [[notes.agentic-engineering.senior-judgement-to-harness]]
 - [[notes.agentic-engineering.before-after-judgement-harness]]

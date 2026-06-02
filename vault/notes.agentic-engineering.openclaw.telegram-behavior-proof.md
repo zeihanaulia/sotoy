@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.openclaw-telegram-behavior-proof
-title: "OpenClaw + Telegram + Crabbox: proof workflow untuk bug fix"
-desc: "Analisis PR OpenClaw tentang real behavior proof, Telegram formatter bug, dan peran Crabbox sebagai evidence control plane."
+title: Telegram Behavior Proof
+desc: >-
+  Analisis PR OpenClaw tentang real behavior proof, Telegram formatter bug, dan
+  peran Crabbox sebagai evidence control plane.
 updated: 1780000000000
 created: 1780000000000
 tags:
@@ -11,7 +13,7 @@ tags:
   - evidence
   - openclaw
   - telegram
-source: https://github.com/openclaw/openclaw/pull/76999#issuecomment-4415012577
+source: 'https://github.com/openclaw/openclaw/pull/76999#issuecomment-4415012577'
 ---
 
 ## Overview

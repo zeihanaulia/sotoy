@@ -1,7 +1,11 @@
 ---
 id: daily.journal.2026.05.05
 title: '2026-05-05'
-desc: "Catatan perubahan billing GitHub Copilot Pro dari premium request ke token-based credit"
+desc: >-
+  Catatan perubahan billing GitHub Copilot Pro dari premium request ke
+  token-based credit
+updated: 1777993308007
+created: 1777981824408
 tags:
   - daily
   - github
@@ -9,9 +13,6 @@ tags:
   - ai-billing
   - x
   - twitter
-created: 1777981824408
-
-updated: 1777993308007
 traitIds:
   - journalNote
 ---
@@ -106,7 +107,7 @@ traitIds:
 - ada nota baru soal next wave: cloud agents + autonomous orchestration di [[notes.agentic-engineering.next-wave-cloud-agents]].
 - ada nota baru soal bagaimana judgement senior dipindahkan ke harness di [[notes.agentic-engineering.senior-judgement-to-harness]].
 - ada nota before-after workflow tim dan harness untuk N+1 query di [[notes.agentic-engineering.before-after-judgement-harness]].
-- ada nota tentang OpenClaw sebagai personal agent orchestration di [[notes.agentic-engineering.openclaw-personal-agent-orchestration]].
+- ada nota tentang OpenClaw sebagai personal agent orchestration di [[notes.agentic-engineering.openclaw.personal-agent-orchestration]].
 - ada nota hands-on self-hosted VM agent runner di [[notes.agentic-engineering.self-hosted-agent-runner]].
 - ada nota GitLab MR review agent di Coolify di [[notes.agentic-engineering.gitlab-mr-review-agent-coolify]].
 

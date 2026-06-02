@@ -1,7 +1,9 @@
 ---
 id: notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering
-title: "Andrej Karpathy: From Vibe Coding to Agentic Engineering"
-desc: "Ringkasan talk YouTube Karpathy tentang pergeseran dari vibe coding ke agentic engineering dan Software 3.0."
+title: 'Andrej Karpathy: From Vibe Coding to Agentic Engineering'
+desc: >-
+  Ringkasan talk YouTube Karpathy tentang pergeseran dari vibe coding ke agentic
+  engineering dan Software 3.0.
 updated: 1778122369000
 created: 1778122369000
 tags:
@@ -125,7 +127,7 @@ Dia membayangkan dunia di mana agent memiliki representasi untuk orang/organisas
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]
 - [[notes.agentic-engineering.senior-judgement-to-harness]]
 - [[notes.agentic-engineering.single-verification-entrypoint]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.next-wave-cloud-agents]]
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.moc.agentic-engineering]]

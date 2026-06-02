@@ -1,7 +1,9 @@
 ---
 id: zettel.20260507101000
-title: "Context window is temporary source code for LLMs"
-desc: "Karpathy: dalam Software 3.0, programming berubah menjadi desain prompt dan context yang mengendalikan LLM."
+title: Context window is temporary source code for LLMs
+desc: >-
+  Karpathy: dalam Software 3.0, programming berubah menjadi desain prompt dan
+  context yang mengendalikan LLM.
 updated: 1778127093000
 created: 1778127093000
 tags:
@@ -26,4 +28,4 @@ See also:
 - [[zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.20260507100100]]
 - [[zettel.moc.agentic-engineering]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]

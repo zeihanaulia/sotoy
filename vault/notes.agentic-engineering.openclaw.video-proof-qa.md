@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.openclaw-video-proof-qa
-title: "OpenClaw video proof untuk QA automation"
-desc: "Insight dari thread X Peter Steinberger tentang bukti video QA sebagai artefak yang bisa diaudit untuk review dan agentic engineering."
+title: Video Proof Qa
+desc: >-
+  Insight dari thread X Peter Steinberger tentang bukti video QA sebagai artefak
+  yang bisa diaudit untuk review dan agentic engineering.
 updated: 1780000000000
 created: 1780000000000
 tags:
@@ -11,7 +13,7 @@ tags:
   - agentic-engineering
   - qa
   - evidence
-source: https://x.com/steipete/status/2053420175379046643
+source: 'https://x.com/steipete/status/2053420175379046643'
 ---
 
 ## Overview

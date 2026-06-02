@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.next-wave-cloud-agents
-title: "Next Wave: Cloud Agents dan Autonomous Orchestration"
-desc: "Ringkasan pergeseran dari agent CLI lokal ke cloud agents paralel dengan orchestration dan harness sebagai safety system."
+title: 'Next Wave: Cloud Agents dan Autonomous Orchestration'
+desc: >-
+  Ringkasan pergeseran dari agent CLI lokal ke cloud agents paralel dengan
+  orchestration dan harness sebagai safety system.
 updated: 1777998274920
 created: 1777998274920
 tags:
@@ -123,7 +125,7 @@ Security agent yang bagus bukan yang paling banyak alert tapi yang paling cepat 
 
 ## Related
 
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]
 - [[notes.agentic-engineering.cloud-agent.handson.references]]
 - [[zettel.moc.agentic-engineering]]

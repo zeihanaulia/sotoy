@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.single-verification-entrypoint
-title: "Single verification entrypoint"
-desc: "Konvensi internal untuk menyediakan satu command standar yang menjadi definition of done bagi agent dan manusia."
+title: Single verification entrypoint
+desc: >-
+  Konvensi internal untuk menyediakan satu command standar yang menjadi
+  definition of done bagi agent dan manusia.
 updated: 1778002892878
 created: 1778002892878
 tags:
@@ -138,5 +140,5 @@ Kalau belum ada sensor N+1, `verify.sh` tidak akan ajaib tahu ada N+1.
 
 ## Related
 - [[notes.agentic-engineering.self-hosted-agent-runner]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.before-after-judgement-harness]]

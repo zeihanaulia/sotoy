@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.heavyskill-heavy-thinking-as-inner-skill
-title: "HeavySkill: Heavy Thinking as Inner Skill in Agentic Harness"
-desc: "Ringkasan arXiv 2605.02396v1 tentang HeavySkill, pola parallel reasoning + deliberation dalam agentic harness."
+title: 'HeavySkill: Heavy Thinking as Inner Skill in Agentic Harness'
+desc: >-
+  Ringkasan arXiv 2605.02396v1 tentang HeavySkill, pola parallel reasoning +
+  deliberation dalam agentic harness.
 updated: 1778206047521
 created: 1778204621041
 tags:
@@ -256,7 +258,7 @@ Heavy Thinking bukan "AI mikir panjang." Lebih tepat:
 Ini adalah pattern kerja AI yang bisa dipakai di agentic harness.
 
 ## Related
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]
 - [[notes.agentic-engineering.before-after-judgement-harness]]
 - [[zettel.20260508142459]]

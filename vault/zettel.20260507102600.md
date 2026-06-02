@@ -1,7 +1,9 @@
 ---
 id: zettel.20260507102600
-title: "Agent-native infrastructure needs agent-legible docs, APIs, and actuators"
-desc: "Karpathy: banyak friction AI datang dari lingkungan kerja yang masih ditulis untuk manusia, bukan agent."
+title: 'Agent-native infrastructure needs agent-legible docs, APIs, and actuators'
+desc: >-
+  Karpathy: banyak friction AI datang dari lingkungan kerja yang masih ditulis
+  untuk manusia, bukan agent.
 updated: 1778127555000
 created: 1778127555000
 tags:
@@ -24,4 +26,4 @@ Why it matters:
 See also:
 - [[notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering]]
 - [[zettel.moc.agentic-engineering]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]

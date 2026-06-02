@@ -1,7 +1,9 @@
 ---
 id: notes.agentic-engineering.openclaw-personal-agent-orchestration
-title: "OpenClaw: Personal Agent Orchestration vs Cloud Coding Agent"
-desc: "Bedakan OpenClaw personal agent platform dari cloud coding agents, dan kaitkan dengan Pi serta harness engineering."
+title: Personal Agent Orchestration
+desc: >-
+  Bedakan OpenClaw personal agent platform dari cloud coding agents, dan kaitkan
+  dengan Pi serta harness engineering.
 updated: 1777998461480
 created: 1777998461480
 tags:

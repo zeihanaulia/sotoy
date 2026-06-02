@@ -1,7 +1,9 @@
 ---
 id: zettel.moc.agentic-engineering
-title: "MOC Agentic Engineering"
-desc: "Map of content untuk agentic engineering, cloud agent review, harness, skill files, dan AI coding verification."
+title: MOC Agentic Engineering
+desc: >-
+  Map of content untuk agentic engineering, cloud agent review, harness, skill
+  files, dan AI coding verification.
 updated: 1778000730821
 created: 1778000730821
 tags:
@@ -24,7 +26,7 @@ Kumpulan note dan zettel yang membahas agentic engineering, AI coding harness, c
 
 - [[notes.agentic-engineering.how-i-use-ai-to-code]]
 - [[notes.agentic-engineering.next-wave-cloud-agents]]
-- [[notes.agentic-engineering.openclaw-personal-agent-orchestration]]
+- [[notes.agentic-engineering.openclaw.personal-agent-orchestration]]
 - [[notes.agentic-engineering.senior-judgement-to-harness]]
 - [[notes.agentic-engineering.before-after-judgement-harness]]
 - [[notes.agentic-engineering.self-hosted-agent-runner]]

@@ -3,7 +3,7 @@ id: daily.journal.2026.05.29
 title: '2026-05-29'
 desc: "Refleksi eksperimen Codex macOS sandboxing dan praktik shell bersih untuk menghindari secret env kebocoran."
 created: 1780042623130
-updated: 1780043749000
+updated: 1780054510696
 tags:
   - daily
   - security
@@ -43,7 +43,7 @@ env -i \
   codex
 ```
 
-Dan solusi gampangnya: buat `codex-safe` di `~/.zshrc`, lalu jalankan Codex lewat situ. Itu yang harus jadi kebiasaan untuk repo yang belum sepenuhnya gue percaya.
+Solusi gampangnya: buat `codex-safe` di `~/.zshrc`, lalu jalankan Codex lewat situ. Itu yang harus jadi kebiasaan untuk repo yang belum sepenuhnya gue percaya.
 
 ## Setup Codex lokal yang gue simpan
 
@@ -81,9 +81,7 @@ include_only = []
 set = {}
 ```
 
-Itu adalah baseline yang gue pake: workspace masih bisa dikerjain, network dimatikan, env sensitif tidak diwariskan, dan root tambahan cuma dibuka kalau perlu.
-
-Kalau repo asing, gue lebih ketat lagi dengan `inherit = "none"` dan `include_only` minimal. Baru kalau ada tool yang benar-benar butuh env spesifik, gue tambahkan satu per satu.
+Ini baseline yang gue pake: workspace masih bisa dikerjain, network dimatikan, env sensitif tidak diwariskan, dan root tambahan cuma dibuka kalau perlu. Kalau repo asing, gue lebih ketat lagi dengan `inherit = "none"` dan `include_only` minimal. Baru kalau ada tool yang benar-benar butuh env spesifik, gue tambahkan satu per satu.
 
 ## Global vs per repo/project
 Gue sekarang melihatnya sebagai layer konfigurasi Codex, bukan setting sandbox macOS mentah. Global config di `~/.codex/config.toml` adalah sabuk pengaman default yang harus konservatif. Per-project config di `.codex/config.toml` adalah izin kerja khusus untuk repo tertentu, dan hanya boleh dipakai kalau repo itu dipercaya.
@@ -117,6 +115,24 @@ Karena gue mau pakai Codex lokal tanpa ngasih false sense of security. Sandbox i
 - secret manager daripada export global
 
 Kalau repo asing atau mencurigakan, gue masih pakai container/VM/remote sandbox.
+
+## Antirez, GPT vs Opus, dan lag evaluasi komunitas
+
+https://x.com/antirez/status/2060017203592761819
+
+Hari ini gue juga nyimak tweet Antirez tentang bagaimana internet baru “ngeh” kalau GPT sudah lebih baik dari Opus. Gue baca itu bukan cuma soal model, tapi soal proses opini di komunitas AI.
+
+Intinya: dia membacanya sebagai kritik terhadap lag evaluasi. Model frontier berubah dalam hitungan minggu atau bulan, tapi opini orang sering masih stuck di pengalaman lama, brand reputation, atau benchmark yang telat.
+
+Yang gue tangkap:
+
+- Antirez tidak cuma bilang “GPT lebih bagus”. Dia bilang: kenapa hal yang menurut dia obvious butuh berbulan-bulan supaya komunitas menyadarinya.
+- Banyak orang tetap nempel ke Opus karena brand memory, bubble informasi, dan vibe Twitter.
+- Benchmark publik lama sering terlalu dangkal untuk pekerjaan engineering nyata.
+- DeepSWE muncul sebagai boundary baru yang coba ukur agentic coding panjang, tapi itu tetap satu lensa, bukan jawaban final.
+- Yang paling penting: kalau mau benar-benar tahu, punya pipeline evaluasi sendiri terhadap task nyata lo lebih kuat daripada cuma ngikutin leaderboard atau tweet.
+
+Gue sendiri pakai ini sebagai reminder: jangan anggap model “selalu sama” dari pengalaman beberapa bulan lalu. Kalau gue cuma pakai benchmark atau opini orang lain, kemungkinan besar gue akan ketinggalan.
 
 ## Tautan terkait
 

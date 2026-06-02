@@ -150,7 +150,12 @@ Kalau problem lo cuma preferensi user sederhana, mungkin ini bisa overkill.
 
 ## Related documents
 
+- [[notes.agentic-engineering.openviking.architecture]]
+- [[notes.agentic-engineering.openviking.storage-architecture]]
+- [[notes.agentic-engineering.openviking.context-extraction]]
+- [[notes.agentic-engineering.openviking.context-types]]
+- [[notes.agentic-engineering.openviking.context-layers]]
 - [[notes.agentic-engineering.hermes-agent.memory-providers]]
 - [[notes.agentic-engineering.honcho.architecture]]
 - [[notes.agentic-engineering.honcho.stateful-memory]]
-- [[daily.journal.2026.06.03]]
+- [[vault/daily.journal.2026.06.03|Daily 2026-06-03]]

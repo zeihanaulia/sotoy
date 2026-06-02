@@ -20,13 +20,13 @@ Beberapa provider yang dicatat:
 - `OpenViking`: filesystem knowledge hierarchy.
 - `Mem0`: automatic memory extraction.
 - `Hindsight`: knowledge graph + synthesis.
-
-Sekarang ada catatan terpisah tentang OpenViking sebagai context database di [[notes.agentic-engineering.openviking-context-database]].
 - `Holographic`: local SQLite + trust scoring.
 - `RetainDB`: hybrid cloud search + compression.
 - `ByteRover`: local-first CLI memory tree.
 - `Supermemory`: semantic memory + context fencing.
 - `Memori`: structured long-term memory dengan tool-aware recall.
+
+Sekarang ada catatan terpisah tentang OpenViking sebagai context database di [[notes.agentic-engineering.openviking-context-database]], arsitektur OpenViking di [[notes.agentic-engineering.openviking.architecture]], storage architecture di [[notes.agentic-engineering.openviking.storage-architecture]], context extraction di [[notes.agentic-engineering.openviking.context-extraction]], dan context layers OpenViking di [[notes.agentic-engineering.openviking.context-layers]].
 
 Kalau nanti mau nulis lebih panjang, ada `vault/notes.agentic-engineering.hermes-agent.memory-providers.md` yang merangkum pilihan provider dan trade-off-nya. Ini membantu gue ingat bahwa pilihan provider Hermes Agent lebih dari sekadar "storage".
 
@@ -42,6 +42,10 @@ Jadi hari ini ada dua level pemahaman: Hermes memory provider sebagai peta arsit
 
 - [[notes.agentic-engineering.hermes-agent.memory-providers]]
 - [[notes.agentic-engineering.openviking-context-database]]
+- [[notes.agentic-engineering.openviking.architecture]]
+- [[notes.agentic-engineering.openviking.storage-architecture]]
+- [[notes.agentic-engineering.openviking.context-extraction]]
+- [[notes.agentic-engineering.openviking.context-types]]
 - [[notes.agentic-engineering.honcho.stateful-memory]]
 - [[notes.agentic-engineering.honcho.architecture]]
 - [[notes.agentic-engineering.honcho.reasoning]]

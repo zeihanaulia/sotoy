@@ -2,7 +2,7 @@
 id: notes.ai-economy.public-reaction-satya-vision
 title: "Dialektika Visi AI Satya Nadella: Antara Pemberdayaan dan Hegemoni"
 desc: "Analisis reaksi publik terhadap konsep Token Capital dan Learning Loop Satya Nadella."
-updated: 1752566400000
+updated: 1781501599772
 created: 1752566400000
 tags:
   - notes
@@ -11,9 +11,11 @@ tags:
   - platform-power
 ---
 
+<blockquote class="twitter-tweet"><p lang="zxx" dir="ltr"><a href="https://t.co/vLmiBKTtX3">https://t.co/vLmiBKTtX3</a></p>&mdash; Satya Nadella (@satyanadella) <a href="https://x.com/satyanadella/status/2066182223213293753?ref_src=twsrc%5Etfw">June 14, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+
 ## Bedah Reaksi: Visi Enterprise vs Realitas Publik
 
-Tulisan Satya Nadella soal *Token Capital* dan *Learning Loop* memicu debat yang menarik. Kalau tulisan Satya adalah visi dari "atas" (platform owner), maka reaksi publik di X adalah koreksi dari "bawah" (pekerja, engineer, dan skeptis platform).
+Tulisan [Satya Nadella soal *Token Capital* dan *Learning Loop*](https://x.com/satyanadella/status/2066182223213293753) memicu debat yang menarik. Kalau tulisan Satya adalah visi dari "atas" (platform owner), maka reaksi publik di X adalah koreksi dari "bawah" (pekerja, engineer, dan skeptis platform).
 
 Gue melihat debat ini bukan sekadar setuju atau tidak setuju, tapi terjadi tabrakan antara tiga level perspektif yang berbeda.
 

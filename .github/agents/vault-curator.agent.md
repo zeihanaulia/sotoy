@@ -600,6 +600,15 @@ tags:
 - Gunakan **kebab-case** untuk semua segmen nama file (huruf kecil, spasi diganti `-`).
 - Gunakan **dot notation** sebagai pemisah hierarki (bukan slash).
 - **Sebelum membuat `zettel.literature.<slug>.md`**, cek dulu apakah MOC-nya sudah ada (`vault/zettel.moc.<topik-kebab>.md`). Jika belum ada, buat MOC-nya terlebih dahulu, baru buat literature note-nya. MOC dibuat lebih dulu supaya literature note bisa langsung di-link ke MOC yang relevan.
+- Never use LaTeX for arrows, symbols, equations, or formatting.
+  Use Unicode characters instead:
+  → ← ↑ ↓ ⇒ ⇐
+
+  Example:
+  Manusia → Input → Software → Output
+
+  NOT:
+  Manusia $\rightarrow$ Input $\rightarrow$ Software
 
 ### Contoh Lengkap Pembuatan File
 

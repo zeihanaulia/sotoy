@@ -19,9 +19,9 @@ Intinya adalah transisi dari sistem digital yang bersifat pasif (seperti ERP ata
 
 ### Cognitive Loop: Manusia dan Sistem yang Saling Memperkuat
 
-Dalam sistem tradisional, alurnya linear: Manusia $\rightarrow$ Input $\rightarrow$ Software $\rightarrow$ Output.
+Dalam sistem tradisional, alurnya linear: Manusia -> Input -> Software -> Output.
 Dalam era AI, alurnya menjadi loop:
-**Manusia bekerja $\rightarrow$ AI membantu $\rightarrow$ Hasil dievaluasi $\rightarrow$ Koreksi disimpan $\rightarrow$ Workflow membaik $\rightarrow$ AI makin paham konteks $\rightarrow$ Manusia naik level.**
+**Manusia bekerja -> AI membantu -> Hasil dievaluasi -> Koreksi disimpan -> Workflow membaik -> AI makin paham konteks -> Manusia naik level.**
 
 Di sini, AI bukan lagi sekadar "asisten", tapi junior analyst yang terus belajar dari cara senior bekerja.
 

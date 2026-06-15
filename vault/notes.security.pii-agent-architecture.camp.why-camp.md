@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.camp.why-camp
 title: "CAMP: apa yang baru dari solusi session-aware PII middleware"
 desc: "Analisis komponen CAMP yang membuatnya berbeda dari per-turn masking biasa untuk agentic LLM." 
-updated: 1777878070887
-created: 1777878070887
+updated: 1777948651883
+created: 1777878089746
 tags:
   - notes
   - security

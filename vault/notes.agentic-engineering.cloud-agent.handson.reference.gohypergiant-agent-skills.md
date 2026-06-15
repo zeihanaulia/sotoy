@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.gohypergiant-agent-skills
 title: "Gohypergiant Agent Skills"
 desc: "Review pola packaging skill dengan progressive disclosure dan instruction router."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1777999988050
 tags:
   - notes
   - agentic-engineering

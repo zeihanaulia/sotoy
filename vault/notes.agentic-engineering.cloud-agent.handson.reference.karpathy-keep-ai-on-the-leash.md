@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.karpathy-keep-ai-on-the-leash
 title: "Karpathy: Keep AI on the Leash"
 desc: "Support note tentang pentingnya pemantauan manusia, incremental chunks, dan verification sebagai bottleneck dalam AI coding." 
-updated: 1778001554464
-created: 1778001375664
+updated: 1778468084907
+created: 1778001403636
 tags:
   - notes
   - agentic-engineering

@@ -2,8 +2,8 @@
 id: zettel.20260427000000
 title: "Prompt engineering sebagai pola komposisi, bukan prompt sakti"
 desc: "Prompt engineering adalah kumpulan teknik yang bisa dikombinasikan, bukan sekadar mencari satu prompt ajaib."
-updated: 1777253367335
-created: 1777253367335
+updated: 1777253883716
+created: 1777253388017
 tags:
   - zettel
   - prompt-engineering

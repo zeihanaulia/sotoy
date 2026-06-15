@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.repair
 title: "RePAIR: Redacting Personal Information in Response"
 desc: "Deep dive RePAIR: mekanisme redaction respons untuk menyelamatkan jika PII lolos hingga output LLM." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223936
+created: 1777871814554
 tags:
   - notes
   - security

@@ -2,8 +2,8 @@
 id: zettel.20260505179983
 title: "Sandbox dan boundary adalah persyaratan untuk tool agentic aman"
 desc: "Tool agentic perlu dijalankan dalam sandbox/isolasi agar akses lokal dan ekfiltrasi dapat dikontrol."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777996052565
+created: 1777992381234
 tags:
   - zettel
   - security

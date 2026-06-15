@@ -4,8 +4,8 @@ title: >-
   Software Requirements Essentials Core Practices for Successful Business
   Analysis
 desc: ''
-updated: 1684465398770
-created: 1684341558111
+updated: 1776324693730
+created: 1724251163399
 ---
 
 ## Pujian untuk Software Requirements Essentials

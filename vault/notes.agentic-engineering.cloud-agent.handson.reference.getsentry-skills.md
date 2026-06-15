@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.getsentry-skills
 title: "Getsentry Skills"
 desc: "Review pola organisasi skill internal Sentry untuk code review dan agent workflows."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1777999988050
 tags:
   - notes
   - agentic-engineering

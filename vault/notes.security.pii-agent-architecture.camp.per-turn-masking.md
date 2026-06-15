@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.camp.per-turn-masking
 title: "Per-turn masking gagal untuk agentic multi-turn chat"
 desc: "Penjelasan kenapa proteksi PII yang hanya memeriksa satu pesan per turn tidak cukup untuk agent yang membawa history penuh ke setiap panggilan model." 
-updated: 1777876488237
-created: 1777876488237
+updated: 1777948651874
+created: 1777876500642
 tags:
   - notes
   - security

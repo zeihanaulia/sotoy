@@ -2,8 +2,8 @@
 id: til.coding.two-sum-ii
 title: Two Sum II - Input Array Is Sorted
 desc: ''
-updated: 1742443122881
-created: 1742345168688
+updated: 1776324693737
+created: 1743493116029
 ---
 
 Link: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/

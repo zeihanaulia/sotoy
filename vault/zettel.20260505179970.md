@@ -2,8 +2,8 @@
 id: zettel.20260505179970
 title: "Revalidation dan ownership adalah kunci agar output agent tidak menjadi noise"
 desc: "Finding AI harus punya tahap verifikasi kedua dan pemilik agar tidak menambah beban triage dan dashboard baru."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995915909
+created: 1777991693193
 tags:
   - zettel
   - ai-security

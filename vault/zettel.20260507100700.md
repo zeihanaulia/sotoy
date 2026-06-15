@@ -2,8 +2,8 @@
 id: zettel.20260507100700
 title: "AI can handle API details, but humans must keep fundamental understanding"
 desc: "Karpathy: agent bisa mengingat keepdims/axis/reshape, namun manusia tetap perlu paham tensor semantics dan efisiensi."
-updated: 1778127070000
-created: 1778127070000
+updated: 1778775926002
+created: 1778126965392
 tags:
   - zettel
   - ai

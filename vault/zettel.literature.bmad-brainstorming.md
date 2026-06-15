@@ -6,6 +6,8 @@ tags:
   - bmad
   - brainstorming
   - literature
+created: 1776769056162
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

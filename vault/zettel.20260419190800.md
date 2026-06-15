@@ -7,6 +7,8 @@ tags:
   - ai
   - governance
   - prompt-engineering
+created: 1776600486720
+updated: 1776600486759
 ---
 
 > Instruksi AI tim bukan cuma teks; ia adalah infrastruktur yang menyimpan dan menyalurkan judgment senior secara konsisten.

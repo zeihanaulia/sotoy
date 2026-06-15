@@ -2,8 +2,8 @@
 id: zettel.20260511124516
 title: "Markdown sebagai source of truth, HTML sebagai human-facing surface"
 desc: "Dalam workflow agent, Markdown idealnya menyimpan knowledge, sementara HTML idealnya menyajikan atau mengoperasikan knowledge untuk manusia."
-updated: 1778464314052
-created: 1778464314052
+updated: 1778468084906
+created: 1778464338603
 tags:
   - zettel
   - prompt-engineering

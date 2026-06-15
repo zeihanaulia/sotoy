@@ -2,8 +2,8 @@
 id: zettel.1777272812614
 title: "Lebih banyak konteks tidak otomatis lebih baik"
 desc: "LLM memakai informasi lebih baik di awal dan akhir prompt; konten tengah bisa terabaikan."
-updated: 1777272812614
-created: 1777272812614
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

@@ -8,6 +8,8 @@ tags:
   - application-architecture
   - martin-fowler
 source: https://martinfowler.com/architecture/
+created: 1776639990764
+updated: 1776639990795
 ---
 
 ## Klaim

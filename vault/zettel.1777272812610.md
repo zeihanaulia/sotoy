@@ -2,8 +2,8 @@
 id: zettel.1777272812610
 title: "Prompt yang vague memaksa model menebak"
 desc: "Prompt yang terbuka lebar memberi model ruang besar untuk menebak informasi yang diinginkan."
-updated: 1777272812610
-created: 1777272812610
+updated: 1777272812608
+created: 1777272812608
 tags:
   - zettel
   - ai

@@ -8,6 +8,8 @@ tags:
   - software-engineering
   - operating-model
   - agentic-workflow
+created: 1776764295244
+updated: 1776767258362
 ---
 
 ## Pertanyaan yang dibuka

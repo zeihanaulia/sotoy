@@ -7,6 +7,8 @@ tags:
   - bmad
   - methodology
   - orchestration
+created: 1776774759216
+updated: 1776775285292
 ---
 
 ## Pertanyaan yang dibuka

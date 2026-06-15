@@ -9,6 +9,8 @@ tags:
   - customer-discovery
   - build-trap
 status: published
+created: 1778516766639
+updated: 1778806126272
 ---
 
 ## Konteks

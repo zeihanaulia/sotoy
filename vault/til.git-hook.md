@@ -2,8 +2,8 @@
 id: til.git-hook
 title: Git Hook
 desc: ''
-updated: 1733886891779
-created: 1733471866704
+updated: 1776324693741
+created: 1739944097670
 published: false
 ---
 

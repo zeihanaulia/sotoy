@@ -2,8 +2,8 @@
 id: zettel.1777282527277
 title: "AI support agent sering diposisikan sebagai garis pertahanan pertama, bukan pengganti manusia"
 desc: "AI masuk sebagai lapisan filter/triage awal yang meningkatkan manusia, bukan sebagai pengganti total."
-updated: 1777282527277
-created: 1777282527277
+updated: 1777349975837
+created: 1777282539453
 tags:
   - zettel
   - ai

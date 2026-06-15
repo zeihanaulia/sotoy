@@ -2,7 +2,7 @@
 id: book-summaries.the-developers-guide-to-ai.part-i
 title: "The Developer’s Guide to AI — Part I: Getting Started with AI"
 desc: "Bagian pertama yang mengajak developer memahami dasar LLM, membangun aplikasi AI sederhana, dan memulai workflow AI yang masuk akal."
-updated: 1777271572642
+updated: 1777271572643
 created: 1777271572642
 tags:
   - book-summary

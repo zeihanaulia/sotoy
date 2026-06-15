@@ -6,6 +6,8 @@ tags:
   - moc
   - ai
   - the-developers-guide-to-ai
+created: 1777272449634
+updated: 1777272951066
 ---
 
 ## Core ideas dari The Developer's Guide to AI

@@ -8,6 +8,8 @@ tags:
   - pii
   - agent
   - threshold
+created: 1777881101021
+updated: 1777948653344
 ---
 
 > Threshold-triggered privacy intervention tidak bisa menghapus apa yang sudah dikirim ke external LLM sebelum trigger.

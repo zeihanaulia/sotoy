@@ -2,8 +2,8 @@
 id: book-summaries.filosofi-teras
 title: Filosofi Teras
 desc: ''
-updated: 1647314727767
-created: 1647314687902
+updated: 1776324693721
+created: 1724251163396
 ---
 
 #self-improvement

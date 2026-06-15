@@ -2,8 +2,8 @@
 id: zettel.20260505179968
 title: "Workstation trust boundary adalah attack surface utama di era AI-native engineering"
 desc: "Developer workstation menyimpan secret dan process sensitif, jadi trust boundary lokal harus dipindai bersama codebase."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995907142
+created: 1777991693097
 tags:
   - zettel
   - workstation

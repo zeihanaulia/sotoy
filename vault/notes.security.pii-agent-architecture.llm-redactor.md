@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.llm-redactor
 title: "LLM-Redactor: Privacy-Preserving LLM Requests"
 desc: "Deep dive LLM-Redactor: evaluasi strategi permintaan privacy untuk agen berbasis LLM." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777948651946
+created: 1777871755309
 tags:
   - notes
   - security

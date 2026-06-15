@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.camp.indexed-masking
 title: "Indexed masking untuk agentic PII protection"
 desc: "Catatan tentang tokenized placeholder sebagai alternatif pseudonymization dalam proteksi PII untuk multi-turn agent." 
-updated: 1777878417390
-created: 1777878417390
+updated: 1777948651876
+created: 1777878435588
 tags:
   - notes
   - security

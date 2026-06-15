@@ -2,8 +2,8 @@
 id: zettel.1777272812627
 title: "Chat memory adalah ilusi aplikasi, bukan kemampuan model"
 desc: "Model sendiri stateless; aplikasi mengirim ulang history sehingga seolah model ingat."
-updated: 1777272812627
-created: 1777272812627
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

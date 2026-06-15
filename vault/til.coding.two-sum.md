@@ -2,8 +2,8 @@
 id: til.coding.two-sum
 title: Two Sum
 desc: ''
-updated: 1742346484606
-created: 1742318794356
+updated: 1776324693737
+created: 1743493116030
 ---
 
 Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.

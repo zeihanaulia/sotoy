@@ -2,8 +2,8 @@
 id: notes.security.overtrust-evaluation
 title: "Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover"
 desc: "Analisis apakah Overtrust punya flaw, apakah ada tool setara yang lebih matang, dan seberapa unik idenya."
-updated: 1777995400000
-created: 1777995400000
+updated: 1777996797705
+created: 1777994852411
 tags:
   - notes
   - security

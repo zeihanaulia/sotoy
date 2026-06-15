@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.before-after-judgement-harness
 title: "Before-After: Senior Judgement ke Harness"
 desc: "Perbandingan workflow tim sebelum dan sesudah judgement senior dipindahkan ke harness, dengan skenario N+1 query."
-updated: 1777998461480
-created: 1777998461480
+updated: 1778004105005
+created: 1777998497800
 tags:
   - notes
   - agentic-engineering

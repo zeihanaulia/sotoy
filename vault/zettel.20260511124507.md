@@ -2,8 +2,8 @@
 id: zettel.20260511124507
 title: "Cross-cutting capabilities adalah fondasi SaaS"
 desc: "Onboarding, identity, deployment, management, billing, metering, metrics, dan analytics adalah bagian inti dari SaaS."
-updated: 1778453643247
-created: 1778453643247
+updated: 1778454323356
+created: 1778454141787
 tags:
   - zettel
   - saas

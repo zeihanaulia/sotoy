@@ -2,8 +2,8 @@
 id: zettel.20260527140354
 title: "Dalam Enoch, hukuman Watchers dibentuk sesuai pelanggaran ontologis mereka"
 desc: "Hukuman Watchers mencerminkan pelanggaran mereka terhadap batas antara heaven, earth, spirit, dan flesh."
-updated: 1779863987096
-created: 1779863987096
+updated: 1779935953089
+created: 1779864006436
 tags:
   - zettel
   - enoch

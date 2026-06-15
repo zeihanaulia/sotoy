@@ -2,8 +2,8 @@
 id: notes.prompt-engineering.markdown-vs-html-llm
 title: "Markdown vs HTML untuk kerja LLM dan kolaborasi manusia"
 desc: "Memetakan perbedaan tujuan antara artifact yang optimal untuk model dan artifact yang optimal untuk pembaca manusia."
-updated: 1778464194864
-created: 1778464194864
+updated: 1778468084891
+created: 1778464216583
 tags:
   - notes
   - prompt-engineering

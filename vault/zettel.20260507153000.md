@@ -2,8 +2,8 @@
 id: zettel.20260507153000
 title: "Karpathy LLM Wiki as knowledge compilation loop"
 desc: "Karpathy's LLM Wiki pattern turns raw documents into a persistent markdown knowledge base rather than a one-shot RAG query."
-updated: 1779859715880
-created: 1777649400000
+updated: 1779859715978
+created: 1778139029557
 tags:
   - zettel
   - llm-knowledge-base

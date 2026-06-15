@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - martin-fowler
+created: 1776640537095
+updated: 1776640537125
 ---
 
 > "Architecture is about the important stuff. Whatever that is."

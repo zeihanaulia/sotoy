@@ -2,6 +2,6 @@
 id: til.coding
 title: Coding
 desc: ''
-updated: 1742318782534
-created: 1742318780562
+updated: 1776324693737
+created: 1743493116027
 ---

@@ -2,8 +2,8 @@
 id: til.coding.two-sum-ii.code
 title: Code
 desc: ''
-updated: 1742353016584
-created: 1742346503084
+updated: 1776324693737
+created: 1743493116029
 ---
 
 Playground: https://go.dev/play/p/V9SQqDEmpzx

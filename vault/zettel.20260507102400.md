@@ -2,8 +2,8 @@
 id: zettel.20260507102400
 title: "Working code is not the same as good code"
 desc: "Karpathy: model bisa membuat kode yang jalan, tapi belum tentu sederhana, elegan, atau durable."
-updated: 1778127559000
-created: 1778127559000
+updated: 1778775926072
+created: 1778127549838
 tags:
   - zettel
   - ai

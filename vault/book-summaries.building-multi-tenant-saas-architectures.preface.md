@@ -2,8 +2,8 @@
 id: book-summaries.building-multi-tenant-saas-architectures.preface
 title: "Preface"
 desc: "Analisis Preface Building Multi-Tenant SaaS Architectures: kontrak intelektual penulis dan kerangka berpikir yang dibangun."
-updated: 1778384559597
-created: 1778384559597
+updated: 1778452613290
+created: 1778384605534
 tags:
   - saas
   - multi-tenancy

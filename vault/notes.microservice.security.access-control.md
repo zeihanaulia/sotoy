@@ -2,8 +2,8 @@
 id: notes.microservice.security.access-control
 title: Access Control
 desc: ''
-updated: 1647288739700
-created: 1647278398829
+updated: 1776324693732
+created: 1724251163400
 published: false
 ---
 

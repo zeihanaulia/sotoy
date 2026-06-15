@@ -8,6 +8,8 @@ tags:
   - architecture
   - application-architecture
   - martin-fowler
+created: 1776650244139
+updated: 1776650244173
 ---
 
 > "One of the undecided problems of software development is deciding what the boundaries of a piece of software is. (Is a browser part of an operating system or not?) Many proponents of Service Oriented Architecture believe that applications are going away - thus future enterprise software development will be about assembling services together. I don't think applications are going away for the same reasons why application boundaries are so hard to draw. Essentially applications are social constructions."

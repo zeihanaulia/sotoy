@@ -4,8 +4,8 @@ title: How I Use AI to Code — literature note
 desc: >-
   Literature note untuk artikel Chris Parsons tentang AI coding yang didukung
   oleh harness, verification, dan agentic workflow.
-updated: 1778000377280
-created: 1778000377280
+updated: 1780426712062
+created: 1778000402026
 tags:
   - zettel
   - literature

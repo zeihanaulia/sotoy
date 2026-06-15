@@ -2,8 +2,8 @@
 id: zettel.1777272812626
 title: "System messages dan roles membuat prompt jadi protocol"
 desc: "Chat-style prompt bukan blob teks; ia adalah protokol berisi roles dan messages."
-updated: 1777272812626
-created: 1777272812626
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

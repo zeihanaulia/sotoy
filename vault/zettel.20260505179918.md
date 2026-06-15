@@ -2,8 +2,8 @@
 id: zettel.20260505179918
 title: "Deepsec docs menegaskan AI security review sebagai workspace orchestrator"
 desc: "Deepsec lebih dari scanner; dia adalah sistem kerja yang menggabungkan regex radar, context injection, agentic process, revalidation, dan workflow integration."
-updated: 1777991186541
-created: 1777991186541
+updated: 1777992186566
+created: 1777991195374
 tags:
   - zettel
   - ai-security

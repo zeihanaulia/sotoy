@@ -2,8 +2,8 @@
 id: zettel.20260527141711
 title: "Chapter 6 Enoch: kosmos terungkap sebagai arsitektur yang punya jalur dan tempat untuk setiap elemen"
 desc: "Bagian awal Chapter 6 menempatkan Enoch sebagai saksi yang dibawa melihat struktur tersembunyi kosmos—api, gelap, air, angin, bintang, dan jalur malaikat."
-updated: 1779865831995
-created: 1779865831995
+updated: 1779935953104
+created: 1779865840296
 tags:
   - zettel
   - enoch

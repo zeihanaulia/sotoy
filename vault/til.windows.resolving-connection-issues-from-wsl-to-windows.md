@@ -2,8 +2,8 @@
 id: til.windows.resolving-connection-issues-from-wsl-to-windows
 title: 'Notes: Resolving Connection Issues from WSL to Windows'
 desc: ''
-updated: 1734422343008
-created: 1732271049414
+updated: 1776324693744
+created: 1748956634968
 tags:
   - wsl2
 ---

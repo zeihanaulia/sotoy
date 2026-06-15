@@ -2,8 +2,8 @@
 id: zettel.20260511124505
 title: "Unified model adalah jawaban terhadap fragmentasi"
 desc: "Unified SaaS model mengatasi fragmentasi versi, custom, dan operasi yang muncul di model installed software."
-updated: 1778453643245
-created: 1778453643245
+updated: 1778454323332
+created: 1778454128143
 tags:
   - zettel
   - saas

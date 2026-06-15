@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - cost-of-change
+created: 1776640133252
+updated: 1776640133297
 ---
 
 > Di paragraf pembuka, Fowler menggeser fokus dari definisi formal arsitektur ke efek ekonomi dari keputusan desain: jika arsitektur jelek, menambah kemampuan baru akan lebih lambat dan lebih mahal.

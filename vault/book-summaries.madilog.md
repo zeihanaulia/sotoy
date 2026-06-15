@@ -2,8 +2,8 @@
 id: book-summaries.madilog
 title: Madilog
 desc: ''
-updated: 1741704456530
-created: 1739782767097
+updated: 1778468084906
+created: 1742029815422
 tags:
   - x
   - twitter

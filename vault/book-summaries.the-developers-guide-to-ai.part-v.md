@@ -2,8 +2,8 @@
 id: book-summaries.the-developers-guide-to-ai.part-v
 title: "The Developer’s Guide to AI — Part V: Building Agentic Systems"
 desc: "Bagian kelima yang membawa pembaca ke arsitektur agent, bagaimana agent dibangun, dan kapan ia dibutuhkan."
-updated: 1777271572643
-created: 1777271572643
+updated: 1777271572644
+created: 1777271572644
 tags:
   - book-summary
   - ai

@@ -2,8 +2,8 @@
 id: zettel.1777272812619
 title: "Chain-of-thought memberi struktur reasoning intermediate"
 desc: "CoT memberitahu model untuk bekerja step-by-step sebelum menjawab."
-updated: 1777272812619
-created: 1777272812619
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

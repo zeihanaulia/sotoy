@@ -2,8 +2,8 @@
 id: notes.10-hari-menulis.2025.commitment
 title: Di Antara Ribuan
 desc: ''
-updated: 1742437722882
-created: 1742419698243
+updated: 1776324693728
+created: 1743493116027
 ---
 
 Tidak semua semut tahu kenapa mereka bekerja keras seumur hidup. Mungkin hanya karena tidak ada pilihan lain, atau mungkin karena takut merasa tidak berarti jika berhenti. Archie adalah seekor semut yang menjalani hidup dengan seadanya. Dia tidak mengerti kenapa semut-semut lain begitu bersemangat kerja. Mungkin mereka tahu sesuatu yang dia tidak tahu atau mungkin mereka hanya lebih pandai berpura pura.

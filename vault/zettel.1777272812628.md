@@ -2,8 +2,8 @@
 id: zettel.1777272812628
 title: "History bertarung dengan token budget"
 desc: "Semakin panjang percakapan, semakin cepat history mencapai limit token."
-updated: 1777272812628
-created: 1777272812628
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

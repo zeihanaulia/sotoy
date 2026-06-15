@@ -2,8 +2,8 @@
 id: notes.infrastructure-as-code
 title: Infrastructure as Code
 desc: ''
-updated: 1721120167108
-created: 1674182809610
+updated: 1776324693731
+created: 1724251163400
 published: false
 ---
 

@@ -2,8 +2,8 @@
 id: notes.security.agentic-coding-permission-boundary
 title: "Agentic coding permission boundary dan risiko filesystem lokal"
 desc: "Analisis thread cheesecake tentang risiko agentic coding tools yang diberi akses filesystem luas dan korelasinya dengan security harness."
-updated: 1777991328067
-created: 1777991328067
+updated: 1777995719365
+created: 1777991352981
 tags:
   - notes
   - security

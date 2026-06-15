@@ -2,8 +2,8 @@
 id: notes.rust.design-patterns-and-best-practices-in-rust
 title: "Design Patterns and Best Practices in Rust"
 desc: "Catatan teknis tentang bagaimana pola desain tradisional diterjemahkan ke idiom Rust."
-updated: 1778769784651
-created: 1778769784651
+updated: 1778806126294
+created: 1778769849772
 tags:
   - notes
   - rust

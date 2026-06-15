@@ -2,8 +2,8 @@
 id: zettel.20260507102300
 title: "AI handles API details, humans must understand fundamentals"
 desc: "Karpathy: agent dapat mengingat detail API, tetapi manusia tetap perlu memahami struktur dan efisiensi."
-updated: 1778127549000
-created: 1778127549000
+updated: 1778775926041
+created: 1778127549838
 tags:
   - zettel
   - ai

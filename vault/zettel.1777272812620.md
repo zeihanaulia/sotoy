@@ -2,8 +2,8 @@
 id: zettel.1777272812620
 title: "Prompt chaining memecah masalah kompleks jadi workflow prompt"
 desc: "Masalah besar lebih mudah dikelola sebagai rangkaian prompt terfokus."
-updated: 1777272812620
-created: 1777272812620
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

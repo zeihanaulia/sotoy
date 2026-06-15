@@ -6,6 +6,8 @@ tags:
   - ai-native
   - software-architecture
   - jargon
+created: 1776762620401
+updated: 1776767258323
 ---
 
 ## Pertanyaan yang dibuka

@@ -2,8 +2,8 @@
 id: zettel.1777866581064
 title: "Knowledge graph + blast radius mengurangi context waste dalam agent code review"
 desc: "Graph struktur persistent dan blast radius membantu memilih subset file relevan untuk agent, sehingga reasoning lebih fokus dan token tidak terbuang."
-updated: 1777866581064
-created: 1777866581064
+updated: 1777866657847
+created: 1777866601530
 tags:
   - zettel
   - knowledge-graph

@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.11
 title: '2026-05-11'
 desc: "Refleksi public tentang service-centric SaaS dan perbandingan product vs service di konteks HRIS, CRM, dan contoh produk SaaS internal."
-updated: 1778453509273
-created: 1778453509273
+updated: 1778806126293
+created: 1778453516730
 tags:
   - daily
   - saas

@@ -2,8 +2,8 @@
 id: zettel.20260507101300
 title: "Future agentic systems may be AI-hosted with classical tools as co-processors"
 desc: "Karpathy: neural net bisa menjadi host process sementara CPU/tools menjadi co-processor untuk deterministic tasks."
-updated: 1778127412000
-created: 1778127412000
+updated: 1778775926059
+created: 1778127422848
 tags:
   - zettel
   - ai

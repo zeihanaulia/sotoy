@@ -2,8 +2,8 @@
 id: zettel.20260512100155
 title: "OrbStack dan Docker Desktop bisa coexist selama migrasi"
 desc: "Saya menemukan bahwa transisi ke OrbStack paling aman dilakukan dengan coexistence, bukan uninstall langsung." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764492
+created: 1778604148169
 tags:
   - zettel
   - docker

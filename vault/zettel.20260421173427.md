@@ -8,6 +8,8 @@ tags:
   - ai-native
   - facilitation
   - cognitive-model
+created: 1776767691806
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

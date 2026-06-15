@@ -8,6 +8,8 @@ tags:
   - enterprise-architecture
   - martin-fowler
 source: https://martinfowler.com/architecture/
+created: 1776639999999
+updated: 1776640000032
 ---
 
 ## Klaim

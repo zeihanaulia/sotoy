@@ -2,8 +2,8 @@
 id: til.security.trusted-publishing-not-safety
 title: "Trusted publishing tidak menjamin safety"
 desc: "Trusted publishing/provenance bisa membuktikan siapa yang publish, tetapi tidak membuktikan apakah publish itu terjadi di jalur kontrol yang aman."
-updated: 1778643308114
-created: 1778643308114
+updated: 1778645245339
+created: 1778643327693
 tags:
   - til
   - security

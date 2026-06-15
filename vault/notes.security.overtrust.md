@@ -2,8 +2,8 @@
 id: notes.security.overtrust
 title: "Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner"
 desc: "Deep dive Overtrust, arsitektur, deteksi risiko agentic coding di workstation, use case, dan batasannya."
-updated: 1777991439615
-created: 1777991439615
+updated: 1777996797696
+created: 1777991461886
 tags:
   - notes
   - security

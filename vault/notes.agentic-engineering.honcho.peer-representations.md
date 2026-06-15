@@ -4,8 +4,8 @@ title: Peer Representations
 desc: >-
   Catatan tentang peer representation di Honcho sebagai kumpulan hasil reasoning
   dinamis tentang entitas.
-updated: 1780425734283
-created: 1780425734283
+updated: 1780426513418
+created: 1780425778524
 tags:
   - notes
   - agentic-engineering

@@ -2,8 +2,8 @@
 id: zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering
 title: "Karpathy — From Vibe Coding to Agentic Engineering"
 desc: "Literature note tentang talk YouTube Andrej Karpathy dan pergeseran dari AI-asisten ke agentic engineering."
-updated: 1779859715876
-created: 1778126769000
+updated: 1779859715942
+created: 1778126794100
 tags:
   - zettel
   - literature-note

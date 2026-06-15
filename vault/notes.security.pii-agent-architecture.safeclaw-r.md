@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.safeclaw-r
 title: "SafeClaw-R: Safe Multi-Agent Personal Assistants"
 desc: "Deep dive SafeClaw-R: keamanan dan privasi dalam arsitektur multi-agent untuk personal assistants." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223936
+created: 1777871797802
 tags:
   - notes
   - security

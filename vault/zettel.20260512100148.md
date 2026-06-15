@@ -2,8 +2,8 @@
 id: zettel.20260512100148
 title: "Hybrid API-first + local small/medium models adalah jalan masuk enterprise yang lebih sehat"
 desc: "Saya menemukan bahwa kombinasi API frontier dan local model kecil sering jadi strategi paling rasional untuk enterprise non-AI." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604126438
 tags:
   - zettel
   - ai

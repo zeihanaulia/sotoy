@@ -2,8 +2,8 @@
 id: zettel.1778000377287
 title: "Domain-specific skill files turn guidance into reusable rules"
 desc: "Klaim bahwa skill files membuat review dan agent behavior modular serta dapat digunakan ulang."
-updated: 1778000377287
-created: 1778000377287
+updated: 1778003052324
+created: 1778000428872
 tags:
   - zettel
   - agentic-engineering

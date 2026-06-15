@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.pii-shield
 title: "PII Shield: Browser Overlay for Personal Data Management"
 desc: "Deep dive PII Shield: front-end overlay untuk deteksi PII dan kontrol pengguna sebelum prompt dikirim ke model." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223937
+created: 1777871769530
 tags:
   - notes
   - security

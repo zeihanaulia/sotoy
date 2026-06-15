@@ -2,8 +2,8 @@
 id: book-summaries.building-multi-tenant-saas-architectures.chapter-1.close-reading
 title: "Chapter 1 Close Reading — The SaaS Mindset"
 desc: "Close reading Chapter 1 dengan analisis alur paragraf, quotes penting, takeaway desain SaaS, dan sketsa ASCII model arsitektur." 
-updated: 1778453643240
-created: 1778453643240
+updated: 1778453922440
+created: 1778453692897
 published: true
 tags:
   - saas

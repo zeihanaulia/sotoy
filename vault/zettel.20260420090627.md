@@ -8,6 +8,8 @@ tags:
   - architecture
   - serverless
   - martin-fowler
+created: 1776650799416
+updated: 1776650799450
 ---
 
 > "Serverless architectures are application designs that incorporate third-party 'Backend as a Service' (BaaS) services, and/or that include custom code run in managed, ephemeral containers on a 'Functions as a Service' (FaaS) platform... Serverless architectures may benefit from significantly reduced operational cost, complexity, and engineering lead time, at a cost of increased reliance on vendor dependencies and comparatively immature supporting services."

@@ -2,8 +2,8 @@
 id: book-summaries.escaping-the-build-trap
 title: Escaping the Build Trap
 desc: 'Ringkasan Escaping the Build Trap: dari feature factory ke product-led organization.'
-updated: 1778804815549
-created: 1778804815549
+updated: 1778806126272
+created: 1778804841926
 tags:
   - book-summary
   - product-management

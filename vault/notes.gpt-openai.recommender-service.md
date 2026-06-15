@@ -2,8 +2,8 @@
 id: notes.gpt-openai.recommender-service
 title: Recommender Service
 desc: ''
-updated: 1670344737169
-created: 1670344545353
+updated: 1776324693731
+created: 1724251163399
 ---
 
 ## Apakah kamu ada ide untuk membuat recommender service? baiknya menggunakan bahasa dan tools apa

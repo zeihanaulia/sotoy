@@ -2,8 +2,8 @@
 id: notes.security.deepsec-challenges
 title: "Deepsec challenge: orchestration, false positives, cost, dan workflow"
 desc: "Rangkuman counter-argument di thread Guillermo Rauch tentang deepsec, fokus pada risk dan limitasi operasional."
-updated: 1777991254501
-created: 1777991254501
+updated: 1777995719366
+created: 1777991278760
 tags:
   - notes
   - security

@@ -2,8 +2,8 @@
 id: til.setup-spring-boot
 title: Setup Spring Boot
 desc: ''
-updated: 1746615097326
-created: 1746614779555
+updated: 1776324693743
+created: 1748956634967
 ---
 
 Siap! Ini dia versi **terbaru dan bersih** dari **step-by-step install Spring Boot pakai Gradle di WSL Ubuntu**, dengan **Java 21 (LTS)** dan **tanpa buka browser**.

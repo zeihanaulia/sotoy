@@ -8,6 +8,8 @@ tags:
   - architecture
   - application-architecture
   - martin-fowler
+created: 1776650118909
+updated: 1776650118943
 ---
 
 > "The first problem with defining application architecture is that there's no clear definition of what an application is. My view is that applications are a social construction: a body of code that's seen by developers as a single unit, a group of functionality that business customers see as a single unit, and an initiative that those with the money see as a single budget."

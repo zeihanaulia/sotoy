@@ -2,8 +2,8 @@
 id: zettel.20260505179981
 title: "Finding keamanan butuh bukti yang actionable kapan pun bisa"
 desc: "Temuan keamanan harus dilengkapi bukti dan rekomendasi agar tidak sekadar jadi noise di tangan engineering."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777996041813
+created: 1777992381229
 tags:
   - zettel
   - security

@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.15
 title: '2026-05-15'
 desc: 'Refleksi baca Escaping the Build Trap dan implikasinya untuk product thinking.'
-updated: 1778804815549
-created: 1778804815549
+updated: 1778806126293
+created: 1778804841854
 tags:
   - daily
   - product-management

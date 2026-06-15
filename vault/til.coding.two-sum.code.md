@@ -2,8 +2,8 @@
 id: til.coding.two-sum.code
 title: Code
 desc: ''
-updated: 1742346490651
-created: 1742346435001
+updated: 1776324693737
+created: 1743493116030
 ---
 
 ## Brute Force

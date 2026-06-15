@@ -2,8 +2,8 @@
 id: notes.sotoy.dependabot-audit
 title: "Sotoy Dependabot & npm audit analysis"
 desc: "Dokumentasi temuan audit dependency untuk proyek Sotoy dan potensi sumber alert pada template Dendron."
-created: 1776326121983
-updated: 1776549600000
+created: 1776326928641
+updated: 1776326928642
 tags:
   - sotoy
   - dependabot

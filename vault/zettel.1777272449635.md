@@ -2,8 +2,8 @@
 id: zettel.1777272449635
 title: "Developer AI sebaiknya fokus pada composition, bukan membangun foundational model sendiri"
 desc: "Quote oven/chef merangkum filosofi praktis buku: nilai AI untuk developer ada di menyusun model dan sistem yang sudah ada, bukan di melatih model dari nol."
-updated: 1777276211619
-created: 1777272449635
+updated: 1777276341256
+created: 1777272449632
 tags:
   - zettel
   - ai

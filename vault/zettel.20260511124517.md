@@ -2,8 +2,8 @@
 id: zettel.20260511124517
 title: "Thread Markdown vs HTML mengarah ke desain pipeline, bukan victory lap format"
 desc: "Diskusi antirez menunjukkan bahwa debat terbaik bukan soal Markdown atau HTML, tapi soal fungsi format di layer yang berbeda."
-updated: 1778464411467
-created: 1778464411467
+updated: 1778468084891
+created: 1778464425758
 tags:
   - zettel
   - prompt-engineering

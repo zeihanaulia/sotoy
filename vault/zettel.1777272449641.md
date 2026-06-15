@@ -2,8 +2,8 @@
 id: zettel.1777272449641
 title: "LLM membutuhkan grounding untuk bisa berguna"
 desc: "Grounding adalah membuat output model terikat pada konteks nyata dan relevan, bukan hanya pada pola bahasa umum."
-updated: 1777281258500
-created: 1777272449641
+updated: 1777282015599
+created: 1777272449633
 tags:
   - zettel
   - ai

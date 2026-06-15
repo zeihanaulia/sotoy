@@ -2,8 +2,8 @@
 id: zettel.1777272449637
 title: "Developer perlu mental model produk lebih dari model AI"
 desc: "Fokus buku ini adalah menggunakan pretrained AI models untuk solusi nyata, bukan memahami model internals sebagai tujuan utama."
-updated: 1777277488055
-created: 1777272449637
+updated: 1777277570243
+created: 1777272449632
 tags:
   - zettel
   - ai

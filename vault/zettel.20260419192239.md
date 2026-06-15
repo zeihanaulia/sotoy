@@ -7,6 +7,8 @@ tags:
   - governance
   - ai
   - copilot
+created: 1776601366140
+updated: 1776601366175
 ---
 
 > Executable governance berarti standar tim tidak berhenti sebagai dokumen; ia harus diubah menjadi instruksi dan workflow yang bisa dijalankan AI.

@@ -8,6 +8,8 @@ tags:
   - brainstorming
   - ai-native
   - facilitation
+created: 1776766632175
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

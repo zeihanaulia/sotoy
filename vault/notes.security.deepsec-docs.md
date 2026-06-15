@@ -2,8 +2,8 @@
 id: notes.security.deepsec-docs
 title: "Deepsec docs: workflow harness, bukan scanner sekali jalan"
 desc: "Ringkasan implementasi deepsec dari repo docs, termasuk instalasi, matcher, context, state, dan workflow nyata."
-updated: 1777991151798
-created: 1777991151798
+updated: 1777993638014
+created: 1777991180384
 tags:
   - notes
   - security

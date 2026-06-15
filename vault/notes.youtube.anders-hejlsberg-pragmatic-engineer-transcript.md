@@ -2,8 +2,8 @@
 id: notes.youtube.anders-hejlsberg-pragmatic-engineer-transcript
 title: "Anders Hejlsberg interview transcript notes"
 desc: "Catatan pertanyaan eksplisit dan jawaban dari video Pragmatic Engineer interview dengan Anders Hejlsberg."
-updated: 1778775601007
-created: 1778775601007
+updated: 1778775961481
+created: 1778775630438
 tags:
   - notes
   - youtube

@@ -2,8 +2,8 @@
 id: zettel.1777272449638
 title: "Traction tanpa leverage operasional bisa berubah jadi krisis"
 desc: "Buzz dan kontrak bukan jaminan keselamatan; saya melihat bahwa pertumbuhan awal bisa memecah cashflow dan tim kalau infrastruktur operasionalnya tidak siap."
-updated: 1777277668903
-created: 1777272449638
+updated: 1777277758648
+created: 1777272449632
 tags:
   - zettel
   - ai

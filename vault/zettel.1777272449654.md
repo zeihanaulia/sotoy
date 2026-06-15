@@ -2,8 +2,8 @@
 id: zettel.1777272449654
 title: "Python dipilih AI karena ekosistem, bukan syntax"
 desc: "Dominasi Python di AI didorong oleh libraries dan tooling, bukan sekadar gaya bahasa."
-updated: 1777272449654
-created: 1777272449654
+updated: 1777272449634
+created: 1777272449634
 tags:
   - zettel
   - ai

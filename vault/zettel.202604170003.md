@@ -6,6 +6,8 @@ tags:
   - zettel
   - knowledge-management
   - zettelkasten
+created: 1776381170415
+updated: 1776390335660
 ---
 
 ## Gagasan

@@ -6,6 +6,8 @@ tags:
   - enoch
   - literature
   - cosmology
+created: 1779866219760
+updated: 1779939660099
 ---
 
 ## Pertanyaan yang dibuka

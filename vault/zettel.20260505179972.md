@@ -2,8 +2,8 @@
 id: zettel.20260505179972
 title: "Secret exposure bisa terjadi tanpa commit Git"
 desc: "Kebocoran secret sering terjadi lewat proses lokal, extension, dan akses environment, bukan hanya commit repositori."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995926176
+created: 1777991898225
 tags:
   - zettel
   - security

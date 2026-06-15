@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.camp
 title: "CAMP: Cross-Turn PII Protection for LLM Conversations"
 desc: "Deep dive CAMP: framework pengaman PII yang mempertimbangkan akumulasi informasi lintas percakapan agent." 
-updated: 1777875390302
-created: 1777871740192
+updated: 1777948651875
+created: 1777871749375
 tags:
   - notes
   - security

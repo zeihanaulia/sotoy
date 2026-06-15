@@ -8,6 +8,8 @@ tags:
   - agentic-coding
   - trust-boundary
 source: https://github.com/cheese-cakee/overtrust
+created: 1777996771701
+updated: 1777996797705
 ---
 
 ## Klaim

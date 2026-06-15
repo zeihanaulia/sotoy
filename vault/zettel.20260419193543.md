@@ -7,6 +7,8 @@ tags:
   - governance
   - ai
   - observability
+created: 1776602169270
+updated: 1776602169298
 ---
 
 > Tracker mengubah pekerjaan AI/developer dari eksekusi hit-and-run menjadi alur yang dapat dilihat, dipantau, dan direview.

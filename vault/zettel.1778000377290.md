@@ -2,8 +2,8 @@
 id: zettel.1778000377290
 title: "Problem-first specs outperform solution-detail specs for AI agents"
 desc: "Klaim bahwa spesifikasi yang berfokus pada masalah lebih efektif untuk agent AI daripada spesifikasi solusi detail."
-updated: 1778000377290
-created: 1778000377290
+updated: 1778003052324
+created: 1778000447879
 tags:
   - zettel
   - agentic-engineering

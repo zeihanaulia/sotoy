@@ -2,8 +2,8 @@
 id: zettel.1777272449653
 title: "ReadableStream membuat browser ikut memproses respons LLM secara progresif"
 desc: "Dengan ReadableStream, client tidak lagi menunggu payload lengkap; ia membaca respons HTTP sebagai aliran yang bisa dirender sebagian demi sebagian."
-updated: 1777272449653
-created: 1777272449653
+updated: 1777427658317
+created: 1777272449634
 tags:
   - zettel
   - ai

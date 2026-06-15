@@ -2,8 +2,8 @@
 id: til.writing.belajar-menulis
 title: Belajar Menulis
 desc: ''
-updated: 1742434383114
-created: 1742420660989
+updated: 1776324693744
+created: 1748956634969
 ---
 
 Tahun ini baru tau dan baru join club menulis yang di inisiasi sama temen temen yang suka menulis di eFishery. Sepertinya menarik, jadi ada teman nulis bareng. Baca isi pikiran mereka dalam tulsan. Gue suka baca tapi gue gak pernah nulis sama sekali. Jadilah gue coba ikutin apa kaya orang orang di youtube aja dulu. Begitu typing belajar menulis langsung keluar video ini.

@@ -2,8 +2,8 @@
 id: zettel.20260512100152
 title: "Spread beli-jual valas adalah biaya transaksi yang sering diabaikan"
 desc: "Saya menangkap bahwa spread bukan hanya perbedaan kurs, tapi friction cost nyata yang membuat hedge valas lebih cocok untuk jangka menengah." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764492
+created: 1778604132525
 tags:
   - zettel
   - finance

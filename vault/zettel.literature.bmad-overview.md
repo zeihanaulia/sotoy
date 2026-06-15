@@ -6,6 +6,8 @@ tags:
   - bmad
   - overview
   - literature
+created: 1776769067184
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

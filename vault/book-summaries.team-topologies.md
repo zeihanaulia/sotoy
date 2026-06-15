@@ -2,8 +2,8 @@
 id: book-summaries.team-topologies
 title: Team Topologies
 desc: ''
-updated: 1683595554316
-created: 1683524168473
+updated: 1776324693723
+created: 1724251163397
 ---
 
 ## The Problem with Org Charts

@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.separable-expert-architecture
 title: "Separable Expert Architecture: Privacy-Preserving Personalization"
 desc: "Deep dive Separable Expert Architecture: memisahkan personalisasi LLM agar data pengguna bisa dihapus dan tidak terpatri di model." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223936
+created: 1777871808960
 tags:
   - notes
   - security

@@ -2,8 +2,8 @@
 id: til.coding.maximum-sum-of-distinct-subarrays-with-length-k
 title: Maximum Sum of Distinct Subarrays with Length K
 desc: ''
-updated: 1742788580503
-created: 1742443701789
+updated: 1776324693737
+created: 1743493116027
 ---
 
 You are given an integer array nums and an integer k. Find the maximum subarray sum of all the subarrays of nums that meet the following conditions:

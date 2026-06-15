@@ -2,8 +2,8 @@
 id: til.devops.setup-vm-azure
 title: Setup Vm Azure
 desc: ''
-updated: 1748956058030
-created: 1748955182718
+updated: 1776324693739
+created: 1749092277369
 ---
 
 ## 1. Pendahuluan

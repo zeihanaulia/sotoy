@@ -2,8 +2,8 @@
 id: zettel.20260505179946
 title: "Workstation trust boundary jadi serangan utama di era agentic coding"
 desc: "Agentic coding tools memperluas attack surface lokal, sehingga scanner lokal harus memetakan permission boundary dan not just secrets."
-updated: 1777991468912
-created: 1777991468912
+updated: 1777992186594
+created: 1777991475450
 tags:
   - zettel
   - security

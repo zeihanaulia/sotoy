@@ -2,8 +2,8 @@
 id: zettel.trusted-publishing-authenticity-vs-agency
 title: "Trusted publishing memverifikasi origin, bukan kontrol publish"
 desc: "Trusted publishing di npm/GitHub memverifikasi identitas dan workflow CI, tetapi tidak membuktikan bahwa publish dilakukan di bawah kontrol yang aman."
-updated: 1778645837051
-created: 1778645837051
+updated: 1778647444179
+created: 1778647244689
 tags:
   - zettel
   - security

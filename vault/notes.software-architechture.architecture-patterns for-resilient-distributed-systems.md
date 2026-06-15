@@ -2,8 +2,8 @@
 id: notes.software-architechture.architecture-patterns for-resilient-distributed-systems
 title: Architecture Patterns for Resilient Distributed Systems
 desc: ''
-updated: 1721120196279
-created: 1674621687062
+updated: 1776324693733
+created: 1724251163400
 published: false
 ---
 

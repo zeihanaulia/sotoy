@@ -7,6 +7,8 @@ tags:
   - architecture
   - adr
   - decision-making
+created: 1776639276459
+updated: 1776639276501
 ---
 
 > ADR adalah catatan singkat tentang satu keputusan arsitektur, lengkap dengan konteks dan konsekuensi, supaya tim tidak kehilangan "kenapa" di balik "apa".

@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.awesome-skills-code-review-skill
 title: "Awesome Skills Code Review Skill"
 desc: "Review struktur skill code review modular yang bisa dijadikan dasar skill layer."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1777999988042
 tags:
   - notes
   - agentic-engineering

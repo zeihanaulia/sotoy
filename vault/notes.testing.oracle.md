@@ -2,8 +2,8 @@
 id: notes.testing.oracle
 title: "Oracle dalam software testing"
 desc: "Penjelasan konsep test oracle sebagai sumber kebenaran independen untuk menilai hasil program."
-updated: 1778467681720
-created: 1778467681720
+updated: 1778468084908
+created: 1778467692668
 tags:
   - notes
   - testing

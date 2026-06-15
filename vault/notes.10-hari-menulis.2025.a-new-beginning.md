@@ -2,8 +2,8 @@
 id: notes.10-hari-menulis.2025.a-new-beginning
 title: 20 Tahun Setelahnya
 desc: ''
-updated: 1742251402186
-created: 1742251018406
+updated: 1776324693727
+created: 1743493116026
 ---
 
 

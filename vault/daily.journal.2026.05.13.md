@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.13
 title: '2026-05-13'
 desc: "Refleksi serangan supply-chain Mini Shai-Hulud yang menarget paket AI/dev tooling dan memanfaatkan file IDE sebagai persistence."
-updated: 1778643750715
-created: 1778643144638
+updated: 1778645245339
+created: 1778643185673
 tags:
   - daily
   - security

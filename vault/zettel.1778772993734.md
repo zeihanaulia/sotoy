@@ -2,8 +2,8 @@
 id: zettel.1778772993734
 title: "Think in Rust, not memorize Rust patterns"
 desc: "Rust pattern harus dibaca dari problem desainnya, bukan dari label GoF atau padanan bahasa lain."
-updated: 1778772993734
-created: 1778772993734
+updated: 1778773151606
+created: 1778773023546
 tags:
   - zettel
   - rust

@@ -7,6 +7,8 @@ tags:
   - moc
   - knowledge-management
   - zettelkasten
+created: 1776508407234
+updated: 1776508407236
 ---
 
 ## Tentang Topik Ini

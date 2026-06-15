@@ -2,8 +2,8 @@
 id: zettel.1778772993735
 title: "Effective Rust development is a design transformation, not syntax mastery"
 desc: "Mahir syntax Rust belum cukup; efekifitas Rust tercapai ketika cara desain software berubah."
-updated: 1778772993735
-created: 1778772993735
+updated: 1778773151626
+created: 1778773030521
 tags:
   - zettel
   - rust

@@ -2,8 +2,8 @@
 id: zettel.1777272449655
 title: "Ulangi contoh di bahasa lain untuk isolasi konsep"
 desc: "Mengulang contoh yang sama di bahasa baru memisahkan konsep dari syntax implementasi."
-updated: 1777272449655
-created: 1777272449655
+updated: 1777272449634
+created: 1777272449634
 tags:
   - zettel
   - ai

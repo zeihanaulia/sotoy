@@ -2,8 +2,8 @@
 id: zettel.20260511124521
 title: "Hand-porting besar lebih efektif jika breadth-first dan tulis semua dulu"
 desc: "Untuk port besar yang bootstrap line-for-line, strategi kerja yang lebih baik adalah membentuk seluruh kerangka port terlebih dahulu, lalu memperbaiki dan mengoptimalkan."
-updated: 1778467149934
-created: 1778467149934
+updated: 1778468084907
+created: 1778467171409
 tags:
   - zettel
   - software-architechture

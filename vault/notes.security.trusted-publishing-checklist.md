@@ -2,8 +2,8 @@
 id: notes.security.trusted-publishing-checklist
 title: "Trusted publishing: kritik argumen dan checklist operasional"
 desc: "Bedah argumen trusted publishing di situasi npm dan turunkan jadi checklist untuk maintainer, repo, CI, dan organisasi."
-updated: 1778647325842
-created: 1778643750715
+updated: 1778647442683
+created: 1778643769032
 tags:
   - notes
   - security

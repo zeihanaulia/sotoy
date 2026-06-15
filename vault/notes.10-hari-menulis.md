@@ -2,8 +2,8 @@
 id: notes.10-hari-menulis
 title: 10 Hari Menulis
 desc: ''
-updated: 1742250672407
-created: 1742250663185
+updated: 1776324693728
+created: 1742250663194
 ---
 
 Tantangan 10 Hari Menulis

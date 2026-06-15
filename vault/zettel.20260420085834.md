@@ -8,6 +8,8 @@ tags:
   - architecture
   - microservices
   - martin-fowler
+created: 1776650324216
+updated: 1776650324251
 ---
 
 > "The microservice architectural pattern is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms... There is a bare minimum of centralized management of these services... While their advantages have made them very fashionable in the last few years, they come with the costs of increasing distribution, weakened consistency and require maturity in operational management."

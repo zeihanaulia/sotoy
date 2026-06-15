@@ -6,6 +6,8 @@ tags:
   - ai
   - literature
   - ai-native
+created: 1776919136185
+updated: 1776970659484
 ---
 
 ## Pertanyaan yang dibuka

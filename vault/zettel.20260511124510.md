@@ -2,8 +2,8 @@
 id: zettel.20260511124510
 title: "Shared and dedicated resources bisa berdampingan dalam SaaS"
 desc: "SaaS bisa menggunakan campuran shared dan dedicated resource tanpa kehilangan model multi-tenant-nya."
-updated: 1778453643250
-created: 1778453643250
+updated: 1778454323332
+created: 1778454141787
 tags:
   - zettel
   - saas

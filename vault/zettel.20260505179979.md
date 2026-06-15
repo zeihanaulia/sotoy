@@ -2,8 +2,8 @@
 id: zettel.20260505179979
 title: "Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class"
 desc: "Keamanan agentic efektif didesain sejak awal dengan kontrol biaya, isolasi, dan pembatasan jaringan."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777996007248
+created: 1777991922909
 tags:
   - zettel
   - security

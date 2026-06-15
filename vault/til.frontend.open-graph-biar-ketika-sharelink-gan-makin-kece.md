@@ -2,8 +2,8 @@
 id: til.frontend.open-graph-biar-ketika-sharelink-gan-makin-kece
 title: Open Graph Biar Ketika Sharelink Gan Makin Kece
 desc: ''
-updated: 1748255796152
-created: 1748255406913
+updated: 1776324693740
+created: 1748956634964
 ---
 
 

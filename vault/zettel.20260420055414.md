@@ -7,6 +7,8 @@ tags:
   - architecture
   - adr
   - documentation
+created: 1776639276491
+updated: 1776639276524
 ---
 
 > Satu ADR = satu keputusan. Jika satu dokumen memuat banyak keputusan, batasan hilang, diskusi jadi kabur, dan riwayat perubahan susah dilacak.

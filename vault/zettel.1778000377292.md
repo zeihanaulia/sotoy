@@ -2,8 +2,8 @@
 id: zettel.1778000377292
 title: "Failure mode: vague AI output plus weak guardrails creates rework"
 desc: "Klaim bahwa workflow AI coding gagal ketika tim mengandalkan output AI yang vague tanpa guardrail yang jelas."
-updated: 1778000377292
-created: 1778000377292
+updated: 1778003052449
+created: 1778000460785
 tags:
   - zettel
   - agentic-engineering

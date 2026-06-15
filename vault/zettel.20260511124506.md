@@ -2,8 +2,8 @@
 id: zettel.20260511124506
 title: "Same-version sebagai litmus test SaaS"
 desc: "Menjalankan semua tenant pada versi yang sama adalah indikator kuat bahwa environment mendekati model SaaS."
-updated: 1778453643246
-created: 1778453643246
+updated: 1778454323379
+created: 1778454141787
 tags:
   - zettel
   - saas

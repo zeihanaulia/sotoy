@@ -2,8 +2,8 @@
 id: handbook.golang.4-setup-golang-ci
 title: 4 Setup Golang CI
 desc: ''
-updated: 1646862695992
-created: 1646862422149
+updated: 1776324693727
+created: 1724251163398
 ---
 
 #go #linter

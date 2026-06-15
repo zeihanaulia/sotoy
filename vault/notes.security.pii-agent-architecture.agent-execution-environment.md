@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.agent-execution-environment
 title: "AI Agent Execution Environment to Safeguard User Data"
 desc: "Deep dive GAAP: eksekusi environment untuk agent AI yang menjamin kerahasiaan data pengguna melalui information flow control."
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223937
+created: 1777871851518
 tags:
   - notes
   - security

@@ -2,8 +2,8 @@
 id: zettel.20260511124515
 title: "SaaS adalah service, bukan product saja"
 desc: "Perbedaan utama SaaS adalah fokus pada pengalaman berkelanjutan, bukan hanya feature list."
-updated: 1778453643255
-created: 1778453643255
+updated: 1778454323379
+created: 1778454154375
 tags:
   - zettel
   - saas

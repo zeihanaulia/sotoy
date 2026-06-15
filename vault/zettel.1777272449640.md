@@ -2,8 +2,8 @@
 id: zettel.1777272449640
 title: "API call adalah pintu masuk developer ke AI"
 desc: "Momen ketika AI berubah dari bidang orang lain menjadi sesuatu yang bisa dipanggil dan diintegrasikan dengan skill developer biasa."
-updated: 1777280793683
-created: 1777272449640
+updated: 1777282015599
+created: 1777272449632
 tags:
   - zettel
   - ai

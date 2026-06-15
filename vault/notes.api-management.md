@@ -2,8 +2,8 @@
 id: notes.api-management
 title: API Management
 desc: ''
-updated: 1721120088368
-created: 1662554583293
+updated: 1776324693729
+created: 1724251163398
 ---
 
 ## Notes

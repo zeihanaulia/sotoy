@@ -2,8 +2,8 @@
 id: til.parenting.board-games-money-learning
 title: "Board game bisa mengajarkan financial reasoning lebih baik daripada sekadar menghitung uang"
 desc: "Insight bahwa board game efektif untuk anak karena mereka belajar uang sebagai pilihan, trade-off, dan konsekuensi, bukan hanya transaksi."
-updated: 1779766468242
-created: 1779766468242
+updated: 1779766482421
+created: 1779766482388
 tags:
   - til
   - parenting

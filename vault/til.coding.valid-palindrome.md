@@ -2,8 +2,8 @@
 id: til.coding.valid-palindrome
 title: Valid Palindrom
 desc: ''
-updated: 1742443210977
-created: 1742352034553
+updated: 1776324693738
+created: 1743493116030
 ---
 
 A phrase is a **palindrome** if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.

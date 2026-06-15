@@ -2,8 +2,8 @@
 id: zettel.20260507102000
 title: "AI may speed delivery, but engineering responsibility stays with humans"
 desc: "Karpathy: vibe coding mempercepat pekerjaan, tetapi responsibility engineering tidak bergeser ke AI."
-updated: 1778127529000
-created: 1778127529000
+updated: 1778775926027
+created: 1778127516396
 tags:
   - zettel
   - ai

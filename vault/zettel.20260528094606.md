@@ -2,8 +2,8 @@
 id: zettel.20260528094606
 title: "Dalam 1 Enoch, alam taat pada tugas kosmik sedangkan manusia dan Watchers memiliki pilihan moral"
 desc: "Alam seperti matahari, bulan, bintang, angin, dan sungai diposisikan sebagai pelaksana tugas tetap, bukan sebagai agen moral yang punya kesadaran seperti manusia."
-updated: 1779936366926
-created: 1779936366926
+updated: 1779939661574
+created: 1779936378173
 tags:
   - zettel
   - enoch

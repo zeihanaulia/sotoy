@@ -8,6 +8,8 @@ tags:
   - enterprise-architecture
   - coordination
   - martin-fowler
+created: 1776651532003
+updated: 1776651532035
 ---
 
 > Much of enterprise architecture is about understanding what is worth the costs of central coordination, and what form that coordination should take.

@@ -9,6 +9,8 @@ tags:
   - governance
   - coordination
   - martin-fowler
+created: 1776651624111
+updated: 1776651624144
 ---
 
 > At one extreme is a central architecture group that must approve all architectural decision for every software system in the enterprise. Such groups slow down decision making and cannot truly understand the issues across such a wide portfolio of systems, leading to poor decision-making.

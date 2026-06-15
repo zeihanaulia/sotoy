@@ -7,6 +7,8 @@ tags:
   - analysis-phase
   - simulation
   - ai-native
+created: 1776766754349
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

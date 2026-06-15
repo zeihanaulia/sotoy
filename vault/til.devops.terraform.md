@@ -2,8 +2,8 @@
 id: til.devops.terraform
 title: Terraform
 desc: ''
-updated: 1749450108053
-created: 1749443611598
+updated: 1776324693739
+created: 1749900077549
 ---
 
 ## **1. Kenapa Lo Perlu Peduli Sama Infrastructure as Code (IaC)?**

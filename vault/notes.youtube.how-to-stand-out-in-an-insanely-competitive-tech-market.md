@@ -2,8 +2,8 @@
 id: notes.youtube.how-to-stand-out-in-an-insanely-competitive-tech-market
 title: How To Stand Out In An Insanely Competitive Tech Market (Ex-Amazon Principal Engineer)
 desc: ''
-updated: 1741243321249
-created: 1741243258973
+updated: 1778775961522
+created: 1741243259005
 ---
 
 

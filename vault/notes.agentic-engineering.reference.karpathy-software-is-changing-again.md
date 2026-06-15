@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.reference.karpathy-software-is-changing-again
 title: "Karpathy — Software Is Changing (Again)"
 desc: "Primary source note untuk talk YouTube Karpathy tentang Software 3.0, autonomy slider, and verification loop."
-updated: 1778001744189
-created: 1778001744189
+updated: 1778468084906
+created: 1778001754425
 tags:
   - notes
   - agentic-engineering

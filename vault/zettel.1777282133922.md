@@ -2,8 +2,8 @@
 id: zettel.1777282133922
 title: "AI adoption kadang lahir dari constraint ekonomi, bukan teknologi keren"
 desc: "Dalam cerita ini AI muncul karena runway pendek, payment terms buruk, dan manual support yang tidak sustainable."
-updated: 1777282133922
-created: 1777282133922
+updated: 1777349975837
+created: 1777282142773
 tags:
   - zettel
   - ai

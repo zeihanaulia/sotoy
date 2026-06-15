@@ -2,8 +2,8 @@
 id: notes.youtube.mbah-nun-kerja-itu-ibadah
 title: "Sinau Bareng Cak Nun dan KiaiKanjeng: BPD DIY, 3 November 2006"
 desc: ''
-updated: 1750398829041
-created: 1750389267221
+updated: 1778775961522
+created: 1750647738133
 tags:
     - cak nun
     - kerja itu ibadah

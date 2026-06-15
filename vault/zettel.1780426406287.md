@@ -2,7 +2,7 @@
 id: zettel.1780426406287
 title: "Stateful agent memory perlu workspace-peer-session-observation"
 desc: "Pisahkan ruang kerja, identitas jangka panjang, episode interaksi, dan perspektif agar state agent tidak bocor atau terlalu sempit."
-updated: 1780426406287
+updated: 1780426664141
 created: 1780426406287
 tags:
   - zettel

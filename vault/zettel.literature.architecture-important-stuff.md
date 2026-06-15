@@ -8,6 +8,8 @@ tags:
   - decision-making
   - martin-fowler
 source: https://martinfowler.com/architecture/
+created: 1776639969323
+updated: 1776639969358
 ---
 
 ## Klaim

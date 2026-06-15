@@ -8,6 +8,8 @@ tags:
   - architecture
   - layering
   - martin-fowler
+created: 1776650924687
+updated: 1776651032590
 ---
 
 > "One of the most common ways to modularize an information-rich program is to separate it into three broad layers: presentation (UI), domain logic (aka business logic), and data access."

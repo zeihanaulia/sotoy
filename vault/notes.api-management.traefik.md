@@ -2,8 +2,8 @@
 id: notes.api-management.traefik
 title: Traefik
 desc: ''
-updated: 1721120117344
-created: 1664300381043
+updated: 1776324693729
+created: 1724251163398
 published: false
 ---
 

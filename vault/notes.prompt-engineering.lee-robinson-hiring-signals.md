@@ -2,8 +2,8 @@
 id: notes.prompt-engineering.lee-robinson-hiring-signals
 title: "Lee Robinson: signal-first hiring advice untuk engineer"
 desc: "Catatan tentang thread Lee Robinson yang menekankan sinyal kompetensi dan relevansi di aplikasi engineering modern."
-updated: 1778465014186
-created: 1778465014186
+updated: 1778468084907
+created: 1778465037083
 tags:
   - notes
   - prompt-engineering

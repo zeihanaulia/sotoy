@@ -8,6 +8,8 @@ tags:
   - enterprise-architecture
   - coordination
   - martin-fowler
+created: 1776651195346
+updated: 1776651428939
 ---
 
 > While application architecture concentrates on the architecture within some form of notional application boundary, enterprise architecture looks architecture across a large enterprise. Such an organization is usually too large to group all its software in any kind of cohesive grouping, thus requiring coordination across teams with many codebases, that have developed in isolation from each other, with funding and users that operate independently of each other.

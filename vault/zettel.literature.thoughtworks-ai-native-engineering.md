@@ -6,6 +6,8 @@ tags:
   - ai-native
   - thoughtworks
   - literature
+created: 1776769078472
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

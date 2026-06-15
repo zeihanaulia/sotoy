@@ -8,6 +8,8 @@ tags:
   - architecture
   - legacy-modernization
   - martin-fowler
+created: 1776650427539
+updated: 1776650427566
 ---
 
 > "When faced with the need to replace existing software systems, organizations often fall into a cycle of half-completed technology replacements. Our experiences have taught us a series of patterns that allow us to break this cycle, relying on: a deliberate recognition of the desired outcomes of displacing the legacy software, breaking this displacement in parts, incrementally delivering these parts, and changing the culture of the organization to recognize that change is the unvarying reality."

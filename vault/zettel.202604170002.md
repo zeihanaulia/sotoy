@@ -6,6 +6,8 @@ tags:
   - zettel
   - knowledge-management
   - writing
+created: 1776381155033
+updated: 1776390335660
 ---
 
 ## Gagasan

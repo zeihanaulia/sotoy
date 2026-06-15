@@ -2,8 +2,8 @@
 id: zettel.1778772993733
 title: "clone() dan Rc<RefCell<T>> adalah sinyal ownership flow yang belum jelas"
 desc: "Penggunaan clone atau Rc<RefCell> secara luas sering menunjukkan bahwa desain ownership belum diekspresikan secara eksplisit."
-updated: 1778772993733
-created: 1778772993733
+updated: 1778773151605
+created: 1778773016077
 tags:
   - zettel
   - rust

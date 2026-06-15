@@ -2,8 +2,8 @@
 id: zettel.20260423125630
 title: "AI app paling efektif dilihat sebagai service dependency"
 desc: "AI app biasanya adalah aplikasi biasa yang memanggil model sebagai dependency, bukan produk model itu sendiri." 
-updated: 1776923790167
-created: 1776923790167
+updated: 1779935953064
+created: 1776923797873
 tags:
   - zettel
   - ai

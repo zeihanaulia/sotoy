@@ -2,8 +2,8 @@
 id: zettel.20260511124511
 title: "Dedicated infra belum tentu anti-SaaS"
 desc: "Dedicated resource dapat tetap menjadi bagian dari SaaS selama pengelolaan tenant tetap terpusat dan versi tetap seragam."
-updated: 1778453643251
-created: 1778453643251
+updated: 1778454323379
+created: 1778454154375
 tags:
   - zettel
   - saas

@@ -8,6 +8,8 @@ tags:
   - architecture
   - martin-fowler
   - technical-debt
+created: 1776649948572
+updated: 1776649948606
 ---
 
 > "While it is true that we can sacrifice quality for faster delivery in the short term, before the build up of cruft has an impact, people underestimate how quickly the cruft leads to an overall slower delivery. While this isn't something that can be objectively measured, experienced developers reckon that attention to internal quality pays off in weeks not months."

@@ -2,8 +2,8 @@
 id: notes.powershell.customize-poweshell
 title: Customize Poweshell
 desc: ''
-updated: 1746175911546
-created: 1746175781930
+updated: 1776324693733
+created: 1746697875223
 ---
 
 Lo pasti pernah ngerasa terminal bawaan Windows itu... meh. Hitam, polos, dan bosenin. Gue juga gitu. Tapi sekarang gue mau share perjalanan gue dari awal setup SSH key ke GitHub sampai akhirnya punya PowerShell yang bukan cuma enak diliat, tapi juga enak dipake. 

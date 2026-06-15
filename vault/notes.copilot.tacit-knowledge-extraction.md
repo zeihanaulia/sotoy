@@ -7,6 +7,8 @@ tags:
   - tacit-knowledge
   - workflow
   - documentation
+created: 1776603119853
+updated: 1776603524587
 ---
 
 ## Tujuan

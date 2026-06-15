@@ -2,8 +2,8 @@
 id: book-summaries.14-habits-of-highly-productive-developers
 title: 14 Habits of Highly Productive Developers
 desc: ''
-updated: 1646860166161
-created: 1646856523151
+updated: 1778468084891
+created: 1724251163395
 published: true
 tags:
   - Self Improvement

@@ -2,8 +2,8 @@
 id: notes.copilot.token-cheap-coding-agent-providers
 title: "Token murah untuk coding agent"
 desc: "Rekomendasi provider dan model API/token murah yang relevan untuk agent coding."
-updated: 1777984927711
-created: 1777983418040
+updated: 1777989957034
+created: 1777983433360
 tags:
   - notes
   - copilot

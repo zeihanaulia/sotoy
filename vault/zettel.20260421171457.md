@@ -7,6 +7,8 @@ tags:
   - analysis-phase
   - ai-native
   - methodology
+created: 1776766525559
+updated: 1776767258338
 ---
 
 ## Pertanyaan yang dibuka

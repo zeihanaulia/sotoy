@@ -2,8 +2,8 @@
 id: zettel.20260507101500
 title: "LLM capability is a jagged map, not a smooth curve"
 desc: "Karpathy: LLM jadi jagged karena training RL, reward, dan data distribution, sehingga kemampuan tidak merata."
-updated: 1778127462000
-created: 1778127462000
+updated: 1778775926034
+created: 1778127469069
 tags:
   - zettel
   - ai

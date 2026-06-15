@@ -2,8 +2,8 @@
 id: zettel.20260423114450
 title: "Introduction buku AI harus jadi manifesto peralihan mindset"
 desc: "Pengenalan buku AI yang efektif menetapkan pembaca sebagai developer yang merakit model, bukan peneliti yang membangun model dari nol." 
-updated: 1776919490879
-created: 1776919490879
+updated: 1777253882236
+created: 1776919512216
 tags:
   - zettel
   - ai

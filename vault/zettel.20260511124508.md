@@ -2,8 +2,8 @@
 id: zettel.20260511124508
 title: "Classic multi-tenancy terlalu sempit"
 desc: "Definisi classic multi-tenancy yang hanya mengandalkan shared infrastructure tidak cukup untuk menjelaskan banyak arsitektur SaaS modern."
-updated: 1778453643248
-created: 1778453643248
+updated: 1778454323379
+created: 1778454141787
 tags:
   - zettel
   - saas

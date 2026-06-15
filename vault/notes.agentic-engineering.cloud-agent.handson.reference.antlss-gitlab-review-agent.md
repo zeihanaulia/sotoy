@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.antlss-gitlab-review-agent
 title: "Antlss GitLab Review Agent"
 desc: "Review konteks GitLab review agent yang clone repo, baca sejarah kode, dan membangun best practices feedback loop."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052323
+created: 1777999959768
 tags:
   - notes
   - agentic-engineering

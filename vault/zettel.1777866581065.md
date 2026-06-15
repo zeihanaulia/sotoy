@@ -2,8 +2,8 @@
 id: zettel.1777866581065
 title: "Bottleneck agen coding sering ada pada pemilihan konteks, bukan kapasitas model"
 desc: "Menyaring dokumen dan file relevan sebelum model berpikir membuat reasoning lebih efisien daripada hanya memperbesar model."
-updated: 1777866581065
-created: 1777866581065
+updated: 1777866657847
+created: 1777866606501
 tags:
   - zettel
   - agent

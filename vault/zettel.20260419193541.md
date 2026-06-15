@@ -7,6 +7,8 @@ tags:
   - governance
   - ai
   - planning
+created: 1776602156669
+updated: 1776602156702
 ---
 
 > Plan dalam workflow AI-agent harus lebih dari daftar tugas; ia adalah artefak governance operasional yang memberi kontrak, struktur, dan basis validasi.

@@ -4,8 +4,8 @@ title: 'HeavySkill: Heavy Thinking as Inner Skill in Agentic Harness'
 desc: >-
   Ringkasan arXiv 2605.02396v1 tentang HeavySkill, pola parallel reasoning +
   deliberation dalam agentic harness.
-updated: 1778206047521
-created: 1778204621041
+updated: 1780426712062
+created: 1778204644824
 tags:
   - notes
   - agentic-engineering

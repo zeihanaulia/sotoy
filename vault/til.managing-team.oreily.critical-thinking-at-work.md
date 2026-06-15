@@ -2,8 +2,8 @@
 id: til.managing-team.oreily.critical-thinking-at-work
 title: Critical Thinking at Work
 desc: ''
-updated: 1682562686824
-created: 1682560486525
+updated: 1776324693741
+created: 1724251163401
 ---
 
 ## What Is Critical Thinking,  Actually?

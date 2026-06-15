@@ -2,8 +2,8 @@
 id: zettel.20260507101800
 title: "AI moat can be a domain-specific verifier and RL environment"
 desc: "Karpathy: startup AI yang paling realistis bukan bersaing di math/coding, melainkan membuat evaluator jelas di domain yang belum dibuat lab."
-updated: 1778127509000
-created: 1778127509000
+updated: 1778775926046
+created: 1778127516396
 tags:
   - zettel
   - ai

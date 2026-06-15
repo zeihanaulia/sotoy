@@ -2,8 +2,8 @@
 id: notes.software-architechture.bun-rewrite-oracle
 title: "Bun rewrite Zig → Rust: oracle test dan validasi independen"
 desc: "Catatan thread Rhys Sullivan tentang pentingnya test suite independen sebagai sumber kebenaran saat melakukan rewrite Bun dari Zig ke Rust."
-updated: 1778467597671
-created: 1778467597671
+updated: 1778468084907
+created: 1778467612733
 tags:
   - notes
   - software-architechture

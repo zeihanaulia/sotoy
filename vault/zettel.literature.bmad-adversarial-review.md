@@ -7,6 +7,8 @@ tags:
   - adversarial-review
   - literature
   - bias
+created: 1776771924522
+updated: 1776771924524
 ---
 
 ## Pertanyaan yang dibuka

@@ -2,8 +2,8 @@
 id: notes.prompt-engineering.harper-llm-codegen-workflow
 title: "Harper Reed: LLM codegen workflow"
 desc: "Analisis Harper Reed tentang workflow LLM coding yang memisahkan brainstorming, spec, planning, eksekusi, dan test."
-updated: 1778773904838
-created: 1778773904838
+updated: 1778775961481
+created: 1778773917139
 tags:
   - notes
   - prompt-engineering

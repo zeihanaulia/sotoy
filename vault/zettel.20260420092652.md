@@ -9,6 +9,8 @@ tags:
   - coordination
   - governance
   - martin-fowler
+created: 1776652035706
+updated: 1776652035737
 ---
 
 > Like most people with an agile mindset, I prefer to err on the side of decentralization, so will head closer to the rocks of chaos rather than suffocating control. But being on that side of the channel still means we have to avoid the rocks, and a way to maximize local decision making in a way that minimizes the real costs involved.

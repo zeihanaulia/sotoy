@@ -2,8 +2,8 @@
 id: notes.agentic-coding.what-is-code
 title: "What Is Code? — code sebagai vocabulary dan model konsep"
 desc: "Analisis artikel Unmesh Joshi tentang code sebagai instruksi mesin dan model konseptual yang dibaca manusia, tim, dan LLM."
-updated: 1778775198969
-created: 1778774761762
+updated: 1778775961481
+created: 1778774774958
 tags:
   - notes
   - ai

@@ -7,6 +7,8 @@ tags:
   - risk-analysis
   - ai-native
   - reasoning
+created: 1776773631514
+updated: 1776775285234
 ---
 
 ## Pertanyaan yang dibuka

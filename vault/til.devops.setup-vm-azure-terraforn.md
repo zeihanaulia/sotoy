@@ -2,8 +2,8 @@
 id: til.devops.setup-vm-azure-terraforn
 title: Setup Vm Azure Terraform
 desc: ''
-updated: 1749091726653
-created: 1749091121822
+updated: 1776324693738
+created: 1749092398263
 ---
 
 ## 1. Install Terraform (TF)

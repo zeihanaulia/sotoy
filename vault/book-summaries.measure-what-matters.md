@@ -2,8 +2,8 @@
 id: book-summaries.measure-what-matters
 title: Measure What Matters
 desc: ''
-updated: 1742029688119
-created: 1659370069465
+updated: 1776324693722
+created: 1742029815447
 ---
 
 Pernah gak lo bekerja di perusahaan atau organisasi yang gak jelas, gak tau arahnya mau kemana tapi semuanya mau dicapai dan semuanya menjadi paling prioritas. 

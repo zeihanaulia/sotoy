@@ -2,8 +2,8 @@
 id: zettel.1777272812617
 title: "In-context examples mengajari pola tanpa mengubah weights"
 desc: "Zero-shot/one-shot/few-shot memberi model pola tugas lewat contoh dalam prompt."
-updated: 1777272812617
-created: 1777272812617
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

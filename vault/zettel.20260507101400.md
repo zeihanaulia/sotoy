@@ -2,8 +2,8 @@
 id: zettel.20260507101400
 title: "Specification fuels classical software; verification fuels agentic AI"
 desc: "Karpathy: tradisional software membutuhkan spesifikasi eksplisit, sedangkan LLM/agentic AI berkembang di domain yang bisa diverifikasi."
-updated: 1778127443000
-created: 1778127443000
+updated: 1778775926052
+created: 1778127452904
 tags:
   - zettel
   - ai

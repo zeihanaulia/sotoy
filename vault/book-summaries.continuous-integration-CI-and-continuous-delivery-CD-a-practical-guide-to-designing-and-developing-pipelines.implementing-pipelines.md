@@ -2,8 +2,8 @@
 id: book-summaries.continuous-integration-CI-and-continuous-delivery-CD-a-practical-guide-to-designing-and-developing-pipelines.implementing-pipelines
 title: 7. Implementing Pipelines
 desc: ''
-updated: 1742029591960
-created: 1688714023571
+updated: 1776324693720
+created: 1742029815438
 ---
 
 Suatu hari, tim kita akhirnya siap merilis sebuah aplikasi baru ke environment production. Saat momen penting ini tiba, berbagai persiapan pun dimulai. Dimulai dari memasang sertifikat SSL, menata seluruh kredensial dan secret agar aman, hingga memastikan monitoring aplikasi terkonfigurasi dengan benar. Tak semuanya bisa diotomatisasi; sebagian tugas masih memerlukan sentuhan manual. Di sisi lain, pengelolaan aplikasi pun perlu direncanakan dengan rapi. Tim harus tahu persis apa yang harus dilakukan jika aplikasi tiba-tiba gagal atau berperilaku di luar dugaan, dan prosedur untuk menangani perubahan, insiden, maupun masalah operasional harus tersedia agar ketersediaan service tetap aman.

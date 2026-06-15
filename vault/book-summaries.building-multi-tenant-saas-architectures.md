@@ -2,8 +2,8 @@
 id: book-summaries.building-multi-tenant-saas-architectures
 title: "Building Multi-Tenant SaaS Architectures"
 desc: "Ringkasan struktur dan logika utama buku SaaS multi-tenant karya Tod Golding."
-updated: 1778383559889
-created: 1778383559889
+updated: 1778453920932
+created: 1778383609847
 published: true
 tags:
   - saas

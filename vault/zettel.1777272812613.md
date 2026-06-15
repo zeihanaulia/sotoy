@@ -2,8 +2,8 @@
 id: zettel.1777272812613
 title: "Token adalah unit biaya dan kapasitas"
 desc: "Semua kata menjadi token yang memperhitungkan waktu, money, dan window size."
-updated: 1777272812613
-created: 1777272812613
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

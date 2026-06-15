@@ -2,8 +2,8 @@
 id: zettel.1777272812623
 title: "Abstraction library adalah keputusan arsitektural"
 desc: "Memilih REST/SDK/wrapper/framework adalah trade-off antara control, performance, dan velocity."
-updated: 1777272812623
-created: 1777272812623
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

@@ -2,8 +2,8 @@
 id: zettel.1777272812605
 title: "Prompt engineering lahir ketika “kasih semua context” mulai gagal"
 desc: "Prompt engineering dibutuhkan saat model sudah berguna, tapi kualitas, struktur, dan biaya belum terkendali."
-updated: 1777272812605
-created: 1777272812605
+updated: 1777272812607
+created: 1777272812606
 tags:
   - zettel
   - ai

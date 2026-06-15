@@ -7,6 +7,8 @@ tags:
   - party-mode
   - ai-native
   - coordination
+created: 1776772481494
+updated: 1776773310359
 ---
 
 ## Pertanyaan yang dibuka

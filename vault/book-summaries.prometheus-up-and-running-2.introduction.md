@@ -2,8 +2,8 @@
 id: book-summaries.prometheus-up-and-running-2.introduction
 title: Introduction
 desc: ''
-updated: 1683716315886
-created: 1683682894797
+updated: 1776324693722
+created: 1724251163396
 ---
 
 ## Apa itu Monitoring?

@@ -8,6 +8,8 @@ tags:
   - ai
   - governance
   - workflow
+created: 1776601252491
+updated: 1776602681204
 ---
 
 > Untuk membuat judgement senior bisa digunakan secara konsisten, tim perlu membangun stack instruksi yang berlapis: dokumentasi untuk manusia, custom instructions untuk aturan umum, skills untuk workflow spesifik, dan agent behavior untuk task otonom.

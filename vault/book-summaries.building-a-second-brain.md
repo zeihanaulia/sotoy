@@ -2,8 +2,8 @@
 id: book-summaries.building-a-second-brain
 title: Building a Second Brain
 desc: ''
-updated: 1741665581566
-created: 1741593849105
+updated: 1776324693720
+created: 1748956634963
 ---
 
 ## Bab 1: Where It All Started

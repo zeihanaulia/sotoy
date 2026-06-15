@@ -2,8 +2,8 @@
 id: zettel.20260505179978
 title: "CI security gate butuh threshold dan baseline, bukan fail-on-any-finding"
 desc: "Pakai scanning di CI dengan ambang severity dan baseline exception agar tidak gagal karena noise."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995983120
+created: 1777991916892
 tags:
   - zettel
   - security

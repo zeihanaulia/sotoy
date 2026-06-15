@@ -9,6 +9,8 @@ tags:
   - micro frontends
   - frontend
   - martin-fowler
+created: 1776650533837
+updated: 1776650533870
 ---
 
 > "Good frontend development is hard. Scaling frontend development so that many teams can work simultaneously on a large and complex product is even harder... This architecture can increase the effectiveness and efficiency of teams working on frontend code. As well as talking about the various benefits and costs, we'll cover some of the implementation options that are available..."

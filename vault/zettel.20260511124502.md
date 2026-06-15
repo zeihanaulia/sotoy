@@ -2,8 +2,8 @@
 id: zettel.20260511124502
 title: "SaaS adalah business and delivery model"
 desc: "SaaS menggabungkan model bisnis dan model pengiriman software dalam satu kerangka kerja."
-updated: 1778453643242
-created: 1778453643242
+updated: 1778454323332
+created: 1778454128143
 tags:
   - zettel
   - saas

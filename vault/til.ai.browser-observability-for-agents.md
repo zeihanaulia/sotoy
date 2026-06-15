@@ -2,8 +2,8 @@
 id: til.ai.browser-observability-for-agents
 title: "Agent browser observability itu bukan sekadar klik-klik"
 desc: "Insight bahwa agent browser yang bisa mengakses network, DOM, screenshot, dan CDP logs berubah dari automation murni ke observability-driven debugging."
-updated: 1777456708827
-created: 1777456708827
+updated: 1777516233465
+created: 1777456718001
 tags:
   - til
   - ai

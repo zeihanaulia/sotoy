@@ -6,6 +6,8 @@ tags:
   - software-engineering
   - ai-native
   - modern-software-engineering
+created: 1776763411358
+updated: 1776767258323
 ---
 
 ## Pertanyaan yang dibuka

@@ -2,8 +2,8 @@
 id: zettel.20260511130100
 title: "SaaS success metrics harus mengukur service experience, bukan hanya fitur selesai"
 desc: "Di SaaS, metrik sukses perlu bergeser dari feature delivery ke waktu nilai, reliabilitas, onboarding, dan churn."
-updated: 1778453152910
-created: 1778453152910
+updated: 1778453922420
+created: 1778453184241
 tags:
   - zettel
   - saas

@@ -6,6 +6,8 @@ tags:
   - bmad
   - analysis-phase
   - literature
+created: 1776769056247
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

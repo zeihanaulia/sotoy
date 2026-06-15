@@ -2,8 +2,8 @@
 id: book-summaries
 title: Book Summaries
 desc: ''
-updated: 1662669510089
-created: 1646856149016
+updated: 1776324693722
+created: 1724251163396
 published: true
 ---
 

@@ -2,8 +2,8 @@
 id: book-summaries.the-devops-handbook.part-I-the-three-ways
 title: Part I - The Three Ways
 desc: ''
-updated: 1682050411373
-created: 1682049639262
+updated: 1776324693724
+created: 1724251163397
 ---
 
 Fokus utama pada bab ini meliputi:

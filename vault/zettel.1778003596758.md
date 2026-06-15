@@ -2,8 +2,8 @@
 id: zettel.1778003596758
 title: "Review comments should be encoded as guardrails, not left in PR threads"
 desc: "Review warnings that recur are institution-level knowledge and should become automated guardrails." 
-updated: 1778003596758
-created: 1778003596758
+updated: 1778004109410
+created: 1778003608572
 tags:
   - zettel
   - guardrail

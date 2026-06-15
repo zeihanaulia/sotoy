@@ -2,8 +2,8 @@
 id: zettel.1777866407372
 title: "Batasan stealth dalam browser automation"
 desc: "Stealth mode mereduksi fingerprint browser, tetapi deteksi tetap bisa terjadi lewat perilaku, jaringan, dan konsistensi sinyal."
-updated: 1777866407372
-created: 1777866407372
+updated: 1777866495502
+created: 1777866418891
 tags:
   - zettel
   - stealth

@@ -2,8 +2,8 @@
 id: zettel.20260507102700
 title: "Agent can become social-operational representation for people and organizations"
 desc: "Karpathy: agent bukan cuma coding assistant, melainkan interface antar entitas dan organisasi."
-updated: 1778127565000
-created: 1778127565000
+updated: 1778775925997
+created: 1778127576222
 tags:
   - zettel
   - ai

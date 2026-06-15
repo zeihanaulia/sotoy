@@ -2,8 +2,8 @@
 id: notes.book.software-requirements-essentials-core-practices-for-successful-business-analysis.chapter-2-laying-the-foundation
 title: Chapter 2. Laying the Foundation
 desc: ''
-updated: 1684353378575
-created: 1684345838360
+updated: 1776324693730
+created: 1724251163399
 ---
 
 ## Chapter 2. Laying the Foundation

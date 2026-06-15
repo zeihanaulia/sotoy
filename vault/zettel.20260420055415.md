@@ -7,6 +7,8 @@ tags:
   - architecture
   - adr
   - history
+created: 1776639276517
+updated: 1776639276552
 ---
 
 > Setelah ADR diterima, dokumen itu harus dibiarkan sebagai fakta historis. Perubahan dibuat dengan ADR baru yang supersede, bukan dengan memodifikasi catatan lama.

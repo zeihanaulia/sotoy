@@ -2,8 +2,8 @@
 id: zettel.1777272812629
 title: "Summarization mengompres history tanpa kehilangan konteks"
 desc: "Ringkasan memungkinkan aplikasi mempertahankan konteks penting tanpa memuat semua detail lama."
-updated: 1777272812629
-created: 1777272812629
+updated: 1777272812611
+created: 1777272812610
 tags:
   - zettel
   - ai

@@ -6,6 +6,8 @@ tags:
   - zettelkasten
   - knowledge-management
   - dendron
+created: 1776381033551
+updated: 1776390340092
 ---
 
 ## Apa itu Zettelkasten?

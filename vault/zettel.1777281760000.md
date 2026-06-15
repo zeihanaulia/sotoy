@@ -2,8 +2,8 @@
 id: zettel.1777281760000
 title: "Opportunity cost support adalah alasan utama untuk AI dalam tim produk"
 desc: "Biaya terbesarnya bukan sekadar volume support, tapi waktu dan fokus yang hilang dari shipping dan strategi produk."
-updated: 1777281760000
-created: 1777281760000
+updated: 1777282015612
+created: 1777282004800
 tags:
   - zettel
   - ai

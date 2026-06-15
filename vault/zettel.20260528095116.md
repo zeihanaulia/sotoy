@@ -2,8 +2,8 @@
 id: zettel.20260528095116
 title: "Daftar holy angels di 1 Enoch berfungsi sebagai peta peran kosmik"
 desc: "Dalam 1 Enoch, holy angels bekerja sebagai administrator domain yang menjaga order, sehingga daftar nama itu berfungsi sebagai struktur peran kosmik, bukan trivia."
-updated: 1779937047294
-created: 1779936676920
+updated: 1779939661606
+created: 1779936739572
 tags:
   - zettel
   - enoch

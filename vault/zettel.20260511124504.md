@@ -2,8 +2,8 @@
 id: zettel.20260511124504
 title: "Pain terbesar model lama adalah hilangnya agility"
 desc: "Dalam installed software model, cost memang masalah, tapi yang lebih fatal adalah lambatnya adaptasi dan release cycle."
-updated: 1778453643244
-created: 1778453643244
+updated: 1778454323332
+created: 1778454128143
 tags:
   - zettel
   - saas

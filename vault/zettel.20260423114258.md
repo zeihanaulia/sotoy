@@ -2,8 +2,8 @@
 id: zettel.20260423114258
 title: "Profil author membantu membaca buku AI dengan ekspektasi yang tepat"
 desc: "Author background bisa menunjukkan bias pedagogi dan target level buku AI." 
-updated: 1776919369883
-created: 1776919369883
+updated: 1777253882215
+created: 1776919406298
 tags:
   - zettel
   - ai

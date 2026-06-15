@@ -2,8 +2,8 @@
 id: zettel.20260527140642
 title: "Enoch dipilih karena dia manusia yang masih righteous sekaligus punya akses ke surga"
 desc: "Dalam tradisi Enoch, dia bukan dipilih karena superioritas ontologis, tetapi karena posisi moral dan akses vision yang membuatnya layak menjadi mediator antara manusia dan surga."
-updated: 1779865642645
-created: 1779865642645
+updated: 1779935953115
+created: 1779865649708
 tags:
   - zettel
   - enoch

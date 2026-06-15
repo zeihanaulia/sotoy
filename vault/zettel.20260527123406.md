@@ -2,8 +2,8 @@
 id: zettel.20260527123406
 title: "About the Book of Enoch adalah pengantar editorial, bukan teks inti"
 desc: "Bagian pengantar dalam edisi modern Book of Enoch harus dibaca sebagai framing historis dan apologetik, bukan sebagai bagian teks Enoch itu sendiri."
-updated: 1779860046195
-created: 1779860046195
+updated: 1779935953056
+created: 1779860052922
 tags:
   - zettel
   - enoch

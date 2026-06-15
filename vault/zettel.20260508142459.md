@@ -2,8 +2,8 @@
 id: zettel.20260508142459
 title: "AI slop is research if bounded; it becomes architecture if it survives too long"
 desc: "Insight bahwa slop hanya berguna sebagai eksperimen sementara, dan bahaya muncul ketika eksperimen tersebut bertahan lama tanpa dibersihkan."
-updated: 1778204249563
-created: 1778204249563
+updated: 1778204280319
+created: 1778204280283
 tags:
   - zettel
   - ai-coding

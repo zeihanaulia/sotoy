@@ -9,6 +9,8 @@ tags:
   - pain-point
   - framework
 status: published
+created: 1778516870275
+updated: 1778806126293
 ---
 
 ## Masalah Utama

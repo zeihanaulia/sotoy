@@ -7,6 +7,8 @@ tags:
   - party-mode
   - literature
   - ai-native
+created: 1776772503829
+updated: 1776773310359
 ---
 
 ## Pertanyaan yang dibuka

@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.hardening-x402
 title: "Hardening x402: PII-Safe Agentic Payments"
 desc: "Deep dive Hardening x402: filter middleware untuk metadata pembayaran AI agent tanpa mengorbankan latency." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777948651914
+created: 1777871762980
 tags:
   - notes
   - security

@@ -2,8 +2,8 @@
 id: til.personal-finance.waste-is-lens-not-framework
 title: "Dalam Smart Money Strategy, waste lebih sebagai lens daripada framework utama"
 desc: "Insight bahwa Luke memakai waste sebagai nilai pendukung dalam financial planning, bukan sebagai kerangka yang dibahas secara mendalam."
-updated: 1779767196714
-created: 1779767196714
+updated: 1779767208394
+created: 1779767208353
 tags:
   - til
   - personal-finance

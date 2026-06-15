@@ -2,8 +2,8 @@
 id: zettel.moc.multi-tenant-saas
 title: "MOC: Multi-Tenant SaaS Architecture"
 desc: "Peta konten untuk ide dan zettel tentang multi-tenant SaaS, layanan operasional, dan boundary SaaS vs MSP."
-updated: 1778454257024
-created: 1778454257024
+updated: 1778454323408
+created: 1778454265237
 tags:
   - structure-note
   - moc

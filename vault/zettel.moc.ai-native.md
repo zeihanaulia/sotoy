@@ -6,6 +6,8 @@ tags:
   - moc
   - ai-native
   - bmad
+created: 1776769092197
+updated: 1777996888048
 ---
 
 ## Apa yang terkandung di sini

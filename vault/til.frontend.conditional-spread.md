@@ -3,8 +3,8 @@ id: til.frontend.conditional-spread
 title: "Conditional Spread in JavaScript/TypeScript"
 desc: >
     Penjelasan praktis tentang teknik conditional spread di JavaScript/TypeScript untuk menambah elemen array atau properti object secara kondisional, tanpa perlu mutasi atau if-else yang berantakan. Cocok untuk kasus seperti dynamic table columns, permission-based UI, dan pattern deklaratif di React atau framework frontend lain.
-updated: 1749644430230
-created: 1749644127217
+updated: 1776324693740
+created: 1749900077550
 tags:
   - javascript
   - typescript

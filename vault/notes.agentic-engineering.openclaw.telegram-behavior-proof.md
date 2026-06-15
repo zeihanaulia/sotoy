@@ -4,8 +4,8 @@ title: Telegram Behavior Proof
 desc: >-
   Analisis PR OpenClaw tentang real behavior proof, Telegram formatter bug, dan
   peran Crabbox sebagai evidence control plane.
-updated: 1780000000000
-created: 1780000000000
+updated: 1780426704797
+created: 1778671873557
 tags:
   - notes
   - agentic-engineering

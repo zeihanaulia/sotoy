@@ -2,8 +2,8 @@
 id: zettel.20260505179974
 title: "Tooling keamanan gagal jika hanya menambah dashboard dan handoff"
 desc: "Tool hanya berguna jika bisa mengurangi friction operasional, bukan jika menciptakan tempat lain yang harus dipantau engineer."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995936510
+created: 1777991898282
 tags:
   - zettel
   - security

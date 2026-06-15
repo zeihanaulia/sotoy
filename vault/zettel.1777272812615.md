@@ -2,8 +2,8 @@
 id: zettel.1777272812615
 title: "Instruction prompting adalah baseline dasar"
 desc: "Instruksi jelas tetap menjadi teknik paling fundamental untuk membuat LLM melakukan tugas yang benar."
-updated: 1777272812615
-created: 1777272812615
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

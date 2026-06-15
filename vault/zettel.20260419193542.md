@@ -7,6 +7,8 @@ tags:
   - governance
   - ai
   - onboarding
+created: 1776602162712
+updated: 1776602162742
 ---
 
 > Agent juga butuh mental model repo. Onboarding docs membantu agent memahami konteks bisnis, tujuan produk, aturan arsitektur, dan norma tim.

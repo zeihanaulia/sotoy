@@ -2,8 +2,8 @@
 id: zettel.1778000377282
 title: "Software is good AI input because it is verifiable"
 desc: "Klaim bahwa kode adalah sumber yang cocok untuk AI karena bisa diuji dan diverifikasi secara objektif."
-updated: 1778000377282
-created: 1778000377282
+updated: 1778003052324
+created: 1778000402108
 tags:
   - zettel
   - agentic-engineering

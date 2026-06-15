@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.codex-macos-sandboxing
 title: "Codex macOS sandboxing dengan Seatbelt"
 desc: "Eksperimen dan konsep sandbox lokal Codex di macOS menggunakan Seatbelt sebagai permission boundary."
-updated: 1780043749000
-created: 1780041829450
+updated: 1780044560196
+created: 1780041862880
 tags:
   - notes
   - security

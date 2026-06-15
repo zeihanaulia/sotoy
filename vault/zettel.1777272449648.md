@@ -2,8 +2,8 @@
 id: zettel.1777272449648
 title: "Prompt engineering adalah intervensi pertama termurah"
 desc: "Sebelum maju ke fine-tuning atau custom model, ubah dulu input dan prompt."
-updated: 1777272449648
-created: 1777272449648
+updated: 1777272449633
+created: 1777272449633
 tags:
   - zettel
   - ai

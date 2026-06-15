@@ -2,8 +2,8 @@
 id: zettel.20260507100100
 title: "Prompt and context become source code in Software 3.0"
 desc: "Dalam Software 3.0, programming bergeser dari kode eksplisit ke prompt dan context window yang mengendalikan LLM."
-updated: 1778127010000
-created: 1778127010000
+updated: 1778127627884
+created: 1778126808790
 tags:
   - zettel
   - software-3-0

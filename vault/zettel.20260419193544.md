@@ -7,6 +7,8 @@ tags:
   - governance
   - ai
   - agent
+created: 1776602176027
+updated: 1776602176057
 ---
 
 > Agent eksplorasi codebase yang efektif harus memahami struktur sistem, file penting, relasi modul, dan alur domain, bukan sekadar mencari potongan kode secara acak.

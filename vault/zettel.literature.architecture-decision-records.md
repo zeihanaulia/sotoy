@@ -7,6 +7,8 @@ tags:
   - architecture
   - adr
   - decision-making
+created: 1776639200700
+updated: 1776639491646
 ---
 
 ## Tentang Sumber

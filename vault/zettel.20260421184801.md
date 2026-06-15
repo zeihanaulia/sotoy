@@ -7,6 +7,8 @@ tags:
   - pre-mortem
   - ai-native
   - reasoning
+created: 1776772318309
+updated: 1776775283760
 ---
 
 ## Pertanyaan yang dibuka

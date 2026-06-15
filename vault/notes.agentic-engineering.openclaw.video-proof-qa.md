@@ -4,8 +4,8 @@ title: Video Proof Qa
 desc: >-
   Insight dari thread X Peter Steinberger tentang bukti video QA sebagai artefak
   yang bisa diaudit untuk review dan agentic engineering.
-updated: 1780000000000
-created: 1780000000000
+updated: 1780426699474
+created: 1778671796390
 tags:
   - notes
   - til

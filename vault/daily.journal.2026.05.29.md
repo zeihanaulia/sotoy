@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.29
 title: '2026-05-29'
 desc: "Refleksi eksperimen Codex macOS sandboxing dan praktik shell bersih untuk menghindari secret env kebocoran."
-created: 1780042623130
-updated: 1780054510696
+created: 1780042631846
+updated: 1780054605246
 tags:
   - daily
   - security

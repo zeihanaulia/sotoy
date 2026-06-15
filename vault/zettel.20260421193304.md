@@ -7,6 +7,8 @@ tags:
   - planning
   - solutioning
   - decision-making
+created: 1776774759270
+updated: 1776775285312
 ---
 
 ## Pertanyaan yang dibuka

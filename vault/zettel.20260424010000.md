@@ -2,8 +2,8 @@
 id: zettel.20260424010000
 title: "Prompt engineering adalah lapisan kontrol pertama untuk LLM" 
 desc: "Prompt adalah alat kontrol yang mengarahkan distribusi probabilitas output LLM, bukan sekadar teks biasa." 
-updated: 1776966000000
-created: 1776966000000
+updated: 1777253882236
+created: 1776970133238
 tags:
   - zettel
   - prompt-engineering

@@ -2,8 +2,8 @@
 id: til.ai.semgrep.guardrails
 title: "Semgrep sebagai guardrail agentic engineering"
 desc: "TIL bahwa Semgrep bisa mengubah komentar review senior menjadi static rule yang dijalankan di verify.sh." 
-updated: 1778003043867
-created: 1778003043867
+updated: 1778004109410
+created: 1778003057969
 tags:
   - til
   - ai

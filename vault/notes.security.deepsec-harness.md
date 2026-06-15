@@ -2,8 +2,8 @@
 id: notes.security.deepsec-harness
 title: "Deepsec: security harness untuk codebase besar"
 desc: "Analisis deepsec sebagai agentic security review orchestration dan cara pakainya di workflow nyata."
-updated: 1777990955339
-created: 1777990955339
+updated: 1777993638015
+created: 1777991000048
 tags:
   - notes
   - security

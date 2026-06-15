@@ -2,8 +2,8 @@
 id: zettel.literature.escaping-the-build-trap
 title: "Escaping the Build Trap"
 desc: "Literature note tentang build trap, output vs outcome, dan product-led organization dari Melissa Perri."
-updated: 1778805167418
-created: 1778805167418
+updated: 1778806126271
+created: 1778805187878
 tags:
   - zettel
   - literature-note

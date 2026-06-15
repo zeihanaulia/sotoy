@@ -2,8 +2,8 @@
 id: notes.software-architechture.software-architechture-tradeoff
 title: Software Architechture Tradeoff
 desc: ''
-updated: 1674110510897
-created: 1674106458496
+updated: 1776324693734
+created: 1724251163400
 ---
 
 Link:

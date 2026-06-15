@@ -2,8 +2,8 @@
 id: zettel.1777272449647
 title: "Hallucination adalah konsekuensi arsitektural LLM"
 desc: "Hallucination terjadi saat LLM menghasilkan jawaban yang terdengar meyakinkan tetapi tidak didukung oleh konteks/TIDAK grounded."
-updated: 1777351529864
-created: 1777272449647
+updated: 1777357541533
+created: 1777272449633
 tags:
   - zettel
   - ai

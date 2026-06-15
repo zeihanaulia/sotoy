@@ -2,8 +2,8 @@
 id: zettel.20260511124509
 title: "Multi-tenancy SaaS = unified tenant experience"
 desc: "Untuk Golding, multi-tenancy berarti tenant dikelola melalui pengalaman terpadu, bukan sekadar berbagi infrastructure."
-updated: 1778453643249
-created: 1778453643249
+updated: 1778454323332
+created: 1778454141787
 tags:
   - zettel
   - saas

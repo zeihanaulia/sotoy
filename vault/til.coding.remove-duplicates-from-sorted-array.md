@@ -2,8 +2,8 @@
 id: til.coding.remove-duplicates-from-sorted-array
 title: Remove Duplicates from Sorted Array
 desc: ''
-updated: 1742443390960
-created: 1742346679252
+updated: 1776324693737
+created: 1743493116028
 ---
 
 Given an integer array nums sorted in **non-decreasing order**, remove the duplicates [in-place(https://en.wikipedia.org/wiki/In-place_algorithm)] such that each unique element appears only **once**. The **relative order** of the elements should be kept the same. Then return the number of unique elements in nums.

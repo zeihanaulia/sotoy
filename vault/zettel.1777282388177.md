@@ -2,8 +2,8 @@
 id: zettel.1777282388177
 title: "Reframing operasional support ke sistematisasi itu kunci, bukan langsung training model"
 desc: "Moment ketika problem operator dibaca ulang sebagai pattern yang bisa diotomasi, bukan hanya beban kerja yang harus ditangani dengan tenaga tambahan."
-updated: 1777282388177
-created: 1777282388177
+updated: 1777349975837
+created: 1777282399573
 tags:
   - zettel
   - ai

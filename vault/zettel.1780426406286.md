@@ -2,8 +2,8 @@
 id: zettel.1780426406286
 title: "Memilih memory provider agent adalah keputusan epistemik"
 desc: "Provider memory menentukan bagaimana konteks dipilih, identitas dibangun, dan relevansi ditetapkan."
-updated: 1780426406286
-created: 1780426406286
+updated: 1780426513416
+created: 1780426406287
 tags:
   - zettel
   - agentic-engineering

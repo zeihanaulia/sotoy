@@ -2,8 +2,8 @@
 id: til.managing-team.belajar-coaching
 title: Belajar Coaching
 desc: ''
-updated: 1662525871763
-created: 1662525868316
+updated: 1776324693741
+created: 1748956634964
 ---
 
 - training

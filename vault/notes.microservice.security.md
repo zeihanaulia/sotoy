@@ -2,7 +2,7 @@
 id: notes.microservice.security
 title: Security
 desc: ''
-updated: 1721120175781
-created: 1682013795320
+updated: 1776324693732
+created: 1724251163400
 published: false
 ---

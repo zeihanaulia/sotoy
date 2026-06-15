@@ -2,8 +2,8 @@
 id: zettel.20260505179973
 title: "Parallel agents hanya berguna jika hasilnya didedup dan dikonsolidasikan"
 desc: "Banyak hasil agent hanya berguna jika sistem bisa menggabungkan, membandingkan, dan menyelaraskan temuan yang bertentangan atau duplikat."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995931193
+created: 1777991898251
 tags:
   - zettel
   - ai-security

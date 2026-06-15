@@ -2,8 +2,8 @@
 id: til.security.scanning-vs-exposure
 title: "TIL: Bedain Security Scan Internal vs Exposure OSINT"
 desc: "Tools OSINT itu berguna buat lihat apa yang kebuka dari luar, tapi bukan pengganti scan code dan config internal."
-updated: 1776964817689
-created: 1776964817689
+updated: 1776964829375
+created: 1776964829342
 tags:
   - til
   - security

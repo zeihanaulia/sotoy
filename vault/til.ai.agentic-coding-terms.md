@@ -7,6 +7,8 @@ tags:
   - ai
   - coding
   - agentic
+created: 1778554582551
+updated: 1778604764488
 ---
 
 Gue tulis istilah-istilah ini supaya kalau lagi diskusi agentic coding, kita pakai definisi yang jelas dan konsisten.

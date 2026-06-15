@@ -2,8 +2,8 @@
 id: notes.eventstorming
 title: Eventstorming
 desc: ''
-updated: 1660600415983
-created: 1660598446523
+updated: 1776324693730
+created: 1724251163399
 ---
 
 - Legend

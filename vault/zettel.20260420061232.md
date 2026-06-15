@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - martin-fowler
+created: 1776640359524
+updated: 1776640359557
 ---
 
 > "People in the software world have long argued about a definition of architecture. For some it's something like the fundamental organization of a system, or the way the highest level components are wired together."

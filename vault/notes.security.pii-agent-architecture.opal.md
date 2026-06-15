@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.opal
 title: "Opal: Private Memory for Personal AI"
 desc: "Deep dive Opal: desain memori pribadi untuk personal AI yang menjaga konten dan access pattern terpisah dari provider." 
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223936
+created: 1777871791067
 tags:
   - notes
   - security

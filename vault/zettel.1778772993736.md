@@ -2,8 +2,8 @@
 id: zettel.1778772993736
 title: "Bad Calculator → Correct Calculator → Samsa: progression pedagogis Rust-native"
 desc: "Urutan contoh buku yang mulai dari anti-pattern, lalu adaptasi Rust, sampai pattern native Rust di arsitektur."
-updated: 1778772993736
-created: 1778772993736
+updated: 1778773151631
+created: 1778773037195
 tags:
   - zettel
   - rust

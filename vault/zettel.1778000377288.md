@@ -2,8 +2,8 @@
 id: zettel.1778000377288
 title: "Portable markdown vaults make agent knowledge durable"
 desc: "Klaim bahwa catatan Markdown terpisah membantu penyimpanan pengetahuan agent yang tahan lama."
-updated: 1778000377288
-created: 1778000377288
+updated: 1778003052324
+created: 1778000435119
 tags:
   - zettel
   - agentic-engineering

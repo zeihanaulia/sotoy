@@ -2,8 +2,8 @@
 id: zettel.1777272449652
 title: "Streaming token dapat diubah jadi UX responsif"
 desc: "Streaming LLM mengubah keterbatasan generasi token demi token menjadi pengalaman UX yang terasa hidup."
-updated: 1777363004056
-created: 1777272449652
+updated: 1777427687182
+created: 1777272449633
 tags:
   - zettel
   - ai

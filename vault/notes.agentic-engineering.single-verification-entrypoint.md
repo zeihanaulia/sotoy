@@ -4,8 +4,8 @@ title: Single verification entrypoint
 desc: >-
   Konvensi internal untuk menyediakan satu command standar yang menjadi
   definition of done bagi agent dan manusia.
-updated: 1778002892878
-created: 1778002892878
+updated: 1780426712062
+created: 1778002913071
 tags:
   - notes
   - agentic-engineering

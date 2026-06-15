@@ -2,8 +2,8 @@
 id: book-summaries.the-developers-guide-to-ai
 title: "The Developer's Guide to AI"
 desc: "Preface dan overview root untuk struktur buku; detail tiap part di file terpisah."
-updated: 1777271952687
-created: 1776919103842
+updated: 1777271952797
+created: 1777268708730
 published: true
 tags:
   - ai

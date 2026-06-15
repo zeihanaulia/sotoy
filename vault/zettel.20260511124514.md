@@ -2,8 +2,8 @@
 id: zettel.20260511124514
 title: "SaaS berbeda dengan MSP"
 desc: "Managed Service Provider mengumpulkan operasi, tapi biasanya tetap mewarisi variasi environment yang SaaS seharusnya reduksi."
-updated: 1778453643254
-created: 1778453643254
+updated: 1778454323379
+created: 1778454154375
 tags:
   - zettel
   - saas

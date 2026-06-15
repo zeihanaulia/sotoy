@@ -4,8 +4,8 @@ title: Stateful Memory
 desc: >-
   Catatan tentang Honcho sebagai memory library/managed service untuk stateful
   agent dan model entity-centric memory.
-updated: 1780422974833
-created: 1780422974833
+updated: 1780426513419
+created: 1780423000260
 tags:
   - notes
   - agentic-engineering

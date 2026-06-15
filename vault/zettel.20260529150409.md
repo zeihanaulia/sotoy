@@ -2,8 +2,8 @@
 id: zettel.20260529150409
 title: "Sandbox OS tidak menyembunyikan environment variable yang diwariskan"
 desc: "Seatbelt membatasi file dan network access, tapi env var tetap bisa diwariskan dari parent shell ke proses sandbox."
-updated: 1780041829450
-created: 1780041829450
+updated: 1780042699654
+created: 1780041866603
 tags:
   - zettel
   - security

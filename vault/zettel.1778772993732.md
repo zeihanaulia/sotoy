@@ -2,8 +2,8 @@
 id: zettel.1778772993732
 title: "Rust compiler adalah reviewer desain, bukan sekadar syntax checker"
 desc: "Borrow checker menolak desain yang kabur dan memberikan sinyal boundary ownership yang harus diperbaiki."
-updated: 1778772993732
-created: 1778772993732
+updated: 1778773151614
+created: 1778773008330
 tags:
   - zettel
   - rust

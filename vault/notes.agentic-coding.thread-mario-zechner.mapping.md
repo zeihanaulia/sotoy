@@ -9,6 +9,8 @@ tags:
   - agentic
   - mental-model
 status: published
+created: 1778555309554
+updated: 1778555309634
 ---
 
 ## Konteks

@@ -4,8 +4,8 @@ title: Context window is temporary source code for LLMs
 desc: >-
   Karpathy: dalam Software 3.0, programming berubah menjadi desain prompt dan
   context yang mengendalikan LLM.
-updated: 1778127093000
-created: 1778127093000
+updated: 1780426712062
+created: 1778127105973
 tags:
   - zettel
   - software-3-0

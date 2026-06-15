@@ -2,8 +2,8 @@
 id: notes.personal-finance.waste-as-lens-not-framework
 title: "Waste dalam Smart Money Strategy: lens pendukung, bukan kerangka utama"
 desc: "Catatan bahwa Luke menggunakan konsep waste sebagai framing nilai personal dalam financial planning, bukan sebagai framework utama buku."
-updated: 1779767196714
-created: 1779767196714
+updated: 1779767204975
+created: 1779767204943
 tags:
   - notes
   - personal-finance

@@ -2,8 +2,8 @@
 id: zettel.1777272812618
 title: "Delimiters adalah information architecture untuk prompt"
 desc: "Delimiter membantu model membedakan instruction, context, examples, dan query."
-updated: 1777272812618
-created: 1777272812618
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

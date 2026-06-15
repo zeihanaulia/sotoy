@@ -2,8 +2,8 @@
 id: notes.parenting.age-appropriate-money-communication
 title: "Age-appropriate money communication untuk anak"
 desc: "Praktik mengajarkan konsep uang sesuai umur agar anak membangun skill keputusan, bukan sekadar patuh menabung."
-updated: 1779766413970
-created: 1779766413970
+updated: 1779766477936
+created: 1779766429336
 tags:
   - notes
   - personal-finance

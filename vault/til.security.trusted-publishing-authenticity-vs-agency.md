@@ -2,8 +2,8 @@
 id: til.security.trusted-publishing-authenticity-vs-agency
 title: "Trusted publishing membuktikan origin, tapi tidak membuktikan kontrol publish"
 desc: "Trusted publishing di npm/GitHub adalah kriptografi provenance, bukan jaminan bahwa publish terjadi di bawah kontrol yang aman."
-updated: 1778643607960
-created: 1778643607960
+updated: 1778645245348
+created: 1778643631948
 tags:
   - til
   - security

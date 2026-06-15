@@ -2,8 +2,8 @@
 id: notes.security.overtrust.workflow-detail
 title: "Overtrust workflow detail: cara kerja local scanner dan trust boundary"
 desc: "Rincian cara Overtrust bekerja sebagai scanner lokal untuk trust boundary workstation dan apa yang gue tangkap dari logika rule-nya."
-updated: 1777993859605
-created: 1777993859605
+updated: 1777996797705
+created: 1777993879589
 tags:
   - notes
   - security

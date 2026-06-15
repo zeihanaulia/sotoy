@@ -2,8 +2,8 @@
 id: book-summaries.building-multi-tenant-saas-architectures.chapter-1
 title: "Chapter 1 — The SaaS Mindset"
 desc: "Ringkasan Chapter 1 yang menegaskan SaaS sebagai model bisnis, operasi, dan layanan, bukan sekadar teknologi."
-updated: 1778452690310
-created: 1778452690310
+updated: 1778453922420
+created: 1778452709476
 published: true
 tags:
   - saas

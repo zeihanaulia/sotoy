@@ -2,8 +2,8 @@
 id: zettel.20260507101600
 title: "LLM can be genius at code but dumb at simple common-sense reasoning"
 desc: "Karpathy: kemampuan model yang tinggi di satu domain tidak menjamin performa pada reasoning situasional sederhana."
-updated: 1778127489000
-created: 1778127489000
+updated: 1778775926031
+created: 1778127516396
 tags:
   - zettel
   - ai

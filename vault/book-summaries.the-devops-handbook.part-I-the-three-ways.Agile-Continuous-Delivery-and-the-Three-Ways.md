@@ -2,8 +2,8 @@
 id: book-summaries.the-devops-handbook.part-I-the-three-ways.Agile-Continuous-Delivery-and-the-Three-Ways
 title: Agile Continuous Delivery and the Three Ways
 desc: ''
-updated: 1682058124603
-created: 1682056287407
+updated: 1776324693724
+created: 1724251163397
 ---
 
 Teori dasar dari Lean Manufacturing dan The Three Ways, prinsip-prinsip dari mana semua perilaku DevOps dapat diperoleh. Fokus utama di sini adalah pada teori dan prinsip-prinsip tersebut, yang menggambarkan banyak pengalaman yang dipelajari selama beberapa dekade dari manufaktur, organisasi dengan keandalan tinggi, model manajemen dengan kepercayaan tinggi, dan lain-lain, dari mana praktik DevOps telah diperoleh. Prinsip-prinsip dan pola-pola konkret yang dihasilkan, serta aplikasi praktisnya untuk aliran nilai teknologi, disajikan dalam bab-bab yang tersisa dari buku ini.

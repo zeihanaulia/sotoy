@@ -2,8 +2,8 @@
 id: til.vscode.yo-code
 title: "Yo Code untuk Extension VS Code"
 desc: "TIL tentang apa itu yo code, kapan cocok dipakai, dan kapan sebaiknya skip untuk membuat VS Code extension."
-updated: 1777952820400
-created: 1777952820400
+updated: 1777954474806
+created: 1777952830259
 tags:
   - til
   - vscode

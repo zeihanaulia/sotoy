@@ -2,8 +2,8 @@
 id: handbook.ai.code-vocabulary-and-bounded-context
 title: "Design Code Vocabulary dan Bounded Context untuk AI-assisted Engineering"
 desc: "Panduan menjaga vocabulary domain dan bounded context agar codebase tetap jadi context yang berguna untuk manusia dan LLM."
-updated: 1778774761762
-created: 1778774761762
+updated: 1778775961481
+created: 1778774795131
 tags:
   - handbook
   - ai

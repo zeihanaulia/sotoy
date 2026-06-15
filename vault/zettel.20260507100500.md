@@ -2,8 +2,8 @@
 id: zettel.20260507100500
 title: "Operational docs are turning into agent-executable artifacts"
 desc: "Karpathy: artifact engineering akan meluas dari kode ke prompt, task recipe, dan instruction files untuk agent."
-updated: 1778127050000
-created: 1778127050000
+updated: 1778775926059
+created: 1778126965263
 tags:
   - zettel
   - documentation

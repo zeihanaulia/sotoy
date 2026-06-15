@@ -7,8 +7,8 @@ tags:
   - agentic-engineering
   - karpathy
   - ai-coding
-created: 1778001554464
-updated: 1778001554464
+created: 1778001622341
+updated: 1778003052475
 traitIds:
   - journalNote
 ---

@@ -7,6 +7,8 @@ tags:
   - literature
   - angels
   - cosmology
+created: 1779936739490
+updated: 1779939661585
 ---
 
 ## Pertanyaan yang dibuka

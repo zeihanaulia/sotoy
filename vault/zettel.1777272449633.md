@@ -2,8 +2,8 @@
 id: zettel.1777272449633
 title: "AI jadi berguna ketika model digabung dengan database dan retrieval"
 desc: "Kecerdasan sistem AI paling nyata muncul ketika pretrained model dipasang ke data dan mekanisme pencarian, bukan saat model berdiri sendiri sebagai chat box."
-updated: 1777275700750
-created: 1777272449633
+updated: 1777275740133
+created: 1777272449631
 tags:
   - zettel
   - ai

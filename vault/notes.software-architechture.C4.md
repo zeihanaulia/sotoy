@@ -2,8 +2,8 @@
 id: notes.software-architechture.C4
 title: C4
 desc: ''
-updated: 1666077306710
-created: 1666072852463
+updated: 1778468084907
+created: 1724251163400
 tags:
   - x
   - twitter

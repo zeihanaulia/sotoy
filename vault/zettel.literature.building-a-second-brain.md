@@ -6,6 +6,8 @@ tags:
   - literature-note
   - knowledge-management
   - second-brain
+created: 1776381123006
+updated: 1776390340093
 ---
 
 ## Tentang Sumber

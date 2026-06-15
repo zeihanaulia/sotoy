@@ -2,8 +2,8 @@
 id: zettel.1777272812611
 title: "Prompt terbaik dibangun dari komponen fungsional"
 desc: "Prompt dapat dibedah menjadi Instruction, Context, Examples, Query, dan Output Format."
-updated: 1777272812611
-created: 1777272812611
+updated: 1777272812608
+created: 1777272812608
 tags:
   - zettel
   - ai

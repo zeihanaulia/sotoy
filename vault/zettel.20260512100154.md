@@ -2,8 +2,8 @@
 id: zettel.20260512100154
 title: "Rebalancing adalah koreksi alokasi saat drift terlalu besar"
 desc: "Saya menemukan bahwa rebalancing paling berguna sebagai guardrail, bukan alasan untuk trading." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604143486
 tags:
   - zettel
   - finance

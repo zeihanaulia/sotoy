@@ -2,8 +2,8 @@
 id: zettel.20260505179925
 title: "Agentic security tooling hanya berguna jika signal-to-workflow kuat"
 desc: "Volume finding dari banyak agent tidak berarti berguna kecuali ada state, triage, ownership, dan workflow integration."
-updated: 1777991254501
-created: 1777991254501
+updated: 1777992186566
+created: 1777991287435
 tags:
   - zettel
   - ai-security

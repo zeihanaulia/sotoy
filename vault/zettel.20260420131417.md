@@ -7,6 +7,8 @@ tags:
   - ai-collaboration
   - knowledge-management
   - context-anchoring
+created: 1776666000986
+updated: 1776666545641
 ---
 
 ## Gagasan

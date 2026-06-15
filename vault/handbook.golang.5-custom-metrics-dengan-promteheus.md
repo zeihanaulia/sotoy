@@ -2,8 +2,8 @@
 id: handbook.golang.5-custom-metrics-dengan-promteheus
 title: 5 Custom Metrics Dengan Promteheus
 desc: ''
-updated: 1668404817226
-created: 1668404191056
+updated: 1776324693727
+created: 1724251163398
 ---
 
 ```go

@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - martin-fowler
+created: 1776640221182
+updated: 1776640293161
 ---
 
 > "This page outlines my view of software architecture and points you to more material about architecture on this site."

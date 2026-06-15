@@ -2,8 +2,8 @@
 id: zettel.1778000377284
 title: "Senior engineers should train harnesses, not only review diffs"
 desc: "Klaim bahwa peran senior change dari reviewer menjadi pembangun harness di workflow AI coding."
-updated: 1778000377284
-created: 1778000377284
+updated: 1778003052324
+created: 1778000402210
 tags:
   - zettel
   - agentic-engineering

@@ -2,8 +2,8 @@
 id: book-summaries.the-complete-book-of-enoch
 title: "The Complete Book of Enoch"
 desc: "Ringkasan pembacaan The Complete Book of Enoch oleh Jay Winter dengan fokus pada lapisan teks, struktur editorial, dan sumber manuskrip."
-updated: 1779950086602
-created: 1779859498295
+updated: 1779950086619
+created: 1779859577664
 tags:
   - book-summary
   - enoch

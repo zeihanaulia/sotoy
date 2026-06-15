@@ -2,8 +2,8 @@
 id: til.parenting.age-appropriate-money-teaching
 title: "Mengajar uang kepada anak harus age-appropriate dan fokus pada skill keputusan, bukan sekadar menabung"
 desc: "Insight bahwa literasi uang anak lebih efektif bila mengajarkan pilihan, trade-off, dan konsekuensi, bukan hanya perintah nabung."
-updated: 1779766413970
-created: 1779766413970
+updated: 1779766433939
+created: 1779766433911
 tags:
   - til
   - parenting

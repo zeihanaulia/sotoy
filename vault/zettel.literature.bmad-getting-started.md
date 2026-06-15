@@ -6,6 +6,8 @@ tags:
   - bmad
   - getting-started
   - literature
+created: 1776769056337
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

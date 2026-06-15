@@ -2,8 +2,8 @@
 id: til.security.google-api-keys-gemini-privilege-expansion
 title: "Google API key publik bisa naik privilege jadi Gemini credential"
 desc: "Insight bahwa Google API key lama yang publik dapat berubah scope efektifnya ketika Gemini API diaktifkan di project yang sama."
-updated: 1777451676269
-created: 1777451676269
+updated: 1777516233465
+created: 1777452227191
 tags:
   - til
   - security

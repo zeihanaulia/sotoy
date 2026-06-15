@@ -8,6 +8,8 @@ tags:
   - martin-fowler
   - architecture-culture
 source: https://martinfowler.com/architecture/
+created: 1776639979316
+updated: 1776639979348
 ---
 
 ## Klaim

@@ -3,8 +3,8 @@ id: notes.security.pii-agent-architecture.agent-boundary-pii-filtering
 title: "PII guardrail antar-agent: dari x402 ke brainstorming + coding agent"
 desc: "Menyambungkan motif pre-execution x402 ke arsitektur dua agent yang perlu menyaring PII sebelum context dan artifact berpindah.
 "
-updated: 1777882257031
-created: 1777882257031
+updated: 1777948653346
+created: 1777882271491
 tags:
   - notes
   - security

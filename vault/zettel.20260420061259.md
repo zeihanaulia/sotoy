@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - martin-fowler
+created: 1776640386760
+updated: 1776640386790
 ---
 
 > "A better view of architecture was the shared understanding that the expert developers have of the system design."

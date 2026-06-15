@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.07
 title: '2026-05-07'
 desc: "Refleksi Karpathy: dari vibe coding ke agentic engineering dan batas-batas Software 3.0."
-updated: 1778121560000
-created: 1778121560000
+updated: 1778775926048
+created: 1778121612460
 tags:
   - daily
   - karpathy

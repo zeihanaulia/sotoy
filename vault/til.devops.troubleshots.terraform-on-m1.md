@@ -2,8 +2,8 @@
 id: til.devops.troubleshots.terraform-on-m1
 title: Terraform on M1
 desc: 'Panduan singkat mengatasi masalah provider Terraform yang belum mendukung arsitektur Apple Silicon (M1/arm64) di macOS, serta solusi menggunakan m1-terraform-provider-helper untuk build dan install provider secara lokal.'
-updated: 1749900629661
-created: 1749900138937
+updated: 1776324693740
+created: 1749900138962
 tags:
     - terraform
     - apple-silicon

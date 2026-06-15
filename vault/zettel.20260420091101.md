@@ -9,6 +9,8 @@ tags:
   - frontend
   - delivery
   - martin-fowler
+created: 1776651075841
+updated: 1776651075875
 ---
 
 > Paragraf 22 memberi sinyal bahwa "application architecture" di halaman ini bukan cuma soal backend; dia meliputi decomposition, delivery, consistency, dan frontend structure.

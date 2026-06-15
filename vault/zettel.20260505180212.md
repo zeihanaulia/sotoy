@@ -2,8 +2,8 @@
 id: zettel.20260505180212
 title: "Efektivitas coding agent lebih tergantung workflow dan state management daripada ukuran model"
 desc: "Local coding agent butuh tool/state workflow yang jelas, bukan sekadar model besar."
-updated: 1777983786427
-created: 1777983786427
+updated: 1777985390759
+created: 1777983823480
 tags:
   - zettel
   - agent

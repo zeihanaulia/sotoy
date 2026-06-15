@@ -2,8 +2,8 @@
 id: zettel.20260507100400
 title: "LLM capability is jagged, so human-in-the-loop stays essential"
 desc: "Karpathy: LLM bisa hebat di satu domain tapi gagal di reasoning sederhana, jadi manusia harus tetap berada di loop."
-updated: 1778127040000
-created: 1778127040000
+updated: 1778775926067
+created: 1778126965177
 tags:
   - zettel
   - ai

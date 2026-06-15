@@ -8,6 +8,8 @@ tags:
   - enoch
   - textual-history
 status: published
+created: 1779859565158
+updated: 1779935953056
 ---
 
 Gue nulis ini karena baca *The Complete Book of Enoch* oleh Jay Winter dan langsung kepikiran: jangan anggap buku itu sebagai naskah asli tunggal. Ada tiga lapisan penting yang harus gue ingat ketika bicara tentang Enoch.

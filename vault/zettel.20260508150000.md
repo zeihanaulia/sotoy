@@ -2,8 +2,8 @@
 id: zettel.20260508150000
 title: "AI-generated draft output is acceptable as research only if it is treated as raw material, not product"
 desc: "Insight bahwa vibe coding dan slop boleh dipakai untuk eksplorasi cepat, tetapi release customer-facing harus melewati quality gate yang jelas."
-updated: 1778204373115
-created: 1778204373115
+updated: 1778204404782
+created: 1778204404748
 tags:
   - zettel
   - ai-coding

@@ -2,8 +2,8 @@
 id: zettel.20260507102100
 title: "Assess agentic engineers with system-building projects, not puzzles"
 desc: "Karpathy: hiring agentic engineers harus diuji melalui proyek besar dan sistem utuh, bukan sekadar puzzle coding."
-updated: 1778127529000
-created: 1778127529000
+updated: 1778775926021
+created: 1778127549838
 tags:
   - zettel
   - ai

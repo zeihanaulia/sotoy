@@ -8,6 +8,8 @@ tags:
   - architecture
   - martin-fowler
   - cruft
+created: 1776640889231
+updated: 1776640889264
 ---
 
 > "Architecture is a tricky subject for the customers and users of software products - as it isn't something they immediately perceive. But a poor architecture is a major contributor to the growth of cruft - elements of the software that impede the ability of developers to understand the software. Software that contains a lot of cruft is much harder to modify, leading to features that arrive more slowly and with more defects."

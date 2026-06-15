@@ -2,8 +2,8 @@
 id: notes.gpt-openai.membuat-aplikasi-loose-coupling
 title: Membuat Aplikasi Loose Coupling
 desc: ''
-updated: 1674011619478
-created: 1673948601572
+updated: 1776324693731
+created: 1724251163399
 ---
 
 Diskusi kali ini tentang bagaimana memisahkan service yang tight coupling dan low cohesion menjadi loose coupling dan high cohesion.

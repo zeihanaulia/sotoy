@@ -2,8 +2,8 @@
 id: zettel.20260506180000
 title: "verify.sh is a verification entrypoint, not a sensor"
 desc: "Klaim bahwa verify.sh hanya menjalankan sensor yang ada, bukan mendeteksi masalah sendiri."
-updated: 1778002954773
-created: 1778002954773
+updated: 1778003053789
+created: 1778002979717
 tags:
   - zettel
   - agentic-engineering

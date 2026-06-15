@@ -2,8 +2,8 @@
 id: zettel.cache-as-trust-boundary
 title: "Cache CI adalah trust boundary, bukan hanya optimisasi performa"
 desc: "CI cache yang direstore di workflow resmi bisa menjadi jalur serangan jika isinya dikontrol oleh kode untrusted."
-updated: 1778645837051
-created: 1778645837051
+updated: 1778647444179
+created: 1778647244709
 tags:
   - zettel
   - security

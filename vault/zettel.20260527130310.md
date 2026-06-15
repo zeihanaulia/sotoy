@@ -2,8 +2,8 @@
 id: zettel.20260527130310
 title: "Dalam Enoch, perbedaan antara Watchers jatuh dan malaikat suci ditentukan oleh otoritas moral"
 desc: "Enoch membedakan dua kelompok surgawi berdasarkan fungsi moral mereka, bukan kemampuan magis atau status kosmik."
-updated: 1779863590031
-created: 1779863590031
+updated: 1779935953064
+created: 1779863660237
 tags:
   - zettel
   - enoch

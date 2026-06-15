@@ -4,8 +4,8 @@ title: Context Database
 desc: >-
   POV catatan tentang bagaimana OpenViking memandang context sebagai filesystem
   yang menggabungkan memory, resource, dan skill.
-updated: 1780426763576
-created: 1780426406289
+updated: 1780427822720
+created: 1780426580293
 tags:
   - notes
   - agentic-engineering

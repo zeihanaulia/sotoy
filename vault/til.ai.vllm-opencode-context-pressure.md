@@ -2,8 +2,8 @@
 id: til.ai.vllm-opencode-context-pressure
 title: "OpenCode + vLLM failure sering karena context pressure, bukan param kecil"
 desc: "Catatan singkat bahwa bug OpenCode/vLLM biasanya muncul dari context/KV cache pressure dan LiteLLM masking error asli."
-updated: 1778590624428
-created: 1778590294491
+updated: 1778605081234
+created: 1778590304474
 tags:
   - til
   - ai

@@ -2,8 +2,8 @@
 id: zettel.20260512100150
 title: "Closed-loop agent workflow perlu intake, grooming, verification, dan audit"
 desc: "Saya menyimpulkan bahwa AI code workflow aman hanya kalau ada loop tertutup yang jelas antara input, fix plan, patch, verifikasi, dan audit." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604126513
 tags:
   - zettel
   - ai

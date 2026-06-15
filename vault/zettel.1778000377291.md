@@ -2,8 +2,8 @@
 id: zettel.1778000377291
 title: "Effective agent context is a sweet spot, not maximum context"
 desc: "Klaim bahwa kualitas output agent bergantung pada konteks yang cukup, bukan konteks yang paling banyak."
-updated: 1778000377291
-created: 1778000377291
+updated: 1778003052449
+created: 1778000453520
 tags:
   - zettel
   - agentic-engineering

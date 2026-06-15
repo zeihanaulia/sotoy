@@ -2,8 +2,8 @@
 id: zettel.20260507102200
 title: "Agent can fill in details, but humans must maintain invariant system design"
 desc: "Karpathy: agent sering gagal di domain model dan invariant sistem; manusia harus tetap mengontrol spec dan oversight."
-updated: 1778127539000
-created: 1778127539000
+updated: 1778775926045
+created: 1778127549838
 tags:
   - zettel
   - ai

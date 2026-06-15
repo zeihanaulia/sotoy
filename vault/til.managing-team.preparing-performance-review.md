@@ -2,8 +2,8 @@
 id: til.managing-team.preparing-performance-review
 title: Preparing Performance Review
 desc: ''
-updated: 1667200045946
-created: 1667189427102
+updated: 1776324693741
+created: 1748956634965
 ---
 
 Tulisan ini catatan dari artikel [Preparing for performance reviews ahead of time](https://newsletter.pragmaticengineer.com/p/preparing-for-performance-reviews)

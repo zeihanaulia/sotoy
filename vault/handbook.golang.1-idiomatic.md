@@ -2,8 +2,8 @@
 id: handbook.golang.1-idiomatic
 title: 1 Idiomatic
 desc: ''
-updated: 1646861911437
-created: 1646861873332
+updated: 1776324693726
+created: 1724251163397
 ---
 
 #go

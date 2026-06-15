@@ -2,8 +2,8 @@
 id: handbook.ai.hybrid-api-self-host-strategy
 title: "Hybrid API-first vs Self-host AI Strategy"
 desc: "Panduan keputusan antara API-first, self-host model kecil, dan GPU besar untuk enterprise biasa."
-updated: 1778590911823
-created: 1778590911823
+updated: 1778604764488
+created: 1778590925181
 tags:
   - handbook
   - ai

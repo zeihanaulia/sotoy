@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.openviking.context-layers
 title: "OpenViking context layers"
 desc: "POV catatan tentang L0/L1/L2 di OpenViking sebagai tiga tingkat representasi konteks untuk resource, memory, dan skill."
-updated: 1780427413639
-created: 1780427413639
+updated: 1780427822720
+created: 1780427428977
 tags:
   - notes
   - agentic-engineering

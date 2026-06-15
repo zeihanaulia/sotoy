@@ -2,8 +2,8 @@
 id: til.setup-spring-boot.package-explanation
 title: Package Explanation
 desc: ''
-updated: 1746616252103
-created: 1746616241368
+updated: 1776324693743
+created: 1748956634967
 ---
 
 # Penamaan Package Java & Spring Boot: Kenapa Harus Seribet Itu?

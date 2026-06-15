@@ -2,8 +2,8 @@
 id: zettel.20260505179975
 title: "Rule-based checks tetap penting di era AI-native security"
 desc: "Pemeriksaan deteksi deterministik dan matcher rule masih langkah pertama terbaik sebelum inferensi AI mahal."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995957994
+created: 1777991898336
 tags:
   - zettel
   - security

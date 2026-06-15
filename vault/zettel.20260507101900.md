@@ -2,8 +2,8 @@
 id: zettel.20260507101900
 title: "Automation frontier is defined by evaluator cost, not just model capability"
 desc: "Karpathy: hampir semua hal bisa dibuat verifiable, tetapi seberapa mudahnya tergantung biaya evaluator."
-updated: 1778127519000
-created: 1778127519000
+updated: 1778127777341
+created: 1778127516396
 tags:
   - zettel
   - ai

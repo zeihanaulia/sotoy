@@ -2,8 +2,8 @@
 id: notes.api-management.kong
 title: Kong
 desc: ''
-updated: 1721120107656
-created: 1662554611996
+updated: 1776324693729
+created: 1724251163398
 published: false
 ---
 

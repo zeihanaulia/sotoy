@@ -2,8 +2,8 @@
 id: zettel.20260528096022
 title: "Dalam 1 Enoch, reward bagi righteous ditunda sampai judgement selesai"
 desc: "1 Enoch menggambarkan pohon harum dan tujuh gunung sebagai inheritance yang hanya diberikan kepada righteous setelah penghakiman." 
-updated: 1779937922032
-created: 1779937922032
+updated: 1779939661599
+created: 1779937950125
 tags:
   - zettel
   - enoch

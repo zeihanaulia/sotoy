@@ -4,8 +4,8 @@ title: 'Andrej Karpathy: From Vibe Coding to Agentic Engineering'
 desc: >-
   Ringkasan talk YouTube Karpathy tentang pergeseran dari vibe coding ke agentic
   engineering dan Software 3.0.
-updated: 1778122369000
-created: 1778122369000
+updated: 1780426712062
+created: 1778122391663
 tags:
   - book-summary
   - youtube

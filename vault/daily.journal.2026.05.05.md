@@ -4,8 +4,8 @@ title: '2026-05-05'
 desc: >-
   Catatan perubahan billing GitHub Copilot Pro dari premium request ke
   token-based credit
-updated: 1777993308007
-created: 1777981824408
+updated: 1780426712064
+created: 1777981844785
 tags:
   - daily
   - github

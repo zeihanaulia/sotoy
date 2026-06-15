@@ -2,8 +2,8 @@
 id: notes.security.tanstack-postmortem
 title: "TanStack npm supply-chain compromise — postmortem notes"
 desc: "Ringkasan dan analisis postmortem TanStack npm supply-chain compromise, fokus pada attack chain, kelemahan trusted publishing, dan pelajaran operasional."
-updated: 1778647325842
-created: 1778644097140
+updated: 1778647442685
+created: 1778644111339
 tags:
   - notes
   - security

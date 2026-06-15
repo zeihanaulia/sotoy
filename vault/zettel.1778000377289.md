@@ -2,8 +2,8 @@
 id: zettel.1778000377289
 title: "Verification speed is the bottleneck in AI coding"
 desc: "Klaim bahwa batas utama adopsi AI coding adalah kecepatan verifikasi, bukan kecepatan produksi kode."
-updated: 1778000377289
-created: 1778000377289
+updated: 1778003052445
+created: 1778000441963
 tags:
   - zettel
   - agentic-engineering

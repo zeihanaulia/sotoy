@@ -2,8 +2,8 @@
 id: zettel.1777272449643
 title: "LLM adalah model pretrained, bukan sihir"
 desc: "LLM kuat karena pretraining skala besar atas data tekstual masif, bukan karena reasoning manusiawi atau aturan eksplisit."
-updated: 1777349945931
-created: 1777272449643
+updated: 1777349975838
+created: 1777272449633
 tags:
   - zettel
   - ai

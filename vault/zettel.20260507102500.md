@@ -2,8 +2,8 @@
 id: zettel.20260507102500
 title: "Understanding LLM as statistical simulation circuits, not animal intelligence"
 desc: "Karpathy: LLM bukan organisme dengan motivasi, melainkan simulasi statistik yang didorong oleh reward."
-updated: 1778127569000
-created: 1778127569000
+updated: 1778775926057
+created: 1778127549840
 tags:
   - zettel
   - ai

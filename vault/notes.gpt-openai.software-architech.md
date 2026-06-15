@@ -2,8 +2,8 @@
 id: notes.gpt-openai.software-architech
 title: Software Architect
 desc: ''
-updated: 1682012837977
-created: 1670345050974
+updated: 1776324693731
+created: 1724251163400
 ---
 
 ## Seperti apa tugas dan tanggung jawab seorang software architech yang hebat

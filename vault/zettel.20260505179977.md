@@ -2,8 +2,8 @@
 id: zettel.20260505179977
 title: "Custom matcher mengubah temuan menjadi aturan yang bisa dipakai ulang"
 desc: "Setelah AI atau scanner menemukan pola bug, langkah selanjutnya adalah mengubah pola itu jadi rule yang bisa mendeteksi saudara-saudara masalah."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995973310
+created: 1777991905725
 tags:
   - zettel
   - security

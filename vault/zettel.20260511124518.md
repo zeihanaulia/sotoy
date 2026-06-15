@@ -2,8 +2,8 @@
 id: zettel.20260511124518
 title: "Aplikasi engineering terbaik adalah paket sinyal, bukan dokumen tunggal"
 desc: "Lamaran engineer modern harus dirancang sebagai sistem sinyal: CV ringkas, LinkedIn rapi, GitHub bukti, website pembeda."
-updated: 1778465177835
-created: 1778465177835
+updated: 1778468084907
+created: 1778465200766
 tags:
   - zettel
   - hiring

@@ -2,8 +2,8 @@
 id: zettel.1777866581063
 title: "Runtime web automation khusus menukar kompatibilitas luas dengan efisiensi fokus"
 desc: "Runtime web automation yang ringan bisa efektif untuk subset use case, tetapi bukan pengganti browser lengkap untuk semua halaman modern."
-updated: 1777866581063
-created: 1777866581063
+updated: 1777866657847
+created: 1777866594829
 tags:
   - zettel
   - browser-automation

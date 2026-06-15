@@ -7,6 +7,8 @@ tags:
   - analysis-phase
   - domain-research
   - ai-native
+created: 1776766632175
+updated: 1776767258362
 ---
 
 ## Pertanyaan yang dibuka

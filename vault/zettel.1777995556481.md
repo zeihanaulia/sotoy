@@ -2,8 +2,8 @@
 id: zettel.1777995556481
 title: "Audit trust boundary lokal sebagai ide keamanan developer"
 desc: "Ide bahwa workstation developer harus diaudit sebagai trust boundary, bukan hanya sekadar secret scanner atau code review."
-updated: 1777995556481
-created: 1777995556481
+updated: 1777996797705
+created: 1777995580159
 tags:
   - zettel
   - security

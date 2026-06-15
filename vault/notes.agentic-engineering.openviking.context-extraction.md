@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.openviking.context-extraction
 title: "OpenViking context extraction"
 desc: "POV catatan tentang proses OpenViking mengubah input mentah menjadi konteks viking:// yang terstruktur, searchable, dan navigable."
-updated: 1780427582762
-created: 1780427582762
+updated: 1780427875512
+created: 1780427768298
 tags:
   - notes
   - agentic-engineering

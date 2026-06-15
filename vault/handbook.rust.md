@@ -2,8 +2,8 @@
 id: handbook.rust
 title: Rust
 desc: ''
-updated: 1705884635260
-created: 1705884547047
+updated: 1776324693727
+created: 1724251163398
 ---
 
 

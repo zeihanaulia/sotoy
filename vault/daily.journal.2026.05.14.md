@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.14
 title: '2026-05-14'
 desc: "Refleksi pembacaan buku Rust pattern dan mental model design Rust dibanding OOP."
-updated: 1778775198969
-created: 1778769784651
+updated: 1778775961481
+created: 1778769838232
 tags:
   - daily
   - rust

@@ -2,8 +2,8 @@
 id: zettel.20260512100151
 title: "OpenCode/vLLM errors sering karena context/KV pressure, bukan model atau prompt"
 desc: "Saya menemukan bahwa runtime pressure dan stream state adalah penyebab utama error OpenCode/vLLM, terutama saat concurrent long-context requests." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604126564
 tags:
   - zettel
   - ai

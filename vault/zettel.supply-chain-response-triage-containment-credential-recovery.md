@@ -2,8 +2,8 @@
 id: zettel.supply-chain-response-triage-containment-credential-recovery
 title: "Respon supply-chain efektif adalah triage → containment → credential recovery"
 desc: "Respons supply-chain harus dibagi menjadi triage artefak, containment persistence/network, dan credential recovery, bukan checklist tunggal."
-updated: 1778645837051
-created: 1778645837051
+updated: 1778647444192
+created: 1778647244854
 tags:
   - zettel
   - security

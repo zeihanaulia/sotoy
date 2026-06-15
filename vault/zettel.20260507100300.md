@@ -2,8 +2,8 @@
 id: zettel.20260507100300
 title: "Verifiability is the fuel for LLM automation"
 desc: "Karpathy: LLM mengotomasi lebih cepat di domain yang outputnya bisa diverifikasi."
-updated: 1778127030000
-created: 1778127030000
+updated: 1778775926035
+created: 1778126965163
 tags:
   - zettel
   - ai

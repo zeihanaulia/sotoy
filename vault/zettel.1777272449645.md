@@ -2,8 +2,8 @@
 id: zettel.1777272449645
 title: "Inference dan training adalah dua tahap berbeda"
 desc: "Training membangun kemampuan umum; inference menggunakan kemampuan itu pada input baru."
-updated: 1777272449645
-created: 1777272449645
+updated: 1777349975838
+created: 1777272449633
 tags:
   - zettel
   - ai

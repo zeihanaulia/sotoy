@@ -2,8 +2,8 @@
 id: zettel.20260507100900
 title: "Vibe coding is exploration flow, not quality discipline"
 desc: "Karpathy: vibe coding muncul dari trust massal terhadap AI, sehingga developer bergerak cepat tanpa kontrol baris demi baris."
-updated: 1778127062000
-created: 1778127062000
+updated: 1778775926056
+created: 1778127073197
 tags:
   - zettel
   - ai

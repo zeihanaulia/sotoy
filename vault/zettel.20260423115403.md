@@ -2,8 +2,8 @@
 id: zettel.20260423115403
 title: "Startup story di awal Part I berfungsi sebagai problem generator AI"
 desc: "Cerita startup bukan hanya latar; ia memunculkan gap antara respons model dan domain knowledge yang kemudian menjadi alasan seluruh teknik berikutnya." 
-updated: 1776920043981
-created: 1776920043981
+updated: 1777253882215
+created: 1776920061828
 tags:
   - zettel
   - ai

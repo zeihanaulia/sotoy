@@ -2,8 +2,8 @@
 id: til.python.building-sse
 title: Building a Robust Live Log Viewer with FastAPI and Server-Sent Events
 desc: ''
-updated: 1747852587739
-created: 1747851734739
+updated: 1776324693743
+created: 1748956634966
 ---
 
 Kadang lo bikin sistem yang kerjanya di balik layar. Kayak proses code generation yang lo trigger dari web, tapi di balik itu semua, ada proses AI yang jalan di background, parsing metadata, generate kode, dan simpen hasil. Masalahnya: user cuma liat loading spinner, padahal di balik layar lagi banyak hal seru—dan penting—yang terjadi.

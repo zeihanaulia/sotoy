@@ -2,8 +2,8 @@
 id: til.managing-team.youtube.3-ways-to-express-your-thoughts-so-that-everyone-will-understand-you
 title: 3 Ways to Express Your Thoughts so That Everyone Will Understand You
 desc: ''
-updated: 1682530195168
-created: 1682529907500
+updated: 1776324693742
+created: 1724251163402
 ---
 
 ![youtube](assets/20230427002651.png)

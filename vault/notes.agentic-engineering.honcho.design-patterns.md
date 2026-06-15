@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.honcho.design-patterns
 title: "Honcho Design Patterns"
 desc: "Panduan desain practical untuk memetakan aplikasi nyata ke struktur Honcho: workspace, peer, session, dan observation."
-updated: 1780426174128
-created: 1780426174128
+updated: 1780426513418
+created: 1780426228424
 tags:
   - notes
   - agentic-engineering

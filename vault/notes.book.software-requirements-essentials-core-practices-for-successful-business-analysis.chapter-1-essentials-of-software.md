@@ -2,8 +2,8 @@
 id: notes.book.software-requirements-essentials-core-practices-for-successful-business-analysis.chapter-1-essentials-of-software
 title: Chapter 1. Essentials of Software
 desc: ''
-updated: 1684345854731
-created: 1684342388294
+updated: 1776324693729
+created: 1724251163398
 ---
 
 ## Chapter 1 - Essentials of Software Requirements

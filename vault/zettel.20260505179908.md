@@ -2,8 +2,8 @@
 id: zettel.20260505179908
 title: "AI security review perlu harness dan triage, bukan hanya agent"
 desc: "Nilai utama review keamanan berbasis AI ada pada orkestrasi, kontrol hasil, dan verifikasi, bukan hanya pada model agen."
-updated: 1777990829047
-created: 1777990829047
+updated: 1777992186558
+created: 1777990836176
 tags:
   - zettel
   - ai-security

@@ -2,8 +2,8 @@
 id: zettel.1777272449642
 title: "LLM kuat bahasa tapi lemah truth domain privat"
 desc: "Kefasihan LLM bukan jaminan bahwa ia punya pengetahuan produk atau domain privat yang relevan."
-updated: 1777281495813
-created: 1777272449642
+updated: 1777282015599
+created: 1777272449633
 tags:
   - zettel
   - ai

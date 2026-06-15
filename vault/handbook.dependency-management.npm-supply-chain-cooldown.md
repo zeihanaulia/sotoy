@@ -2,8 +2,8 @@
 id: handbook.dependency-management.npm-supply-chain-cooldown
 title: "Hardening npm dependency installs dengan cooldown policy"
 desc: "Panduan implementasi minimum release age, frozen lockfile CI, dan build script allowlist untuk mengurangi risiko supply chain di ekosistem npm/pnpm."
-updated: 1778773631311
-created: 1778773631311
+updated: 1778773981913
+created: 1778773660496
 tags:
   - handbook
   - dependency-management

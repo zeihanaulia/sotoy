@@ -2,8 +2,8 @@
 id: zettel.1777272449639
 title: "Pekerjaan repetitif adalah kandidat AI alami"
 desc: "Pekerjaan high-volume dan low-novelty adalah kandidat alami untuk otomasi AI."
-updated: 1777279255390
-created: 1777272449639
+updated: 1777282015599
+created: 1777272449632
 tags:
   - zettel
   - ai

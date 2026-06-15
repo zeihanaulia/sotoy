@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.aparimeet-ai-code-review
 title: "Aparimeet AI Code Review"
 desc: "Review arsitektur webhook dan worker untuk AI-driven GitLab/GitHub code review."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052323
+created: 1777999959746
 tags:
   - notes
   - agentic-engineering

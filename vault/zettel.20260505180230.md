@@ -2,8 +2,8 @@
 id: zettel.20260505180230
 title: "Hitung biaya coding agent berdasarkan total task cost, bukan hanya harga per token"
 desc: "Dalam agent workflows, model murah bisa kalah jika loop dan retries membuat total token usage melonjak."
-updated: 1777983857149
-created: 1777983857149
+updated: 1777985390759
+created: 1777983870896
 tags:
   - zettel
   - economics

@@ -2,8 +2,8 @@
 id: zettel.1777281650097
 title: "Frekuensi tinggi membuat support AI jadi masalah operasional utama"
 desc: "Beban support bukan cuma soal pertanyaan yang mirip, tapi soal ritme yang terus-menerus dan drain operasional yang konstan."
-updated: 1777281650097
-created: 1777281650097
+updated: 1777282015611
+created: 1777281660044
 tags:
   - zettel
   - ai

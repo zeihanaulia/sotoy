@@ -2,8 +2,8 @@
 id: notes.gpt-openai.casbin
 title: Casbin
 desc: ''
-updated: 1670392703734
-created: 1670365703792
+updated: 1776324693730
+created: 1724251163399
 ---
 
 ## What happen if I call "casbin.NewEnforcer" function each request? it will impacted to app performance

@@ -2,8 +2,8 @@
 id: zettel.1777272812616
 title: "Persona adalah compression mechanism untuk framing"
 desc: "Persona memasukkan banyak constraint implisit tentang sudut pandang, tone, dan bias."
-updated: 1777272812616
-created: 1777272812616
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

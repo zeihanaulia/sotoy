@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.openviking.architecture
 title: "OpenViking architecture"
 desc: "Catatan POV tentang struktur internal OpenViking: client, service layer, core modules, storage layer, dan data flow."
-updated: 1780426976025
-created: 1780426976025
+updated: 1780427822719
+created: 1780426998171
 tags:
   - notes
   - agentic-engineering

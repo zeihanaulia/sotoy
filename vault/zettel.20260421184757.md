@@ -7,6 +7,8 @@ tags:
   - advanced-elicitation
   - ai-native
   - reasoning
+created: 1776772112679
+updated: 1776773310359
 ---
 
 ## Pertanyaan yang dibuka

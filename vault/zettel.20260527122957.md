@@ -2,8 +2,8 @@
 id: zettel.20260527122957
 title: "Baca Book of Enoch sebagai arsip berlapis, bukan teks tunggal"
 desc: "Membaca 1 Enoch dengan asumsi distorsi sebagai default dan mengevaluasi bagian berdasarkan dukungan saksi teks."
-updated: 1779859797403
-created: 1779859797403
+updated: 1779935953056
+created: 1779859824295
 tags:
   - zettel
   - enoch

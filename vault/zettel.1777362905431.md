@@ -2,8 +2,8 @@
 id: zettel.1777362905431
 title: "Grounding adalah menyuplai konteks yang hilang saat inference tanpa mengubah model"
 desc: "Kalau model tidak punya pengetahuan yang dibutuhkan, kita bisa menutup gap dengan konteks saat inference, bukan dengan memodifikasi model."
-updated: 1777362905431
-created: 1777362905431
+updated: 1777362938335
+created: 1777362921302
 tags:
   - zettel
   - ai

@@ -2,8 +2,8 @@
 id: til.national-finance.spread-beli-jual
 title: "Spread beli-jual adalah biaya transaksi di forex dan valas"
 desc: "Definisi spread jual-beli dan mengapa kata ini penting untuk memahami biaya hedge valas."
-updated: 1778578649300
-created: 1778578457687
+updated: 1778578667962
+created: 1778578465579
 tags:
   - til
   - national-finance

@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.ai-slop-disposable-experimentation
 title: "AI Slop dan Batas Disposable Experimentation"
 desc: "Catatan Mitchell Hashimoto tentang kapan kode AI kasar boleh dipakai untuk eksperimen dan kapan harus dijaga bersih."
-updated: 1778204249563
-created: 1778204172340
+updated: 1778468084906
+created: 1778204200153
 tags:
   - notes
   - agentic-engineering

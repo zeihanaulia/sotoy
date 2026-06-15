@@ -2,7 +2,7 @@
 id: tags.rhenald-kasali
 title: Rhenald Kasali
 desc: ''
-updated: 1646860329713
-created: 1646860329713
+updated: 1776324693735
+created: 1724251163401
 ---
 

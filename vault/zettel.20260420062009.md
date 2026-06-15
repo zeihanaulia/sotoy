@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - martin-fowler
+created: 1776640815907
+updated: 1776640815938
 ---
 
 > Fowler menutup definisi arsitektur dengan mengatakan bahwa developer menjadi architect ketika dia bisa mengenali elemen-elemen yang penting—yakni elemen yang bila tak dikendalikan akan menimbulkan masalah serius.

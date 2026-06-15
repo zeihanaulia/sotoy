@@ -8,6 +8,8 @@ tags:
   - copilot
   - governance
   - workflow
+created: 1776602959383
+updated: 1776603629474
 ---
 
 > Tacit knowledge senior bukan sekadar pengalaman umum; ia adalah judgement konkret yang aktif saat melihat kasus nyata, dan nilai terbaiknya muncul ketika diubah menjadi artefak operasional.

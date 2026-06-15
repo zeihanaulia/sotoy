@@ -2,8 +2,8 @@
 id: notes.orbstack-docker-coexistence
 title: "Apakah Perlu Uninstall Docker Desktop Saat Install OrbStack?"
 desc: "Analisis apakah Docker Desktop dan OrbStack bisa coexist atau harus uninstall sebelum install OrbStack"
-updated: 1747008000000
-created: 1747008000000
+updated: 1778604764488
+created: 1778469353805
 published: true
 tags:
   - orbstack

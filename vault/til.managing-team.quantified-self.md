@@ -2,8 +2,8 @@
 id: til.managing-team.quantified-self
 title: Quantified Self
 desc: ''
-updated: 1741593785656
-created: 1741593681926
+updated: 1776324693742
+created: 1748956634965
 ---
 
 

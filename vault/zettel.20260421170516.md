@@ -7,6 +7,8 @@ tags:
   - ai-native
   - methodology
   - software-engineering
+created: 1776765937325
+updated: 1776767258339
 ---
 
 ## Pertanyaan yang dibuka

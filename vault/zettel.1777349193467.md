@@ -2,8 +2,8 @@
 id: zettel.1777349193467
 title: "Nilai model dibatasi oleh distribusi data latihnya"
 desc: "Keterbatasan LLM sering berasal dari data latih yang digunakan, bukan hanya arsitektur atau penyedia model."
-updated: 1777349193467
-created: 1777349193467
+updated: 1777349975837
+created: 1777349205612
 tags:
   - zettel
   - ai

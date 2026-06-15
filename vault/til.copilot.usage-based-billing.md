@@ -7,8 +7,8 @@ tags:
   - copilot
   - github
   - ai-billing
-created: 1777981824408
-updated: 1777982315000
+created: 1777981844785
+updated: 1777985390712
 ---
 
 Copilot Pro masih $10/bulan, tapi model billingnya berubah dari premium request units ke GitHub AI Credits yang dihitung berdasarkan token (input, output, cached).

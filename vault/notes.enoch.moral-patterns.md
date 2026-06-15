@@ -2,8 +2,8 @@
 id: notes.enoch.moral-patterns
 title: "Enoch dan pola moral modern: mulut yang mencemari dan hati yang keras"
 desc: "Membaca frasa Enoch tentang impure mouth dan hard-hearted sebagai pola moral yang juga terlihat dalam berita modern tanpa mengklaim buku itu secara historis literal."
-updated: 1779949972000
-created: 1779949972000
+updated: 1779950042165
+created: 1779949980828
 tags:
   - notes
   - enoch

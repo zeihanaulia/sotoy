@@ -2,8 +2,8 @@
 id: zettel.20260423124353
 title: "LLM penting sebagai pelurus intuisi engineering"
 desc: "Pengantar LLM harus memberi mental model yang cukup untuk membedakan probabilistic language generation dari deterministic code." 
-updated: 1776923033204
-created: 1776923033204
+updated: 1779935953064
+created: 1776923070342
 tags:
   - zettel
   - ai

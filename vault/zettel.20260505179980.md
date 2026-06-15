@@ -2,8 +2,8 @@
 id: zettel.20260505179980
 title: "Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan"
 desc: "Keamanan di AI-native engineering butuh kebiasaan terus-menerus tentang boundary, verifikasi, dan pembuatan aturan."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777996031917
+created: 1777991929509
 tags:
   - zettel
   - security

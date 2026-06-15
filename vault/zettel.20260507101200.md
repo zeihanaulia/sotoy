@@ -2,8 +2,8 @@
 id: zettel.20260507101200
 title: "Largest AI opportunities are new work formats, not faster old workflows"
 desc: "Karpathy: fokus startup dan product bukan hanya akselerasi workflow lama, tapi mencari apa yang dulu tidak feasible."
-updated: 1778127243000
-created: 1778127243000
+updated: 1778775926068
+created: 1778127253618
 tags:
   - zettel
   - ai

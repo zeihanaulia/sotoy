@@ -2,8 +2,8 @@
 id: book-summaries.the-devops-handbook
 title: The Devops Handbook
 desc: ''
-updated: 1682050104200
-created: 1682046153823
+updated: 1776324693724
+created: 1724251163397
 ---
 
 ## Outcomes Devops

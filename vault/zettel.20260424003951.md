@@ -2,8 +2,8 @@
 id: zettel.20260424003951
 title: "Part II Prompt Engineering adalah layer kontrol di atas model" 
 desc: "Part II menunjukkan bahwa prompt engineering adalah disiplin desain input yang mempengaruhi akurasi, memori, biaya, dan latency." 
-updated: 1776965991157
-created: 1776965991157
+updated: 1777253882236
+created: 1776966009222
 tags:
   - zettel
   - ai

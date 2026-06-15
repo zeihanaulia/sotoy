@@ -9,6 +9,8 @@ tags:
   - organization
   - governance
   - martin-fowler
+created: 1776652176718
+updated: 1776652176753
 ---
 
 > To make fruitful use of technology, we need to align our technology thinking with underlying business plans. A technology strategy can drive this alignment, providing it properly integrates business and technology. ... Product-mode instead uses durable, ideate-build-run teams working on a persistent business issue. ... Many large organizations see their IT engine separated by many floors from the executive penthouse ... The primary role of an architect is to ride the elevators between the penthouse and engine room ... When an organization takes on an agile mindset, enterprise architecture doesn't go away, but the role of enterprise architects changes. Enterprise Architects no longer make choices, but help others make the right choice and then radiate that information.

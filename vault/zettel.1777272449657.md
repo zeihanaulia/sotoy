@@ -2,8 +2,8 @@
 id: zettel.1777272449657
 title: "Generator Python cocok untuk streaming response LLM"
 desc: "Python generator sesuai dengan incremental delivery dari model ke client."
-updated: 1777272449657
-created: 1777272449657
+updated: 1777272449634
+created: 1777272449634
 tags:
   - zettel
   - ai

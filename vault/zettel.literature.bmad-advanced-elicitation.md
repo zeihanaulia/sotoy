@@ -7,6 +7,8 @@ tags:
   - advanced-elicitation
   - literature
   - reasoning
+created: 1776772112682
+updated: 1776773310359
 ---
 
 ## Pertanyaan yang dibuka

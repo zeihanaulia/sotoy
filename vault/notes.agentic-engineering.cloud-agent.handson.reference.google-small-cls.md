@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.google-small-cls
 title: "Google Small CLs"
 desc: "Support note tentang kenapa perubahan kecil membuat review lebih cepat, lebih aman, dan lebih mudah untuk rollback." 
-updated: 1778001375663
-created: 1778001375663
+updated: 1778003052450
+created: 1778001403559
 tags:
   - notes
   - agentic-engineering

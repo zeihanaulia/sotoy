@@ -2,8 +2,8 @@
 id: zettel.20260511124519
 title: "Porting sistem Zig organik ke Rust modular sering butuh negosiasi ulang arsitektur"
 desc: "Porting performa-sensitif runtime yang interconnected dari Zig ke Rust bukan sekadar translasi fitur, tapi perlu redesign dependency dan abstraction model."
-updated: 1778465177836
-created: 1778465177836
+updated: 1778468084908
+created: 1778466390292
 tags:
   - zettel
   - software-architechture

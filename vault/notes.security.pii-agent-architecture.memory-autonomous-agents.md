@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.memory-autonomous-agents
 title: "Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers"
 desc: "Ringkasan paper survei tentang memory architecture, kontrol, dan evaluasi untuk autonomous LLM agents." 
-updated: 1777874750725
-created: 1777871740192
+updated: 1777948651855
+created: 1777871863273
 tags:
   - notes
   - security

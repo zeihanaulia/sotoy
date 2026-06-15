@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.senior-judgement-to-harness
 title: "Senior Judgement yang Dipindahkan ke Harness"
 desc: "Cara mengubah review comment senior menjadi aturan, skill, linter, test, dan gate yang bisa dipakai agent dan tim berulang."
-updated: 1777998395907
-created: 1777998395907
+updated: 1778003052300
+created: 1777998431344
 tags:
   - notes
   - agentic-engineering

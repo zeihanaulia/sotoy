@@ -2,8 +2,8 @@
 id: zettel.1778000377285
 title: "Harness matters more than prompt in AI coding workflows"
 desc: "Klaim bahwa prompt hanya satu bagian kecil; rangka kerja harness menentukan konsistensi agent."
-updated: 1778000377285
-created: 1778000377285
+updated: 1778003052324
+created: 1778000410848
 tags:
   - zettel
   - agentic-engineering

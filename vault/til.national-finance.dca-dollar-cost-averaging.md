@@ -2,8 +2,8 @@
 id: til.national-finance.dca-dollar-cost-averaging
 title: "DCA adalah strategi rata-rata biaya masuk"
 desc: "Definisi Dollar Cost Averaging dan aplikasinya di konteks hedge valas."
-updated: 1778579628914
-created: 1778579628914
+updated: 1778580048061
+created: 1778579633791
 tags:
   - til
   - national-finance

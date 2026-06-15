@@ -2,8 +2,8 @@
 id: zettel.20260507102800
 title: "Understanding is the last bottleneck in agentic systems"
 desc: "Karpathy: thinking bisa didelegasikan, tetapi understanding tetap harus ada pada manusia."
-updated: 1778127575000
-created: 1778127575000
+updated: 1778775926066
+created: 1778127576218
 tags:
   - zettel
   - ai

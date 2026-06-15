@@ -2,8 +2,8 @@
 id: zettel.dependency-installer-initial-access
 title: "Installer dependency bisa menjadi initial access di supply-chain dev"
 desc: "Dalam serangan supply-chain modern, tindakan install dependency dapat menjadi titik masuk awal yang memicu payload dan memungkinkan persistence di workflow developer."
-updated: 1778645837051
-created: 1778645837051
+updated: 1778647444202
+created: 1778647244781
 tags:
   - zettel
   - security

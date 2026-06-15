@@ -2,8 +2,8 @@
 id: zettel.1778000377283
 title: "Agent CLI outperforms IDE assistants for repo-scale AI workflows"
 desc: "Klaim bahwa AI coding lebih efektif sebagai command-line agent daripada editor assistant untuk operasi repo penuh."
-updated: 1778000377283
-created: 1778000377283
+updated: 1778003052324
+created: 1778000402154
 tags:
   - zettel
   - agentic-engineering

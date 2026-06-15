@@ -4,8 +4,8 @@ title: How I Use AI to Code
 desc: >-
   Ringkasan artikel Chris Parsons tentang agent CLI, harness, dan pergeseran
   dari prompt ke verifikasi dalam AI coding.
-updated: 1777997562846
-created: 1777997562846
+updated: 1780426712062
+created: 1777997610939
 tags:
   - notes
   - agentic-engineering

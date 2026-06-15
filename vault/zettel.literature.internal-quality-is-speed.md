@@ -8,6 +8,8 @@ tags:
   - technical-debt
   - martin-fowler
 source: https://martinfowler.com/architecture/
+created: 1776639985150
+updated: 1776639985217
 ---
 
 ## Klaim

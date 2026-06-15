@@ -2,8 +2,8 @@
 id: zettel.1777272812612
 title: "Context window adalah constraint resource, bukan sekadar konteks"
 desc: "Prompt engineering hidup di bawah batasan context window; kapasitas terbatas memaksa kita memilih konteks dengan bijak."
-updated: 1777272812612
-created: 1777272812612
+updated: 1777272812608
+created: 1777272812608
 tags:
   - zettel
   - ai

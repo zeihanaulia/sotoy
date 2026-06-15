@@ -7,6 +7,8 @@ tags:
   - analysis-phase
   - market-research
   - ai-native
+created: 1776766632175
+updated: 1776767258345
 ---
 
 ## Pertanyaan yang dibuka

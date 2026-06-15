@@ -7,6 +7,8 @@ tags:
   - ai
   - engineering-judgment
   - governance
+created: 1776600469086
+updated: 1776638899846
 ---
 
 ## Tentang Sumber

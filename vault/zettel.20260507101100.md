@@ -4,8 +4,8 @@ title: Agent instructions replace deterministic scripting in variable environmen
 desc: >-
   Karpathy: dalam Software 3.0, agent dapat menyesuaikan detail operasional
   sehingga tidak perlu menulis semua cabang logika eksplisit.
-updated: 1778127121000
-created: 1778127121000
+updated: 1780426712062
+created: 1778127131424
 tags:
   - zettel
   - agentic-engineering

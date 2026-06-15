@@ -7,6 +7,8 @@ tags:
   - stakeholder-mapping
   - ai-native
   - reasoning
+created: 1776772359842
+updated: 1776772359842
 ---
 
 ## Pertanyaan yang dibuka

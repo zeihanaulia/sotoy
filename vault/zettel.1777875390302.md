@@ -9,6 +9,8 @@ tags:
   - agent
   - security
   - memory
+created: 1777875405537
+updated: 1777948651877
 ---
 
 > Dalam multi-turn agent, risiko PII bukan hanya dari satu pesan; risiko muncul dari akumulasi fragmen kecil yang bisa digabung menjadi profil identitas.

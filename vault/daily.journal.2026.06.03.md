@@ -2,8 +2,8 @@
 id: daily.journal.2026.06.03
 title: "2026-06-03"
 desc: "Catatan baca Hermes Agent Memory Providers dan Honcho stateful memory."
-updated: 1780426561278
-created: 1780422794971
+updated: 1780427822719
+created: 1780422819041
 ---
 
 Hari ini gue baca dokumentasi Hermes Agent tentang memory provider. Yang menarik adalah perbedaan antara memori bawaan (`MEMORY.md` / `USER.md`) dan provider eksternal. Built-in memory tetap aktif, dan provider eksternal berfungsi sebagai lapisan tambahan untuk persistent memory lintas sesi.

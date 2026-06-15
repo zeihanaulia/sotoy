@@ -2,8 +2,8 @@
 id: book-summaries.design-patterns-and-best-practices-in-rust
 title: "Design Patterns and Best Practices in Rust"
 desc: "Ringkasan buku tentang cara berpikir ulang design pattern klasik untuk idiom Rust."
-updated: 1778769784651
-created: 1778769784651
+updated: 1778806126299
+created: 1778769830967
 tags:
   - book-summary
   - rust

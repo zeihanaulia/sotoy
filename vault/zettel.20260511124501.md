@@ -2,8 +2,8 @@
 id: zettel.20260511124501
 title: "SaaS bukan technology-first mindset"
 desc: "SaaS harus dimulai dari business goals dan operating model, bukan dari tooling atau deployment style." 
-updated: 1778453643241
-created: 1778453643241
+updated: 1778454323332
+created: 1778454128143
 tags:
   - zettel
   - saas

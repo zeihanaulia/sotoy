@@ -5,6 +5,8 @@ desc: "Root hierarki Zettelkasten — jaring gagasan personal"
 tags:
   - zettelkasten
   - index
+created: 1776599047385
+updated: 1776775283748
 ---
 
 ## Index

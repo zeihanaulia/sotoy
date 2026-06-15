@@ -2,8 +2,8 @@
 id: til.ai.code-vocabulary-is-conceptual-model
 title: "Code bukan cuma instruksi mesin, tapi juga vocabulary konsep"
 desc: "Dalam era LLM, nilai coding bergeser ke membangun vocabulary domain yang dipahami bersama, bukan sekadar mengetik syntax."
-updated: 1778774761762
-created: 1778774761762
+updated: 1778775961481
+created: 1778774783273
 tags:
   - til
   - ai

@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.references
 title: "Cloud Agent Hands-on References"
 desc: "Kumpulan catatan referensi untuk GitLab MR review agent dan code review skills."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1778000000141
 tags:
   - notes
   - agentic-engineering

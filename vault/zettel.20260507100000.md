@@ -2,8 +2,8 @@
 id: zettel.20260507100000
 title: "AI execution cheapens but direction becomes expensive"
 desc: "Karpathy: AI membuat banyak detail implementasi murah, tetapi understanding dan direction tetap menjadi bottleneck."
-updated: 1778127000000
-created: 1778127000000
+updated: 1778775926031
+created: 1778126800467
 tags:
   - zettel
   - ai

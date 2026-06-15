@@ -2,8 +2,8 @@
 id: book-summaries.devops-handbook
 title: Devops Handbook
 desc: ''
-updated: 1721120010166
-created: 1681362311318
+updated: 1776324693721
+created: 1724251163396
 published: false
 ---
 

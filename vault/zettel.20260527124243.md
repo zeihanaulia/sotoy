@@ -2,8 +2,8 @@
 id: zettel.20260527124243
 title: "Awal Enoch membangun horizon akhir sebelum menyelidiki penyebab kerusakan"
 desc: "Awal narasi Enoch menunjukkan bahwa kerusakan dunia dibaca sebagai masalah kosmik dan penghakiman akhir, bukan sekadar kronik historis."
-updated: 1779860513626
-created: 1779860513626
+updated: 1779935953056
+created: 1779860521247
 tags:
   - zettel
   - enoch

@@ -2,8 +2,8 @@
 id: zettel.20260505180229
 title: "Swap adalah pembunuh kinerja utama untuk LLM lokal di Mac M1 16GB"
 desc: "Kalau local inference memaksa swap, latensi bisa melonjak drastis meski modelnya kecil."
-updated: 1777983857149
-created: 1777983857149
+updated: 1777985390759
+created: 1777983862725
 tags:
   - zettel
   - llm

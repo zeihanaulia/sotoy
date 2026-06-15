@@ -2,8 +2,8 @@
 id: til.nix.nixos-on-windows
 title: Nixos on Windows
 desc: ''
-updated: 1746161590837
-created: 1746161248147
+updated: 1776324693742
+created: 1749092277370
 ---
 
 ## NixOS di WSL — Biar Setup Dev Lo Gak Ribet Tiap Ganti Laptop

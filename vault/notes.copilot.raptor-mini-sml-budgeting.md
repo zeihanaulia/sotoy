@@ -2,8 +2,8 @@
 id: notes.copilot.raptor-mini-sml-budgeting
 title: "Raptor mini, SML, dan billing Copilot yang pindah ke token"
 desc: "Kenapa Raptor mini tetap pilihan baik untuk agent coding, tapi sekarang bukan lagi terasa 0x gratis karena billing dihitung berdasarkan token." 
-updated: 1777988175541
-created: 1777982148089
+updated: 1778468084906
+created: 1777982164378
 tags:
   - notes
   - copilot

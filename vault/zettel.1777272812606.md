@@ -2,8 +2,8 @@
 id: zettel.1777272812606
 title: "Data ada tetapi harus disusun sebagai konteks berguna"
 desc: "Masalah sering bukan tidak punya data, tapi belum mengubah data itu jadi prompt/context yang tepat."
-updated: 1777272812606
-created: 1777272812606
+updated: 1777272812607
+created: 1777272812607
 tags:
   - zettel
   - ai

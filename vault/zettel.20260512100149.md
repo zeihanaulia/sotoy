@@ -2,8 +2,8 @@
 id: zettel.20260512100149
 title: "Agentic coding sering merusak mental model developer"
 desc: "Saya melihat agentic coding lebih berbahaya karena menjauhkan developer dari proses problem solving." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604126461
 tags:
   - zettel
   - ai

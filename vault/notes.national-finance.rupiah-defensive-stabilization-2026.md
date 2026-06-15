@@ -2,8 +2,8 @@
 id: notes.national-finance.rupiah-defensive-stabilization-2026
 title: "Rupiah: Tekanan Global, Respons BI, dan Strategi Hedge Bertahap"
 desc: "Catatan analitis tentang pelemahan rupiah Mei 2026, respons Bank Indonesia, dan implikasi hedge aset."
-updated: 1779859715870
-created: 1778575865097
+updated: 1779859715908
+created: 1778576949361
 tags:
   - notes
   - national-finance

@@ -4,8 +4,8 @@ title: 'Next Wave: Cloud Agents dan Autonomous Orchestration'
 desc: >-
   Ringkasan pergeseran dari agent CLI lokal ke cloud agents paralel dengan
   orchestration dan harness sebagai safety system.
-updated: 1777998274920
-created: 1777998274920
+updated: 1780426712062
+created: 1777998299326
 tags:
   - notes
   - agentic-engineering

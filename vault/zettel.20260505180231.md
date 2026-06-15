@@ -2,8 +2,8 @@
 id: zettel.20260505180231
 title: "Cloud GPU rental sering lebih rasional daripada beli 4090 untuk penggunaan eksperimental"
 desc: "Kalau lo belum rutin pakai local LLM ratusan jam, sewa 4090 di cloud bisa lebih murah daripada capex dan listrik."
-updated: 1777983857149
-created: 1777983857149
+updated: 1777985390780
+created: 1777983878210
 tags:
   - zettel
   - hardware

@@ -2,8 +2,8 @@
 id: zettel.20260511124500
 title: "SaaS sebagai unified operational service model, bukan label infrastruktur"
 desc: "SaaS seharusnya didefinisikan berdasarkan pengalaman operasi terpusat, bukan sekadar resource sharing."
-updated: 1778452700000
-created: 1778452700000
+updated: 1778453922420
+created: 1778452728897
 tags:
   - zettel
   - saas

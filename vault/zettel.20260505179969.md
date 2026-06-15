@@ -2,8 +2,8 @@
 id: zettel.20260505179969
 title: "Security harness lebih penting daripada single AI agent"
 desc: "AI security review harus dibangun sebagai sistem kontrol yang mengatur agent, state, sandbox, verifikasi, dan ownership."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995911726
+created: 1777991693162
 tags:
   - zettel
   - security

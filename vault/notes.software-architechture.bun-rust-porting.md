@@ -2,8 +2,8 @@
 id: notes.software-architechture.bun-rust-porting
 title: "Bun porting dari Zig ke Rust: masalah layering, crates, dan tagged pointer"
 desc: "Catatan Jared Sumner tentang kesulitan port Bun dari Zig ke Rust, fokus pada modularity, cyclic dependency, dan runtime representation."
-updated: 1778465177835
-created: 1778465177835
+updated: 1778468084907
+created: 1778466375778
 tags:
   - notes
   - software-architechture

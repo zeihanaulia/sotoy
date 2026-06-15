@@ -2,8 +2,8 @@
 id: notes.prompt-engineering.xml-vs-json
 title: "XML vs JSON dalam AI Coding Tools: Analisis Mendalam Prompt Engineering"
 desc: ''
-updated: 1761207676636
-created: 1761207633594
+updated: 1776324693733
+created: 1761207633603
 ---
 
 ## Pendahuluan

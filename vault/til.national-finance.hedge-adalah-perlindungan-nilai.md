@@ -2,8 +2,8 @@
 id: til.national-finance.hedge-adalah-perlindungan-nilai
 title: "Hedge adalah perlindungan nilai, bukan cari untung utama"
 desc: "Perbedaan antara hedge, investasi, dan spekulasi dalam konteks rupiah dan aset valuta asing."
-updated: 1778577709498
-created: 1778577709498
+updated: 1778578353774
+created: 1778577717472
 tags:
   - til
   - national-finance

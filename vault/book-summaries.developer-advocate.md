@@ -2,8 +2,8 @@
 id: book-summaries.developer-advocate
 title: Developer Advocate
 desc: ''
-updated: 1721120005296
-created: 1647370757037
+updated: 1776324693721
+created: 1724251163396
 published: false
 ---
 

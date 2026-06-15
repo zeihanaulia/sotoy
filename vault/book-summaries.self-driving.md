@@ -1,8 +1,8 @@
 ---
 id: book-summaries.self-driving
 title: Self Driving
-updated: 1742029724968
-created: 1646854981225
+updated: 1776324693723
+created: 1742029815447
 tags: [Self Improvement, Rhenald Kasali]
 desc: null
 ---

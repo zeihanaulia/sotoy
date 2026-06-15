@@ -2,8 +2,8 @@
 id: zettel.20260505179971
 title: "Deterministic local scanners melengkapi AI scanners dalam keamanan developer workflow"
 desc: "Tool lokal tanpa cloud seperti Overtrust penting untuk memeriksa environment, sedangkan AI scanner seperti deepsec memeriksa codebase."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995920913
+created: 1777991693244
 tags:
   - zettel
   - security

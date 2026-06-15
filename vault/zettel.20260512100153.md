@@ -2,8 +2,8 @@
 id: zettel.20260512100153
 title: "Hedge adalah perlindungan nilai, bukan cari profit utama"
 desc: "Saya memahami bahwa posisi hedge valas harus dilihat sebagai asuransi, bukan spekulasi." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604138469
 tags:
   - zettel
   - finance

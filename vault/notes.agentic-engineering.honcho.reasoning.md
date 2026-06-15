@@ -4,8 +4,8 @@ title: Reasoning
 desc: >-
   Catatan tentang mekanisme Honcho yang mengubah message menjadi kesimpulan,
   pola, dan representasi peer.
-updated: 1780424219990
-created: 1780424219990
+updated: 1780426513418
+created: 1780424253586
 tags:
   - notes
   - agentic-engineering

@@ -6,6 +6,8 @@ tags:
   - structure-note
   - moc
   - product-thinking
+created: 1778805202087
+updated: 1778806126271
 ---
 
 ## Tentang Topik Ini

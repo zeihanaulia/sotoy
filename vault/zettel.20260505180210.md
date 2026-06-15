@@ -2,8 +2,8 @@
 id: zettel.20260505180210
 title: "Total ownership cost local LLM mencakup listrik, PSU, casing, dan maintenance"
 desc: "Upgrade GPU ke 4090 bukan cuma soal VRAM; itu soal ekosistem hardware dan biaya operasi."
-updated: 1777983786427
-created: 1777983786427
+updated: 1777985390759
+created: 1777983817035
 tags:
   - zettel
   - hardware

@@ -2,8 +2,8 @@
 id: notes.saas.product-vs-service
 title: "Product vs Service dalam SaaS"
 desc: "Perbandingan contoh HRIS, CRM, dan produk SaaS internal untuk membedakan lapisan product dan service di SaaS B2B."
-updated: 1778453382539
-created: 1778453382539
+updated: 1778806555699
+created: 1778453394137
 tags:
   - saas
   - service

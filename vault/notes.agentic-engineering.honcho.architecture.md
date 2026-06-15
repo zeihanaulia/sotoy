@@ -4,8 +4,8 @@ title: Architecture
 desc: >-
   Catatan tentang arsitektur data, flow, dan prinsip desain Honcho untuk
   stateful agent memory.
-updated: 1780424113432
-created: 1780424113432
+updated: 1780426513417
+created: 1780424167186
 tags:
   - notes
   - agentic-engineering

@@ -7,6 +7,8 @@ tags:
   - brainstorming
   - simulation
   - ai-native
+created: 1776767791331
+updated: 1776772163018
 ---
 
 ## Pertanyaan yang dibuka

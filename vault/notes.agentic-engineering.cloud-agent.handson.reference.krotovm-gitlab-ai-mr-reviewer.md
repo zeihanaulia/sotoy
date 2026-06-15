@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.krotovm-gitlab-ai-mr-reviewer
 title: "KrotovM GitLab AI MR Reviewer"
 desc: "Review pendekatan CI-triggered GitLab MR reviewer yang menghasilkan Markdown comment dari OpenAI."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052445
+created: 1777999959813
 tags:
   - notes
   - agentic-engineering

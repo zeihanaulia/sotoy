@@ -2,8 +2,8 @@
 id: til.ai.interrogatory-llm-context-elicitation
 title: "Interrogatory LLM adalah cara membuat prompt lewat wawancara konteks"
 desc: "LLM bisa dipakai bukan hanya untuk menjawab, tapi untuk menggali konteks secara bertahap lalu menghasilkan prompt yang lebih akurat."
-updated: 1778773746191
-created: 1778773746191
+updated: 1778773981914
+created: 1778773775395
 tags:
   - til
   - ai

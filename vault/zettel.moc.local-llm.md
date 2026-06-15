@@ -2,8 +2,8 @@
 id: zettel.moc.local-llm
 title: "MOC Local LLM dan Copilot agent"
 desc: "Peta topik untuk catatan tentang local LLM, Copilot agent overhead, billing token, dan hardware upgrade."
-updated: 1777983968089
-created: 1777983968089
+updated: 1777985390775
+created: 1777983980703
 tags:
   - moc
   - local-llm

@@ -9,6 +9,8 @@ tags:
   - confluence
   - backlog
 status: published
+created: 1778557611112
+updated: 1778604764488
 ---
 
 Gue bikin simulasi ini supaya bisa melihat lebih jelas dua lapis state yang sering keblurr di agentic workflow: backlog/ticket dan pipeline agent.

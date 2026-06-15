@@ -8,6 +8,8 @@ tags:
   - architecture
   - martin-fowler
   - internal-quality
+created: 1776641018609
+updated: 1776641018641
 ---
 
 > "This situation is counter to our usual experience. We are used to something that is 'high quality' as something that costs more. For some aspects of software, such as the user-experience, this can be true. But when it comes to the architecture, and other aspects of internal quality, this relationship is reversed. High internal quality leads to faster delivery of new features, because there is less cruft to get in the way."

@@ -2,8 +2,8 @@
 id: zettel.20260505179935
 title: "Agentic coding perlu permission boundary setara process lokal"
 desc: "Kerentanan agentic coding lebih sering muncul dari permission boundary dan filesystem access ketimbang dari model AI itu sendiri."
-updated: 1777991358371
-created: 1777991358371
+updated: 1777992186594
+created: 1777991365378
 tags:
   - zettel
   - security

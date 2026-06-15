@@ -2,8 +2,8 @@
 id: zettel.20260505179976
 title: "Context AI harus ringkas dan spesifik untuk menjaga signal"
 desc: "Context panjang dan general bisa mengencerkan keluaran agent. Hasil lebih baik datang dari konteks singkat yang relevan untuk proyek."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995966618
+created: 1777991898483
 tags:
   - zettel
   - ai-security

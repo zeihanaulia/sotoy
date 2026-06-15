@@ -2,8 +2,8 @@
 id: zettel.1777272449651
 title: "Local model membantu belajar integrasi tanpa vendor noise"
 desc: "Local model memperbolehkan fokus pada arsitektur integrasi, bukan auth/billing/provider."
-updated: 1777272449651
-created: 1777272449651
+updated: 1777362938335
+created: 1777272449633
 tags:
   - zettel
   - ai

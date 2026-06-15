@@ -9,6 +9,8 @@ tags:
   - privacy
   - pii
   - governance
+created: 1777874920043
+updated: 1777948651853
 ---
 
 > Memory is not just chat history. For long-lived autonomous agents, memory is an architectural control plane that decides what to store, retrieve, update, and forget.

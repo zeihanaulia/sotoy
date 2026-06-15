@@ -12,6 +12,8 @@ tags:
   - gamedev
   - analytics
 status: published
+created: 1778555872846
+updated: 1778556193566
 ---
 
 ## Arti catatan ini

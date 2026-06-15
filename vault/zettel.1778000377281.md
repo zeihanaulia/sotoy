@@ -2,8 +2,8 @@
 id: zettel.1778000377281
 title: "AI coding succeeds because verification replaces model certainty"
 desc: "Klaim bahwa keberhasilan AI coding bergantung pada loop verifikasi objektif, bukan keyakinan internal model."
-updated: 1778000377281
-created: 1778000377281
+updated: 1778003052324
+created: 1778000402053
 tags:
   - zettel
   - agentic-engineering

@@ -2,8 +2,8 @@
 id: notes.national-finance.core-satellite-defensive-allocation
 title: "Core-satellite defensive allocation untuk hedge rupiah"
 desc: "Framework alokasi dan monitoring untuk melindungi nilai ketika rupiah tertekan tanpa panik masuk valas."
-updated: 1778582116439
-created: 1778577751876
+updated: 1778604764488
+created: 1778577766274
 tags:
   - notes
   - national-finance

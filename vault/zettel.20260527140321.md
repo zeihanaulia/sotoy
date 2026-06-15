@@ -2,8 +2,8 @@
 id: zettel.20260527140321
 title: "Book of Enoch menampilkan model tanggung jawab ganda antara Watchers dan manusia"
 desc: "Dalam Enoch, kerusakan dunia bersifat eksternal dari Watchers/Azazel dan internal dari pilihan manusia sendiri."
-updated: 1779863821611
-created: 1779863821611
+updated: 1779935953084
+created: 1779863854385
 tags:
   - zettel
   - enoch

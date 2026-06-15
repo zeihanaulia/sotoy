@@ -2,8 +2,8 @@
 id: til.security.cooldown-is-delay-gate-not-freeze
 title: "Coolingdown package baru itu delay gate, bukan freeze dependency update"
 desc: "Minimum release age harus berbasis risk tier dan environment, bukan aturan satu ukuran untuk semua."
-updated: 1778643457319
-created: 1778643457319
+updated: 1778645245348
+created: 1778643474023
 tags:
   - til
   - security

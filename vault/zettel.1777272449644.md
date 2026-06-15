@@ -2,8 +2,8 @@
 id: zettel.1777272449644
 title: "Output LLM dibangun lewat next-token prediction"
 desc: "Respons model dihasilkan token demi token, jadi prompt menentukan trajectory output."
-updated: 1777272449644
-created: 1777272449644
+updated: 1777349975837
+created: 1777272449633
 tags:
   - zettel
   - ai

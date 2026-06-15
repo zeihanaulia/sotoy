@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.llm-wiki
 title: "Karpathy LLM Wiki: compiled knowledge base vs RAG"
 desc: "Ringkasan pattern Karpathy LLM Wiki sebagai knowledge compilation loop dan artikel penunjang yang menguatkan perbedaan dengan RAG."
-updated: 1779859715875
-created: 1778130600000
+updated: 1779859715926
+created: 1778139189445
 tags:
   - notes
   - agentic-engineering

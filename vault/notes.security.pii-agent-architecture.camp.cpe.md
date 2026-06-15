@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.camp.cpe
 title: "CPE: mengukur risiko PII sebagai akumulasi session, bukan message"
 desc: "Analisis Cumulative PII Exposure (CPE) sebagai formalization risiko kombinasi PII dalam percakapan multi-turn." 
-updated: 1777876725910
-created: 1777876725910
+updated: 1777948651869
+created: 1777876750956
 tags:
   - notes
   - security

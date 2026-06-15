@@ -2,8 +2,8 @@
 id: notes.ai.vllm-qwen3-gpu-capacity
 title: "Qwen3.5-397B-A17B-FP8 di vLLM: kebutuhan H100 dan kapasitas runtime"
 desc: "Ringkasan angka VRAM dan kapasitas H100 untuk Qwen3.5-397B-A17B-FP8 serta implikasi run concurrent di vLLM." 
-updated: 1778604565146
-created: 1778604565146
+updated: 1778605081234
+created: 1778604575820
 tags:
   - notes
   - ai

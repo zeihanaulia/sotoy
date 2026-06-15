@@ -2,6 +2,6 @@
 id: notes.software-architechture
 title: Software Architechture
 desc: ''
-updated: 1682013795320
-created: 1682013795320
+updated: 1776324693734
+created: 1724251163400
 ---

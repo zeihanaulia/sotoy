@@ -8,6 +8,8 @@ tags:
   - ai
   - workflow
   - documentation
+created: 1776601802887
+updated: 1776602195635
 ---
 
 > Dokumentasi tetap perlu, tapi fungsinya untuk manusia: menjelaskan kenapa aturan itu ada, memberi contoh, jadi referensi onboarding, menyimpan konteks yang lebih panjang.

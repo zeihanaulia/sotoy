@@ -2,8 +2,8 @@
 id: zettel.20260505180211
 title: "API pricing ditentukan oleh active parameter dan optimisasi provider, bukan usia model"
 desc: "Model tua bisa lebih mahal daripada model baru jika serving-nya kurang efisien."
-updated: 1777983786427
-created: 1777983786427
+updated: 1777985390759
+created: 1777983817100
 tags:
   - zettel
   - pricing

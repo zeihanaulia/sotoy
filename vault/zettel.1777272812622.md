@@ -2,8 +2,8 @@
 id: zettel.1777272812622
 title: "Prompt bagus di playground belum tentu cukup di produksi"
 desc: "Sekali prompt dipasang ke codebase, muncul latency, biaya, state, dan maintainability issues."
-updated: 1777272812622
-created: 1777272812622
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

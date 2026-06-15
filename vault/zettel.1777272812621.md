@@ -2,8 +2,8 @@
 id: zettel.1777272812621
 title: "Prompt harus diperlakukan seperti code"
 desc: "Prompt perlu versioning, testing, dan iterasi yang serupa dengan kode."
-updated: 1777272812621
-created: 1777272812621
+updated: 1777272812609
+created: 1777272812609
 tags:
   - zettel
   - ai

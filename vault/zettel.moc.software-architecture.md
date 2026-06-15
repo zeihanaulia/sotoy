@@ -6,6 +6,8 @@ tags:
   - structure-note
   - moc
   - software-architecture
+created: 1776639470259
+updated: 1778773151605
 ---
 
 ## Tentang Topik Ini

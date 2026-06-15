@@ -2,8 +2,8 @@
 id: til.nix
 title: Nix
 desc: ''
-updated: 1691471896227
-created: 1691470461657
+updated: 1776324693742
+created: 1724251163402
 ---
 
 Nix adalah solusi kalau lo males buat setup development env dari 0, tiap ganti laptop lo harus instal satu persatu tools yang lo butuhin. dengan nix lo bisa mendeklarasikan konfigurasi yang lo mau.

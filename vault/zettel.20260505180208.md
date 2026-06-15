@@ -2,8 +2,8 @@
 id: zettel.20260505180208
 title: "Mac M1 16GB realistis untuk local coding agent, tapi 30B bukan daily driver"
 desc: "Target model lokal yang masuk akal untuk Mac M1 16GB adalah 7B–14B, bukan 30B sebagai default."
-updated: 1777983786427
-created: 1777983786427
+updated: 1777985390751
+created: 1777983816916
 tags:
   - zettel
   - mac

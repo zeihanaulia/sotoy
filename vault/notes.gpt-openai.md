@@ -2,7 +2,7 @@
 id: notes.gpt-openai
 title: Gpt Openai
 desc: ''
-updated: 1721120150473
-created: 1682013795317
+updated: 1776324693730
+created: 1724251163399
 published: false
 ---

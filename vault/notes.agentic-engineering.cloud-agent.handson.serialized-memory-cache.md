@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.serialized-memory-cache
 title: "Hands-on Serialized Memory Cache untuk HeavySkill Workflow"
 desc: "Contoh hands-on reproduce serialized memory cache di luar model menggunakan Python + OpenAI-compatible API / Ollama."
-updated: 1778206145482
-created: 1778206145482
+updated: 1778206176239
+created: 1778206176208
 tags:
   - notes
   - agentic-engineering

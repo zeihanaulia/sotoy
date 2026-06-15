@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - martin-fowler
+created: 1776650037189
+updated: 1776650037221
 ---
 
 > "The important decisions in software development vary with the scale of the context that we're thinking about. A common scale is that of an application, hence 'application architecture'."

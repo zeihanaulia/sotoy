@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.martin-fowler-harness-engineering
 title: "Martin Fowler - Harness Engineering for Coding Agent Users"
 desc: "Support note tentang harness engineering, feedforward-feedback, dan verifikasi sebelum code review." 
-updated: 1778001375662
-created: 1778001375662
+updated: 1778003052450
+created: 1778001403525
 tags:
   - notes
   - agentic-engineering

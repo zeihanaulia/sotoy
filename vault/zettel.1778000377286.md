@@ -2,8 +2,8 @@
 id: zettel.1778000377286
 title: "Permanent repo instructions like AGENTS.md preserve agent behavior"
 desc: "Klaim bahwa file instruksi permanen di repo penting untuk menjaga konsistensi agent lintas sesi."
-updated: 1778000377286
-created: 1778000377286
+updated: 1778003052324
+created: 1778000418617
 tags:
   - zettel
   - agentic-engineering

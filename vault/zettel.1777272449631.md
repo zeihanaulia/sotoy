@@ -2,7 +2,7 @@
 id: zettel.1777272449631
 title: "Otomasi menggeser nilai kerja dari eksekusi manual ke desain dan adaptasi sistem"
 desc: "Otomasi tidak cuma mempercepat kerja; dia membuat skill lama yang hanya eksekusi jadi tidak relevan, sehingga kelangsungan karier bergantung pada adaptasi ke lapisan baru."
-updated: 1777273088018
+updated: 1777273145072
 created: 1777272449631
 tags:
   - zettel

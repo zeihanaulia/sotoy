@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.anthropic-claude-code-review-plugin
 title: "Anthropic Claude Code Review Plugin"
 desc: "Review arsitektur multi-agent, confidence scoring, dan explicit guideline verification untuk code review."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1777999959855
 tags:
   - notes
   - agentic-engineering

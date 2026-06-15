@@ -2,8 +2,8 @@
 id: zettel.20260505180207
 title: "Copilot agent overhead sering jadi penyebab latency, bukan kualitas model lokal"
 desc: "Model lokal bisa tampak lambat karena boilerplate agent, bukan karena modelnya sendiri."
-updated: 1777983786427
-created: 1777983786427
+updated: 1777985390737
+created: 1777983816892
 tags:
   - zettel
   - copilot

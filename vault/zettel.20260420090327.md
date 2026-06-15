@@ -9,6 +9,8 @@ tags:
   - gui
   - frontend
   - martin-fowler
+created: 1776650617182
+updated: 1776650725713
 ---
 
 > "Graphical User Interfaces provide a rich interaction between the user and a software system. Such richness is complex to manage, so it's important to contain that complexity with a thoughtful architecture... MVC is one of the most misunderstood architectural patterns around, and systems using that name display a range of important differences... The best way to think of MVC is as set of principles including the separation of presentation from domain logic and synchronizing presentation state through events."

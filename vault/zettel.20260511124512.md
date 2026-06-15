@@ -2,8 +2,8 @@
 id: zettel.20260511124512
 title: "Hindari istilah single-tenant dalam konteks SaaS"
 desc: "Istilah single-tenant cenderung menyesatkan karena menyiratkan bahwa dedicated infra bukan multi-tenant."
-updated: 1778453643252
-created: 1778453643252
+updated: 1778454323379
+created: 1778454154375
 tags:
   - zettel
   - saas

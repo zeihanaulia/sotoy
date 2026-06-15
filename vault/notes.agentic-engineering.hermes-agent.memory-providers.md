@@ -4,8 +4,8 @@ title: Memory Providers
 desc: >-
   Ringkasan tipe eksternal memory provider Hermes Agent dan cara memilihnya
   berdasarkan kebutuhan.
-updated: 1780422794971
-created: 1780422794971
+updated: 1780426513417
+created: 1780422813290
 tags:
   - notes
   - agentic-engineering

@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.26
 title: "2026-05-26"
 desc: Ringkasan harian dari membaca Smart Money Strategy oleh Luke Smith.
-updated: 1779859715877
-created: 1779763198525
+updated: 1779859715950
+created: 1779763204650
 ---
 
 Hari ini gue lagi baca *Smart Money Strategy* sama Luke Smith dan yang paling nyantol adalah frame-nya, bukan ngomongin produk investasi, tapi gimana financial planner menyusun strategi uang secara berlapis.

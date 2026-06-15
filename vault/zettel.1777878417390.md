@@ -8,6 +8,8 @@ tags:
   - pii
   - agent
   - masking
+created: 1777878443788
+updated: 1777948651923
 ---
 
 > Untuk agentic multi-turn conversation, lebih aman menyamarkan PII dengan token terindeks daripada menggantinya dengan nilai palsu yang bisa mengubah konteks.

@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.27
 title: "2026-05-27"
 desc: "Refleksi baca The Complete Book of Enoch dan cara memisahkan buku, tradisi, serta manuskrip sumber."
-updated: 1779859498295
-created: 1779859498295
+updated: 1779935953056
+created: 1779859554487
 ---
 
 Hari ini gue baca *The Complete Book of Enoch: Standard English Version* oleh Dr. Jay Winter. Sebelum masuk isi, gue sengaja memisahkan tiga lapisan: 1) buku yang gue punya, 2) teks Enoch sebagai tradisi kuno, dan 3) naskah sumber yang jadi basis terjemahan.

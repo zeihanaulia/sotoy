@@ -8,6 +8,8 @@ tags:
   - martin-fowler
   - decision-making
 source: https://martinfowler.com/architecture/
+created: 1776639746311
+updated: 1776652250406
 ---
 
 ## Tentang Sumber

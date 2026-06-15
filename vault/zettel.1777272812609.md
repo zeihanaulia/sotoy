@@ -2,8 +2,8 @@
 id: zettel.1777272812609
 title: "LLM tidak mengerti maksud; LLM hanya tahu teks yang dikirim"
 desc: "Prompt harus membuat intent eksplisit karena model tidak memahami maksud implisit manusia."
-updated: 1777272812609
-created: 1777272812609
+updated: 1777272812608
+created: 1777272812608
 tags:
   - zettel
   - ai

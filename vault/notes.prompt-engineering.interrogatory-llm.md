@@ -2,8 +2,8 @@
 id: notes.prompt-engineering.interrogatory-llm
 title: "Interrogatory LLM: LLM sebagai pewawancara konteks"
 desc: "Analisis Martin Fowler tentang LLM yang mengekstraksi konteks dari manusia untuk membuat prompt final lebih akurat."
-updated: 1778773746191
-created: 1778773746191
+updated: 1778775961481
+created: 1778773768305
 tags:
   - notes
   - prompt-engineering

@@ -2,8 +2,8 @@
 id: book-summaries.the-compound-effect
 title: The Compound Effect
 desc: ''
-updated: 1646860250529
-created: 1646856184154
+updated: 1776324693724
+created: 1724251163397
 tags:
   - Self Improvement
   - Darren Hardy

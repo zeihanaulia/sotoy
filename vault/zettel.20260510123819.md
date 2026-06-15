@@ -2,8 +2,8 @@
 id: zettel.20260510123819
 title: "SaaS architecture is business-shaped architecture"
 desc: "SaaS technical design must align dengan tujuan ekonomi dan operasi, bukan hanya praktik teknis atau deployment environment."
-updated: 1778384559597
-created: 1778384559597
+updated: 1778452613311
+created: 1778384624175
 tags:
   - zettel
   - saas

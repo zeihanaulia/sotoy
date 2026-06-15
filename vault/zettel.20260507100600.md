@@ -2,8 +2,8 @@
 id: zettel.20260507100600
 title: "Agent-native infrastructure needs agent-legible sensors and actuators"
 desc: "Karpathy: banyak tooling masih human-native, sementara agent-native memerlukan docs, state, permissions, dan actuator yang bisa dipahami model."
-updated: 1778127060000
-created: 1778127060000
+updated: 1778775926006
+created: 1778126965316
 tags:
   - zettel
   - infrastructure

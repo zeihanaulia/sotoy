@@ -2,8 +2,8 @@
 id: notes.copilot.custom-instructions-best-practices
 title: Best Practices for Writing Copilot Custom Instructions
 desc: Guidelines and best practices for creating effective GitHub Copilot custom instructions files
-updated: 1734021600000
-created: 1734021600000
+updated: 1765538962542
+created: 1765538631701
 ---
 
 

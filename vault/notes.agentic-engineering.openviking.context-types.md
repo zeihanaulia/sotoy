@@ -2,7 +2,7 @@
 id: notes.agentic-engineering.openviking.context-types
 title: "OpenViking context types"
 desc: "POV catatan tentang pembagian konteks OpenViking menjadi Resource, Memory, dan Skill dan mengapa ini penting untuk agent." 
-updated: 1780427287689
+updated: 1780427845719
 created: 1780427287689
 tags:
   - notes

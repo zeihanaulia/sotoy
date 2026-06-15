@@ -2,8 +2,8 @@
 id: notes.orbstack-vs-docker-desktop
 title: "OrbStack vs Docker Desktop: Perbandingan Lengkap"
 desc: "Analisis perbandingan OrbStack dan Docker Desktop untuk development di macOS"
-updated: 1747008000000
-created: 1747008000000
+updated: 1778604764488
+created: 1778469318189
 published: true
 tags:
   - docker

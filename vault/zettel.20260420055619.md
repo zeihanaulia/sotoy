@@ -7,6 +7,8 @@ tags:
   - architecture
   - adr
   - process
+created: 1776639392537
+updated: 1776639392575
 ---
 
 > ADR yang sehat bukan dokumen rapih; ia adalah mekanisme yang mengubah cara maintainer review, link issue/PR, dan buat supersede saat konteks berubah.

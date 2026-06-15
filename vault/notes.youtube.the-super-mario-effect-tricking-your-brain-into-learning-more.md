@@ -2,8 +2,8 @@
 id: notes.youtube.the-super-mario-effect-tricking-your-brain-into-learning-more
 title: The Super Mario Effect Tricking Your Brain into Learning More
 desc: ''
-updated: 1683596864482
-created: 1683596292281
+updated: 1778775961522
+created: 1724251163397
 ---
 
 Link: <https://www.youtube.com/watch?v=9vJRopau0g0>

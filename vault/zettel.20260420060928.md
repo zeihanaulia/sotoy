@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - programming
+created: 1776640177382
+updated: 1776640177411
 ---
 
 > Fowler curiga terhadap istilah "architecture" karena sering memberi kesan bahwa arsitektur terpisah dari programming dan bernuansa elit. Untuknya, arsitektur baik adalah yang mendukung evolusinya sendiri dan terus diuji oleh praktik coding.

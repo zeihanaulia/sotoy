@@ -2,8 +2,8 @@
 id: til.ai.real-behavior-proof-setup
 title: "Setup MVP untuk workflow real behavior proof"
 desc: "Setup minimal untuk mereplikasi workflow video proof / real behavior proof mirip PR OpenClaw."
-updated: 1780000000000
-created: 1780000000000
+updated: 1778673062305
+created: 1778671924934
 tags:
   - til
   - ai

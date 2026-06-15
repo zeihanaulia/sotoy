@@ -7,6 +7,8 @@ tags:
   - socratic-questioning
   - ai-native
   - reasoning
+created: 1776772359842
+updated: 1776773352137
 ---
 
 ## Pertanyaan yang dibuka

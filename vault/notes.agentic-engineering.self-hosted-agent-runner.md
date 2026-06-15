@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.self-hosted-agent-runner
 title: "Self-Hosted Cloud Agent Runner"
 desc: "Praktik membuat self-hosted agent runner di VM/container sendiri untuk coding task, workspace terisolasi, verification, dan PR/report flow."
-updated: 1778002175159
-created: 1777998817562
+updated: 1778003052300
+created: 1777998859715
 tags:
   - notes
   - agentic-engineering

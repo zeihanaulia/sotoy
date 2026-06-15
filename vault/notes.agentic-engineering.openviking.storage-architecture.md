@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.openviking.storage-architecture
 title: "OpenViking storage architecture"
 desc: "POV catatan tentang desain penyimpanan OpenViking yang memisahkan AGFS sebagai source of truth dari Vector Index sebagai katalog pencarian."
-updated: 1780427582762
-created: 1780427582762
+updated: 1780427822719
+created: 1780427598443
 tags:
   - notes
   - agentic-engineering

@@ -6,6 +6,8 @@ tags:
   - ai-native
   - modern-software-engineering
   - readiness
+created: 1776763411450
+updated: 1776767258323
 ---
 
 ## Pertanyaan yang dibuka

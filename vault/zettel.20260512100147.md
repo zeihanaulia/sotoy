@@ -2,8 +2,8 @@
 id: zettel.20260512100147
 title: "Self-host model 400B untuk kantor biasa sering bukan pilihan yang layak"
 desc: "Pengalaman menunjukkan investasi self-host model besar hanya masuk akal ketika inference compute adalah core business." 
-updated: 1778604107391
-created: 1778604107391
+updated: 1778604764488
+created: 1778604126428
 tags:
   - zettel
   - ai

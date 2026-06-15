@@ -2,8 +2,8 @@
 id: book-summaries.an-elegant-puzzle.running-a-humane-interview-process
 title: Running a Humane Interview Process
 desc: ''
-updated: 1742028084043
-created: 1683597073567
+updated: 1776324693719
+created: 1742029815438
 published: false
 ---
 

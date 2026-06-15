@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.gitlab-mr-comment-formatting
 title: "Cloud Agent Hands-on: MR Comment Formatting"
 desc: "Lanjutan GitLab MR review agent dengan format komentar agent yang terstruktur, actionable, dan bisa dipakai sebagai cloud-agent handson."
-updated: 1777999103833
-created: 1777999103833
+updated: 1778003052323
+created: 1777999132228
 tags:
   - notes
   - agentic-engineering

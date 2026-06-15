@@ -2,8 +2,8 @@
 id: notes.saas.multi-tenant-saas-reading-roadmap
 title: "Roadmap Baca Multi-Tenant SaaS"
 desc: "Panduan buku lanjutan berdasarkan fungsi chapter di Building Multi-Tenant SaaS Architectures."
-updated: 1778383559889
-created: 1778383559889
+updated: 1778452613289
+created: 1778384059557
 tags:
   - saas
   - reading-roadmap

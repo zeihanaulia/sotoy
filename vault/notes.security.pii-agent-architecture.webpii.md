@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.webpii
 title: "WebPII: Visual PII Detection for Computer-Use Agents"
 desc: "Deep dive WebPII: benchmark visual PII detection untuk screenshot UI dan agent automasi berbasis komputer."
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874238048
+created: 1777871776881
 tags:
   - notes
   - security

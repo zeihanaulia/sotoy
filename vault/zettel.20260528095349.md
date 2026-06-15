@@ -2,8 +2,8 @@
 id: zettel.20260528095349
 title: "1 Enoch membangun peta afterlife yang memisahkan roh berdasarkan moralitas"
 desc: "Dalam 1 Enoch, roh manusia dikumpulkan di ruang tunggu khusus dan dibedakan menjadi kategori righteous, sinners, dan korban."
-updated: 1779937047294
-created: 1779936829283
+updated: 1779939661586
+created: 1779936852387
 tags:
   - zettel
   - enoch

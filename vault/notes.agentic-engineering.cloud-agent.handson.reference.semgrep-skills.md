@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.semgrep-skills
 title: "Semgrep Skills"
 desc: "Review referensi skill yang menggabungkan kode review dengan OWASP/LLM security best practices."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1777999988050
 tags:
   - notes
   - agentic-engineering

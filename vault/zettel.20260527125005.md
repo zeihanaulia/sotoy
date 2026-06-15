@@ -2,8 +2,8 @@
 id: zettel.20260527125005
 title: "Korupsi dunia di Enoch berakar pada pelanggaran batas surgawi"
 desc: "Enoch menempatkan krisis utama sebagai akibat Watchers melanggar batas antara heaven dan earth, bukan sekadar godaan manusia."
-updated: 1779862005032
-created: 1779862005032
+updated: 1779935953056
+created: 1779862011729
 tags:
   - zettel
   - enoch

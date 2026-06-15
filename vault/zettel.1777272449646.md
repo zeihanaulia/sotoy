@@ -2,8 +2,8 @@
 id: zettel.1777272449646
 title: "LLM probabilistik; kode tradisional deterministik"
 desc: "Software tradisional mengeksekusi aturan deterministik, sementara LLM memilih output berdasarkan probabilitas pola yang dipelajari."
-updated: 1777350556088
-created: 1777272449646
+updated: 1777351444399
+created: 1777272449633
 tags:
   - zettel
   - ai

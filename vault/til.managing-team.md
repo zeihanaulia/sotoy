@@ -2,8 +2,8 @@
 id: til.managing-team
 title: Managing Team
 desc: ''
-updated: 1682532916719
-created: 1682526271728
+updated: 1778468084907
+created: 1724251163401
 tags:
   - til
   - team

@@ -2,8 +2,8 @@
 id: notes.security.sast.semgrep
 title: "Semgrep sebagai SAST / static analysis tool"
 desc: "Semgrep sebagai application security tool untuk SAST dan static code analysis, plus arsitektur rule parsing dan use case." 
-updated: 1778003389051
-created: 1778003389051
+updated: 1778004109424
+created: 1778003411841
 tags:
   - notes
   - security

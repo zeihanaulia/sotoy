@@ -2,8 +2,8 @@
 id: zettel.1777272812625
 title: "Prompt template memisahkan logic dari prompt assembly"
 desc: "Prompt template membuat prompt lebih bersih, reuseable, dan lebih mudah dirawat."
-updated: 1777272812625
-created: 1777272812625
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

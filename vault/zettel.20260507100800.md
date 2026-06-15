@@ -2,8 +2,8 @@
 id: zettel.20260507100800
 title: "Trust threshold shifts AI workflow from assistant to production"
 desc: "Karpathy: saat output AI cukup sering benar, workflow manusia bergeser dari assistant mode ke production mode."
-updated: 1778127016000
-created: 1778127016000
+updated: 1778775926073
+created: 1778127026032
 tags:
   - zettel
   - ai

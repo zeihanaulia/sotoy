@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.alex-ellis-ai-code-review-bot
 title: "Alex Ellis AI Code Review Bot"
 desc: "Review safety architecture untuk webhook-based code review, HMAC, sandboxing, dan prompt injection."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052323
+created: 1777999959891
 tags:
   - notes
   - agentic-engineering

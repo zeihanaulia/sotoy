@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture
 title: "Arsitektur PII filter dan security agent"
 desc: "Riset arsitektur PII detection, baseline scan, dan modular plugin untuk security agent."
-updated: 1777874908001
-created: 1777869503130
+updated: 1777948729559
+created: 1777869564387
 tags:
   - notes
   - security

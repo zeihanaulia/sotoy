@@ -8,6 +8,8 @@ tags:
   - copilot
   - governance
   - workflow
+created: 1776601550390
+updated: 1776601550425
 ---
 
 > Instruksi standar tim yang efektif bukan sekadar daftar aturan. Ia harus jelas peran, eksplisit konteks, terstruktur berdasarkan prioritas, dan menghasilkan output yang konsisten.

@@ -2,8 +2,8 @@
 id: zettel.20260507101700
 title: "Human-in-the-loop is a response to jagged AI, not nostalgia"
 desc: "Karpathy: oversight manusia dibutuhkan karena bentuk intelligence LLM tidak merata, bukan karena manusia takut digantikan."
-updated: 1778127499000
-created: 1778127499000
+updated: 1778127777341
+created: 1778127516396
 tags:
   - zettel
   - ai

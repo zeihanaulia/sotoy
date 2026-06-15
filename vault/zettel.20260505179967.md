@@ -2,8 +2,8 @@
 id: zettel.20260505179967
 title: "Agentic coding tools adalah process dengan permission, bukan autocomplete"
 desc: "Pengingat bahwa agentic coding memiliki akses filesystem, shell, dan config, sehingga harus diperlakukan sebagai process lokal yang punya boundary izin."
-updated: 1777991678277
-created: 1777991678277
+updated: 1777995901310
+created: 1777991693065
 tags:
   - zettel
   - agentic-coding

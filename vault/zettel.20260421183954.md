@@ -6,6 +6,8 @@ tags:
   - bmad
   - agent-conflicts
   - architecture
+created: 1776771706575
+updated: 1776772163039
 ---
 
 ## Pertanyaan yang dibuka

@@ -7,6 +7,8 @@ tags:
   - software-architecture
   - architecture
   - decision-making
+created: 1776639478271
+updated: 1776639478309
 ---
 
 > Software architecture paling berguna ketika dia mengekspresikan keputusan dan trade-off yang mendasari struktur, bukan ketika dia hanya memetakan komponen.

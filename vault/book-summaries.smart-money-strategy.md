@@ -2,8 +2,8 @@
 id: book-summaries.smart-money-strategy
 title: Smart Money Strategy
 desc: Ringkasan buku personal finance praktis Luke Smith tentang cara menyusun strategi uang yang sistematis.
-updated: 1779763081291
-created: 1779763081291
+updated: 1779766254149
+created: 1779763095076
 tags:
   - book-summary
   - personal-finance

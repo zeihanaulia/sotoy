@@ -2,8 +2,8 @@
 id: daily.journal.2026.05.08
 title: '2026-05-08'
 desc: "Refleksi Mitchell Hashimoto tentang AI slop, eksperimen disposable, dan batas antara eksperimen dan production-ready dalam agentic coding."
-updated: 1778206047521
-created: 1778204172340
+updated: 1778206055333
+created: 1778204211499
 tags:
   - daily
   - agentic-engineering

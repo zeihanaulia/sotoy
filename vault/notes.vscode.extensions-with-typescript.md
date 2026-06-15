@@ -2,8 +2,8 @@
 id: notes.vscode.extensions-with-typescript
 title: "VS Code Extension dengan TypeScript"
 desc: "Ringkasan langkah utama dan struktur untuk membangun extension VS Code menggunakan TypeScript."
-updated: 1777966775437
-created: 1777950079438
+updated: 1777966775490
+created: 1777950093457
 tags:
   - notes
   - vscode

@@ -2,8 +2,8 @@
 id: zettel.20260527125750
 title: "Surga di Enoch berfungsi sebagai pengadilan terhadap korupsi Watchers"
 desc: "Dalam Enoch, konflik tidak berhenti di bumi; malaikat suci membawa kasus korupsi ke surga dan memediasi pemulihan."
-updated: 1779863270935
-created: 1779863270935
+updated: 1779935953056
+created: 1779863278128
 tags:
   - zettel
   - enoch

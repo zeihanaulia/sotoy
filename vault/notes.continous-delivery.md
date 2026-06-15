@@ -2,8 +2,8 @@
 id: notes.continous-delivery
 title: Continous Delivery
 desc: ''
-updated: 1662669642981
-created: 1662658315170
+updated: 1776324693730
+created: 1724251163399
 ---
 
 - Apa yang dimaksud dengan continous delivery?

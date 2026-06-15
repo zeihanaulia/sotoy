@@ -2,8 +2,8 @@
 id: zettel.1777272449634
 title: "Buku ini mengunci perspektif developer-first untuk AI integration, bukan research-first model building"
 desc: "Dengan mengatakan buku ini ditulis oleh developer untuk developer, penulis menetapkan scope: AI akan dijelaskan sebagai komponen software untuk sistem nyata, bukan sebagai domain riset model dari nol."
-updated: 1777275862912
-created: 1777272449634
+updated: 1777276098027
+created: 1777272449632
 tags:
   - zettel
   - ai

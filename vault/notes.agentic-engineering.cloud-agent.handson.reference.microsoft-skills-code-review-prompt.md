@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.cloud-agent.handson.reference.microsoft-skills-code-review-prompt
 title: "Microsoft Skills Code Review Prompt"
 desc: "Review template checklist code review dari Microsoft Skills sebagai rule-based inspiration."
-updated: 1777999929389
-created: 1777999929389
+updated: 1778003052324
+created: 1777999988050
 tags:
   - notes
   - agentic-engineering

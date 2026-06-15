@@ -2,8 +2,8 @@
 id: notes.agentic-engineering.gitlab-mr-review-agent-coolify
 title: "GitLab MR Review Agent di Coolify"
 desc: "Desain self-hosted GitLab MR review agent di Coolify dengan webhook trigger comment, worker terisolasi, dan structured report."
-updated: 1777998890459
-created: 1777998890459
+updated: 1778003052323
+created: 1777998924151
 tags:
   - notes
   - agentic-engineering

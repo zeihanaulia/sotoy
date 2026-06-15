@@ -2,8 +2,8 @@
 id: zettel.1777272449650
 title: "Aplikasi AI pertama adalah plumbing request-model-response"
 desc: "AI app pertama adalah soal menghubungkan input, model, dan response lewat service."
-updated: 1777272449650
-created: 1777272449650
+updated: 1777272449633
+created: 1777272449633
 tags:
   - zettel
   - ai

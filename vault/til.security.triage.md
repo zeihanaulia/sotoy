@@ -2,8 +2,8 @@
 id: til.security.triage
 title: "TIL: apa itu triage di security review"
 desc: "Triage adalah proses menyaring dan memprioritaskan temuan keamanan setelah tool atau agent menghasilkan alert."
-updated: 1777992858623
-created: 1777992858623
+updated: 1777995719366
+created: 1777992865532
 tags:
   - til
   - security

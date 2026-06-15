@@ -2,7 +2,7 @@
 id: book-summaries.an-elegant-puzzle
 title: An Elegant Puzzle
 desc: ''
-updated: 1721119936450
-created: 1683596990148
+updated: 1776324693719
+created: 1724251163395
 published: false
 ---

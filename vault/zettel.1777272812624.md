@@ -2,8 +2,8 @@
 id: zettel.1777272812624
 title: "Output configuration adalah bagian dari control surface"
 desc: "Pengaturan temperature, max tokens, dan sampling memengaruhi perilaku model."
-updated: 1777272812624
-created: 1777272812624
+updated: 1777272812610
+created: 1777272812610
 tags:
   - zettel
   - ai

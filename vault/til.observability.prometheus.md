@@ -2,8 +2,8 @@
 id: til.observability.prometheus
 title: Prometheus
 desc: ''
-updated: 1670220161406
-created: 1670214321497
+updated: 1776324693743
+created: 1748956634966
 ---
 
 ## Apa itu Prometheus

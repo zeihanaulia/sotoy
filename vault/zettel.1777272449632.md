@@ -2,8 +2,8 @@
 id: zettel.1777272449632
 title: "API dan SDK membuat AI jadi komponen software, bukan domain riset terpisah"
 desc: "Harapan muncul ketika AI berhenti terasa seperti matematika dan mulai terasa seperti interface developer yang bisa diintegrasikan dalam aplikasi." 
-updated: 1777273778452
-created: 1777272449632
+updated: 1777273870631
+created: 1777272449631
 tags:
   - zettel
   - ai

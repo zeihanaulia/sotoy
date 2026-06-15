@@ -4,8 +4,8 @@ title: MOC Agentic Engineering
 desc: >-
   Map of content untuk agentic engineering, cloud agent review, harness, skill
   files, dan AI coding verification.
-updated: 1778000730821
-created: 1778000730821
+updated: 1780426712062
+created: 1778000749818
 tags:
   - zettel
   - moc

@@ -2,8 +2,8 @@
 id: til.security.socket-recommended-action-layers
 title: "Recommended actions supply-chain harus dibaca sebagai triage → containment → credential recovery"
 desc: "Socket menyarankan respons insiden supply-chain dalam tiga layer: cek artefak, batasi persistence/network, lalu anggap secret mungkin bocor."
-updated: 1778643255851
-created: 1778643255851
+updated: 1778645245339
+created: 1778643282459
 tags:
   - til
   - security

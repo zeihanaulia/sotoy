@@ -2,8 +2,8 @@
 id: book-summaries.dare-to-lead
 title: Dare to Lead
 desc: ''
-updated: 1668415907766
-created: 1646858780149
+updated: 1776324693721
+created: 1724251163396
 tags:
   - Self Improvement
   - Brené Brown

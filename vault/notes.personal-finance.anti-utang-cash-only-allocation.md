@@ -2,8 +2,8 @@
 id: notes.personal-finance.anti-utang-cash-only-allocation
 title: "Anti-utang cash-only perlu sistem alokasi dan sinking fund"
 desc: "Perbedaan antara anti-utang yang sehat dan cash-only tanpa mekanisme alokasi karena tujuan besar tetap bocor ke konsumsi."
-updated: 1779766534612
-created: 1779766534612
+updated: 1779766546894
+created: 1779766546847
 tags:
   - notes
   - personal-finance

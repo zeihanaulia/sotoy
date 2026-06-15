@@ -6,6 +6,8 @@ tags:
   - zettel
   - knowledge-management
   - cognitive-science
+created: 1776381140618
+updated: 1776390335636
 ---
 
 ## Gagasan

@@ -2,8 +2,8 @@
 id: zettel.pull-request-target-takeover
 title: "pull_request_target bisa menjadi jalur takeover PR sebelum merge"
 desc: "Action GitHub `pull_request_target` dapat mengeksekusi PR code dalam konteks base repo, memungkinkan PR berbahaya mempengaruhi pipeline resmi tanpa perlu di-merge."
-updated: 1778645837051
-created: 1778645837051
+updated: 1778647444179
+created: 1778647244697
 tags:
   - zettel
   - security

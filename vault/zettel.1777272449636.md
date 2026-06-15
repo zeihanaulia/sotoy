@@ -2,8 +2,8 @@
 id: zettel.1777272449636
 title: "AI recipes pentingnya lebih besar daripada model tunggal"
 desc: "Use case terbaik di AI sering lahir dari pola gabungan komponen, bukan dari satu model sakti."
-updated: 1777272449636
-created: 1777272449636
+updated: 1777277331607
+created: 1777272449632
 tags:
   - zettel
   - ai

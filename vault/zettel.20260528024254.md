@@ -2,8 +2,8 @@
 id: zettel.20260528024254
 title: "Darker punishment zones in 1 Enoch are embedded in the same ordered cosmos as the watchwords of angels"
 desc: "In 1 Enoch Chapter 6, hukuman dimasukkan ke dalam struktur kosmik yang sama dengan jalur, gudang, dan fondasi alam, bukan sebagai fenomena moral terpisah."
-updated: 1779936174826
-created: 1779936174826
+updated: 1779939661572
+created: 1779936282806
 tags:
   - zettel
   - enoch

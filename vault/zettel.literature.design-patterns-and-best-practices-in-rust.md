@@ -2,8 +2,8 @@
 id: zettel.literature.design-patterns-and-best-practices-in-rust
 title: "Rust-native design lebih dari sekadar pattern"
 desc: "Preface menegaskan bahwa efektifitas Rust berasal dari transformasi cara berpikir desain, bukan hanya penerapan pola." 
-updated: 1778772857433
-created: 1778772857433
+updated: 1778773151606
+created: 1778772874657
 tags:
   - zettel
   - literature-note

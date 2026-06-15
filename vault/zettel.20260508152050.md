@@ -2,8 +2,8 @@
 id: zettel.20260508152050
 title: "HeavySkill turns parallel reasoning plus deliberation into a reusable agentic skill"
 desc: "Insight bahwa proses reasoning kolektif di agentic harness bisa diabstraksikan sebagai skill file, bukan hanya sebagai framework eksekusi."
-updated: 1778204622050
-created: 1778204622050
+updated: 1778204652329
+created: 1778204652299
 tags:
   - zettel
   - agentic-harness

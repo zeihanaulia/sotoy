@@ -2,8 +2,8 @@
 id: zettel.1777272449649
 title: "Context engineering melebihi sekadar wording prompt"
 desc: "Masalah praktis AI bukan hanya mengubah kata prompt, tapi memilih dan menyusun konteks yang tepat dalam context window."
-updated: 1777349718863
-created: 1777272449649
+updated: 1777351630305
+created: 1777272449633
 tags:
   - zettel
   - ai

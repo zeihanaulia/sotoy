@@ -8,6 +8,8 @@ tags:
   - enterprise-architecture
   - governance
   - martin-fowler
+created: 1776652154641
+updated: 1776652154670
 ---
 
 > Enterprise Architecture groups often get separated from day to day development. This can lead to their knowledge of development work getting out of date and development teams not taking a broad company-wide perspective. Having seen this happen frequently my colleague (Thoughtworks CTO) Rebecca argues that enterprise architects can be much more effective by joining development teams.

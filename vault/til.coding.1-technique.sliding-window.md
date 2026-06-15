@@ -2,8 +2,8 @@
 id: til.coding.1-technique.sliding-window
 title: Sliding Window
 desc: ''
-updated: 1742787737097
-created: 1742449567517
+updated: 1776324693736
+created: 1743493116027
 ---
 
 Apa itu sliding window. Ini adalah teknik algoritma yang digunakan untuk mengjitung sesuatu secara berkelanjutan pada subarray atau substring yang berukuran tetap atau dinamis dalam sebuah array atau string.

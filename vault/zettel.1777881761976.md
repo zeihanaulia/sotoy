@@ -8,6 +8,8 @@ tags:
   - payment
   - pii
   - agent
+created: 1777881774538
+updated: 1777948653344
 ---
 
 > In agentic x402 payment flows, the payment metadata fields `resource_url`, `description`, and `reason` are a PII leakage vector that must be filtered before the payment request is executed.

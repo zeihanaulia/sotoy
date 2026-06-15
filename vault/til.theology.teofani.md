@@ -2,8 +2,8 @@
 id: til.theology.teofani
 title: "Teofani"
 desc: "Teofani adalah manifestasi Tuhan yang hadir secara nyata kepada manusia, sering lewat gunung, api, awan, dan ketakutan."
-updated: 1779947612000
-created: 1779947612000
+updated: 1779947634331
+created: 1779947620721
 tags:
   - til
   - theology

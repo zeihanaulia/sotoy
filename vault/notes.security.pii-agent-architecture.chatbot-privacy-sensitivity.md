@@ -2,8 +2,8 @@
 id: notes.security.pii-agent-architecture.chatbot-privacy-sensitivity
 title: "Privacy-Sensitive Chatbots: Input Regurgitation and Sanitization"
 desc: "Deep dive pada evaluasi ChatGPT terhadap regurgitasi PII dan batasan prompt-induced sanitization."
-updated: 1777873618660
-created: 1777871740192
+updated: 1777874223937
+created: 1777871856441
 tags:
   - notes
   - security

@@ -2,8 +2,8 @@
 id: zettel.1778001021442
 title: "Agentic engineering differs from vibe coding"
 desc: "Klaim bahwa AI coding matang membutuhkan disiplin engineering, bukan sekadar vibe coding."
-updated: 1778001554464
-created: 1778001021442
+updated: 1778003052450
+created: 1778001028522
 tags:
   - zettel
   - agentic-engineering

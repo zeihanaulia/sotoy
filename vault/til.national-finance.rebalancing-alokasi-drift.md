@@ -2,8 +2,8 @@
 id: til.national-finance.rebalancing-alokasi-drift
 title: "Rebalancing adalah koreksi alokasi ketika drift terlalu besar"
 desc: "Definisi rebalancing portofolio dan drift alokasi untuk strategi hedge valas."
-updated: 1778579870967
-created: 1778579870967
+updated: 1778580048061
+created: 1778579878224
 tags:
   - til
   - national-finance

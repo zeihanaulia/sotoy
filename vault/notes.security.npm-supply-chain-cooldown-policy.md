@@ -2,8 +2,8 @@
 id: notes.security.npm-supply-chain-cooldown-policy
 title: "NPM supply-chain cooldown policy"
 desc: "Analisis kebijakan minimum release age dan build script allowlist untuk hardening supply chain npm dengan pnpm."
-updated: 1778773631311
-created: 1778773631311
+updated: 1778775961481
+created: 1778773660474
 tags:
   - notes
   - security

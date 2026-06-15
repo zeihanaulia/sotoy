@@ -2,8 +2,8 @@
 id: zettel.20260507100200
 title: "Agentic engineering preserves quality bar while vibe coding raises floor"
 desc: "Karpathy: vibe coding membuka akses, agentic engineering menjaga standar profesional software."
-updated: 1778127020000
-created: 1778127020000
+updated: 1778127627884
+created: 1778126817542
 tags:
   - zettel
   - agentic-engineering

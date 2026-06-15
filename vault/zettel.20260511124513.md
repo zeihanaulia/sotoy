@@ -2,8 +2,8 @@
 id: zettel.20260511124513
 title: "Boundary SaaS ditentukan oleh apa tenant lihat"
 desc: "Dalam SaaS, boundary utama adalah experience surface yang dilihat tenant, bukan lokasi atau provider resource."
-updated: 1778453643253
-created: 1778453643253
+updated: 1778454323379
+created: 1778454154375
 tags:
   - zettel
   - saas

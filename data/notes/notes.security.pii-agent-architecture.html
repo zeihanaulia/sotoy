@@ -1,0 +1,289 @@
+<h1 id="arsitektur-pii-filter-dan-security-agent">Arsitektur PII filter dan security agent<a aria-hidden="true" class="anchor-heading icon-link" href="#arsitektur-pii-filter-dan-security-agent"></a></h1>
+<ul>
+<li>Riset ini fokus pada desain security agent yang bisa deteksi dan redaksi PII, bukan sekadar menebak entitas sensitif dengan satu regex.</li>
+</ul>
+<h2 id="referensi-utama">Referensi utama<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-utama"></a></h2>
+<ul>
+<li><code>microsoft/presidio</code>: SDK modular untuk identifikasi dan de-identifikasi PII di teks dan gambar.</li>
+<li><code>Yelp/detect-secrets</code>: model baseline+diff untuk fokus pada perubahan baru dalam repositori kode.</li>
+<li><code>piisa/pii-extract-base</code>: engine infrastruktur yang menyediakan framework, sementara deteksi aktual disuplai oleh plugin eksternal.</li>
+</ul>
+<h2 id="apa-yang-penting-dari-presidio">Apa yang penting dari Presidio<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-penting-dari-presidio"></a></h2>
+<ul>
+<li>Memisahkan peran utama: analyzer, anonymizer, image redactor, dan structured PII.</li>
+<li>Menggabungkan teknologi: NER, regex, rule-based logic, checksum, dan konektor ke model eksternal.</li>
+<li>Menekankan bahwa deteksi otomatis membantu, tapi tidak bisa menjamin semua sensitive info terdeteksi.</li>
+<li>Ini cocok untuk agent privacy filter yang perlu:
+<ul>
+<li>identifikasi PII yang bisa di-redaksi,</li>
+<li>support multi-format (text + image),</li>
+<li>custom recognizer dan policy per domain.</li>
+</ul>
+</li>
+</ul>
+<h2 id="apa-yang-penting-dari-detect-secrets">Apa yang penting dari detect-secrets<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-penting-dari-detect-secrets"></a></h2>
+<ul>
+<li>Pattern utamanya: buat baseline, lalu cek perubahan baru.</li>
+<li>Fokus pada "baru masuk" mengurangi noise dan false positive dari artefak lama.</li>
+<li>Untuk security agent, ini berarti:
+<ul>
+<li>agent harus bisa mengenali konteks perubahan, bukan scan penuh setiap saat,</li>
+<li>audit daftar sensitif bisa dipisah antara item lama dan item baru,</li>
+<li>ini lebih efisien untuk pipeline yang dipakai terus-menerus.</li>
+</ul>
+</li>
+</ul>
+<h2 id="apa-yang-penting-dari-pii-extract-base">Apa yang penting dari pii-extract-base<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-penting-dari-pii-extract-base"></a></h2>
+<ul>
+<li>Engine ini tidak melakukan deteksi sendiri; dia hanya menyediakan infrastruktur untuk task PII.</li>
+<li>Bukti arsitektur: <code>core engine</code> + <code>detector plugin</code> + <code>data base</code>.</li>
+<li>Artinya desain terbaik adalah memisahkan platform dari aturan deteksi.</li>
+<li>Dengan begitu, kita bisa menambahkan:
+<ul>
+<li>plugin baru untuk tipe PII khusus,</li>
+<li>model external untuk nama/alamat/organisasi,</li>
+<li>fallback regex/checksum untuk angka dan format tertentu.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pelajaran-arsitektur">Pelajaran arsitektur<a aria-hidden="true" class="anchor-heading icon-link" href="#pelajaran-arsitektur"></a></h2>
+<ul>
+<li>Desain pipeline modular:
+<ol>
+<li>collector (kumpulkan teks/dokumen/image),</li>
+<li>detector (identifikasi kemungkinan PII),</li>
+<li>policy engine (tentukan apakah flag, mask, redact, atau audit),</li>
+<li>redactor/anonymizer (hasilkan output aman).</li>
+</ol>
+</li>
+<li>Gunakan plugin atau registry untuk model dan pola PII; jangan hardcode semua jenis entitas di satu layer.</li>
+<li>Minimal dua output penting:
+<ul>
+<li><code>flagged item</code> untuk audit dan logging,</li>
+<li><code>redacted output</code> untuk data yang boleh diteruskan.</li>
+</ul>
+</li>
+<li>Tambahkan kemampuan incremental update kalau agent jalan terus: jangan rebuild seluruh index setiap input.</li>
+</ul>
+<h2 id="takeaway">Takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway"></a></h2>
+<ul>
+<li>Security agent untuk PII paling kuat kalau dibangun sebagai sistem, bukan skrip tunggal.</li>
+<li>Presidio memberi pola deteksi + redaksi; detect-secrets memberi pola change-focused scan; pii-extract-base memberi pola engine-plugin.</li>
+<li>Fokus arsitektur harus pada modularitas, auditability, dan pemisahan antara deteksi dan tindakan.</li>
+<li>Jika ingin lanjut, review dokumentasi resmi masing-masing repo karena akses riset masih partial dari batas rate limit/API.</li>
+</ul>
+<h2 id="riset-terbaru-2026">Riset terbaru 2026<a aria-hidden="true" class="anchor-heading icon-link" href="#riset-terbaru-2026"></a></h2>
+<ul>
+<li><code>CAMP (2604.16521)</code>: fokus pada PII cross-turn dalam percakapan agentik, tidak cukup hanya mask tiap pesan. Sistem ini menjawab tiga pertanyaan: kelemahan per-turn masking, formalization risiko cumulative exposure melalui CPE, dan desain middleware untuk session-aware protection. <a href="/sotoy/notes/zettel.1777875390302">Cross-turn PII exposure requires session-aware masking, not per-turn masking</a> (detail note)
+<ul>
+<li><code>camp.*</code> notes: <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a>, <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a>, <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a>, <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a>, <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+</ul>
+</li>
+<li><code>LLM-Redactor (2604.12064)</code>: evaluasi empiris 8 teknik request privacy untuk LLM, termasuk local inference, redaction, semantik rephrasing, TEE, split inference, FHE, MPC, dan DP. Kombinasi paling praktis: local + redact + rephrase. <a href="/sotoy/notes/notes.security.pii-agent-architecture.llm-redactor">LLM-Redactor: Privacy-Preserving LLM Requests</a> (detail note)</li>
+<li><code>Hardening x402 (2604.11430)</code>: contoh nyata PII-safe agentic payment, dengan middleware pre-execution filter untuk metadata x402 agar URL/deskripsi/reason string yang mengandung PII ter-redact sebelum request dikirim. <a href="/sotoy/notes/notes.security.pii-agent-architecture.hardening-x402">Hardening x402: PII-Safe Agentic Payments</a> (detail note)</li>
+<li><code>PII boundary antara agent</code>: adaptasi pola x402 ke dua-agent workflow, di mana brainstorming agent dan coding agent dipisahkan oleh PII guardrail dan sanitized artifact. <a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-boundary-pii-filtering">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent</a> (detail note)</li>
+<li><code>PII Shield (2603.24895)</code>: browser overlay yang memberi pengguna kontrol langsung atas redaction prompt AI, termasuk local LLM untuk deteksi entitas dan aktivitas smokescreen untuk mitigasi profiling. <a href="/sotoy/notes/notes.security.pii-agent-architecture.pii-shield">PII Shield: Browser Overlay for Personal Data Management</a> (detail note)</li>
+<li><code>WebPII (2603.17357)</code>: benchmark visual PII detection untuk screenshot UI agent/computer-use, yang menyorot kebutuhan sanitasi PII di visual pipeline, bukan hanya teks. <a href="/sotoy/notes/notes.security.pii-agent-architecture.webpii">WebPII: Visual PII Detection for Computer-Use Agents</a> (detail note)</li>
+</ul>
+<h2 id="temuan-tambahan-user-supplied-pii-dan-personal-ai">Temuan tambahan: user-supplied PII dan personal AI<a aria-hidden="true" class="anchor-heading icon-link" href="#temuan-tambahan-user-supplied-pii-dan-personal-ai"></a></h2>
+<ul>
+<li>
+<p><code>Opal: Private Memory for Personal AI (2604.02522)</code>: relevant untuk agent yang menyimpan konteks personal user secara lokal, membantu memisahkan informasi pengguna dari prompt yang dikirim ke model. <a href="/sotoy/notes/notes.security.pii-agent-architecture.opal">Opal: Private Memory for Personal AI</a> (detail note)</p>
+</li>
+<li>
+<p><code>SafeClaw-R: Towards Safe and Secure Multi-Agent Personal Assistants (2603.28807)</code>: fokus pada keamanan dan privasi pada personal assistant multi-agent, cocok untuk kasus user request yang berisi data sensitif. <a href="/sotoy/notes/notes.security.pii-agent-architecture.safeclaw-r">SafeClaw-R: Safe Multi-Agent Personal Assistants</a> (detail note)</p>
+</li>
+<li>
+<p><code>Separable Expert Architecture: Toward Privacy-Preserving LLM Personalization via Composable Adapters and Deletable User Proxies (2604.21571)</code>: desain LLM personalization yang bisa meminimalkan exposure data personal dengan adapter yang bisa dihapus. <a href="/sotoy/notes/notes.security.pii-agent-architecture.separable-expert-architecture">Separable Expert Architecture: Privacy-Preserving Personalization</a> (detail note)</p>
+</li>
+<li>
+<p><code>RePAIR: Interactive Machine Unlearning through Prompt-Aware Model Repair (2604.12820)</code>: relevan untuk fallback ketika user-supplied PII sudah terlanjur mendarat di model, dengan prompt-aware model repair sebagai mekanisme mitigate. <a href="/sotoy/notes/notes.security.pii-agent-architecture.repair">RePAIR: Redacting Personal Information in Response</a> (detail note)</p>
+</li>
+<li>
+<p><code>Privacy as Permissible Operations: An ABAC Framework for Policy-Law Compliance (2604.10832)</code>: memberi kerangka akses kontrol terhadap data personal pada aplikasi berbasis AI, penting untuk mendefinisikan policy sebelum agent mengeksekusi query.</p>
+</li>
+<li>
+<p><code>An AI Agent Execution Environment to Safeguard User Data (2604.19657)</code>: model lingkungan eksekusi yang memisahkan akses data sensitif dari pipeline utama model. <a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-execution-environment">AI Agent Execution Environment to Safeguard User Data</a> (detail note)</p>
+</li>
+<li>
+<p><code>Are Chatbots Ready for Privacy-Sensitive Applications? An Investigation into Input Regurgitation and Prompt-Induced Sanitization (2305.15008)</code>: bukti bahwa input sensitif masih sering bocor kembali lewat respons dan sanitization sisi prompt tidak cukup andal. <a href="/sotoy/notes/notes.security.pii-agent-architecture.chatbot-privacy-sensitivity">Privacy-Sensitive Chatbots: Input Regurgitation and Sanitization</a> (detail note)</p>
+</li>
+<li>
+<p><code>Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers (2603.07670)</code>: memori lintas sesi jadi titik penting seandainya agent menyimpan PII dari user secara terpisah. Paper ini menguatkan bahwa agent memory harus diperlakukan sebagai layer governance tersendiri, dengan filtering sebelum store, retention policy, access scoping, dan audit, bukan sekadar ditangani sebagai chat history. <a href="/sotoy/notes/notes.security.pii-agent-architecture.memory-autonomous-agents">Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers</a> (detail note)</p>
+</li>
+<li>
+<p><a href="/sotoy/notes/zettel.1777874908001">Cross-session agent memory becomes a PII risk without governance</a> — cross-session agent memory harus dilihat sebagai sumber sensitif yang butuh policy, bukan sekadar log percakapan.</p>
+</li>
+</ul>
+<h2 id="use-case-hands-on-untuk-security-agent">Use case hands-on untuk security agent<a aria-hidden="true" class="anchor-heading icon-link" href="#use-case-hands-on-untuk-security-agent"></a></h2>
+<ol>
+<li>Agen pembayaran autonomous: intercept request metadata sebelum dikirim ke payment gateway, redaksi nama, email, nomor akun, dan reason text.</li>
+<li>Multi-turn customer support chatbot: pantau percakapan sepanjang sesi, simpan fragmen PII dalam registry, dan jalankan retroactive masking saat kombinasi entitas melewati ambang risiko.</li>
+<li>Browser-based personal AI assistant: jalankan local redaction overlay pada prompt sebelum diteruskan ke model cloud, sehingga data sensitif tidak meninggalkan perangkat.</li>
+<li>Visual UI automation: deteksi PII di screenshot aplikasi atau form yang diisi pengguna, sehingga agen yang membaca layar hanya melihat versi anonymized.</li>
+</ol>
+<h2 id="langkah-bukti-keamanan-agent">Langkah bukti keamanan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-bukti-keamanan-agent"></a></h2>
+<ol>
+<li>Definisikan threat model secara eksplisit: apakah ancamannya data leakage, reidentifikasi, atau payment metadata exposure?</li>
+<li>Pisahkan pipeline menjadi: input collector → detector → policy engine → redactor/anonymizer → audit logger.</li>
+<li>Terapkan session-level state untuk kasus multi-turn dan cross-input, bukan hanya scan stateless per request.</li>
+<li>Tambahkan audit trail yang merekam entitas PII, keputusan policy, dan output yang dikirim agent.</li>
+<li>Evaluasi dengan benchmark sintetis + skenario nyata: percakapan multi-turn, metadata pembayaran, screenshot UI, dan permintaan cloud LLM.</li>
+<li>Verifikasi utilitas agent tidak rusak secara drastis: bandingkan output sebelum dan sesudah redaction, lalu pastikan tidak ada PII mentah tertinggal.</li>
+</ol>
+<h2 id="contoh-snippet-pii-safe-agent">Contoh snippet PII-safe agent<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-snippet-pii-safe-agent"></a></h2>
+<pre class="language-python"><code class="language-python"><span class="token keyword">from</span> typing <span class="token keyword">import</span> List<span class="token punctuation">,</span> Dict
+
+<span class="token keyword">class</span> <span class="token class-name">PiiItem</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> entity_type<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> text<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> score<span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span><span class="token builtin">type</span> <span class="token operator">=</span> entity_type
+        self<span class="token punctuation">.</span>text <span class="token operator">=</span> text
+        self<span class="token punctuation">.</span>score <span class="token operator">=</span> score
+
+    <span class="token keyword">def</span> <span class="token function">to_dict</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"type"</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span><span class="token builtin">type</span><span class="token punctuation">,</span> <span class="token string">"text"</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>text<span class="token punctuation">,</span> <span class="token string">"score"</span><span class="token punctuation">:</span> self<span class="token punctuation">.</span>score<span class="token punctuation">}</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">PiiRegistry</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>items<span class="token punctuation">:</span> List<span class="token punctuation">[</span>PiiItem<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+    <span class="token keyword">def</span> <span class="token function">update</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> new_items<span class="token punctuation">:</span> List<span class="token punctuation">[</span>PiiItem<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>items<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>new_items<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">compute_cpe</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">float</span><span class="token punctuation">:</span>
+        weights <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">"NAME"</span><span class="token punctuation">:</span> <span class="token number">0.5</span><span class="token punctuation">,</span>
+            <span class="token string">"EMAIL"</span><span class="token punctuation">:</span> <span class="token number">0.7</span><span class="token punctuation">,</span>
+            <span class="token string">"CREDIT_CARD"</span><span class="token punctuation">:</span> <span class="token number">1.0</span><span class="token punctuation">,</span>
+            <span class="token string">"ADDRESS"</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">,</span>
+            <span class="token string">"PHONE"</span><span class="token punctuation">:</span> <span class="token number">0.6</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token builtin">sum</span><span class="token punctuation">(</span>weights<span class="token punctuation">.</span>get<span class="token punctuation">(</span>item<span class="token punctuation">.</span><span class="token builtin">type</span><span class="token punctuation">,</span> <span class="token number">0.4</span><span class="token punctuation">)</span> <span class="token operator">*</span> item<span class="token punctuation">.</span>score <span class="token keyword">for</span> item <span class="token keyword">in</span> self<span class="token punctuation">.</span>items<span class="token punctuation">)</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">SafeAgent</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> detector<span class="token punctuation">,</span> redactor<span class="token punctuation">,</span> threshold<span class="token punctuation">:</span> <span class="token builtin">float</span> <span class="token operator">=</span> <span class="token number">1.5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>detector <span class="token operator">=</span> detector
+        self<span class="token punctuation">.</span>redactor <span class="token operator">=</span> redactor
+        self<span class="token punctuation">.</span>threshold <span class="token operator">=</span> threshold
+        self<span class="token punctuation">.</span>registry <span class="token operator">=</span> PiiRegistry<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> text<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> Dict<span class="token punctuation">:</span>
+        found <span class="token operator">=</span> self<span class="token punctuation">.</span>detector<span class="token punctuation">.</span>scan<span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>registry<span class="token punctuation">.</span>update<span class="token punctuation">(</span>found<span class="token punctuation">)</span>
+        cpe <span class="token operator">=</span> self<span class="token punctuation">.</span>registry<span class="token punctuation">.</span>compute_cpe<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> cpe <span class="token operator">>=</span> self<span class="token punctuation">.</span>threshold<span class="token punctuation">:</span>
+            safe_text <span class="token operator">=</span> self<span class="token punctuation">.</span>redactor<span class="token punctuation">.</span>rewrite_history<span class="token punctuation">(</span>self<span class="token punctuation">.</span>registry<span class="token punctuation">,</span> text<span class="token punctuation">)</span>
+            status <span class="token operator">=</span> <span class="token string">"review_required"</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            safe_text <span class="token operator">=</span> self<span class="token punctuation">.</span>redactor<span class="token punctuation">.</span>redact<span class="token punctuation">(</span>text<span class="token punctuation">,</span> found<span class="token punctuation">)</span>
+            status <span class="token operator">=</span> <span class="token string">"ok"</span>
+
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            <span class="token string">"status"</span><span class="token punctuation">:</span> status<span class="token punctuation">,</span>
+            <span class="token string">"safe_text"</span><span class="token punctuation">:</span> safe_text<span class="token punctuation">,</span>
+            <span class="token string">"pii_items"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>item<span class="token punctuation">.</span>to_dict<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> item <span class="token keyword">in</span> found<span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token string">"cpe"</span><span class="token punctuation">:</span> cpe<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li><code>detector.scan(text)</code> bisa menggabungkan NER, regex, dan domain-specific rules.</li>
+<li><code>redactor.redact(...)</code> menghasilkan placeholder terstruktur.</li>
+<li><code>rewrite_history(...)</code> adalah analog CAMP: retroactive masking untuk seluruh session ketika skor risiko terlalu tinggi.</li>
+</ul>
+<h2 id="catatan-praktis">Catatan praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-praktis"></a></h2>
+<ul>
+<li>Gunakan model atau rule yang bisa dijalankan lokal untuk menjaga data tetap di dalam perimeter.</li>
+<li>Audit log adalah bukti bahwa agent sudah menjalankan pemeriksaan PII; penting untuk security review.</li>
+<li>Untuk hands-on, mulai dari case <code>x402 metadata</code> karena ada penerapan yang jelas: filter sebelum execution.</li>
+<li>Untuk pembuktian keamanan, buat dua suite: <code>privacy tests</code> (no PII leak) dan <code>utility tests</code> (agent masih bisa menyelesaikan tugas).</li>
+</ul>
+<h2 id="prinsip-pii-safe-untuk-llm-agent">Prinsip PII-safe untuk LLM agent<a aria-hidden="true" class="anchor-heading icon-link" href="#prinsip-pii-safe-untuk-llm-agent"></a></h2>
+<ul>
+<li><strong>Masking harus terjadi sebelum prompt dikirim ke LLM</strong>. Ini adalah lapisan pertama dan paling penting.</li>
+<li><strong>Output filtering hanya safety net</strong>, bukan satu-satunya pertahanan. Jika model sudah menerima PII mentah, risiko exposure tetap ada.</li>
+<li><strong>Jangan pakai prompt-level safety saja</strong> tanpa state-aware policy. Multi-turn agent harus menilai PII cross-turn, seperti <code>CAMP</code>.</li>
+<li><strong>Pseudonymization dan placeholder replacement</strong> lebih baik dari sekadar redaksi kasar karena menjaga konteks utilitas.</li>
+<li><strong>Audit dan traceability</strong> harus mencatat:
+<ul>
+<li>entitas PII yang ditemukan,</li>
+<li>transformasi yang dilakukan (mask/redact/pseudonymize),</li>
+<li>apakah data dikirim ke LLM langsung atau melalui trusted local rewriting.</li>
+</ul>
+</li>
+<li><strong>Threat model harus eksplisit</strong>: data leakage, reidentification, payment metadata exposure, dan model memorization.</li>
+<li><strong>Jika mungkin, gunakan local inference untuk filtering</strong> sebelum call ke remote LLM. Ini meminimalkan jumlah informasi sensitif yang meninggalkan perimeter.</li>
+</ul>
+<h2 id="menangani-user-supplied-pii">Menangani user-supplied PII<a aria-hidden="true" class="anchor-heading icon-link" href="#menangani-user-supplied-pii"></a></h2>
+<ul>
+<li>User boleh memasukkan PII secara eksplisit, tetapi agent tidak boleh langsung meneruskan PII itu ke model.</li>
+<li><strong>Pisahkan data access dari generative reasoning</strong>:
+<ul>
+<li>data sensitif (rekening, tagihan, kondisi kesehatan) diambil melalui backend atau storage yang terkontrol,</li>
+<li>query ke LLM dibuat dalam bentuk aman / abstrak.</li>
+</ul>
+</li>
+<li><strong>Contoh pola</strong>:
+<ol>
+<li>user: "Berapa tunggakan saya?"</li>
+<li>agent: ambil <code>account_id</code> dan data billing secara lokal dari sistem internal</li>
+<li>agent: buat prompt aman seperti "Tampilkan status tagihan untuk Customers A" atau gunakan template internal non-identifiable</li>
+<li>kirim prompt ke LLM untuk memformat jawaban, bukan untuk mencari data mentah</li>
+</ol>
+</li>
+<li>Untuk kesehatan, gunakan <code>patient_case_123</code> atau label serupa, bukan nama/NIK/identitas yang bisa direidentifikasi.</li>
+<li><strong>Jika PII ingin digunakan langsung dalam reasoning</strong> (mis. diagnosis spesifik), lakukan itu di perimeter yang trusted dan jangan kirim mentah ke cloud LLM.</li>
+<li><code>output filter</code> tetap digunakan, tapi dalam skenario ini fungsinya sebagai pengaman kedua, bukan deteksi utama.</li>
+<li><strong>Kunci</strong>: agent dapat melayani request personal, tetapi model tidak boleh pernah mendapatkan PII mentah yang bisa bocor.</li>
+</ul>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-execution-environment">AI Agent Execution Environment to Safeguard User Data</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.hardening-x402">Hardening x402: PII-Safe Agentic Payments</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.llm-redactor">LLM-Redactor: Privacy-Preserving LLM Requests</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.memory-autonomous-agents">Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.opal">Opal: Private Memory for Personal AI</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.pii-shield">PII Shield: Browser Overlay for Personal Data Management</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-boundary-pii-filtering">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.chatbot-privacy-sensitivity">Privacy-Sensitive Chatbots: Input Regurgitation and Sanitization</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.repair">RePAIR: Redacting Personal Information in Response</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.safeclaw-r">SafeClaw-R: Safe Multi-Agent Personal Assistants</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.separable-expert-architecture">Separable Expert Architecture: Privacy-Preserving Personalization</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.webpii">WebPII: Visual PII Detection for Computer-Use Agents</a></li>
+</ol>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777874908001">Cross-session agent memory becomes a PII risk without governance</a></li>
+<li><a href="/sotoy/notes/zettel.1777875390302">Cross-turn PII exposure requires session-aware masking, not per-turn masking</a></li>
+<li><a href="/sotoy/notes/zettel.1777878417390">Agentic privacy lebih baik dengan typed indexed placeholders daripada fake identities</a></li>
+<li><a href="/sotoy/notes/zettel.1777881085671">Threshold-based session privacy still leaves pre-trigger exposure</a></li>
+<li><a href="/sotoy/notes/zettel.1777881761976">Pre-execution metadata filtering is essential for agentic x402 payments</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-boundary-pii-filtering">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-execution-environment">AI Agent Execution Environment to Safeguard User Data</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.chatbot-privacy-sensitivity">Privacy-Sensitive Chatbots: Input Regurgitation and Sanitization</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.hardening-x402">Hardening x402: PII-Safe Agentic Payments</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.llm-redactor">LLM-Redactor: Privacy-Preserving LLM Requests</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.memory-autonomous-agents">Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.opal">Opal: Private Memory for Personal AI</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.pii-shield">PII Shield: Browser Overlay for Personal Data Management</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.repair">RePAIR: Redacting Personal Information in Response</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.safeclaw-r">SafeClaw-R: Safe Multi-Agent Personal Assistants</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.separable-expert-architecture">Separable Expert Architecture: Privacy-Preserving Personalization</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.webpii">WebPII: Visual PII Detection for Computer-Use Agents</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+</ul>

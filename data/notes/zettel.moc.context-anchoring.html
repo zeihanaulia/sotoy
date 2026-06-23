@@ -1,0 +1,116 @@
+<h1 id="moc-context-anchoring--praktik-template-dan-integrasi">MOC: Context Anchoring — Praktik, Template, dan Integrasi<a aria-hidden="true" class="anchor-heading icon-link" href="#moc-context-anchoring--praktik-template-dan-integrasi"></a></h1>
+<p><strong>Ringkasan</strong></p>
+<p>Context-anchoring: praktik memindahkan konteks keputusan yang sifatnya ephemeral (mis. chat dengan AI) ke dokumen hidup level fitur supaya "the why" nggak hilang saat sesi terputus. Tujuannya: make restarts cheap — siapa pun bisa warm-start tanpa tanya ulang alasan desain.</p>
+<p><strong>Dokumen Terkait</strong></p>
+<ul>
+<li>Literature note: <a href="/sotoy/vault/zettel.literature.context-anchoring.md">vault/zettel.literature.context-anchoring.md</a></li>
+<li>contoh permanent note: <a href="/sotoy/vault/zettel.20260420131310.md">vault/zettel.20260420131310.md</a></li>
+<li>Daftar zettel turunan: lihat bagian "Zettels yang Dibuat" di literature note.</li>
+</ul>
+<p><strong>Kapan dipakai</strong></p>
+<ul>
+<li>Fitur lintas-sesi atau akan direvisit dalam >1 hari.</li>
+<li>Pekerjaan yang melibatkan >1 orang (handoff / review). </li>
+<li>Keputusan yang punya dampak arsitektural atau mempengaruhi banyak komponen.</li>
+</ul>
+<p><strong>Format Minimal Dokumen Fitur (recommended)</strong></p>
+<ul>
+<li>Judul: singkat, fitur/area</li>
+<li>Sections: Decisions, Reasons, Rejected alternatives, Open questions, State</li>
+<li>Metadata: date, owner, refs (issue/PR/file)</li>
+</ul>
+<p><strong>Workflow Praktis (low-friction)</strong></p>
+<ol>
+<li>Saat sesi chat/ideasi berakhir, si pemilik sesi minta ringkasan 2–3 baris (decision + why + refs).</li>
+<li>Tempel ringkasan itu ke feature doc: buat file baru di repo/<code>vault/</code> atau update issue/PR.</li>
+<li>Link feature doc ke issue/PR/PR description agar mudah ditemukan.</li>
+<li>Reviewer/owner finalize saat PR merge: mark sebagai <code>status: settled</code> atau convert ke ADR jika berdampak besar.</li>
+<li>Kalau perlu, tambahkan field <code>last-updated</code> dan siapa yang mengubah.</li>
+</ol>
+<p><strong>Template YAML minimal (copy-paste)</strong></p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">title</span><span class="token punctuation">:</span> <span class="token string">"Feature X — quick context"</span>
+<span class="token key atrule">date</span><span class="token punctuation">:</span> <span class="token datetime number">2026-04-20</span>
+<span class="token key atrule">owner</span><span class="token punctuation">:</span> @nama
+<span class="token key atrule">decision</span><span class="token punctuation">:</span> <span class="token string">"Gunakan paginasi server-side"</span>
+<span class="token key atrule">reason</span><span class="token punctuation">:</span> <span class="token string">"Kurangi latency &#x26; memori di client"</span>
+<span class="token key atrule">refs</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">issue</span><span class="token punctuation">:</span> <span class="token number">123</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">files</span><span class="token punctuation">:</span> src/feed/*
+<span class="token key atrule">open_questions</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token string">"Perlu mekanisme backfill untuk clients lama?"</span>
+<span class="token key atrule">status</span><span class="token punctuation">:</span> draft
+</code></pre>
+<p><strong>Contoh VSCode snippet (paste ke <code>snippets/*.code-snippets</code>)</strong></p>
+<pre class="language-json"><code class="language-json"><span class="token property">"Feature Context (quick)"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token property">"prefix"</span><span class="token operator">:</span> <span class="token string">"featctx"</span><span class="token punctuation">,</span>
+  <span class="token property">"body"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"title: \"${1:Feature X — quick context}\""</span><span class="token punctuation">,</span>
+    <span class="token string">"date: ${TM_YEAR}-${TM_MONTH}-${TM_DAY}"</span><span class="token punctuation">,</span>
+    <span class="token string">"owner: ${2:@nama}"</span><span class="token punctuation">,</span>
+    <span class="token string">"decision: \"${3:Keputusan singkat}\""</span><span class="token punctuation">,</span>
+    <span class="token string">"reason: \"${4:Alasan singkat}\""</span><span class="token punctuation">,</span>
+    <span class="token string">"refs:"</span><span class="token punctuation">,</span>
+    <span class="token string">"  - issue: ${5:123}"</span><span class="token punctuation">,</span>
+    <span class="token string">"open_questions:"</span><span class="token punctuation">,</span>
+    <span class="token string">"  - \"${6:Pertanyaan terbuka}\""</span><span class="token punctuation">,</span>
+    <span class="token string">"status: draft"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Quick feature context template"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Skrip shell kecil: buat feature doc dari template</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># buat-feature-doc.sh</span>
+<span class="token builtin class-name">set</span> -e
+<span class="token assign-left variable">slug</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+<span class="token assign-left variable">dir</span><span class="token operator">=</span><span class="token string">"vault/feature-docs"</span>
+<span class="token function">mkdir</span> -p <span class="token string">"<span class="token variable">$dir</span>"</span>
+<span class="token assign-left variable">file</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$dir</span>/<span class="token variable">${slug}</span>.md"</span>
+<span class="token function">cat</span> <span class="token operator">></span> <span class="token string">"<span class="token variable">$file</span>"</span> <span class="token operator">&#x3C;&#x3C;</span><span class="token string">EOF
+---
+title: "<span class="token variable">${2<span class="token operator">:-</span>Feature<span class="token operator">:</span> $slug}</span>"
+date: <span class="token variable"><span class="token variable">$(</span><span class="token function">date</span> +%F<span class="token variable">)</span></span>
+owner: <span class="token variable">${3<span class="token operator">:-</span>unknown}</span>
+status: draft
+---
+
+## Decisions
+
+## Reasons
+
+## Rejected alternatives
+
+## Open questions
+
+## Refs
+
+EOF</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"Created <span class="token variable">$file</span>"</span>
+</code></pre>
+<p>Gunakan: <code>./buat-feature-doc.sh feature-x @nama</code> → membuat <code>vault/feature-docs/feature-x.md</code>.</p>
+<p><strong>Praktik Integrasi ke Alur Kerja</strong></p>
+<ul>
+<li>Tambahkan checklist singkat di PR template: "Does this PR update the feature doc / add context?".</li>
+<li>Integrasi ke CI: optional check that feature-doc exists for PR touching feature folders (advanced).</li>
+<li>Education: ajarkan tim kebiasaan 30 detik: setiap sesi berakhir, tulis 1–2 kalimat.</li>
+</ul>
+<p><strong>Risiko &#x26; Batasan</strong></p>
+<ul>
+<li>Overhead: jangan paksakan untuk quick-fixes; anchoring punya biaya dan harus di-kalibrasi.</li>
+<li>Kualitas ringkasan: ringkasan buruk lebih berbahaya daripada tidak ada ringkasan — fokus pada alasan singkat.</li>
+</ul>
+<p><strong>Links &#x26; Next Steps</strong></p>
+<ul>
+<li>Buat snippet VSCode di repo/shared snippets.</li>
+<li>Implementasikan <code>vault/feature-docs/</code> sebagai tempat pendahuluan kalau tim mau simpannya di repo.</li>
+<li>Pertimbangkan automasi ringan (bot yang menempatkan TL;DR ke issue body saat ditag).</li>
+</ul>
+<hr>
+<p>Jika mau, gue bisa: (a) commit file snippet VSCode, (b) tambah <code>buat-feature-doc.sh</code> ke repo, atau (c) buat checklist PR template contoh. Mana yang mau elu mulai dulu? </p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #edc8ff;" href="/sotoy/notes/tags.moc">moc</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">process (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+</ol>

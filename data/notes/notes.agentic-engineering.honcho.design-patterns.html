@@ -1,0 +1,740 @@
+<h1 id="honcho-design-patterns">Honcho Design Patterns<a aria-hidden="true" class="anchor-heading icon-link" href="#honcho-design-patterns"></a></h1>
+<p>Arti yang gue pakai: <strong>“design pattern” di page ini = pola desain praktis untuk memetakan aplikasi nyata ke struktur Honcho: workspace, peer, session, observe_me, observe_others, dan cross-session context</strong>. Bukan design pattern klasik software seperti Factory, Observer, Strategy.</p>
+<p>Istilah yang perlu dikunci dulu:</p>
+<ul>
+<li>“Workspace” = batas isolasi keras. Kalau beda workspace, memory tidak saling campur.</li>
+<li>“Peer” = entitas persisten yang ingin diberi identitas dan bisa direasoning: user, agent, customer, student, NPC.</li>
+<li>“Session” = konteks interaksi aktif: chat thread, channel, support ticket, project, import batch.</li>
+<li>“observe_me” = Honcho membangun representation tentang peer itu sendiri.</li>
+<li>“observe_others” = peer membangun representation tentang peer lain berdasarkan interaksi yang ia saksikan.</li>
+<li>“peer_target” = cara membuat <code>session.context()</code> memasukkan memory lintas sesi dari peer tertentu, bukan cuma konteks session lokal.</li>
+</ul>
+<h2 id="1-pertanyaan-kunci">1. Pertanyaan kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci"></a></h2>
+<p>Ada 7 pertanyaan inti dari page ini:</p>
+<ol>
+<li>Kapan bikin workspace baru?</li>
+<li>Kapan beberapa agent harus berbagi workspace?</li>
+<li>Siapa yang harus dijadikan peer?</li>
+<li>Bagaimana memilih peer ID yang benar?</li>
+<li>Session harus diskop berdasarkan apa?</li>
+<li>Kapan pakai <code>observe_me</code> dan <code>observe_others</code>?</li>
+<li>Apa kesalahan desain paling sering?</li>
+</ol>
+<p>★ Insight ─────────────────────────
+Page ini sebenarnya ngajarin satu prinsip besar: <strong>memory yang bagus bukan dimulai dari retrieval, tapi dari boundary design</strong>.</p>
+<p>Kalau boundary workspace salah, memory bocor atau terfragmentasi.
+Kalau peer ID salah, identitas pecah.
+Kalau session terlalu kecil, reasoning tidak jalan efektif.
+Kalau observation salah, agent bisa jadi terlalu tahu atau reasoning compute kebuang.</p>
+<p>Jadi “design pattern” Honcho bukan kosmetik. Ini fondasi supaya memory agent tidak jadi lumpur konteks.
+───────────────────────────────────</p>
+<h2 id="2-quick-reference-satu-kalimat-inti">2. Quick reference: satu kalimat inti<a aria-hidden="true" class="anchor-heading icon-link" href="#2-quick-reference-satu-kalimat-inti"></a></h2>
+<p>Page-nya memberi ringkasan yang sangat padat:</p>
+<blockquote>
+<p>“Workspaces isolate, peers persist, and sessions scope the active context.”</p>
+</blockquote>
+<p>Ini kalimat paling penting di seluruh page.</p>
+<p>Pecahannya:</p>
+<pre><code>Workspace = memisahkan dunia
+Peer = menjaga identitas lintas waktu
+Session = membatasi konteks aktif
+</code></pre>
+<p>Kalau elo salah memahami tiga ini, semua desain memory jadi kacau.</p>
+<p>Contoh:</p>
+<pre><code>Workspace:
+"aplikasi/customer/environment mana?"
+
+Peer:
+"siapa/apa entitas yang sama dari waktu ke waktu?"
+
+Session:
+"interaksi ini episode apa?"
+</code></pre>
+<p>Jadi sebelum mikir retrieval, embedding, atau LLM, pertanyaan desain pertama adalah:</p>
+<pre><code>Apa boundary-nya?
+Apa identity-nya?
+Apa episode-nya?
+</code></pre>
+<h2 id="3-workspace-design-kapan-harus-dipisah">3. Workspace design: kapan harus dipisah?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-workspace-design-kapan-harus-dipisah"></a></h2>
+<p>Workspace adalah <strong>hard isolation boundary</strong>.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“A workspace is a hard isolation boundary.”</p>
+</blockquote>
+<p>Artinya kalau dua hal harus benar-benar tidak saling melihat memory, pisahkan workspace.</p>
+<p>Pattern default-nya:</p>
+<pre><code>Satu workspace per application.
+</code></pre>
+<p>Pisah workspace hanya kalau ada boundary nyata:</p>
+<ul>
+<li>beda produk</li>
+<li>beda customer/tenant</li>
+<li>beda environment: dev/staging/prod</li>
+<li>beda compliance/privacy boundary</li>
+<li>beda agent yang memang tidak boleh saling memengaruhi memory</li>
+</ul>
+<p>Contoh bagus:</p>
+<pre><code>workspace_prod_customer_A
+workspace_prod_customer_B
+</code></pre>
+<p>atau:</p>
+<pre><code>workspace_my_ai_coding_app_prod
+workspace_my_ai_coding_app_dev
+</code></pre>
+<p>Kesalahan umum: terlalu cepat memisahkan workspace.</p>
+<p>Misalnya elo punya coding agent, writing agent, dan research agent yang semuanya membantu user yang sama dalam project yang sama. Kalau mereka dipisah workspace, mereka tidak bisa berbagi konteks.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Agents that collaborate over the same product, user, or game state belong in the same workspace so each can retrieve what the others produced.”</p>
+</blockquote>
+<p>Atomic idea-nya:</p>
+<pre><code>Pisahkan workspace untuk isolasi.
+Satukan workspace untuk kolaborasi.
+</code></pre>
+<p>Jangan kebalik.</p>
+<h2 id="4-workspace-dalam-multi-agent">4. Workspace dalam multi-agent<a aria-hidden="true" class="anchor-heading icon-link" href="#4-workspace-dalam-multi-agent"></a></h2>
+<p>Kalau beberapa agent bekerja pada hal yang sama, mereka sebaiknya satu workspace.</p>
+<p>Contoh:</p>
+<pre><code>Workspace: project_alpha
+
+Peers:
+- user_raka
+- planner_agent
+- coder_agent
+- reviewer_agent
+</code></pre>
+<p>Kenapa satu workspace?</p>
+<p>Karena planner agent bisa membuat keputusan, coder agent mengeksekusi, reviewer agent mengecek. Mereka butuh shared memory.</p>
+<p>Kalau dipisah workspace:</p>
+<pre><code>planner_agent tidak tahu keputusan coder_agent
+reviewer_agent tidak tahu konteks planner_agent
+user harus mengulang semua konteks
+</code></pre>
+<p>Tapi kalau agent tidak boleh saling memengaruhi, pisahkan.</p>
+<p>Contoh:</p>
+<pre><code>workspace_customer_A_support
+workspace_customer_B_support
+</code></pre>
+<p>Customer A tidak boleh melihat atau dipengaruhi memory Customer B.</p>
+<p>Jadi rule-nya:</p>
+<pre><code>Shared state → same workspace
+Hard isolation → separate workspace
+</code></pre>
+<h2 id="5-peer-design-siapa-yang-harus-jadi-peer">5. Peer design: siapa yang harus jadi peer?<a aria-hidden="true" class="anchor-heading icon-link" href="#5-peer-design-siapa-yang-harus-jadi-peer"></a></h2>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Any persistent participant whose messages should be attributed or reasoned about.”</p>
+</blockquote>
+<p>Jadi peer adalah entitas yang:</p>
+<ul>
+<li>punya identitas berkelanjutan</li>
+<li>muncul di banyak interaksi</li>
+<li>message-nya perlu diatribusikan</li>
+<li>perilaku/preferensinya perlu dipahami</li>
+</ul>
+<p>Contoh peer:</p>
+<pre><code>users
+agents
+assistants
+NPCs
+students
+customers
+</code></pre>
+<p>Bisa juga entitas non-manusia kalau memang persisten:</p>
+<pre><code>project_alpha
+repository_backend
+game_world_state
+support_customer_123
+</code></pre>
+<p>Tapi hati-hati: jangan semua hal dijadikan peer. Kalau entitas tidak perlu dimodelkan, cukup simpan sebagai metadata atau message content.</p>
+<p>Atomic distinction:</p>
+<pre><code>Peer = entitas yang ingin dipahami lintas waktu.
+Metadata = atribut pendukung.
+Message = event/data yang terjadi.
+</code></pre>
+<p>Contoh salah:</p>
+<pre><code>Peer:
+- button_click
+- page_view
+- notification_01
+</code></pre>
+<p>Itu lebih cocok jadi message/event, bukan peer.</p>
+<p>Contoh benar:</p>
+<pre><code>Peer:
+- user_123
+- support_agent
+- customer_account_456
+</code></pre>
+<h2 id="6-peer-id-satu-entitas-satu-id-stabil">6. Peer ID: satu entitas, satu ID stabil<a aria-hidden="true" class="anchor-heading icon-link" href="#6-peer-id-satu-entitas-satu-id-stabil"></a></h2>
+<p>Ini salah satu poin paling praktis.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Give each real-world entity one stable peer ID and reuse it everywhere.”</p>
+</blockquote>
+<p>Kenapa? Karena peer ID adalah jangkar representation.</p>
+<p>Kalau satu orang dibuat dengan banyak ID:</p>
+<pre><code>alice
+alice-discord
+alice-slack
+alice-web
+</code></pre>
+<p>Honcho akan membangun tiga atau empat representation berbeda.</p>
+<p>Akibatnya:</p>
+<pre><code>memory Alice di Discord tidak nyambung ke Alice di web
+agent melihat Alice sebagai beberapa orang berbeda
+cross-session continuity rusak
+</code></pre>
+<p>Page menyebut ini sebagai common mistake:</p>
+<blockquote>
+<p>“Splitting one identity across peer IDs.”</p>
+</blockquote>
+<p>Pattern yang sehat:</p>
+<pre><code>Peer ID utama:
+user_12345
+</code></pre>
+<p>Lalu channel source disimpan sebagai metadata atau alias:</p>
+<pre><code>{
+  "aliases": ["alice", "alice_discord", "alice_slack"],
+  "discord_id": "491827364",
+  "slack_id": "U123"
+}
+</code></pre>
+<p>Kalau app multi-channel, page menyarankan prefix ID by source, misalnya:</p>
+<pre><code>discord_491827364
+</code></pre>
+<p>Tapi ini perlu dibaca hati-hati. Prefix by source bagus kalau identitas memang hanya pasti di level source. Kalau elo sudah tahu Discord user dan Slack user itu orang yang sama, lebih baik satukan ke satu stable canonical ID, lalu simpan source ID sebagai alias.</p>
+<p>Atomic rule:</p>
+<pre><code>Kalau mau unified memory, satu entitas harus punya satu canonical peer ID.
+</code></pre>
+<h2 id="7-peer-card-dan-alias">7. Peer card dan alias<a aria-hidden="true" class="anchor-heading icon-link" href="#7-peer-card-dan-alias"></a></h2>
+<p>Page menyebut kalau peer punya banyak nama, simpan alias di peer card dengan <code>set_card()</code> / <code>setCard()</code>.</p>
+<p>Ini penting karena nama manusia tidak stabil:</p>
+<pre><code>Raka
+raka.dev
+@raka_ai
+raka@gmail.com
+</code></pre>
+<p>Kalau semua jadi peer ID terpisah, memory pecah.</p>
+<p>Lebih baik:</p>
+<pre><code>peer_id: user_raka_001
+
+peer_card:
+name: Raka
+aliases:
+- raka.dev
+- @raka_ai
+- raka@gmail.com
+</code></pre>
+<p>Dengan begitu representation tetap satu, tapi Honcho tetap tahu variasi identitasnya.</p>
+<h2 id="8-session-design-session-harus-diskop-berdasarkan-apa">8. Session design: session harus diskop berdasarkan apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#8-session-design-session-harus-diskop-berdasarkan-apa"></a></h2>
+<p>Session adalah temporal boundary. Page bilang session memengaruhi:</p>
+<pre><code>- bagaimana summaries dibuat
+- bagaimana context diambil
+- kapan reasoning fires
+</code></pre>
+<p>Jadi session bukan sekadar “chat id”. Session adalah keputusan desain: konteks lokal ini harus terus nyambung atau reset?</p>
+<p>Page memberi beberapa pattern umum.</p>
+<h3 id="pattern-1-per-conversation">Pattern 1: Per-conversation<a aria-hidden="true" class="anchor-heading icon-link" href="#pattern-1-per-conversation"></a></h3>
+<p>Session = setiap chat thread baru.</p>
+<p>Contoh:</p>
+<pre><code>ChatGPT-style UI
+Claude Code thread
+satu percakapan = satu session
+</code></pre>
+<p>Cocok kalau setiap thread punya konteks berbeda dan wajar direset.</p>
+<h3 id="pattern-2-per-channel">Pattern 2: Per-channel<a aria-hidden="true" class="anchor-heading icon-link" href="#pattern-2-per-channel"></a></h3>
+<p>Session = channel/room persistent.</p>
+<p>Contoh:</p>
+<pre><code>Discord channel
+Slack thread
+group room
+</code></pre>
+<p>Cocok kalau konteks channel memang terus akumulatif.</p>
+<p>Misalnya channel <code>#project-alpha</code> berisi diskusi ongoing. Jangan bikin session baru tiap pesan, karena konteksnya harus mengalir.</p>
+<h3 id="pattern-3-per-interaction">Pattern 3: Per-interaction<a aria-hidden="true" class="anchor-heading icon-link" href="#pattern-3-per-interaction"></a></h3>
+<p>Session = satu task atau encounter yang bounded.</p>
+<p>Contoh:</p>
+<pre><code>support ticket
+game encounter
+appointment
+sales call
+</code></pre>
+<p>Cocok kalau ada awal dan akhir yang jelas.</p>
+<h3 id="pattern-4-per-project">Pattern 4: Per-project<a aria-hidden="true" class="anchor-heading icon-link" href="#pattern-4-per-project"></a></h3>
+<p>Session = work area persisten.</p>
+<p>Contoh:</p>
+<pre><code>coding agent memory untuk satu repository
+</code></pre>
+<p>Cocok untuk agent coding. Satu repo bisa punya memory berkelanjutan: keputusan arsitektur, bug, test, convention, setup.</p>
+<h3 id="pattern-5-per-import">Pattern 5: Per-import<a aria-hidden="true" class="anchor-heading icon-link" href="#pattern-5-per-import"></a></h3>
+<p>Session = batch external data.</p>
+<p>Contoh:</p>
+<pre><code>import email
+import dokumen
+import meeting transcripts
+</code></pre>
+<p>Cocok kalau elo mau mengaitkan data eksternal ke peer tertentu tanpa menjadikannya chat normal.</p>
+<h2 id="9-kapan-bikin-session-baru-vs-reuse-session">9. Kapan bikin session baru vs reuse session?<a aria-hidden="true" class="anchor-heading icon-link" href="#9-kapan-bikin-session-baru-vs-reuse-session"></a></h2>
+<p>Page memberi rule:</p>
+<blockquote>
+<p>“Create a new session when context resets ... reuse one when context should keep accumulating.”</p>
+</blockquote>
+<p>Terjemahan praktis:</p>
+<p>Bikin session baru kalau:</p>
+<pre><code>- percakapan baru
+- topik baru
+- hari baru, kalau konteks harian penting
+- support ticket baru
+- task run baru
+- konteks lama tidak perlu dibawa secara lokal
+</code></pre>
+<p>Reuse session kalau:</p>
+<pre><code>- channel ongoing
+- persistent thread
+- project/repo yang sama
+- konteks lokal harus terus bertambah
+- low-volume input yang kalau dipecah terlalu kecil
+</code></pre>
+<p>Ini bukan sekadar rapi. Ini memengaruhi reasoning.</p>
+<h2 id="10-jangan-bikin-session-terlalu-tipis">10. Jangan bikin session terlalu tipis<a aria-hidden="true" class="anchor-heading icon-link" href="#10-jangan-bikin-session-terlalu-tipis"></a></h2>
+<p>Page memberi warning penting:</p>
+<blockquote>
+<p>“Don’t scope sessions too thin.”</p>
+</blockquote>
+<p>Alasannya: Honcho baru melakukan reasoning atas peer setelah akumulasi kira-kira <strong>~1.000 token dalam satu session</strong>.</p>
+<p>Kalau elo bikin banyak session kecil:</p>
+<pre><code>session_1: 80 token
+session_2: 120 token
+session_3: 50 token
+session_4: 90 token
+</code></pre>
+<p>Reasoning bisa tertunda karena masing-masing tidak melewati threshold.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Many tiny sessions each stall below that threshold.”</p>
+</blockquote>
+<p>Artinya data tidak hilang, tapi reasoning menunggu. Efeknya: representation lambat update.</p>
+<p>Atomic idea:</p>
+<pre><code>Session terlalu kecil = konteks lokal pecah + reasoning bisa stall.
+Session terlalu besar = konteks bisa terlalu campur.
+</code></pre>
+<p>Jadi pilih boundary yang natural.</p>
+<p>Untuk trickle inputs, misalnya user action log kecil-kecil, lebih baik append ke ongoing session daripada bikin session baru tiap event.</p>
+<h2 id="11-cross-session-reasoning-session-memory-vs-peer-memory">11. Cross-session reasoning: session memory vs peer memory<a aria-hidden="true" class="anchor-heading icon-link" href="#11-cross-session-reasoning-session-memory-vs-peer-memory"></a></h2>
+<p>Ini bagian yang sering bikin salah paham.</p>
+<p>Page menjelaskan:</p>
+<pre><code>Session memory = lokal ke satu interaction.
+Peer memory / representation = akumulasi lintas semua session yang melibatkan peer.
+</code></pre>
+<p>Jadi ada dua level memory:</p>
+<pre><code>Session-level:
+"apa yang terjadi di episode ini?"
+
+Peer-level:
+"apa yang kita pahami tentang entitas ini dari semua episode?"
+</code></pre>
+<p>Contoh:</p>
+<pre><code>Session A:
+User bahas sandboxing.
+
+Session B:
+User bahas Honcho memory.
+
+Session C:
+User bahas ekonomi Indonesia.
+</code></pre>
+<p>Session memory masing-masing tetap lokal. Tapi peer representation bisa menangkap pola lintas semuanya:</p>
+<pre><code>User likes deep structured analysis, compares systems via trade-offs, and cares about reliability.
+</code></pre>
+<h2 id="12-sessioncontext-dan-peer_target">12. <code>session.context()</code> dan <code>peer_target</code><a aria-hidden="true" class="anchor-heading icon-link" href="#12-sessioncontext-dan-peer_target"></a></h2>
+<p>Page menyebut common mistake:</p>
+<blockquote>
+<p>“Forgetting peer_target on session context.”</p>
+</blockquote>
+<p>Ini krusial.</p>
+<p><code>session.context()</code> secara default mengembalikan konteks session aktif:</p>
+<pre><code>summary session ini
+recent messages session ini
+</code></pre>
+<p>Tapi kalau elo ingin cross-session memory, perlu menambahkan <code>peer_target</code>.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“It becomes cross-session only through adding a peer_target which includes the peer representation.”</p>
+</blockquote>
+<p>Jadi:</p>
+<pre><code>Tanpa peer_target:
+ambil konteks lokal session ini saja.
+
+Dengan peer_target:
+ambil konteks session ini + representation lintas sesi dari peer target.
+</code></pre>
+<p>Contoh:</p>
+<pre><code>User: "lanjut yang kemarin"
+</code></pre>
+<p>Kalau agent hanya pakai session context lokal, bisa bingung.</p>
+<p>Kalau agent pakai <code>peer_target=user_raka</code>, Honcho bisa memasukkan long-term representation user itu.</p>
+<p>Atomic rule:</p>
+<pre><code>Mau memory lintas sesi? Jangan cuma panggil session.context().
+Tambahkan peer_target.
+</code></pre>
+<h2 id="13-observe_me-kapan-dimatikan">13. <code>observe_me</code>: kapan dimatikan?<a aria-hidden="true" class="anchor-heading icon-link" href="#13-observe_me-kapan-dimatikan"></a></h2>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Should I set observe_me: false? Yes, for deterministic peers Honcho does not need to model, like bots or tool agents.”</p>
+</blockquote>
+<p>Default-nya <code>observe_me</code> aktif. Artinya Honcho membangun representation tentang peer itu.</p>
+<p>Tapi untuk peer deterministic, sering tidak perlu.</p>
+<p>Contoh peer yang bisa <code>observe_me: false</code>:</p>
+<pre><code>calculator_tool
+weather_bot
+retrieval_bot
+static_assistant
+scripted_agent
+</code></pre>
+<p>Kenapa dimatikan?</p>
+<p>Karena Honcho tidak perlu membangun model tentang sesuatu yang perilakunya sudah dikontrol dan tidak berevolusi.</p>
+<p>Kalau dibiarkan aktif:</p>
+<pre><code>- reasoning compute terbuang
+- representation noise bertambah
+- biaya naik
+</code></pre>
+<p>Tapi message dari peer itu tetap bisa disimpan agar peer lain punya session context.</p>
+<p>Ini nuance penting:</p>
+<pre><code>observe_me false ≠ jangan simpan message.
+observe_me false = jangan reason about peer itu sebagai entitas.
+</code></pre>
+<h2 id="14-kapan-observe_me-tetap-aktif">14. Kapan <code>observe_me</code> tetap aktif?<a aria-hidden="true" class="anchor-heading icon-link" href="#14-kapan-observe_me-tetap-aktif"></a></h2>
+<p>Untuk peer yang berubah atau perlu dipahami.</p>
+<p>Contoh:</p>
+<pre><code>user
+student
+customer
+evolving agent
+creative assistant
+NPC dengan karakter berkembang
+</code></pre>
+<p>Kalau user adalah peer utama, biasanya <code>observe_me</code> harus aktif.</p>
+<p>Karena tujuan Honcho adalah membangun representation tentang user dari waktu ke waktu.</p>
+<h2 id="15-observe_others-kapan-dipakai">15. <code>observe_others</code>: kapan dipakai?<a aria-hidden="true" class="anchor-heading icon-link" href="#15-observe_others-kapan-dipakai"></a></h2>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Do I need observe_others? Only when a peer needs its own perspective on another participant.”</p>
+</blockquote>
+<p>Ini tidak perlu dinyalakan semua tempat.</p>
+<p>Gunakan <code>observe_others</code> kalau butuh perspektif relatif.</p>
+<p>Contoh:</p>
+<pre><code>games
+multi-agent systems
+parent/subagent workflows
+group chat simulation
+</code></pre>
+<p>Misalnya:</p>
+<pre><code>Bob hanya tahu Alice dari session 1 dan 2.
+Charlie hanya tahu Alice dari session 3.
+</code></pre>
+<p>Maka Bob’s representation of Alice dan Charlie’s representation of Alice harus beda.</p>
+<p>Ini penting untuk simulation realism dan trust.</p>
+<p>Kalau semua peer tahu semua hal, agent jadi omniscient.</p>
+<h2 id="16-jangan-nyalakan-observe_others-sembarangan">16. Jangan nyalakan <code>observe_others</code> sembarangan<a aria-hidden="true" class="anchor-heading icon-link" href="#16-jangan-nyalakan-observe_others-sembarangan"></a></h2>
+<p>Common mistake dari page:</p>
+<blockquote>
+<p>“Turning on observe_others everywhere.”</p>
+</blockquote>
+<p>Kenapa salah?</p>
+<p>Karena directional representations kuat, tapi kompleks.</p>
+<p>Kalau setiap peer mengamati setiap peer lain, jumlah representation bisa meledak.</p>
+<p>Contoh session dengan 10 peer:</p>
+<pre><code>Setiap peer bisa punya representation tentang 9 peer lain.
+</code></pre>
+<p>Itu menambah:</p>
+<pre><code>- compute
+- storage
+- retrieval complexity
+- risiko perspective leakage
+- maintenance cost
+</code></pre>
+<p>Jadi gunakan hanya kalau memang perlu “siapa tahu apa tentang siapa”.</p>
+<p>Untuk banyak aplikasi biasa, cukup model user sebagai peer, tidak perlu setiap agent membangun representation tentang agent lain.</p>
+<h2 id="17-common-mistakes-bedah-satu-satu">17. Common mistakes: bedah satu-satu<a aria-hidden="true" class="anchor-heading icon-link" href="#17-common-mistakes-bedah-satu-satu"></a></h2>
+<h3 id="mistake-1-splitting-one-identity-across-peer-ids">Mistake 1: Splitting one identity across peer IDs<a aria-hidden="true" class="anchor-heading icon-link" href="#mistake-1-splitting-one-identity-across-peer-ids"></a></h3>
+<p>Ini bikin memory pecah.</p>
+<p>Salah:</p>
+<pre><code>alice
+alice-discord
+alice-cursor
+alice-web
+</code></pre>
+<p>Benar:</p>
+<pre><code>user_alice_001
+aliases: alice, alice-discord, alice-cursor, alice-web
+</code></pre>
+<p>Kalau memang ingin unified memory, satu entitas harus satu peer.</p>
+<h3 id="mistake-2-too-many-tiny-sessions">Mistake 2: Too many tiny sessions<a aria-hidden="true" class="anchor-heading icon-link" href="#mistake-2-too-many-tiny-sessions"></a></h3>
+<p>Ini bikin local context fragmented dan reasoning bisa stall di bawah ~1.000 token.</p>
+<p>Salah:</p>
+<pre><code>session per message
+session per small event
+session per tiny import row
+</code></pre>
+<p>Benar:</p>
+<pre><code>session per ongoing channel
+session per support ticket
+session per project
+session per import batch
+</code></pre>
+<h3 id="mistake-3-separating-agents-that-should-collaborate">Mistake 3: Separating agents that should collaborate<a aria-hidden="true" class="anchor-heading icon-link" href="#mistake-3-separating-agents-that-should-collaborate"></a></h3>
+<p>Kalau agent perlu shared product/customer/team context, taruh di workspace sama.</p>
+<p>Salah:</p>
+<pre><code>planner_workspace
+coder_workspace
+reviewer_workspace
+</code></pre>
+<p>padahal ketiganya kerja di project sama.</p>
+<p>Benar:</p>
+<pre><code>workspace_project_alpha
+peers: planner, coder, reviewer
+</code></pre>
+<h3 id="mistake-4-leaving-observe_me-on-for-assistants">Mistake 4: Leaving observe_me on for assistants<a aria-hidden="true" class="anchor-heading icon-link" href="#mistake-4-leaving-observe_me-on-for-assistants"></a></h3>
+<p>Kalau assistant deterministic dan elo tidak perlu modelnya, matikan.</p>
+<p>Salah:</p>
+<pre><code>observe_me aktif untuk calculator_bot
+</code></pre>
+<p>Benar:</p>
+<pre><code>observe_me false untuk deterministic tool agent
+</code></pre>
+<h3 id="mistake-5-turning-on-observe_others-everywhere">Mistake 5: Turning on observe_others everywhere<a aria-hidden="true" class="anchor-heading icon-link" href="#mistake-5-turning-on-observe_others-everywhere"></a></h3>
+<p>Gunakan hanya kalau butuh perspective-taking.</p>
+<p>Salah:</p>
+<pre><code>semua peer mengamati semua peer lain
+</code></pre>
+<p>Benar:</p>
+<pre><code>hanya peer yang butuh perspektif stateful terhadap peer lain
+</code></pre>
+<h3 id="mistake-6-forgetting-peer_target">Mistake 6: Forgetting peer_target<a aria-hidden="true" class="anchor-heading icon-link" href="#mistake-6-forgetting-peer_target"></a></h3>
+<p>Kalau mau cross-session context tapi tidak pakai <code>peer_target</code>, agent cuma dapat session-local context.</p>
+<p>Salah:</p>
+<pre><code>session.context()
+</code></pre>
+<p>Benar:</p>
+<pre><code>session.context(peer_target=user_id)
+</code></pre>
+<pre><code>Konsepnya, bukan syntax presisi.
+
+### Mistake 7: Blocking on processing
+
+Page bilang messages diproses async.
+
+Jangan polling atau menunggu reasoning selesai sebelum app lanjut.
+
+Salah:
+
+</code></pre>
+<p>save message
+wait until reasoning done
+then respond</p>
+<pre><code>
+Benar:
+
+</code></pre>
+<p>save message
+continue app flow
+let reasoning update in background
+use available context opportunistically</p>
+<pre><code>
+Trade-off-nya: context terbaru mungkin belum langsung tersedia. Tapi app tetap responsif.
+
+## 18. Pattern untuk use case nyata
+
+### Use case: personal AI across tools
+
+Misalnya elo pakai Claude Code, Cursor, OpenCode, dan app sendiri.
+
+Pattern:
+
+</code></pre>
+<p>Workspace:
+shared_personal_workspace</p>
+<p>Peer:
+same user peer ID everywhere</p>
+<p>Sessions:
+per repo / per conversation / per task</p>
+<pre><code>
+Tujuannya: unified memory.
+
+Kalau tiap plugin pakai workspace dan peer ID berbeda, memory pecah.
+
+### Use case: coding agent per repository
+
+Pattern:
+
+</code></pre>
+<p>Workspace:
+coding_assistant</p>
+<p>Peers:
+user
+coding_agent
+repo_project_alpha</p>
+<p>Sessions:
+per-project atau per-repo</p>
+<pre><code>
+Kalau repo butuh memory panjang, pakai session per-project/repo. Kalau tiap task dibuat session kecil, keputusan arsitektur bisa terfragmentasi.
+
+### Use case: customer support SaaS
+
+Pattern:
+
+</code></pre>
+<p>Workspace:
+per tenant/customer org jika butuh isolasi keras</p>
+<p>Peers:
+customer_user
+support_agent
+billing_agent</p>
+<p>Sessions:
+per support ticket</p>
+<pre><code>
+Kenapa per-ticket? Karena ticket punya boundary natural.
+
+Peer representation customer tetap lintas ticket.
+
+### Use case: Discord bot komunitas
+
+Pattern:
+
+</code></pre>
+<p>Workspace:
+community_server</p>
+<p>Peers:
+discord_user_id untuk tiap member
+bot_agent</p>
+<p>Sessions:
+per-channel atau per-thread</p>
+<pre><code>
+Kalau channel ongoing, reuse session. Kalau thread topic-specific, session per-thread.
+
+### Use case: game / NPC
+
+Pattern:
+
+</code></pre>
+<p>Workspace:
+game_world</p>
+<p>Peers:
+player
+NPC_A
+NPC_B</p>
+<p>Sessions:
+per encounter / per location / per scene</p>
+<p>observe_others:
+aktif untuk NPC yang perlu punya perspektif berbeda terhadap player</p>
+<pre><code>
+Ini salah satu kasus di mana `observe_others` masuk akal.
+
+NPC A boleh tahu sejarah dengan player. NPC B tidak boleh tahu kalau belum pernah bertemu.
+
+## 19. Linking: bagaimana design pattern nyambung ke architecture, reasoning, representation
+
+Kita sambungkan semua:
+
+Architecture memberi bentuk:
+
+</code></pre>
+<p>Workspace → Peer → Session → Message</p>
+<pre><code>
+Reasoning memproses message:
+
+</code></pre>
+<p>Message → reasoning → conclusions/summaries/peer cards</p>
+<pre><code>
+Representation menyimpan hasil belajar:
+
+</code></pre>
+<p>Conclusions + summaries + peer cards → peer representation</p>
+<pre><code>
+Design patterns memastikan input ke sistem ini tidak rusak.
+
+Kalau workspace salah, isolation salah.
+
+Kalau peer ID salah, representation pecah.
+
+Kalau session salah, summary dan batching salah.
+
+Kalau observation salah, perspective salah.
+
+Kalau lupa peer_target, context retrieval salah.
+
+Jadi design pattern adalah lapisan “information architecture” untuk memory.
+
+</code></pre>
+<p>Bad design pattern → bad memory
+Bad memory → bad context
+Bad context → bad agent behavior</p>
+<pre><code>
+## 20. Insight penutup
+
+★ Insight ─────────────────────────
+Kesalahan umum orang waktu pakai memory system adalah langsung mikir “cara retrieve-nya gimana?”
+
+Di Honcho, pertanyaan pertama harusnya:
+“Gue mau memisahkan dunia apa?” → workspace
+“Gue mau memodelkan siapa?” → peer
+“Episode interaksinya apa?” → session
+“Siapa boleh tahu apa tentang siapa?” → observation
+“Context lokal atau lintas sesi?” → peer_target
+
+Kalau lima keputusan ini benar, reasoning punya bahan yang bersih. Kalau salah, model sebagus apa pun cuma akan mengolah kekacauan.
+───────────────────────────────────
+
+## 21. Korelasi dengan konsep lain
+
+Konsep pertama: **domain-driven design**.
+
+Di DDD, lo harus menentukan bounded context dan identity. Honcho mirip:
+
+</code></pre>
+<p>Workspace = bounded context / isolation boundary
+Peer = entity dengan identity
+Session = interaction aggregate / episode
+Message = event
+Representation = projection/state hasil reasoning</p>
+<pre><code>
+Bedanya: DDD biasanya deterministic business logic. Honcho memakai reasoning model untuk membangun state interpretatif.
+
+Konsep kedua: **database schema design**.
+
+Kalau schema salah, query jadi buruk. Di Honcho, kalau workspace/peer/session salah, memory retrieval juga buruk.
+
+Bedanya: schema database biasanya tentang tabel dan relasi. Design pattern Honcho tentang identitas, konteks, dan perspektif.
+
+Konsep ketiga: **Zettelkasten**.
+
+Zettelkasten menuntut atomic notes dan linking yang benar. Honcho menuntut atomic identity dan context boundary yang benar.
+
+Bedanya: Zettelkasten idea-centric. Honcho peer-centric.
+
+Kesimpulan pendeknya: **Design Patterns Honcho adalah panduan supaya memory agent tidak bocor, tidak pecah, tidak terlalu kecil, dan tidak terlalu omniscient. Prinsipnya: workspace untuk isolasi, peer untuk identitas jangka panjang, session untuk konteks aktif, observation untuk perspektif, dan peer_target untuk memory lintas sesi.**
+
+## Related documents
+
+- [[notes.agentic-engineering.honcho.architecture]]
+- [[notes.agentic-engineering.honcho.peer-representations]]
+- [[notes.agentic-engineering.honcho.reasoning]]
+- [[notes.agentic-engineering.honcho.stateful-memory]]
+
+</code></pre>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">memory (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.hermes-agent.memory-providers">Memory Providers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.peer-representations">Peer Representations</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.reasoning">Reasoning</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

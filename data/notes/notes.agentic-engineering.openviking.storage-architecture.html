@@ -1,0 +1,189 @@
+<h1 id="openviking-storage-architecture">OpenViking storage architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#openviking-storage-architecture"></a></h1>
+<p>Link: <a href="https://docs.openviking.ai/en/concepts/05-storage">https://docs.openviking.ai/en/concepts/05-storage</a></p>
+<p><strong>Storage Architecture di OpenViking adalah desain penyimpanan internal yang memisahkan konten asli dari indeks pencarian semantic</strong>. Ini bukan sekadar "di-save di folder mana", tapi cara OpenViking menjaga agar context bisa dibaca seperti filesystem sekaligus dicari seperti vector database.</p>
+<h2 id="1-pertanyaan-kunci-yang-gue-pegang">1. Pertanyaan kunci yang gue pegang<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci-yang-gue-pegang"></a></h2>
+<ol>
+<li>Kenapa OpenViking memisahkan content storage dan index storage?</li>
+<li>Apa peran VikingFS?</li>
+<li>Apa yang disimpan AGFS?</li>
+<li>Apa yang disimpan Vector Index?</li>
+<li>Bagaimana URI <code>viking://...</code> dipetakan ke lokasi fisik?</li>
+<li>Bagaimana relation antar resource disimpan?</li>
+<li>Bagaimana OpenViking menjaga konsistensi saat delete atau move?</li>
+</ol>
+<h2 id="2-storage-architecture-menurut-gue">2. Storage Architecture menurut gue<a aria-hidden="true" class="anchor-heading icon-link" href="#2-storage-architecture-menurut-gue"></a></h2>
+<p>Kalau disederhanakan, OpenViking punya dua dunia penyimpanan utama:</p>
+<ul>
+<li><strong>AGFS</strong> menyimpan isi asli: L0, L1, L2, multimedia, dan relations.</li>
+<li><strong>Vector Index</strong> menyimpan peta semantic: URI, vector, metadata, abstract.</li>
+</ul>
+<p>Di atas keduanya ada <strong>VikingFS</strong>: lapisan URI abstraction yang menerjemahkan <code>viking://...</code> ke storage fisik dan mengatur operasi read, write, move, delete, relation, dan find.</p>
+<p>Analoginya simpel:</p>
+<ul>
+<li>AGFS = rak buku dan isi bukunya.</li>
+<li>Vector Index = katalog perpustakaan.</li>
+<li>VikingFS = pustakawan yang tahu cara menerjemahkan "cari auth docs" menjadi lokasi, ringkasan, dan isi.</li>
+</ul>
+<p>Kalau katalog rusak, buku tetap ada. Kalau buku dipindah, katalog harus ikut diperbarui.</p>
+<h2 id="3-kenapa-harus-dipisah">3. Kenapa harus dipisah?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-kenapa-harus-dipisah"></a></h2>
+<p>OpenViking memisahkan dua layer karena tugasnya berbeda.</p>
+<p>AGFS butuh durability, hierarki, dukungan file multimodal, dan operasi file klasik. Vector Index butuh kecepatan similarity search, filter metadata, dan recall hybrid.</p>
+<p>Kalau dua tanggung jawab ini dicampur, vector store bisa berubah jadi gudang penuh konten:</p>
+<ul>
+<li>duplikasi data,</li>
+<li>ketidaksinkronan versi,</li>
+<li>storage mahal,</li>
+<li>delete/move susah,</li>
+<li>debug lebih rumit.</li>
+</ul>
+<p>Dengan pemisahan:</p>
+<ul>
+<li>AGFS jadi source of truth,</li>
+<li>Vector Index jadi search accelerator.</li>
+</ul>
+<h2 id="4-apa-peran-vikingfs">4. Apa peran VikingFS?<a aria-hidden="true" class="anchor-heading icon-link" href="#4-apa-peran-vikingfs"></a></h2>
+<p>VikingFS adalah lapisan abstraksi URI.</p>
+<p>Dia mengurus:</p>
+<ul>
+<li>menerjemahkan <code>viking://...</code> ke lokasi fisik,</li>
+<li>membaca dan menulis di AGFS,</li>
+<li>memindah dan menghapus resource,</li>
+<li>mengelola relation,</li>
+<li>mencari dengan Vector Index.</li>
+</ul>
+<p>Jadi ketika agent memanggil:</p>
+<pre class="language-python"><code class="language-python">client<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token string">"viking://resources/docs/auth"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>VikingFS mengarahkan ke AGFS.</p>
+<p>Ketika agent memanggil:</p>
+<pre class="language-python"><code class="language-python">client<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">"authentication methods"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>VikingFS/ Search layer pakai Vector Index untuk menemukan URI kandidat, lalu konten asli tetap dibaca dari AGFS.</p>
+<h2 id="5-apa-yang-disimpan-agfs">5. Apa yang disimpan AGFS?<a aria-hidden="true" class="anchor-heading icon-link" href="#5-apa-yang-disimpan-agfs"></a></h2>
+<p>AGFS adalah backend content storage. Dia menyimpan:</p>
+<ul>
+<li><code>.abstract.md</code> = L0,</li>
+<li><code>.overview.md</code> = L1,</li>
+<li>file asli / folder = L2,</li>
+<li>multimedia (image, audio, video),</li>
+<li><code>.relations.json</code> = graph relation antar resource.</li>
+</ul>
+<p>Page juga menulis bahwa AGFS sudah diimplementasi ulang sebagai Rust RAGFS. Artinya backend content storage bisa optimal dan portable.</p>
+<p>Intinya:</p>
+<ul>
+<li>AGFS menyimpan konten penuh,</li>
+<li>AGFS menyimpan struktur filesystem,</li>
+<li>AGFS menyimpan relations.</li>
+</ul>
+<h2 id="6-apa-yang-disimpan-vector-index">6. Apa yang disimpan Vector Index?<a aria-hidden="true" class="anchor-heading icon-link" href="#6-apa-yang-disimpan-vector-index"></a></h2>
+<p>Vector Index adalah semantic index storage.</p>
+<p>Dia menyimpan:</p>
+<ul>
+<li><code>uri</code>,</li>
+<li><code>parent_uri</code>,</li>
+<li><code>context_type</code>,</li>
+<li><code>is_leaf</code>,</li>
+<li><code>vector</code>,</li>
+<li><code>sparse_vector</code>,</li>
+<li><code>abstract</code>,</li>
+<li><code>name</code>,</li>
+<li><code>description</code>,</li>
+<li><code>created_at</code>,</li>
+<li><code>active_count</code>.</li>
+</ul>
+<p>Catatan penting:</p>
+<ul>
+<li>Vector Index tidak menyimpan isi file penuh.</li>
+<li>Abstract L0 boleh ditempatkan di index karena dipakai untuk recall cepat.</li>
+<li>Isi penuh dibaca dari AGFS.</li>
+</ul>
+<p>Kalau index hanya menyimpan peta dan metadata, ia tetap ringan dan bisa dibangun ulang dari AGFS.</p>
+<h2 id="7-bagaimana-uri-viking-dipetakan">7. Bagaimana URI <code>viking://...</code> dipetakan?<a aria-hidden="true" class="anchor-heading icon-link" href="#7-bagaimana-uri-viking-dipetakan"></a></h2>
+<p><code>viking://</code> adalah alamat konseptual. VikingFS yang menerjemahkan ke lokasi fisik.</p>
+<p>Contoh sederhana:</p>
+<ul>
+<li><code>viking://resources/docs/auth</code> → <code>/local/{account}/resources/docs/auth</code></li>
+<li><code>viking://user/memories/preferences</code> → <code>/local/{account}/user/{user}/memories/preferences</code></li>
+<li><code>viking://agent/skills/search-web</code> → <code>/local/{account}/agent/{agent}/skills/search-web</code></li>
+</ul>
+<p>URI tetap stabil walau storage fisik diubah. Ini penting untuk portability dan konsistensi.</p>
+<h2 id="8-bagaimana-relation-disimpan">8. Bagaimana relation disimpan?<a aria-hidden="true" class="anchor-heading icon-link" href="#8-bagaimana-relation-disimpan"></a></h2>
+<p>OpenViking tidak hanya memakai hierarchy. Ia juga menyimpan graph relation melalui <code>.relations.json</code>.</p>
+<p>Ketika resource saling terkait, VikingFS bisa menyimpan link seperti:</p>
+<pre class="language-python"><code class="language-python">viking_fs<span class="token punctuation">.</span>link<span class="token punctuation">(</span>
+  from_uri<span class="token operator">=</span><span class="token string">"viking://resources/docs/auth"</span><span class="token punctuation">,</span>
+  uris<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"viking://resources/docs/security"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  reason<span class="token operator">=</span><span class="token string">"Related security docs"</span>
+<span class="token punctuation">)</span>
+</code></pre>
+<p>Lalu relation diambil via:</p>
+<pre class="language-python"><code class="language-python">relations <span class="token operator">=</span> viking_fs<span class="token punctuation">.</span>relations<span class="token punctuation">(</span><span class="token string">"viking://resources/docs/auth"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Ini penting karena tidak semua hubungan bisa direpresentasikan lewat folder tree saja.</p>
+<h2 id="9-bagaimana-konsistensi-dijaga-saat-deletemove">9. Bagaimana konsistensi dijaga saat delete/move?<a aria-hidden="true" class="anchor-heading icon-link" href="#9-bagaimana-konsistensi-dijaga-saat-deletemove"></a></h2>
+<p>Konsistensi adalah kunci karena AGFS dan Vector Index dipisah.</p>
+<h3 id="delete-sync">Delete sync<a aria-hidden="true" class="anchor-heading icon-link" href="#delete-sync"></a></h3>
+<p>Kalau resource dihapus lewat VikingFS,</p>
+<ul>
+<li>AGFS menghapus konten,</li>
+<li>Vector Index menghapus semua record dengan URI prefix yang sama.</li>
+</ul>
+<p>Ini mencegah dangling index references.</p>
+<h3 id="move-sync">Move sync<a aria-hidden="true" class="anchor-heading icon-link" href="#move-sync"></a></h3>
+<p>Kalau resource dipindah/rename,</p>
+<ul>
+<li>AGFS memindah file/directory,</li>
+<li>Vector Index update <code>uri</code> dan <code>parent_uri</code>.</li>
+</ul>
+<p>Kalau tidak, search akan kembali ke path lama yang tidak ada.</p>
+<h2 id="10-kenapa-ini-penting">10. Kenapa ini penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#10-kenapa-ini-penting"></a></h2>
+<p>OpenViking menerapkan prinsip:</p>
+<ul>
+<li>AGFS = file content source of truth,</li>
+<li>Vector Index = search catalog,</li>
+<li>VikingFS = URI abstraction &#x26; orchestration.</li>
+</ul>
+<p>Dengan cara ini:</p>
+<ul>
+<li>search cepat,</li>
+<li>content tetap konsisten,</li>
+<li>delete/move bisa dijaga,</li>
+<li>file bisa dibaca sebagai filesystem,</li>
+<li>query bisa ditemukan sebagai vector search.</li>
+</ul>
+<h2 id="11-apa-implikasi-untuk-agent">11. Apa implikasi untuk agent?<a aria-hidden="true" class="anchor-heading icon-link" href="#11-apa-implikasi-untuk-agent"></a></h2>
+<p>Agent bisa:</p>
+<ul>
+<li><code>find</code> candidate via Vector Index,</li>
+<li><code>read</code> actual content via AGFS,</li>
+<li><code>abstract</code>/<code>overview</code> via AGFS,</li>
+<li><code>follow relations</code> via <code>.relations.json</code>.</li>
+</ul>
+<p>Kalau agent hanya tahu <code>viking://</code> URI, dia tidak perlu tahu detail storage fisik.</p>
+<h2 id="12-related-documents">12. Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#12-related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault/daily.journal.2026.06.03 (Private)</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openviking (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">storage (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

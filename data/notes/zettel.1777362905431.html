@@ -1,0 +1,50 @@
+<h1 id="grounding-adalah-menyuplai-konteks-yang-hilang-saat-inference-tanpa-mengubah-model">Grounding adalah menyuplai konteks yang hilang saat inference tanpa mengubah model<a aria-hidden="true" class="anchor-heading icon-link" href="#grounding-adalah-menyuplai-konteks-yang-hilang-saat-inference-tanpa-mengubah-model"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Yang gue tangkap dari quote ini adalah: kalau model nggak tahu sesuatu, itu nggak selalu berarti kita harus melatih ulang atau ganti model. Kita bisa memberi model konteks yang hilang pada saat inference agar jawabannya terikat ke fakta dan domain yang benar.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>“You can work around this constraint by providing the missing context within your prompt at inference time. This is referred to as AI grounding.”</p>
+</blockquote>
+<h2 id="kenapa-ini-core">Kenapa ini core<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-core"></a></h2>
+<p>Quote ini penting karena dia memindahkan solusi dari perubahan model ke perubahan input. Sebelum ini, gampang berpikir bahwa knowledge gap harus diatasi dengan fine-tuning, model baru, atau data training tambahan. Di sini buku bilang: tunggu dulu, coba dulu tambahkan konteks pada runtime.</p>
+<h2 id="apa-yang-bikin-ini-beda">Apa yang bikin ini beda<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-bikin-ini-beda"></a></h2>
+<ul>
+<li>"work around this constraint" artinya batasan model tetap ada.</li>
+<li>"missing context" artinya yang hilang bukan kemampuan bahasa, tapi fakta domain, data privat, atau informasi terbaru.</li>
+<li>"within your prompt" artinya grounding awalnya masih sederhana: letakkan informasi relevan langsung di prompt.</li>
+<li>"at inference time" artinya ini adalah intervensi runtime, bukan training time.</li>
+</ul>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>Grounding adalah strategi runtime, bukan perubahan model.</li>
+<li>Ini jauh lebih cepat, murah, dan aman untuk data privat dibanding fine-tuning.</li>
+<li>Ini cocok untuk hal-hal yang dinamis seperti dokumen produk terbaru, ticket state, atau kebijakan internal.</li>
+<li>Ini memberi batas yang jelas antara knowledge injection dan model skill change.</li>
+<li>Manual grounding yang bekerja pada tahap awal nanti bisa diskalakan menjadi RAG.</li>
+</ul>
+<h2 id="mengapa-ini-penting-untuk-arsitektur-ai">Mengapa ini penting untuk arsitektur AI<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting-untuk-arsitektur-ai"></a></h2>
+<p>Momen ini buat gue adalah pergeseran dari "model-centric" ke "system-centric". Ada kemampuan model, tapi bukan itu satu-satunya variabel. Arsitektur sistem di sekeliling model punya peran utama dalam memastikan outputnya grounded.</p>
+<h2 id="hubungan">Hubungan<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777272449641">LLM membutuhkan grounding untuk bisa berguna</a> — grounding umum</li>
+<li><a href="/sotoy/notes/zettel.1777272449651">Local model membantu belajar integrasi tanpa vendor noise</a> — local model sebagai media belajar integrasi</li>
+<li><a href="/sotoy/notes/zettel.1777272449645">Inference dan training adalah dua tahap berbeda</a> — inference vs training</li>
+<li><a href="/sotoy/notes/zettel.1777272449647">Hallucination adalah konsekuensi arsitektural LLM</a> — hallucination</li>
+<li><a href="/sotoy/notes/zettel.1777349193467">Nilai model dibatasi oleh distribusi data latihnya</a> — knowledge limit dan grounding</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Part I</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">grounding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">inference-vs-training (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">part-i (Private)</a></li>
+</ol>

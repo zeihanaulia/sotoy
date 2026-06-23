@@ -1,0 +1,234 @@
+<h1 id="openviking-context-extraction">OpenViking context extraction<a aria-hidden="true" class="anchor-heading icon-link" href="#openviking-context-extraction"></a></h1>
+<p>Link: <a href="https://docs.openviking.ai/en/concepts/06-extraction">https://docs.openviking.ai/en/concepts/06-extraction</a></p>
+<p><strong>Context Extraction di OpenViking adalah proses mengubah input mentah seperti PDF, Markdown, HTML, repo code, image, video, audio, skill, atau session history menjadi struktur <code>viking://...</code> yang punya L0/L1, bisa dibaca dari AGFS, dan bisa dicari lewat Vector Index</strong>.</p>
+<p>Ini bukan cuma summarization. Lebih tepat: <strong>pipeline ingestion + structuring + semantic generation + vectorization</strong>.</p>
+<h2 id="1-pertanyaan-kunci-yang-gue-pegang">1. Pertanyaan kunci yang gue pegang<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci-yang-gue-pegang"></a></h2>
+<ol>
+<li>Kenapa OpenViking memisahkan parsing dan semantic generation?</li>
+<li>Apa yang dilakukan Parser?</li>
+<li>Apa yang dilakukan TreeBuilder?</li>
+<li>Apa yang dilakukan SemanticQueue?</li>
+<li>Bagaimana L0/L1 dibuat secara bottom-up?</li>
+<li>Bagaimana code repository diproses lewat AST Mode?</li>
+<li>Bagaimana Resource, Memory, dan Skill punya flow extraction yang berbeda?</li>
+</ol>
+<h2 id="2-kenapa-parsing-dan-semantic-generation-dipisah">2. Kenapa parsing dan semantic generation dipisah?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-parsing-dan-semantic-generation-dipisah"></a></h2>
+<p>Page ini menegaskan satu prinsip: parsing dan semantics harus dipisah.</p>
+<ul>
+<li><code>Parser</code> hanya membaca format, memecah struktur, dan menulis hasil sementara.</li>
+<li><code>SemanticQueue</code> menghasilkan makna: L0/L1, embeddings, vector index.</li>
+</ul>
+<p>Kenapa? Karena parsing harus deterministik, cepat, dan bebas biaya LLM. Semantic generation mahal, lambat, dan harus bisa berjalan async.</p>
+<p>Atomic idea:</p>
+<pre><code>Parser membangun bentuk.
+SemanticQueue membangun makna.
+</code></pre>
+<p>Kalau dua ini dicampur, ingestion jadi lambat, mahal, dan debugging jadi susah.</p>
+<h2 id="3-parser--reader--temp-structurer">3. Parser = reader + temp structurer<a aria-hidden="true" class="anchor-heading icon-link" href="#3-parser--reader--temp-structurer"></a></h2>
+<p>Parser membaca format input dan mengubahnya jadi struktur file sementara di temp directory.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Parser handles document format conversion and structuring, creating file structure in temp directory.”</p>
+</blockquote>
+<p>Parser tidak memanggil LLM.</p>
+<p>Hasilnya adalah <code>ParseResult</code> yang mencakup:</p>
+<ul>
+<li><code>temp_dir_path</code></li>
+<li><code>source_format</code></li>
+<li><code>parser_name</code></li>
+<li><code>parse_time</code></li>
+<li><code>meta</code></li>
+</ul>
+<p>Jadi setelah parsing, OpenViking tahu di mana hasil sementara ada dan format asalnya.</p>
+<h3 id="format-input-yang-didukung">Format input yang didukung<a aria-hidden="true" class="anchor-heading icon-link" href="#format-input-yang-didukung"></a></h3>
+<ul>
+<li>Markdown (.md, .markdown)</li>
+<li>Plain text (.txt)</li>
+<li>PDF (.pdf)</li>
+<li>HTML (.html, .htm)</li>
+<li>Code (.py, .js, .go, dsb.)</li>
+<li>Image (.png, .jpg, dsb.)</li>
+<li>Video (.mp4, .avi, dsb.)</li>
+<li>Audio (.mp3, .wav, dsb.)</li>
+</ul>
+<p>Untuk code repository, parser juga hormat <code>.gitignore</code> dan mengabaikan direktori non-code yang umum.</p>
+<p>Atomic rule:</p>
+<pre><code>Parser tahu apa yang harus dimasukkan.
+Parser juga tahu apa yang harus diabaikan.
+</code></pre>
+<h2 id="4-treebuilder--temp--agfs--queue-semantic-jobs">4. TreeBuilder = temp → AGFS + queue semantic jobs<a aria-hidden="true" class="anchor-heading icon-link" href="#4-treebuilder--temp--agfs--queue-semantic-jobs"></a></h2>
+<p>Setelah Parser selesai, <code>TreeBuilder</code> memindahkan struktur sementara ke AGFS dan mendaftarkan pekerjaan semantic.</p>
+<p>Page menjelaskan flow utama:</p>
+<pre><code>1. Find document root
+2. Determine target URI
+3. Recursively move directory tree
+4. Clean up temp directory
+5. Queue semantic generation
+</code></pre>
+<h3 id="find-document-root">Find document root<a aria-hidden="true" class="anchor-heading icon-link" href="#find-document-root"></a></h3>
+<p>TreeBuilder memastikan result punya satu root konteks. Jika parsing menghasilkan banyak root tanpa struktur, konteks jadi ambigu.</p>
+<h3 id="determine-target-uri">Determine target URI<a aria-hidden="true" class="anchor-heading icon-link" href="#determine-target-uri"></a></h3>
+<p>TreeBuilder menempatkan hasil ke base URI sesuai scope:</p>
+<ul>
+<li><code>resources</code> → <code>viking://resources</code></li>
+<li><code>user</code>      → <code>viking://user</code></li>
+<li><code>agent</code>     → <code>viking://agent</code></li>
+</ul>
+<p>Scope ini menentukan world context: Resource, Memory, atau Skill.</p>
+<h3 id="move--cleanup--queue">Move + cleanup + queue<a aria-hidden="true" class="anchor-heading icon-link" href="#move--cleanup--queue"></a></h3>
+<p>TreeBuilder memindahkan file ke AGFS, kemudian menghapus temp.
+Dia tidak membuat L0/L1. Itu pekerjaan <code>SemanticQueue</code>.</p>
+<p>Atomic idea:</p>
+<pre><code>TreeBuilder = pemindah struktur.
+SemanticQueue = pembuat makna.
+</code></pre>
+<h2 id="5-semanticqueue--async-l0l1--vectorization">5. SemanticQueue = async L0/L1 + vectorization<a aria-hidden="true" class="anchor-heading icon-link" href="#5-semanticqueue--async-l0l1--vectorization"></a></h2>
+<p><code>SemanticQueue</code> adalah pipeline async yang membangun L0/L1 dan menghasilkan embeddings.</p>
+<p>Pesanannya biasanya berupa <code>SemanticMsg</code> yang membawa:</p>
+<ul>
+<li><code>uri</code></li>
+<li><code>context_type</code></li>
+<li><code>status</code></li>
+<li><code>job id</code></li>
+</ul>
+<p>Kenapa pakai queue?</p>
+<p>Karena L0/L1 sering perlu LLM/VLM call. Itu lebih lambat dan lebih mahal. Dengan queue, AGFS bisa terisi terlebih dahulu, lalu semantic processing berjalan di belakang layar.</p>
+<p>Atomic idea:</p>
+<pre><code>AGFS ready dulu.
+Semantic search menyusul.
+</code></pre>
+<h2 id="6-l0l1-dibuat-secara-bottom-up">6. L0/L1 dibuat secara bottom-up<a aria-hidden="true" class="anchor-heading icon-link" href="#6-l0l1-dibuat-secara-bottom-up"></a></h2>
+<p>SemanticQueue memproses directory dari bawah ke atas:</p>
+<ul>
+<li>buat L0/L1 untuk leaf nodes,</li>
+<li>kumpulkan abstract child,</li>
+<li>buat overview parent,</li>
+<li>naik ke root.</li>
+</ul>
+<p>Ini penting karena parent overview perlu tahu isi child sebelum bisa dirangkum.</p>
+<p>Contoh:</p>
+<ul>
+<li><code>oauth.md</code> → buat <code>oauth/.abstract.md</code> dan <code>oauth/.overview.md</code></li>
+<li><code>jwt.md</code> → buat <code>jwt/.abstract.md</code> dan <code>jwt/.overview.md</code></li>
+<li><code>api-keys.md</code> → buat <code>api-keys/.abstract.md</code> dan <code>api-keys/.overview.md</code></li>
+<li>lalu folder <code>auth/</code> → buat <code>.abstract.md</code>/<code>.overview.md</code> dari child abstracts</li>
+</ul>
+<p>Atomic idea:</p>
+<pre><code>Anak diringkas dulu.
+Orang tua merangkum anak-anaknya.
+</code></pre>
+<h2 id="7-ast-mode-untuk-code-repository">7. AST Mode untuk code repository<a aria-hidden="true" class="anchor-heading icon-link" href="#7-ast-mode-untuk-code-repository"></a></h2>
+<p>OpenViking punya mode khusus untuk repo code: AST Mode.</p>
+<p>Page menulis bahwa code processing bisa pakai tree-sitter untuk mengekstrak skeleton tanpa LLM, supaya proses lebih murah.</p>
+<h3 id="code_summary_mode"><code>code_summary_mode</code><a aria-hidden="true" class="anchor-heading icon-link" href="#code_summary_mode"></a></h3>
+<ul>
+<li><code>ast</code>: pakai AST skeleton untuk file besar, tidak memanggil LLM.</li>
+<li><code>llm</code>: selalu pakai LLM untuk code.</li>
+<li><code>ast_llm</code>: buat skeleton dulu, lalu ringkas dengan LLM.</li>
+</ul>
+<h3 id="mengapa-ast-mode-penting">Mengapa AST Mode penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ast-mode-penting"></a></h3>
+<p>Code repo bisa besar. Jika setiap file diringkas lewat LLM,</p>
+<ul>
+<li>biaya jauh lebih tinggi,</li>
+<li>proses lebih lambat,</li>
+<li>rate limit lebih berisiko.</li>
+</ul>
+<p>AST Mode membantu ketika agent hanya butuh struktur:</p>
+<ul>
+<li>imports</li>
+<li>class names</li>
+<li>method signatures</li>
+<li>function signatures</li>
+<li>docstring first lines</li>
+</ul>
+<p>Contoh:</p>
+<pre><code>class AuthClient(BaseClient):
+  def refresh_token(self, token: str) -> Optional[str]:
+</code></pre>
+<p>Untuk pertanyaan struktur code, AST sering sudah cukup.</p>
+<h2 id="8-tiga-mode-code-summary">8. Tiga mode code summary<a aria-hidden="true" class="anchor-heading icon-link" href="#8-tiga-mode-code-summary"></a></h2>
+<p><code>ast</code> = murah dan struktural.
+<code>llm</code> = kaya semantik tapi mahal.
+<code>ast_llm</code> = struktur dulu, lalu semantic summary.</p>
+<p>AST adalah optimasi, bukan single point of failure. Kalau AST gagal, pipeline fallback ke LLM.</p>
+<h2 id="9-resource-memory-dan-skill-punya-flow-berbeda">9. Resource, Memory, dan Skill punya flow berbeda<a aria-hidden="true" class="anchor-heading icon-link" href="#9-resource-memory-dan-skill-punya-flow-berbeda"></a></h2>
+<p>Flow extraction dasarnya sama, tapi target dan <code>context_type</code> berbeda.</p>
+<ul>
+<li>Resource → <code>viking://resources/...</code></li>
+<li>Memory   → <code>viking://user/memories/...</code> atau <code>viking://agent/memories/...</code></li>
+<li>Skill    → <code>viking://agent/skills/...</code></li>
+</ul>
+<p>Resource biasanya berasal dari file/link eksternal.
+Skill biasanya sudah berupa definisi capability.
+Memory lahir dari session commit.</p>
+<h2 id="10-kenapa-context-extraction-lebih-dari-summarization">10. Kenapa Context Extraction lebih dari summarization?<a aria-hidden="true" class="anchor-heading icon-link" href="#10-kenapa-context-extraction-lebih-dari-summarization"></a></h2>
+<p>Context Extraction adalah pabrik bahan mentah OpenViking.</p>
+<p>Input mentah belum berguna sampai dia:</p>
+<ol>
+<li>punya alamat <code>viking://...</code>,</li>
+<li>punya struktur folder,</li>
+<li>punya L0/L1 untuk navigasi,</li>
+<li>punya L2 sebagai detail asli,</li>
+<li>masuk Vector Index agar bisa retrieval.</li>
+</ol>
+<p>Jadi extraction adalah pipeline ingestion + structuring + semantic generation + vectorization.</p>
+<h2 id="11-hubungan-extraction-dengan-storage">11. Hubungan extraction dengan storage<a aria-hidden="true" class="anchor-heading icon-link" href="#11-hubungan-extraction-dengan-storage"></a></h2>
+<p>Flow lengkap:</p>
+<pre><code>Parser → temp tree
+TreeBuilder → AGFS
+SemanticQueue → L0/L1 ke AGFS
+EmbeddingQueue → Vector Index
+</code></pre>
+<p>Storage Architecture menyediakan tempat. Context Extraction menyediakan proses.</p>
+<h2 id="12-hubungan-extraction-dengan-context-layers">12. Hubungan extraction dengan context layers<a aria-hidden="true" class="anchor-heading icon-link" href="#12-hubungan-extraction-dengan-context-layers"></a></h2>
+<p>Context Layers adalah hasil:</p>
+<ul>
+<li><code>L0</code> = <code>.abstract.md</code></li>
+<li><code>L1</code> = <code>.overview.md</code></li>
+<li><code>L2</code> = original content</li>
+</ul>
+<p>Context Extraction adalah cara menghasilkan hasil itu.</p>
+<h2 id="13-hubungan-extraction-dengan-retrieval">13. Hubungan extraction dengan retrieval<a aria-hidden="true" class="anchor-heading icon-link" href="#13-hubungan-extraction-dengan-retrieval"></a></h2>
+<p>Retrieval bergantung pada kualitas extraction.</p>
+<pre><code>bad parsing → bad tree → bad L0/L1 → bad index → bad retrieval
+</code></pre>
+<h2 id="14-failure-mode-extraction">14. Failure mode extraction<a aria-hidden="true" class="anchor-heading icon-link" href="#14-failure-mode-extraction"></a></h2>
+<ul>
+<li>Parser terlalu agresif split.</li>
+<li>Parser kurang split.</li>
+<li><code>TreeBuilder</code> tidak menemukan root yang jelas.</li>
+<li><code>SemanticQueue</code> tertunda.</li>
+<li>LLM summary salah.</li>
+<li>AST skeleton kehilangan logic penting.</li>
+<li>Memory extraction salah kategori.</li>
+</ul>
+<h2 id="15-insight-penutup">15. Insight penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#15-insight-penutup"></a></h2>
+<p>★ Insight ─────────────────────────</p>
+<p>Context Extraction adalah titik di mana data mentah berubah menjadi context agent yang terstruktur, searchable, navigable, dan reusable. OpenViking tidak cukup hanya “menyimpulkan ringkasan”. Dia perlu menjadikan input mentah punya format <code>viking://</code>, folder tree, L0/L1, L2, dan index semantic.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault/daily.journal.2026.06.03 (Private)</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openviking (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-extraction (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

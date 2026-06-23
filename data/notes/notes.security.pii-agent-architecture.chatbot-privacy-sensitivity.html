@@ -1,0 +1,24 @@
+<h1 id="privacy-sensitive-chatbots-input-regurgitation-and-sanitization">Privacy-Sensitive Chatbots: Input Regurgitation and Sanitization<a aria-hidden="true" class="anchor-heading icon-link" href="#privacy-sensitive-chatbots-input-regurgitation-and-sanitization"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>Paper ini menemukan bahwa chatbot modern masih sering mengalirkan kembali PII dari prompt. Di aplikasi healthcare, personal assistant, dan hiring, model menerima data sensitif sebagai contoh atau record, dan output dapat mengembalikan informasi tersebut secara verbatim.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>Studi ini memperkenalkan konsep <code>Input Regurgitation</code> dan <code>Prompt-Induced Sanitization</code>. Input regurgitation mengukur seberapa sering model menyalin kembali PII. Prompt-induced sanitization mengukur apakah instruksi privasi dalam prompt dapat memaksa model untuk membersihkan output.</p>
+<h2 id="real-case-implementation">Real case implementation<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-implementation"></a></h2>
+<p>Implementasi nyata untuk agent adalah menempatkan sanitization di awal pipeline dan menggunakan prompt privacy hanya sebagai lapisan tambahan. Jika model digunakan untuk merangkum atau memproses dokumen sensitif, sistem harus memfilter input terlebih dahulu dan tidak bergantung pada model untuk menyingkirkan PII.</p>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>Temuan ini menegaskan bahwa fallback output sanitization bukanlah strategi privacy utama. Untuk user-supplied PII, desain agent terbaik adalah meminimalkan exposure input sejak awal, dengan prompt-induced sanitization sebagai penguat tambahan.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2305.15008">https://arxiv.org/abs/2305.15008</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">chatbot (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

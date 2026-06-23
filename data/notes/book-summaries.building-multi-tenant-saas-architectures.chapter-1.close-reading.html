@@ -1,0 +1,1227 @@
+<h1 id="chapter-1-close-reading--the-saas-mindset">Chapter 1 Close Reading — The SaaS Mindset<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-1-close-reading--the-saas-mindset"></a></h1>
+<p>Chapter 1 ini bukan sekadar bab pengantar bagi gue. Ini bagian yang bikin gue ngecek ulang apakah cara gue memikirkan SaaS sudah nyambung dengan yang dimaksud penulis.</p>
+<h2 id="tujuan-close-reading">Tujuan close reading<a aria-hidden="true" class="anchor-heading icon-link" href="#tujuan-close-reading"></a></h2>
+<p>Gue bikin close reading ini untuk:</p>
+<ul>
+<li>melihat alur pikir penulis per paragraf,</li>
+<li>ambil quotes yang paling berat,</li>
+<li>cari takeaway desain yang bisa gue pakai di sistem nyata,</li>
+<li>dan bikin sketsa logika visual supaya nggak cuma lepas di kepala.</li>
+</ul>
+<p>Kalau gue baca buku arsitektur serius, bukan cuma soal "apa isinya", tapi "kenapa susunan paragrafnya begini".</p>
+<h2 id="sketsa-model-visual">Sketsa model visual<a aria-hidden="true" class="anchor-heading icon-link" href="#sketsa-model-visual"></a></h2>
+<h3 id="figure-1-1--installed-software-model">Figure 1-1 — Installed software model<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-1--installed-software-model"></a></h3>
+<pre class="language-text"><code class="language-text">                 +----------------------+
+                 |         ISV          |
+                 |  builds the product  |
+                 +----------+-----------+
+                            |
+          +-----------------+-----------------+
+          |                                   |
+   +------+-----+                       +-----+------+
+   | Professional|                      | Operations |
+   |  Services   |                      |  Teams     |
+   +------+-----+                       +-----+------+
+          |                                   |
+   -------+-----------------------------------+------------------
+
+   +-------------------+   +-------------------+   +-------------------+
+   | Customer 1 Env    |   | Customer 2 Env    |   | Customer N Env    |
+   | Version A         |   | Version B         |   | Version X         |
+   | Customization 1   |   | Customization 2   |   | Customization ?   |
+   | Own infra / setup |   | Own infra / setup |   | Own infra / setup |
+   +-------------------+   +-------------------+   +-------------------+
+</code></pre>
+<p>Ini gambaran yang paling ngejelasin buat gue: satu vendor, banyak pulau environment customer, masing-masing versi dan custom beda. Ini mengunci argumentasinya di awal: cuma karena ada label "SaaS", bukan berarti semua orang lagi ngomongin platform bersama.</p>
+<h3 id="figure-1-2--shared-infrastructure-saas-model">Figure 1-2 — Shared infrastructure SaaS model<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-2--shared-infrastructure-saas-model"></a></h3>
+<pre class="language-text"><code class="language-text">                +--------------------------------------+
+                |   Management / Ops / Deployment      |
+                +------------------+-------------------+
+                                   |
+                     +-------------v-------------+
+                     |   Unified SaaS Platform   |
+                     | shared app + shared infra |
+                     +------+------+------+------+
+                            |      |      |
+                         Tenant1 Tenant2 TenantN
+</code></pre>
+<p>Ini model tradisional SaaS yang langsung kebayang kalau denger multi-tenancy: satu gedung besar, satu deployment, satu update untuk semua tenant.</p>
+<h3 id="figure-1-3--cross-cutting-saas-capabilities">Figure 1-3 — Cross-cutting SaaS capabilities<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-3--cross-cutting-saas-capabilities"></a></h3>
+<pre class="language-text"><code class="language-text">                +----------------------+
+                | Onboarding / Identity|
+                +----------+-----------+
+                           |
+   +-----------------------v------------------------+
+   |                                                |
+   |             SaaS Application Core              |
+   |         (business features / app logic)        |
+   |                                                |
+   +-----------+------------------------+-----------+
+               |                        |
+   +-----------v---------+   +----------v----------+
+   | Deploy / Management |   | Billing / Metering  |
+   |                     |   | Metrics / Analytics |
+   +---------------------+   +---------------------+
+</code></pre>
+<p>Gambar ini penting buat gue karena ngejelasin satu hal yang gue sering lupa: core app itu bukan sendirian. Onboarding, identity, deploy, billing, metering, metrics adalah bagian dari SaaS, bukan pelengkap.</p>
+<h3 id="figure-1-4--sample-multi-tenant-environment">Figure 1-4 — Sample multi-tenant environment<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-4--sample-multi-tenant-environment"></a></h3>
+<pre class="language-text"><code class="language-text">      +------------------------------------------------------+   
+      | Shared SaaS Services                                 |
+      | onboarding | identity | deploy | manage | billing   |
+      +--------------------------+---------------------------+
+                                 |
+               +-----------------v-----------------+
+               | Shared App Microservices           |
+               | product | order | fulfillment ... |
+               | shared compute + shared storage    |
+               +-----------------+-----------------+
+                                 |
+                        +--------+--------+
+                        | tenants 1..N    |
+                        +-----------------+
+</code></pre>
+<p>Ini versi paling mudah dicerna: shared app plus shared surrounding services. Jadi kalau lo ingin model klasik SaaS, ini prototype-nya.</p>
+<h3 id="figure-1-5--shared-and-dedicated-mixed-model">Figure 1-5 — Shared and dedicated mixed model<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-5--shared-and-dedicated-mixed-model"></a></h3>
+<pre class="language-text"><code class="language-text">   +--------------------------------------------------------------+
+   | Shared control plane: onboarding / management / operations   |
+   +------------------------+-------------------------------------+
+                            |
+         +------------------+------------------+------------------+
+         |                                     |                  |
+   +-----v------+                       +------v------+    +------v------+
+   | Product MS |                       | Order MS    |    | Fulfillment |
+   | compute: S |                       | compute: S  |    | compute: D  |
+   | storage: S |                       | storage: D  |    | storage: S  |
+   +------------+                       +------+------+    +------+------+ 
+                                               |                  |
+                                          Tenant DBs         Tenant runtimes
+
+Legend:
+S = shared
+D = dedicated
+</code></pre>
+<p>Model hybrid ini bikin gue ngeh bahwa SaaS bisa campur-campur. Sharedness nggak mesti seragam di semua layer.</p>
+<h3 id="figure-1-6--fully-dedicated-resources-still-saas">Figure 1-6 — Fully dedicated resources, still SaaS<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-6--fully-dedicated-resources-still-saas"></a></h3>
+<pre class="language-text"><code class="language-text">      +------------------------------------------------------+
+      | Shared SaaS control plane                            |
+      | onboarding | deploy | management | operations        |
+      +-----------------------------+------------------------+
+                                    |
+      +-----------+-----------------+-----------------+-----------+
+      |           |                                   |           |
++-----v----+ +----v-----+                       +-----v----+ +----v-----+
+|Tenant 1  | |Tenant 2  |         ...           |Tenant N  | | ...      |
+|compute D | |compute D |                       |compute D | |          |
+|store D   | |store D   |                       |store D   | |          |
++----------+ +----------+                       +----------+ +----------+
+</code></pre>
+<p>Ini yang menurut gue paling radikal: dedicated infra tetap bisa jadi bagian dari SaaS kalau control plane dan experience-nya masih satu.</p>
+<h3 id="figure-1-7--msp-model">Figure 1-7 — MSP model<a aria-hidden="true" class="anchor-heading icon-link" href="#figure-1-7--msp-model"></a></h3>
+<pre class="language-text"><code class="language-text">                 +----------------------+
+                 |   Software Vendor    |
+                 +----------+-----------+
+                            |
+                     +------v------+
+                     |     MSP     |
+                     | centralized |
+                     | operations  |
+                     +------+------+ 
+                            |
+      +---------------------+-----------------------+
+      |                     |                       |
++-----v----+          +-----v----+            +-----v----+
+|Cust Env 1|          |Cust Env 2|            |Cust Env N|
+|Version A |          |Version B |            |Version X |
+|Custom 1  |          |Custom 2  |            |Custom ?  |
++----------+          +----------+            +----------+
+</code></pre>
+<p>MSP ini bikin gue sadar: operasi terpusat saja belum menjadikan sesuatu SaaS. Kalau versi dan environment customer masih beda-beda, itu masih punya banyak problem model lama.</p>
+<h2 id="close-reading-per-paragraf">Close reading per paragraf<a aria-hidden="true" class="anchor-heading icon-link" href="#close-reading-per-paragraf"></a></h2>
+<h3 id="a-opening-argument">A. Opening argument<a aria-hidden="true" class="anchor-heading icon-link" href="#a-opening-argument"></a></h3>
+<p>Paragraf pertama ngejelasin pengalaman penulis yang sering ketemu definisi SaaS beda-beda.</p>
+<ul>
+<li>Inti: visi "SaaS" bisa sangat bervariasi.</li>
+<li>Quote: “they tend to start out with what seems like a reasonable, high-level view of what it means to be SaaS… I often discover significant variations in their vision.”</li>
+<li>Takeaway: kalau orang bilang "mau bikin SaaS", belum tentu itu arti yang sama.</li>
+</ul>
+<p>Paragraf kedua bilang SaaS bukan sekadar teknis; itu mindset.</p>
+<ul>
+<li>Inti: SaaS melampaui technical scope.</li>
+<li>Quote: “The scope of SaaS goes well beyond the technical. It is, in many respects, a mindset…”</li>
+<li>Takeaway: kalau gue masih melihat SaaS sebagai stack, gue sudah terlalu sempit.</li>
+</ul>
+<p>Paragraf ketiga punya tujuan jelas: bangun mental model.</p>
+<ul>
+<li>Inti: chapter ini harus jadi dasar.</li>
+<li>Quote: “The goal in this chapter is to build a foundational mental model…”</li>
+<li>Takeaway: ini bukan intro filler. Ini kalibrasi istilah.</li>
+</ul>
+<p>Paragraf keempat mengikat: SaaS bukan technology-first mindset.</p>
+<ul>
+<li>Inti: business goals dan technical model harus sejalan.</li>
+<li>Quote: “It’s essential for SaaS architects to understand that SaaS is not a technology-first mindset.”</li>
+<li>Takeaway: arsitek SaaS harus mulai dari apa bisnis butuh, bukan dari komponen infra apa yang keren.</li>
+</ul>
+<p>Paragraf kelima: ini bisa jadi chapter terpenting.</p>
+<ul>
+<li>Inti: jangan skip.</li>
+<li>Quote: “it may be one of the most important chapters in the book.”</li>
+<li>Takeaway: ini bab yang nentuin apakah kita bakal paham pola pikirnya atau cuma ambil jargon.</li>
+</ul>
+<h3 id="b-where-we-started">B. Where We Started<a aria-hidden="true" class="anchor-heading icon-link" href="#b-where-we-started"></a></h3>
+<p>Paragraf keenam memperkenalkan model installed software.</p>
+<ul>
+<li>Inti: delivery lama modelnya customer install sendiri.</li>
+<li>Quote: “pre-SaaS systems were typically delivered in an ‘installed software’ model”</li>
+<li>Takeaway: sebelum kita bicara SaaS, kita harus paham lawan yang dia garap.</li>
+</ul>
+<p>Paragraf ketujuh: dev dan ops terpisah.</p>
+<ul>
+<li>Inti: dev jauh dari run.</li>
+<li>Takeaway: itu budaya lama yang bikin banyak operational friction.</li>
+</ul>
+<p>Paragraf kedelapan siapin visual Figure 1-1.</p>
+<ul>
+<li>Inti: sekarang lihat gambarnya.</li>
+<li>Takeaway: visual bikin lensa tadi langsung lebih jelas.</li>
+</ul>
+<p>Paragraf kesembilan ngejelasin environment customer terpisah.</p>
+<ul>
+<li>Inti: setiap customer punya versi dan custom sendiri.</li>
+<li>Quote: “Each of these customers is running specific versions… required one-off customizations…”</li>
+<li>Takeaway: masalahnya bukan infra saja, tapi variasi per customer.</li>
+</ul>
+<p>Paragraf kesepuluh: skala model ini butuh banyak support/ops.</p>
+<ul>
+<li>Inti: growth menaikkan overhead.</li>
+<li>Takeaway: scaling model lama berarti nambah tim, bukan nambah efisiensi.</li>
+</ul>
+<p>Paragraf kesebelas: model ini sales-driven.</p>
+<ul>
+<li>Inti: deal dulu, teknologi ikut.</li>
+<li>Quote: “landing a deal can take precedence over the need for agility, scale, and operational efficiency.”</li>
+<li>Takeaway: banyak technical debt SaaS lahir dari keputusan ini.</li>
+</ul>
+<p>Paragraf kedua belas: release cadence makin lambat.</p>
+<ul>
+<li>Inti: multiple versions bikin update rumit.</li>
+<li>Takeaway: variasi mengganggu kecepatan delivery.</li>
+</ul>
+<p>Paragraf ketiga belas bilang model lama masih valid di domain tertentu.</p>
+<ul>
+<li>Inti: bukan semua model lama salah.</li>
+<li>Takeaway: ini penulis yang fair, bukan dogmatis.</li>
+</ul>
+<p>Paragraf keempat belas: tapi buat banyak bisnis, model ini problematik.</p>
+<ul>
+<li>Inti: one-off kills scale.</li>
+<li>Takeaway: bila bisnis mau tumbuh, model lama bisa jadi jebakan.</li>
+</ul>
+<p>Paragraf kelima belas: validitas tergantung skala.</p>
+<ul>
+<li>Inti: kalau customer sedikit, model ini masih oke.</li>
+<li>Takeaway: pilihan model harus cocok dengan ambition.</li>
+</ul>
+<p>Paragraf keenam belas: cost dan inefficiency.</p>
+<ul>
+<li>Inti: setiap customer baru berarti overhead baru.</li>
+<li>Quote: “Each new customer could require more support teams, more infrastructure…”</li>
+<li>Takeaway: growth idealnya tidak nambah overhead proporsional per customer.</li>
+</ul>
+<p>Paragraf ketujuh belas: operational burden bisa bikin perusahaan sengaja slow growth.</p>
+<ul>
+<li>Inti: infrastructure model bisa hambat strategy.</li>
+<li>Takeaway: ini warning nyata untuk tim SaaS.</li>
+</ul>
+<p>Paragraf kedelapan belas: masalah lebih besar dari cost—agility.</p>
+<ul>
+<li>Quote: “this model is anything but nimble.”</li>
+<li>Takeaway: SaaS bukan sekadar cost play, ini agility play.</li>
+</ul>
+<p>Paragraf kesembilan belas: time-to-feature lambat.</p>
+<ul>
+<li>Inti: release yang lambat membuat produk mudah ketinggalan.</li>
+<li>Takeaway: lambat berarti kehilangan relevansi.</li>
+</ul>
+<p>Paragraf kedua puluh: customer sekarang lebih peduli low-friction value.</p>
+<ul>
+<li>Inti: preferensi customer berubah.</li>
+<li>Takeaway: customer sekarang lebih sudi pindah ke model yang lebih mudah diakses.</li>
+</ul>
+<p>Paragraf kedua puluh satu: pricing berubah ke subscription.</p>
+<ul>
+<li>Inti: payment model ikut mendukung SaaS.</li>
+<li>Takeaway: model delivery dan pricing saling menguatkan.</li>
+</ul>
+<p>Paragraf kedua puluh dua: cloud mempercepat transisi, tapi cloud bukan SaaS.</p>
+<ul>
+<li>Inti: cloud membantu, bukan mendefinisikan.</li>
+<li>Takeaway: lo jangan samakan cloud dengan SaaS.</li>
+</ul>
+<h3 id="c-the-move-to-a-unified-model">C. The Move to a Unified Model<a aria-hidden="true" class="anchor-heading icon-link" href="#c-the-move-to-a-unified-model"></a></h3>
+<p>Paragraf dua puluh tiga: unified/shared model sebagai jawaban.</p>
+<ul>
+<li>Inti: model per-customer tidak scale.</li>
+<li>Takeaway: unified model muncul sebagai response ekonomi.</li>
+</ul>
+<p>Paragraf dua puluh empat: shared infra sebagai alat efisiensi.</p>
+<ul>
+<li>Inti: sharedness adalah opsi, bukan dogma.</li>
+<li>Takeaway: shared infra dipilih karena memastikan manageability.</li>
+</ul>
+<p>Paragraf dua puluh lima: pengantar Figure 1-2.</p>
+<p>Paragraf dua puluh enam: tenant = environment bersama.</p>
+<ul>
+<li>Inti: tenant adalah penghuni common platform.</li>
+<li>Quote: “one set of resources that is shared and occupied by one or more consumers”</li>
+<li>Takeaway: definisi tenant menggeser perspektif.</li>
+</ul>
+<p>Paragraf dua puluh tujuh: shared infra menghapus downside model terpisah.</p>
+<ul>
+<li>Inti: satu deployment, satu version.</li>
+<li>Quote: “Gone is the idea of separately deployed, versioned, managed, and operated customer environments.”</li>
+<li>Takeaway: unified deployment adalah klaim terkuat SaaS.</li>
+</ul>
+<p>Paragraf dua puluh delapan: shared infra memperbaiki telemetry, DevOps, onboarding.</p>
+<ul>
+<li>Inti: ini bukan tweak. Ini perbaikan operasi.</li>
+<li>Takeaway: shared infra merapikan seluruh machine operasional.</li>
+</ul>
+<p>Paragraf dua puluh sembilan: shared model membawa agility+cost+growth.</p>
+<ul>
+<li>Inti: kombinasi nilai.</li>
+<li>Takeaway: SaaS bisa jadi nilai ganda.</li>
+</ul>
+<p>Paragraf tiga puluh: tantangan baru muncul.</p>
+<ul>
+<li>Inti: shared model juga punya pain.</li>
+<li>Takeaway: kita tukar one set of problems dengan yang lain.</li>
+</ul>
+<p>Paragraf tiga puluh satu: same-version sebagai litmus test.</p>
+<ul>
+<li>Inti: semua tenant jalan di versi yang sama.</li>
+<li>Quote: “This notion of having all tenants running the same version of your offering represents a common litmus test for SaaS environments.”</li>
+<li>Takeaway: same-version adalah discipline penting.</li>
+</ul>
+<p>Paragraf tiga puluh dua: SaaS butuh control-plane capabilities.</p>
+<ul>
+<li>Inti: app core must sit inside a wider system.</li>
+<li>Takeaway: ini kenapa onboarding/identity/billing nggak boleh dianggap secondary.</li>
+</ul>
+<p>Paragraf tiga puluh tiga: pengantar Figure 1-3.</p>
+<p>Paragraf tiga puluh empat: surrounding capabilities.</p>
+<ul>
+<li>Inti: app core dikelilingi support capabilities.</li>
+<li>Takeaway: core app bukan sendirian.</li>
+</ul>
+<p>Paragraf tiga puluh lima: people underestimate these capabilities.</p>
+<ul>
+<li>Inti: itu anti-pattern.</li>
+<li>Takeaway: banyak tim keliru menunda komponen ini.</li>
+</ul>
+<p>Paragraf tiga puluh enam: these components must be front and center.</p>
+<ul>
+<li>Quote: “these components… must be put front and center”</li>
+<li>Takeaway: operational capabilities adalah fundamental.</li>
+</ul>
+<p>Paragraf tiga puluh tujuh: efisiensi SaaS multi-dimensi.</p>
+<ul>
+<li>Inti: bukan hanya shared infra.</li>
+<li>Takeaway: efisiensi datang dari beberapa arah.</li>
+</ul>
+<h3 id="d-redefining-multi-tenancy">D. Redefining Multi-Tenancy<a aria-hidden="true" class="anchor-heading icon-link" href="#d-redefining-multi-tenancy"></a></h3>
+<p>Paragraf tiga puluh delapan: istilah multi-tenancy punya baggage.</p>
+<ul>
+<li>Inti: istilah perlu ditunda.</li>
+<li>Takeaway: istilah populer bisa bikin kita ngikutin jalan lama.</li>
+</ul>
+<p>Paragraf tiga puluh sembilan: definisi lama valid tapi tidak cukup.</p>
+<ul>
+<li>Inti: shared infrastructure itu bagian, bukan semua.</li>
+<li>Takeaway: definisi lama perlu diperluas.</li>
+</ul>
+<p>Paragraf empat puluh: definisi lama wajar dibawa.</p>
+<ul>
+<li>Inti: ini bukan salah.</li>
+<li>Takeaway: kita perlu bahasa baru, bukan buang bahasa lama.</li>
+</ul>
+<p>Paragraf empat puluh satu: pengantar Figure 1-4.</p>
+<p>Paragraf empat puluh dua: shared app model.</p>
+<ul>
+<li>Inti: ini kasus klasik.</li>
+<li>Takeaway: masih mudah dipahami.</li>
+</ul>
+<p>Paragraf empat puluh tiga: SaaS bisa hybrid.</p>
+<ul>
+<li>Inti: real world lebih kompleks.</li>
+<li>Takeaway: shared infra bukan satu-satunya konfigurasi.</li>
+</ul>
+<p>Paragraf empat puluh empat: pengantar Figure 1-5.</p>
+<p>Paragraf empat puluh lima: contoh hybrid.</p>
+<ul>
+<li>Inti: compute/storage bisa beda-beda.</li>
+<li>Takeaway: multi-tenancy adalah kombinasi trade-off.</li>
+</ul>
+<p>Paragraf empat puluh enam: definisi klasik goyah.</p>
+<ul>
+<li>Inti: kita butuh vocabulary lebih presisi.</li>
+<li>Takeaway: ini alasan pentingnya redefine.</li>
+</ul>
+<p>Paragraf empat puluh tujuh: architecture memilih kombinasi.</p>
+<ul>
+<li>Quote: “you’re picking the combinations… that best align with the business and technical requirements”</li>
+<li>Takeaway: design decision = trade-off.</li>
+</ul>
+<p>Paragraf empat puluh delapan: benefit dari unified operational model.</p>
+<ul>
+<li>Inti: value SaaS lebih dari resource sharing.</li>
+<li>Takeaway: shared service model juga sumber nilai.</li>
+</ul>
+<p>Paragraf empat puluh sembilan: pengantar Figure 1-6.</p>
+<p>Paragraf lima puluh: dedicated all-in, still SaaS.</p>
+<ul>
+<li>Inti: dedicated infra tetap bisa SaaS.</li>
+<li>Takeaway: control plane unified is key.</li>
+</ul>
+<p>Paragraf lima puluh satu: shared capabilities tetap penting.</p>
+<ul>
+<li>Quote: “they continue to be onboarded, managed, and operated through the same set of shared capabilities”</li>
+<li>Takeaway: operation unified is the line.</li>
+</ul>
+<p>Paragraf lima puluh dua: dedicated bisa valid karena compliance/migration.</p>
+<ul>
+<li>Inti: ini bukan teori aneh.</li>
+<li>Takeaway: real world sering butuh dedicated.</li>
+</ul>
+<p>Paragraf lima puluh tiga: definisi harus dievolusi.</p>
+<ul>
+<li>Inti: definisi praktis lebih berguna.</li>
+<li>Takeaway: filosofi harus fleksibel.</li>
+</ul>
+<p>Paragraf lima puluh empat: definisi baru multi-tenant.</p>
+<ul>
+<li>Quote: “multi-tenant will refer to any environment that onboards, deploys, manages, and operates tenants through a single, unified experience.”</li>
+<li>Quote: “The sharedness of any infrastructure will have no correlation to the term ‘multi-tenancy.’”</li>
+<li>Takeaway: shift dari infra-centric ke operating-model-centric.</li>
+</ul>
+<p>Paragraf lima puluh lima: terminology tambahan.</p>
+<ul>
+<li>Inti: kita butuh presisi istilah.</li>
+<li>Takeaway: hybrid model butuh kata-kata yang pas.</li>
+</ul>
+<h3 id="e-avoiding-the-single-tenant-term">E. Avoiding the “Single-Tenant” Term<a aria-hidden="true" class="anchor-heading icon-link" href="#e-avoiding-the-single-tenant-term"></a></h3>
+<p>Paragraf lima puluh enam: lawan multi-tenant.</p>
+<ul>
+<li>Inti: istilah single-tenant jebakan.</li>
+<li>Takeaway: kata bisa merusak pola pikir.</li>
+</ul>
+<p>Paragraf lima puluh tujuh: istilah ini tidak cocok.</p>
+<ul>
+<li>Quote: “Labeling this a single-tenant environment would undermine…”</li>
+<li>Takeaway: istilah itu menarik diskusi kembali ke definisi lama.</li>
+</ul>
+<p>Paragraf lima puluh delapan: stop using it.</p>
+<ul>
+<li>Inti: fokus ke mode sharing.</li>
+<li>Takeaway: langsung ke bagaimana resource digunakan.</li>
+</ul>
+<p>Paragraf lima puluh sembilan: vocabulary alignment.</p>
+<ul>
+<li>Inti: istilah dicari karena berguna.</li>
+<li>Takeaway: definisi adalah alat.</li>
+</ul>
+<h3 id="f-where-are-the-boundaries-of-saas">F. Where Are the Boundaries of SaaS?<a aria-hidden="true" class="anchor-heading icon-link" href="#f-where-are-the-boundaries-of-saas"></a></h3>
+<p>Paragraf enam puluh: nuance dependency eksternal.</p>
+<ul>
+<li>Inti: boundary SaaS harus realistis.</li>
+<li>Takeaway: definisi jangan terlalu ketat.</li>
+</ul>
+<p>Paragraf enam puluh satu: distributed footprint.</p>
+<ul>
+<li>Inti: bukan soal satu lokasi.</li>
+<li>Takeaway: boundary bisa lintas lokasi.</li>
+</ul>
+<p>Paragraf enam puluh dua: hidden dependency masih SaaS.</p>
+<ul>
+<li>Quote: “If their presence is entirely hidden from your tenants… this is still SaaS to me.”</li>
+<li>Takeaway: hidden complexity is acceptable.</li>
+</ul>
+<p>Paragraf enam puluh tiga: exposed dependency memecah SaaS.</p>
+<ul>
+<li>Inti: tenant harus tetap melihat permukaan.</li>
+<li>Takeaway: exposed complexity kills the boundary.</li>
+</ul>
+<p>Paragraf enam puluh empat: rule of thumb.</p>
+<ul>
+<li>Quote: “our tenants’ view is limited to the surface of our service.”</li>
+<li>Takeaway: tenant only sees the service surface.</li>
+</ul>
+<h3 id="g-the-managed-service-provider-model">G. The Managed Service Provider Model<a aria-hidden="true" class="anchor-heading icon-link" href="#g-the-managed-service-provider-model"></a></h3>
+<p>Paragraf enam puluh lima: MSP sebagai wrinkle.</p>
+<ul>
+<li>Inti: SaaS dan MSP mirip namun berbeda.</li>
+<li>Takeaway: ada gap meski permukaan serupa.</li>
+</ul>
+<p>Paragraf enam puluh enam: pengantar Figure 1-7.</p>
+<p>Paragraf enam puluh tujuh: MSP masih punya environment terpisah.</p>
+<ul>
+<li>Inti: version/customer variation remains.</li>
+<li>Takeaway: MSP bukan unified app.</li>
+</ul>
+<p>Paragraf enam puluh delapan: operasi terpusat, versi beda.</p>
+<ul>
+<li>Inti: still one-off variation.</li>
+<li>Takeaway: operasi terpusat tidak otomatis SaaS.</li>
+</ul>
+<p>Paragraf enam puluh sembilan: vendor + MSP.</p>
+<ul>
+<li>Inti: MSP bisa jadi layer operasional.</li>
+<li>Takeaway: MSP bukan product creator.</li>
+</ul>
+<p>Paragraf tujuh puluh: gap SaaS vs MSP.</p>
+<ul>
+<li>Inti: same-version penting.</li>
+<li>Quote: “customers are being allowed to run separate versions.”</li>
+<li>Takeaway: same-version is a key separator.</li>
+</ul>
+<p>Paragraf tujuh puluh dua: MSP valid tapi bukan SaaS.</p>
+<ul>
+<li>Inti: efficiency, yes; unified SaaS, no.</li>
+<li>Takeaway: recognize the difference.</li>
+</ul>
+<p>Paragraf tujuh puluh tiga: tim SaaS beda.</p>
+<ul>
+<li>Inti: team topology matters.</li>
+<li>Takeaway: org design ikut berpengaruh.</li>
+</ul>
+<p>Paragraf tujuh puluh empat: pulse runtime.</p>
+<ul>
+<li>Inti: observability is business.</li>
+<li>Takeaway: ops awareness is not just ops.</li>
+</ul>
+<p>Paragraf tujuh puluh lima: MSP bisa stepping stone.</p>
+<ul>
+<li>Inti: don’t throw it away.</li>
+<li>Takeaway: MSP is transitional, not final.</li>
+</ul>
+<h3 id="h-at-its-core-saas-is-a-business-model">H. At Its Core, SaaS Is a Business Model<a aria-hidden="true" class="anchor-heading icon-link" href="#h-at-its-core-saas-is-a-business-model"></a></h3>
+<p>Paragraf tujuh puluh enam: SaaS is business model.</p>
+<ul>
+<li>Quote: “you should really be viewing SaaS more as a business model.”</li>
+<li>Takeaway: SaaS is not just deployment.</li>
+</ul>
+<p>Paragraf tujuh puluh tujuh: semua fungsi berubah.</p>
+<ul>
+<li>Inti: this is business transformation.</li>
+<li>Takeaway: not just engineering.</li>
+</ul>
+<p>Paragraf tujuh puluh delapan: responsiveness ke pasar.</p>
+<ul>
+<li>Inti: model must support fast adaptation.</li>
+<li>Takeaway: SaaS = adaptive operation.</li>
+</ul>
+<p>Paragraf tujuh puluh sembilan: needs of the many.</p>
+<ul>
+<li>Quote: “the needs of the many should always outweigh the needs of the few.”</li>
+<li>Takeaway: collective needs trump one-offs.</li>
+</ul>
+<p>Paragraf delapan puluh: backlog butuh operational attributes.</p>
+<ul>
+<li>Inti: feature list tidak cukup.</li>
+<li>Takeaway: service attributes must be visible.</li>
+</ul>
+<p>Paragraf delapan puluh satu: engineer/QA ikut experience.</p>
+<ul>
+<li>Inti: everyone owns experience.</li>
+<li>Takeaway: accountability broadens.</li>
+</ul>
+<p>Paragraf delapan puluh dua: marketing/pricing/support berubah.</p>
+<ul>
+<li>Inti: SaaS blurs functional boundaries.</li>
+<li>Takeaway: collaboration is required.</li>
+</ul>
+<p>Paragraf delapan puluh tiga: business principles.</p>
+<ul>
+<li>Inti: now we move to values.</li>
+<li>Takeaway: principles shape choices.</li>
+</ul>
+<p>Paragraf delapan puluh empat: agility.</p>
+<ul>
+<li>Quote: “A multi-tenant offering that reduced costs without realizing agility would certainly miss the broader value proposition of SaaS.”</li>
+<li>Takeaway: cost without agility is incomplete.</li>
+</ul>
+<p>Paragraf delapan puluh lima: operational efficiency.</p>
+<ul>
+<li>Inti: what if 1,000 customers show up?</li>
+<li>Takeaway: design for scale.</li>
+</ul>
+<p>Paragraf delapan puluh enam: innovation.</p>
+<ul>
+<li>Inti: good operations enable experiments.</li>
+<li>Takeaway: operations fuel innovation.</li>
+</ul>
+<p>Paragraf delapan puluh tujuh: frictionless onboarding.</p>
+<ul>
+<li>Inti: onboarding is growth engine.</li>
+<li>Takeaway: onboarding is strategic.</li>
+</ul>
+<p>Paragraf delapan puluh delapan: growth as design assumption.</p>
+<ul>
+<li>Inti: SaaS assumes growth.</li>
+<li>Takeaway: architecture should accommodate it.</li>
+</ul>
+<p>Paragraf delapan puluh sembilan: leadership alignment.</p>
+<ul>
+<li>Inti: top-down matters.</li>
+<li>Takeaway: leadership must own it.</li>
+</ul>
+<p>Paragraf sembilan puluh: architecture is business-shaped.</p>
+<ul>
+<li>Quote: “Almost every dimension of your SaaS architecture and strategy is going to be derived from your business vision.”</li>
+<li>Takeaway: technical design should flow from vision.</li>
+</ul>
+<p>Paragraf sembilan puluh satu: tanpa bisnis jelas, desain goyah.</p>
+<ul>
+<li>Inti: misalignment kills.</li>
+<li>Takeaway: business clarity is foundation.</li>
+</ul>
+<h3 id="i-building-a-servicenot-a-product">I. Building a Service—Not a Product<a aria-hidden="true" class="anchor-heading icon-link" href="#i-building-a-servicenot-a-product"></a></h3>
+<p>Paragraf sembilan puluh dua: product mindset status quo.</p>
+<ul>
+<li>Inti: product thinking is static.</li>
+<li>Takeaway: product mindset can miss experience.</li>
+</ul>
+<p>Paragraf sembilan puluh tiga: product-focused on fitur.</p>
+<ul>
+<li>Inti: feature gap closings.</li>
+<li>Takeaway: feature list alone is insufficient.</li>
+</ul>
+<p>Paragraf sembilan puluh empat: shift to service.</p>
+<ul>
+<li>Quote: “with SaaS, we shift from creating a product to creating a service.”</li>
+<li>Takeaway: this is a real mindset shift.</li>
+</ul>
+<p>Paragraf sembilan puluh lima: service also needs functionality, but experience is broader.</p>
+<ul>
+<li>Inti: service = fitur + experience.</li>
+<li>Takeaway: experience is part of the deliverable.</li>
+</ul>
+<p>Paragraf sembilan puluh enam: restoran analogy.</p>
+<ul>
+<li>Takeaway: good output doesn't guarantee good service.</li>
+</ul>
+<p>Paragraf sembilan puluh tujuh: tenant expectations.</p>
+<ul>
+<li>Quote: “Having a great product won’t matter if the overall experience for customers does not meet their expectations.”</li>
+<li>Takeaway: experience can swamp product quality.</li>
+</ul>
+<p>Paragraf sembilan puluh delapan: tenants see surface only.</p>
+<ul>
+<li>Takeaway: internal complexity is invisible.</li>
+</ul>
+<p>Paragraf sembilan puluh sembilan: rapid innovation advantage.</p>
+<ul>
+<li>Takeaway: agility compounds.</li>
+</ul>
+<p>Paragraf seratus: incumbents kalah karena lambat.</p>
+<ul>
+<li>Takeaway: speed beats depth sometimes.</li>
+</ul>
+<p>Paragraf seratus satu: service mindset must be measured.</p>
+<ul>
+<li>Takeaway: if you don't measure it, it stays slogan.</li>
+</ul>
+<h3 id="j-the-b2b-and-b2c-saas-story">J. The B2B and B2C SaaS Story<a aria-hidden="true" class="anchor-heading icon-link" href="#j-the-b2b-and-b2c-saas-story"></a></h3>
+<p>Paragraf seratus dua: B2B vs B2C differences.</p>
+<ul>
+<li>Inti: scope matters.</li>
+<li>Takeaway: don't overgeneralize.</li>
+</ul>
+<p>Paragraf seratus tiga: principle overlap, divergence in implementation.</p>
+<ul>
+<li>Takeaway: principle can cross segments.</li>
+</ul>
+<p>Paragraf seratus empat: this book leans B2B.</p>
+<ul>
+<li>Takeaway: center of gravity is enterprise SaaS.</li>
+</ul>
+<h3 id="k-defining-saas">K. Defining SaaS<a aria-hidden="true" class="anchor-heading icon-link" href="#k-defining-saas"></a></h3>
+<p>Paragraf seratus lima: definisi eksplisit.</p>
+<ul>
+<li>Quote: “SaaS is a business and software delivery model that enables organizations to offer their solutions in a low-friction, service-centric model that maximizes value for customers and providers. It relies on agility and operational efficiency as pillars of a business strategy that promotes growth, reach, and innovation.”</li>
+<li>Takeaway: definition is goal-rich and tool-light.</li>
+</ul>
+<p>Paragraf seratus enam: architect choice is pattern choice.</p>
+<ul>
+<li>Takeaway: architecture is consequence, not definition.</li>
+</ul>
+<h3 id="l-conclusion">L. Conclusion<a aria-hidden="true" class="anchor-heading icon-link" href="#l-conclusion"></a></h3>
+<p>Paragraf seratus tujuh: recap foundational mindset.</p>
+<ul>
+<li>Takeaway: SaaS answers model-lama pain.</li>
+</ul>
+<p>Paragraf seratus delapan: a good app alone isn't enough.</p>
+<ul>
+<li>Takeaway: operation and experience are just as important.</li>
+</ul>
+<p>Paragraf seratus sembilan: tenant, shared infra, unified experience.</p>
+<ul>
+<li>Takeaway: unified experience is the red thread.</li>
+</ul>
+<p>Paragraf seratus sepuluh: vocabulary matters.</p>
+<ul>
+<li>Takeaway: terms are design tools.</li>
+</ul>
+<p>Paragraf seratus sebelas: service vs product, MSP vs SaaS.</p>
+<ul>
+<li>Takeaway: focus is on organizational thinking.</li>
+</ul>
+<p>Paragraf seratus dua belas: this chapter cleans the reader's lens.</p>
+<ul>
+<li>Takeaway: later chapters will land better.</li>
+</ul>
+<h2 id="quotes-yang-paling-load-bearing">Quotes yang paling load-bearing<a aria-hidden="true" class="anchor-heading icon-link" href="#quotes-yang-paling-load-bearing"></a></h2>
+<ul>
+<li>“It’s essential for SaaS architects to understand that SaaS is not a technology-first mindset.”</li>
+<li>“The scope of SaaS goes well beyond the technical. It is, in many respects, a mindset…”</li>
+<li>“This notion of having all tenants running the same version of your offering represents a common litmus test for SaaS environments.”</li>
+<li>“multi-tenant will refer to any environment that onboards, deploys, manages, and operates tenants through a single, unified experience.”</li>
+<li>“The sharedness of any infrastructure will have no correlation to the term ‘multi-tenancy.’”</li>
+<li>“the needs of the many should always outweigh the needs of the few.”</li>
+<li>“you should really be viewing SaaS more as a business model.”</li>
+<li>“with SaaS, we shift from creating a product to creating a service.”</li>
+<li>“Having a great product won’t matter if the overall experience for customers does not meet their expectations.”</li>
+<li>“SaaS is a business and software delivery model…”</li>
+</ul>
+<h2 id="takeaway-desain-saas-nyata">Takeaway desain SaaS nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway-desain-saas-nyata"></a></h2>
+<ol>
+<li>SaaS harus dimulai dengan business goals, bukan infra first.</li>
+<li>Multi-tenancy bukan lagi hanya soal shared infra; ia adalah soal unified operational experience.</li>
+<li>Surrounding service capabilities adalah tulang punggung, bukan pernak-pernik.</li>
+<li>Akurasi terminology penting untuk diskusi arsitektur hybrid dan dedicated.</li>
+<li>Same-version discipline itu penting.</li>
+<li>Service mindset memindahkan fokus dari “fitur” ke “experience.”</li>
+<li>B2B/B2C beda implementasi; prinsip bisa overlap.</li>
+<li>SaaS adalah business model; leadership alignment penting.</li>
+<li>One-off variation harus diwaspadai.</li>
+<li>Hidden complexity boleh ada; exposed complexity harus dikurangi.</li>
+</ol>
+<h2 id="insight-terbesar">Insight terbesar<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-terbesar"></a></h2>
+<p>Chapter 1 menurut gue bukan hanya bab definisi. Dia bekerja seperti pembersih lensa:</p>
+<p>di awal, dia membersihkan kabut istilah; di tengah, dia mendefinisikan ulang multi-tenancy; di akhir, dia menempatkan SaaS sebagai business/service model.</p>
+<p>Kalau gue bisa baca chapter ini sebagai rangkaian argumen, bukan sekadar kumpulan poin, gue akan lebih siap mengelola trade-off arsitektur dan operasi di chapter-chapter berikutnya.</p>
+<ul>
+<li>Inti: sistem lama modelnya customer-installed.</li>
+<li>Quote: “pre-SaaS systems were typically delivered in an ‘installed software’ model”</li>
+<li>Takeaway: untuk memahami SaaS, kita harus paham apa yang dia lawan.</li>
+</ul>
+<p>Paragraf tujuh: pembagian tanggung jawab antara development dan operations.</p>
+<ul>
+<li>Inti: dev jauh dari run.</li>
+<li>Takeaway: pemisahan build/run ketat adalah ciri model lama.</li>
+</ul>
+<p>Paragraf delapan: pengantar visual Figure 1-1.</p>
+<ul>
+<li>Inti: saatnya lihat gambarnya.</li>
+<li>Takeaway: visual mengunci imej model.</li>
+</ul>
+<p>Paragraf sembilan: interpretasi customer environment terpisah.</p>
+<ul>
+<li>Inti: setiap customer punya versi/custom berbeda.</li>
+<li>Quote: “Each of these customers is running specific versions… required one-off customizations…”</li>
+<li>Takeaway: problem utama adalah variasi per customer.</li>
+</ul>
+<p>Paragraf sepuluh: scaling model ini berarti menambah support/ops.</p>
+<ul>
+<li>Inti: biaya growth naik terus.</li>
+<li>Takeaway: growth bikin overhead linear atau lebih buruk.</li>
+</ul>
+<p>Paragraf sebelas: model ini sales-driven.</p>
+<ul>
+<li>Inti: deal dulu, teknologi ngikut.</li>
+<li>Quote: “landing a deal can take precedence over the need for agility, scale, and operational efficiency.”</li>
+<li>Takeaway: ini sumber technical debt SaaS.</li>
+</ul>
+<p>Paragraf dua belas: release cadence lambat.</p>
+<ul>
+<li>Inti: versi customer beda membuat update rumit.</li>
+<li>Takeaway: variasi mengganggu kecepatan.</li>
+</ul>
+<p>Paragraf tiga belas: model lama valid di domain tertentu.</p>
+<ul>
+<li>Inti: bukan dogma.</li>
+<li>Takeaway: ada konteks di mana installed model lebih cocok.</li>
+</ul>
+<p>Paragraf empat belas: buat bisnis skala besar, model lama problematik.</p>
+<ul>
+<li>Inti: one-off kills scale.</li>
+<li>Takeaway: salah satu korbannya adalah growth.</li>
+</ul>
+<p>Paragraf lima belas: validitas tergantung skala.</p>
+<ul>
+<li>Inti: model lama masih bisa jika customer sedikit.</li>
+<li>Takeaway: pilihan model tergantung ambition.</li>
+</ul>
+<p>Paragraf enam belas: cost dan inefficiency.</p>
+<ul>
+<li>Inti: setiap customer baru bermakna overhead baru.</li>
+<li>Quote: “Each new customer could require more support teams, more infrastructure…”</li>
+<li>Takeaway: growth idealnya tidak menambah overhead proporsional.</li>
+</ul>
+<p>Paragraf tujuh belas: operational burden bisa membuat perusahaan sengaja memperlambat growth.</p>
+<ul>
+<li>Takeaway: arsitektur delivery bisa menghambat strategi.</li>
+</ul>
+<p>Paragraf delapan belas: masalah lebih besar dari cost, yakni agility.</p>
+<ul>
+<li>Quote: “this model is anything but nimble.”</li>
+<li>Takeaway: agility adalah pilar bisnis.</li>
+</ul>
+<p>Paragraf sembilan belas: time-to-feature jadi lambat.</p>
+<ul>
+<li>Takeaway: keterlambatan berarti kehilangan relevansi.</li>
+</ul>
+<p>Paragraf dua puluh: customer prefer low-friction value, bukan kontrol environment.</p>
+<ul>
+<li>Takeaway: preferensi customer berubah.</li>
+</ul>
+<p>Paragraf dua puluh satu: pricing shift ke subscription.</p>
+<ul>
+<li>Takeaway: model delivery dan pricing saling menguatkan.</li>
+</ul>
+<p>Paragraf dua puluh dua: cloud mempercepat pergeseran, tapi bukan definisi SaaS.</p>
+<ul>
+<li>Takeaway: cloud adalah aksen, bukan tujuan.</li>
+</ul>
+<h3 id="c-the-move-to-a-unified-model-1">C. The Move to a Unified Model<a aria-hidden="true" class="anchor-heading icon-link" href="#c-the-move-to-a-unified-model-1"></a></h3>
+<p>Paragraf dua puluh tiga: unified/shared model sebagai jawaban ekonomi.</p>
+<ul>
+<li>Takeaway: model terpisah tidak sustainable di skala.</li>
+</ul>
+<p>Paragraf dua puluh empat: shared infra sebagai alat efisiensi.</p>
+<ul>
+<li>Takeaway: sharedness adalah opsi, bukan dogma.</li>
+</ul>
+<p>Paragraf dua puluh lima: pengantar Figure 1-2.</p>
+<p>Paragraf dua puluh enam: tenant = penghuni environment bersama.</p>
+<ul>
+<li>Quote: “one set of resources that is shared and occupied by one or more consumers”</li>
+<li>Takeaway: definisi tenant meneguhkan pergeseran paradigm.</li>
+</ul>
+<p>Paragraf dua puluh tujuh: shared infra menghapus downside model terpisah.</p>
+<ul>
+<li>Quote: “Gone is the idea of separately deployed, versioned, managed, and operated customer environments.”</li>
+<li>Takeaway: unified deployment adalah claim utama SaaS.</li>
+</ul>
+<p>Paragraf dua puluh delapan: manfaat shared infra meluas ke telemetry, DevOps, onboarding.</p>
+<ul>
+<li>Takeaway: shared infra merapikan operational machine.</li>
+</ul>
+<p>Paragraf dua puluh sembilan: shared model memberikan agility + cost + growth.</p>
+<ul>
+<li>Takeaway: SaaS memadukan beberapa nilai.</li>
+</ul>
+<p>Paragraf tiga puluh: shared infra membawa tantangan baru.</p>
+<ul>
+<li>Takeaway: switching pain, bukan menghilangkan pain.</li>
+</ul>
+<p>Paragraf tiga puluh satu: same-version sebagai litmus test.</p>
+<ul>
+<li>Quote: “This notion of having all tenants running the same version of your offering represents a common litmus test for SaaS environments.”</li>
+<li>Takeaway: same-version adalah prinsip praktis.</li>
+</ul>
+<p>Paragraf tiga puluh dua: cross-cutting components tetap penting.</p>
+<ul>
+<li>Takeaway: app core plus control plane = SaaS.</li>
+</ul>
+<p>Paragraf tiga puluh tiga: pengantar Figure 1-3.</p>
+<p>Paragraf tiga puluh empat: surround capabilities.</p>
+<ul>
+<li>Takeaway: core app bukan sendirian.</li>
+</ul>
+<p>Paragraf tiga puluh lima: kapabilitas pendukung sering dianggap secondary.</p>
+<ul>
+<li>Takeaway: itu anti-pattern.</li>
+</ul>
+<p>Paragraf tiga puluh enam: sukses SaaS bergantung pada surrounding capabilities.</p>
+<ul>
+<li>Quote: “these components… must be put front and center”</li>
+<li>Takeaway: mulai dari operational capabilities.</li>
+</ul>
+<p>Paragraf tiga puluh tujuh: efisiensi SaaS datang dari shared services plus app architecture.</p>
+<ul>
+<li>Takeaway: efisiensi multi-dimensi.</li>
+</ul>
+<h3 id="d-redefining-multi-tenancy-1">D. Redefining Multi-Tenancy<a aria-hidden="true" class="anchor-heading icon-link" href="#d-redefining-multi-tenancy-1"></a></h3>
+<p>Paragraf tiga puluh delapan: istilah multi-tenancy punya baggage.</p>
+<ul>
+<li>Takeaway: istilah perlu ditunda sampai konteks jelas.</li>
+</ul>
+<p>Paragraf tiga puluh sembilan: definisi lama valid, tapi tidak cukup.</p>
+<ul>
+<li>Takeaway: tidak perlu membuang sejarah istilah.</li>
+</ul>
+<p>Paragraf empat puluh: definisi lama wajar dibawa ke SaaS.</p>
+<ul>
+<li>Takeaway: problemnya bukan invalid, tapi sempit.</li>
+</ul>
+<p>Paragraf empat puluh satu: pengantar Figure 1-4.</p>
+<p>Paragraf empat puluh dua: model shared everything.</p>
+<ul>
+<li>Takeaway: ini kasus paling mudah.</li>
+</ul>
+<p>Paragraf empat puluh tiga: SaaS real bisa hybrid.</p>
+<ul>
+<li>Takeaway: definisi klasik tidak mewakili kompleksitas.</li>
+</ul>
+<p>Paragraf empat puluh empat: pengantar Figure 1-5.</p>
+<p>Paragraf empat puluh lima: contoh hybrid shared/dedicated.</p>
+<ul>
+<li>Takeaway: SaaS hybrid itu nyata.</li>
+</ul>
+<p>Paragraf empat puluh enam: definisi klasik jadi goyah.</p>
+<ul>
+<li>Takeaway: perlu vocabulary baru.</li>
+</ul>
+<p>Paragraf empat puluh tujuh: architecture adalah kombinasi trade-off.</p>
+<ul>
+<li>Quote: “you’re picking the combinations… that best align with the business and technical requirements”</li>
+<li>Takeaway: multi-tenancy adalah permainan trade-off.</li>
+</ul>
+<p>Paragraf empat puluh delapan: benefit berasal dari unified service model.</p>
+<ul>
+<li>Takeaway: infra shared bukan satu-satunya sumber nilai.</li>
+</ul>
+<p>Paragraf empat puluh sembilan: pengantar Figure 1-6.</p>
+<p>Paragraf lima puluh: semua dedicated tapi tetap SaaS.</p>
+<ul>
+<li>Takeaway: dedicated infra tidak otomatis keluar dari SaaS.</li>
+</ul>
+<p>Paragraf lima puluh satu: shared control plane tetap penting.</p>
+<ul>
+<li>Quote: “they continue to be onboarded, managed, and operated through the same set of shared capabilities”</li>
+<li>Takeaway: operation unified adalah definisi.</li>
+</ul>
+<p>Paragraf lima puluh dua: skenario dedicated bisa valid karena compliance/migration.</p>
+<ul>
+<li>Takeaway: reality sering mengharuskan dedicated resources.</li>
+</ul>
+<p>Paragraf lima puluh tiga: definisi harus dievolusi.</p>
+<ul>
+<li>Takeaway: definisi praktis lebih berguna.</li>
+</ul>
+<p>Paragraf lima puluh empat: definisi baru multi-tenant.</p>
+<ul>
+<li>Quote: “multi-tenant will refer to any environment that onboards, deploys, manages, and operates tenants through a single, unified experience.”</li>
+<li>Quote: “The sharedness of any infrastructure will have no correlation to the term ‘multi-tenancy.’”</li>
+<li>Takeaway: shift dari infra ke service/operating-model.</li>
+</ul>
+<p>Paragraf lima puluh lima: terminology tambahan akan membantu.</p>
+<ul>
+<li>Takeaway: perlu bahasa presisi untuk hybrid models.</li>
+</ul>
+<h3 id="e-avoiding-the-single-tenant-term-1">E. Avoiding the “Single-Tenant” Term<a aria-hidden="true" class="anchor-heading icon-link" href="#e-avoiding-the-single-tenant-term-1"></a></h3>
+<p>Paragraf lima puluh enam: lawan multi-tenant yaitu single-tenant.</p>
+<ul>
+<li>Takeaway: jebakan kata.</li>
+</ul>
+<p>Paragraf lima puluh tujuh: istilah single-tenant tidak cocok untuk model SaaS ini.</p>
+<ul>
+<li>Quote: “Labeling this a single-tenant environment would undermine…”</li>
+<li>Takeaway: istilah itu mengembalikan diskusi ke definisi lama.</li>
+</ul>
+<p>Paragraf lima puluh delapan: istilah single-tenant dihentikan.</p>
+<ul>
+<li>Takeaway: diskusi sekarang fokus pada mode sharing, bukan label lawan.</li>
+</ul>
+<p>Paragraf lima puluh sembilan: ini soal vocabulary alignment.</p>
+<ul>
+<li>Takeaway: istilah dipilih karena berguna buat diskusi.</li>
+</ul>
+<h3 id="f-where-are-the-boundaries-of-saas-1">F. Where Are the Boundaries of SaaS?<a aria-hidden="true" class="anchor-heading icon-link" href="#f-where-are-the-boundaries-of-saas-1"></a></h3>
+<p>Paragraf enam puluh: nuance dependency eksternal.</p>
+<ul>
+<li>Takeaway: jangan membuat definisi SaaS terlalu sempit.</li>
+</ul>
+<p>Paragraf enam puluh satu: pertanyaan tentang distributed footprint.</p>
+<ul>
+<li>Takeaway: boundary bukan soal lokasi.</li>
+</ul>
+<p>Paragraf enam puluh dua: jika dependency tersembunyi, itu tetap SaaS.</p>
+<ul>
+<li>Quote: “If their presence is entirely hidden from your tenants… this is still SaaS to me.”</li>
+<li>Takeaway: hidden complexity is acceptable.</li>
+</ul>
+<p>Paragraf enam puluh tiga: exposed external dependency memecah SaaS.</p>
+<ul>
+<li>Takeaway: exposed complexity ruins the service boundary.</li>
+</ul>
+<p>Paragraf enam puluh empat: rule of thumb.</p>
+<ul>
+<li>Quote: “our tenants’ view is limited to the surface of our service.”</li>
+<li>Takeaway: tenant should see the surface, not the kitchen.</li>
+</ul>
+<h3 id="g-the-managed-service-provider-model-1">G. The Managed Service Provider Model<a aria-hidden="true" class="anchor-heading icon-link" href="#g-the-managed-service-provider-model-1"></a></h3>
+<p>Paragraf enam puluh lima: MSP bisa dilihat sebagai wrinkle.</p>
+<ul>
+<li>Takeaway: SaaS vs MSP perlu dibedakan.</li>
+</ul>
+<p>Paragraf enam puluh enam: pengantar Figure 1-7.</p>
+<p>Paragraf enam puluh tujuh: MSP masih punya environment terpisah.</p>
+<ul>
+<li>Takeaway: MSP bukan unified application model.</li>
+</ul>
+<p>Paragraf enam puluh delapan: operasi terpusat, tapi versi masih berbeda.</p>
+<ul>
+<li>Takeaway: MSP belum menghapus one-off variation.</li>
+</ul>
+<p>Paragraf enam puluh sembilan: vendor bisa bermitra dengan MSP.</p>
+<ul>
+<li>Takeaway: MSP adalah lapisan operasional, bukan software creation model.</li>
+</ul>
+<p>Paragraf tujuh puluh: gap SaaS vs MSP besar meski permukaan mirip.</p>
+<ul>
+<li>Takeaway: similar surface does not mean same structure.</li>
+</ul>
+<p>Paragraf tujuh puluh satu: same-version property penting sebagai pembeda.</p>
+<ul>
+<li>Quote: “customers are being allowed to run separate versions.”</li>
+<li>Takeaway: same-version adalah pembeda inti.</li>
+</ul>
+<p>Paragraf tujuh puluh dua: MSP memberi efisiensi tapi tetap warisi variation pain.</p>
+<ul>
+<li>Takeaway: MSP valid, tetapi bukan SaaS.</li>
+</ul>
+<p>Paragraf tujuh puluh tiga: budaya tim berbeda.</p>
+<ul>
+<li>Takeaway: team topology matters.</li>
+</ul>
+<p>Paragraf tujuh puluh empat: tim SaaS harus punya pulse runtime.</p>
+<ul>
+<li>Takeaway: observability dan operational awareness adalah business concerns.</li>
+</ul>
+<p>Paragraf tujuh puluh lima: MSP bisa stepping stone.</p>
+<ul>
+<li>Takeaway: bedakan, tapi jangan remehkan.</li>
+</ul>
+<h3 id="h-at-its-core-saas-is-a-business-model-1">H. At Its Core, SaaS Is a Business Model<a aria-hidden="true" class="anchor-heading icon-link" href="#h-at-its-core-saas-is-a-business-model-1"></a></h3>
+<p>Paragraf tujuh puluh enam: SaaS adalah business model.</p>
+<ul>
+<li>Quote: “you should really be viewing SaaS more as a business model.”</li>
+<li>Takeaway: SaaS bukan sekadar deployment. Ini model bisnis.</li>
+</ul>
+<p>Paragraf tujuh puluh tujuh: semua fungsi organisasi berubah.</p>
+<ul>
+<li>Takeaway: transformasi SaaS lebih dari engineering.</li>
+</ul>
+<p>Paragraf tujuh puluh delapan: SaaS harus fokus pada responsiveness ke pasar.</p>
+<ul>
+<li>Takeaway: model harus mendukung adaptasi cepat.</li>
+</ul>
+<p>Paragraf tujuh puluh sembilan: the needs of the many.</p>
+<ul>
+<li>Quote: “the needs of the many should always outweigh the needs of the few.”</li>
+<li>Takeaway: trade-offs harus dibuat untuk kolektif tenant.</li>
+</ul>
+<p>Paragraf delapan puluh: backlog SaaS butuh operational attributes.</p>
+<ul>
+<li>Takeaway: product backlog bukan cukup.</li>
+</ul>
+<p>Paragraf delapan puluh satu: engineer/QA juga harus memikirkan experience.</p>
+<ul>
+<li>Takeaway: tanggung jawab experience tersebar.</li>
+</ul>
+<p>Paragraf delapan puluh dua: marketing/pricing/support ikut berubah.</p>
+<ul>
+<li>Takeaway: SaaS mengaburkan batas fungsi organisasi.</li>
+</ul>
+<p>Paragraf delapan puluh tiga: ia mulai ajukan business principles.</p>
+<ul>
+<li>Takeaway: sekarang masuk ke nilai inti.</li>
+</ul>
+<p>Paragraf delapan puluh empat: agility.</p>
+<ul>
+<li>Quote: “A multi-tenant offering that reduced costs without realizing agility would certainly miss the broader value proposition of SaaS.”</li>
+<li>Takeaway: cost reduction tanpa agility bukan win.</li>
+</ul>
+<p>Paragraf delapan puluh lima: operational efficiency.</p>
+<ul>
+<li>Takeaway: ask yourself what happens if 1,000 customers show up.</li>
+</ul>
+<p>Paragraf delapan puluh enam: innovation.</p>
+<ul>
+<li>Takeaway: operational model yang baik memicu eksperimen.</li>
+</ul>
+<p>Paragraf delapan puluh tujuh: frictionless onboarding.</p>
+<ul>
+<li>Takeaway: onboarding bukan admin task. Ini growth engine.</li>
+</ul>
+<p>Paragraf delapan puluh delapan: growth as design assumption.</p>
+<ul>
+<li>Takeaway: SaaS membangun footprint yang life-ready.</li>
+</ul>
+<p>Paragraf delapan puluh sembilan: leadership alignment.</p>
+<ul>
+<li>Takeaway: SaaS is top-down too.</li>
+</ul>
+<p>Paragraf sembilan puluh: architecture is business-shaped.</p>
+<ul>
+<li>Quote: “Almost every dimension of your SaaS architecture and strategy is going to be derived from your business vision.”</li>
+<li>Takeaway: desain teknis harus muncul dari visi bisnis.</li>
+</ul>
+<p>Paragraf sembilan puluh satu: tanpa bisnis jelas, desain SaaS goyah.</p>
+<ul>
+<li>Takeaway: misalignment business-architecture is root cause.</li>
+</ul>
+<h3 id="i-building-a-servicenot-a-product-1">I. Building a Service—Not a Product<a aria-hidden="true" class="anchor-heading icon-link" href="#i-building-a-servicenot-a-product-1"></a></h3>
+<p>Paragraf sembilan puluh dua: product mindset sebagai status quo.</p>
+<ul>
+<li>Takeaway: product mindset lebih statis.</li>
+</ul>
+<p>Paragraf sembilan puluh tiga: product-thinking berfokus pada fitur.</p>
+<ul>
+<li>Takeaway: feature-oriented thinking tidak cukup.</li>
+</ul>
+<p>Paragraf sembilan puluh empat: shift to service.</p>
+<ul>
+<li>Quote: “with SaaS, we shift from creating a product to creating a service.”</li>
+<li>Takeaway: ini jauh lebih dari istilah.</li>
+</ul>
+<p>Paragraf sembilan puluh lima: service tetap perlu fungsionalitas, tapi experience lebih luas.</p>
+<ul>
+<li>Takeaway: service = fitur + end-to-end experience.</li>
+</ul>
+<p>Paragraf sembilan puluh enam: restoran analogy.</p>
+<ul>
+<li>Takeaway: output bagus tidak menjamin service bagus.</li>
+</ul>
+<p>Paragraf sembilan puluh tujuh: tenant expectations for service.</p>
+<ul>
+<li>Quote: “Having a great product won’t matter if the overall experience for customers does not meet their expectations.”</li>
+<li>Takeaway: service expectations can swamp product quality.</li>
+</ul>
+<p>Paragraf sembilan puluh delapan: tenant melihat surface service.</p>
+<ul>
+<li>Takeaway: internal complexity doesn’t matter to customer.</li>
+</ul>
+<p>Paragraf sembilan puluh sembilan: rapid innovation as service advantage.</p>
+<ul>
+<li>Takeaway: agility = competitive edge.</li>
+</ul>
+<p>Paragraf seratus: incumbents kalah karena lambat, bukan karena fitur kurang.</p>
+<ul>
+<li>Takeaway: speed can beat depth.</li>
+</ul>
+<p>Paragraf seratus satu: service mindset harus diukur.</p>
+<ul>
+<li>Takeaway: jika tidak diukur, ini gampang jadi jargon.</li>
+</ul>
+<h3 id="j-the-b2b-and-b2c-saas-story-1">J. The B2B and B2C SaaS Story<a aria-hidden="true" class="anchor-heading icon-link" href="#j-the-b2b-and-b2c-saas-story-1"></a></h3>
+<p>Paragraf seratus dua: B2B vs B2C differences.</p>
+<ul>
+<li>Takeaway: jangan generalisasi tanpa konteks.</li>
+</ul>
+<p>Paragraf seratus tiga: overlap principles, divergen implementation.</p>
+<ul>
+<li>Takeaway: prinsip bisa lintas segmen, implementasi tergantung market.</li>
+</ul>
+<p>Paragraf seratus empat: scope buku lebih dekat B2B.</p>
+<ul>
+<li>Takeaway: ini buku bergravitasi ke enterprise SaaS.</li>
+</ul>
+<h3 id="k-defining-saas-1">K. Defining SaaS<a aria-hidden="true" class="anchor-heading icon-link" href="#k-defining-saas-1"></a></h3>
+<p>Paragraf seratus lima: definisi eksplisit.</p>
+<ul>
+<li>Quote: “SaaS is a business and software delivery model that enables organizations to offer their solutions in a low-friction, service-centric model that maximizes value for customers and providers. It relies on agility and operational efficiency as pillars of a business strategy that promotes growth, reach, and innovation.”</li>
+<li>Takeaway: definisi ini miskin tool, kaya tujuannya.</li>
+</ul>
+<p>Paragraf seratus enam: responsibility arsitek memilih pattern yang mendukung tujuan.</p>
+<ul>
+<li>Takeaway: tool/architecture adalah konsekuensi, bukan definisi.</li>
+</ul>
+<h3 id="l-conclusion-1">L. Conclusion<a aria-hidden="true" class="anchor-heading icon-link" href="#l-conclusion-1"></a></h3>
+<p>Paragraf seratus tujuh: rekap fundamental mindset.</p>
+<ul>
+<li>Takeaway: SaaS menjawab problem model lama.</li>
+</ul>
+<p>Paragraf seratus delapan: aplikasi bagus saja belum cukup.</p>
+<ul>
+<li>Takeaway: operation/experience sama pentingnya.</li>
+</ul>
+<p>Paragraf seratus sembilan: tenant, shared infra, unified experience.</p>
+<ul>
+<li>Takeaway: unified experience adalah benang merah.</li>
+</ul>
+<p>Paragraf seratus sepuluh: pentingnya vocabulary.</p>
+<ul>
+<li>Takeaway: istilah adalah alat desain.</li>
+</ul>
+<p>Paragraf seratus sebelas: service vs product, MSP vs SaaS.</p>
+<ul>
+<li>Takeaway: fokus adalah bagaimana organisasi berpikir.</li>
+</ul>
+<p>Paragraf seratus dua belas: chapter ini membersihkan kacamatanya pembaca.</p>
+<ul>
+<li>Takeaway: bab lanjut bisa dibaca dengan frame yang lebih tajam.</li>
+</ul>
+<h2 id="quotes-yang-paling-load-bearing-1">Quotes yang paling load-bearing<a aria-hidden="true" class="anchor-heading icon-link" href="#quotes-yang-paling-load-bearing-1"></a></h2>
+<ul>
+<li>“It’s essential for SaaS architects to understand that SaaS is not a technology-first mindset.”</li>
+<li>“The scope of SaaS goes well beyond the technical. It is, in many respects, a mindset…”</li>
+<li>“This notion of having all tenants running the same version of your offering represents a common litmus test for SaaS environments.”</li>
+<li>“multi-tenant will refer to any environment that onboards, deploys, manages, and operates tenants through a single, unified experience.”</li>
+<li>“The sharedness of any infrastructure will have no correlation to the term ‘multi-tenancy.’”</li>
+<li>“the needs of the many should always outweigh the needs of the few.”</li>
+<li>“you should really be viewing SaaS more as a business model.”</li>
+<li>“with SaaS, we shift from creating a product to creating a service.”</li>
+<li>“Having a great product won’t matter if the overall experience for customers does not meet their expectations.”</li>
+<li>“SaaS is a business and software delivery model…”</li>
+</ul>
+<h2 id="takeaway-desain-saas-nyata-1">Takeaway desain SaaS nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway-desain-saas-nyata-1"></a></h2>
+<ol>
+<li>SaaS harus dimulai dengan business goals, bukan infra first.</li>
+<li>Multi-tenancy bukan lagi hanya soal shared infra; ia adalah soal unified operational experience.</li>
+<li>Surrounding service capabilities adalah tulang punggung, bukan pernak-pernik.</li>
+<li>Akurasi terminology penting untuk diskusi arsitektur hybrid dan dedicated.</li>
+<li>SaaS mengandalkan same-version discipline untuk menjaga agility dan simplicity.</li>
+<li>Service mindset memindahkan fokus dari "fitur" ke "experience." </li>
+<li>B2B/B2C beda implementasi; prinsip bisa overlap.</li>
+<li>SaaS adalah business model; leadership alignment penting.</li>
+<li>One-off variation harus diwaspadai; kebutuhan kolektif tenant lebih penting.</li>
+<li>Hidden complexity boleh ada; exposed complexity harus dikurangi.</li>
+</ol>
+<h2 id="insight-terbesar-1">Insight terbesar<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-terbesar-1"></a></h2>
+<p>Chapter 1 bukan hanya membahas definisi SaaS. Dia bekerja seperti pembersih lensa:</p>
+<p>di awal, dia menghapus kabut istilah; di tengah, dia mengganti definisi multi-tenancy; di akhir, dia menempatkan SaaS sebagai business/service model.</p>
+<p>Dengan kata lain: chapter ini menggeser cara berpikir dari "apa yang harus kita bangun" menjadi "bagaimana experience dan ekonomi model itu harus berfungsi." </p>
+<p>Kalau lo bisa membaca chapter ini sebagai rangkaian argumen, bukan sekadar kumpulan poin, lo akan lebih siap mengelola trade-off arsitektur dan operasi pada chapter berikutnya.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">saas (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">close-reading (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">service (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures">Building Multi-Tenant SaaS Architectures</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124501">SaaS bukan technology-first mindset</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124502">SaaS adalah business and delivery model</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124503">Installed software pain adalah customer variation</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124504">Pain terbesar model lama adalah hilangnya agility</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124505">Unified model adalah jawaban terhadap fragmentasi</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124506">Same-version sebagai litmus test SaaS</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124507">Cross-cutting capabilities adalah fondasi SaaS</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124508">Classic multi-tenancy terlalu sempit</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124509">Multi-tenancy SaaS = unified tenant experience</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124510">Shared and dedicated resources bisa berdampingan dalam SaaS</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124511">Dedicated infra belum tentu anti-SaaS</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124512">Hindari istilah single-tenant dalam konteks SaaS</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124513">Boundary SaaS ditentukan oleh apa tenant lihat</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124514">SaaS berbeda dengan MSP</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124515">SaaS adalah service, bukan product saja</a></li>
+<li><a href="/sotoy/notes/zettel.moc.multi-tenant-saas">MOC: Multi-Tenant SaaS Architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+</ul>

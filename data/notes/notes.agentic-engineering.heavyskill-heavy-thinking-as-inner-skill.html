@@ -1,0 +1,228 @@
+<h1 id="heavyskill-heavy-thinking-as-inner-skill-in-agentic-harness">HeavySkill: Heavy Thinking as Inner Skill in Agentic Harness<a aria-hidden="true" class="anchor-heading icon-link" href="#heavyskill-heavy-thinking-as-inner-skill-in-agentic-harness"></a></h1>
+<h2 id="context-check">Context check<a aria-hidden="true" class="anchor-heading icon-link" href="#context-check"></a></h2>
+<p>Paper ini punya istilah yang mudah disalahtafsirkan, jadi gue kunci dulu artinya:</p>
+<ul>
+<li>"Heavy Thinking" = pola inferensi test-time scaling dua tahap: banyak reasoning path dibuat paralel, lalu satu tahap deliberation yang menyintesis.</li>
+<li>"Skill" = dokumen instruksi yang bisa dimuat agentic harness, berisi kapan dipakai, bagaimana dipakai, dan seperti apa outputnya.</li>
+<li>"Agentic harness" = kerangka orkestrasi agent: model, subagent, memory, skill, tool, dan loop eksekusi.</li>
+<li>"Thinker" = satu trajectory generator, bukan agent dengan pengetahuan berbeda. 8 thinker bisa saja model yang sama dengan sampling independen.</li>
+<li>"Bias reviewer/deliberator" ada dua makna: bias posisi dalam prompt dan bias internal model. Paper ini lebih eksplisit soal bias posisi lewat shuffling cache, tetapi belum sepenuhnya menuntaskan bias internal model.</li>
+</ul>
+<p>Paper ini bukan tentang "AI mikir lama." Ini tentang:
+<strong>AI membuat beberapa percobaan berpikir secara terpisah, lalu satu reviewer membaca semua percobaan itu dan mengambil keputusan final.</strong></p>
+<h2 id="1-masalah-yang-coba-diselesaikan">1. Masalah yang coba diselesaikan<a aria-hidden="true" class="anchor-heading icon-link" href="#1-masalah-yang-coba-diselesaikan"></a></h2>
+<p>Masalah dasarnya: satu reasoning path itu rapuh.</p>
+<p>Kalau model cuma ikut satu lintasan awal, asumsi pertama bisa menuntun semua langkah berikutnya. Jika asumsi awal salah, jawaban akhir ikut bengkok.</p>
+<p>Contoh sederhana:</p>
+<ul>
+<li>"aplikasi lambat di repo besar" bisa jadi karena RAM, indexing, extension, context retrieval, I/O, atau integrasi IDE.</li>
+</ul>
+<p>Paper menanyakan: apakah agentic harness yang terlihat rumit sebenarnya hanya melakukan dua tahap sederhana?</p>
+<p>Jawabannya: ya — parallel reasoning lalu sequential deliberation.</p>
+<h2 id="2-apa-itu-heavyskill">2. Apa itu HeavySkill?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-apa-itu-heavyskill"></a></h2>
+<p>HeavySkill adalah pola kerja yang dipaketkan sebagai skill bagi agentic harness.</p>
+<p>Bukan model baru. Bukan framework baru. Bukan sekadar plugin.</p>
+<p>Ini adalah dokumen instruksi yang menjelaskan:</p>
+<ul>
+<li>kapan heavy thinking dipakai,</li>
+<li>bagaimana spawn K thinker,</li>
+<li>bagaimana reviewer mengevaluasi trajectory,</li>
+<li>format output final.</li>
+</ul>
+<p>Jadi HeavySkill adalah guardrail kognitif, bukan guardrail eksekusi.</p>
+<h2 id="3-workflow-heavy-thinking">3. Workflow Heavy Thinking<a aria-hidden="true" class="anchor-heading icon-link" href="#3-workflow-heavy-thinking"></a></h2>
+<p>Workflow Heavy Thinking adalah alur kerja inferensi dari input awal sampai jawaban final.</p>
+<h3 id="31-kalau-input-nya-satu-pertanyaan-kenapa-sistem-bikin-banyak-jawaban-dulu">3.1 Kalau input-nya satu pertanyaan, kenapa sistem bikin banyak jawaban dulu?<a aria-hidden="true" class="anchor-heading icon-link" href="#31-kalau-input-nya-satu-pertanyaan-kenapa-sistem-bikin-banyak-jawaban-dulu"></a></h3>
+<p>Karena satu jawaban tunggal rentan terjebak pada satu asumsi awal.</p>
+<p>Thinker 1 bisa fokus ke RAM.
+Thinker 2 bisa fokus ke indexing.
+Thinker 3 bisa fokus ke extension.
+Thinker 4 bisa fokus ke context retrieval.</p>
+<p>Membuat banyak jawaban dulu memperbanyak hipotesis awal sehingga sistem tidak terkunci pada satu lintasan.</p>
+<p>Atomic idea: parallel reasoning = memperbanyak kemungkinan agar tidak semua bergantung pada asumsi pertama.</p>
+<h3 id="32-apa-bedanya-parallel-reasoning-dengan-tanya-model-berkali-kali-biasa">3.2 Apa bedanya “parallel reasoning” dengan “tanya model berkali-kali” biasa?<a aria-hidden="true" class="anchor-heading icon-link" href="#32-apa-bedanya-parallel-reasoning-dengan-tanya-model-berkali-kali-biasa"></a></h3>
+<p>Beda utamanya:</p>
+<ul>
+<li>Parallel reasoning minta K thinker independen.</li>
+<li>Tanya model berkali-kali biasa bisa menghasilkan jawaban yang saling bias.</li>
+</ul>
+<p>Jika thinker B membaca atau dipengaruhi oleh output thinker A, ia bisa meniru asumsi yang sama. Heavy Thinking idealnya membuat setiap trajectory dimulai dari nol.</p>
+<p>Jadi parallel reasoning bukan sekadar repetisi. Ia adalah eksplorasi independen.</p>
+<h4 id="321-thinker-adalah-trajectory-generator">3.2.1 Thinker adalah trajectory generator<a aria-hidden="true" class="anchor-heading icon-link" href="#321-thinker-adalah-trajectory-generator"></a></h4>
+<p>Thinker di sini bukan berarti ada 8 agent berbeda. Thinker berarti satu generator trajectory. Jadi 8 thinker bisa saja model yang sama, dengan sampling independen dan prompt yang memaksa variasi.</p>
+<p>Masalah penting: kalau semua thinker berasal dari model yang sama dengan prior dan prompt mirip, diversity bisa palsu. 8 trajectory bisa berakhir sebagai 8 variasi jawaban yang sama.</p>
+<p>Atomic idea: parallel reasoning hanya berguna kalau ia benar-benar membuka beberapa jalur hipotesis; bukan sekadar echo chamber yang lebih mahal.</p>
+<h3 id="33-apa-itu-trajectory">3.3 Apa itu trajectory?<a aria-hidden="true" class="anchor-heading icon-link" href="#33-apa-itu-trajectory"></a></h3>
+<p>Trajectory adalah jalur reasoning dari input sampai kandidat jawaban.</p>
+<p>Bukan cuma jawaban akhirnya. Trajectory berisi:</p>
+<ul>
+<li>asumsi awal,</li>
+<li>langkah berpikir,</li>
+<li>evidence yang dipakai,</li>
+<li>kesimpulan sementara.</li>
+</ul>
+<p>Trajectory penting karena deliberator nanti akan menilai cara sampai ke jawaban, bukan hanya hasilnya.</p>
+<h3 id="34-apa-yang-terjadi-di-tahap-sequential-deliberation">3.4 Apa yang terjadi di tahap sequential deliberation?<a aria-hidden="true" class="anchor-heading icon-link" href="#34-apa-yang-terjadi-di-tahap-sequential-deliberation"></a></h3>
+<p>Tahap ini memakai reviewer model.</p>
+<p>Reviewer membaca semua trajectory.
+Tugasnya bukan memilih yang paling populer.
+Tugasnya:</p>
+<ul>
+<li>mengevaluasi reasoning,</li>
+<li>membandingkan evidence,</li>
+<li>mendeteksi error,</li>
+<li>menggabungkan insight,</li>
+<li>menulis final answer.</li>
+</ul>
+<p>Deliberation bukan ringkasan biasa. Ia adalah proses kritis.</p>
+<p>Contoh final answer yang bagus akan menggabungkan beberapa trajectory, bukan hanya memilih satu.</p>
+<h3 id="35-kenapa-hasil-akhirnya-bisa-lebih-baik-daripada-jawaban-tunggal">3.5 Kenapa hasil akhirnya bisa lebih baik daripada jawaban tunggal?<a aria-hidden="true" class="anchor-heading icon-link" href="#35-kenapa-hasil-akhirnya-bisa-lebih-baik-daripada-jawaban-tunggal"></a></h3>
+<p>Karena deliberator punya bahan dari banyak sumber.</p>
+<p>Jika satu trajectory minoritas benar, reviewer bisa menemukan dan memilihnya.
+Jika beberapa trajectory berbeda memberi bukti komplementer, reviewer bisa synthesize jawaban baru.</p>
+<p>Dengan satu jawaban tunggal, model hanya punya satu kesempatan. Dengan Heavy Thinking, model punya banyak hipotesis lalu satu kesempatan untuk memutuskan.</p>
+<h2 id="4-fungsi-serialized-memory-cache">4. Fungsi serialized memory cache<a aria-hidden="true" class="anchor-heading icon-link" href="#4-fungsi-serialized-memory-cache"></a></h2>
+<p>Serialized memory cache adalah mekanisme agentic workflow untuk menyimpan hasil thinkernya sebagai konteks terstruktur bagi tahap deliberation berikutnya.</p>
+<p>Di paper ini, "serialized memory cache" bukan memory internal model seperti KV-cache atau hidden state. Ini adalah memory eksternal: kumpulan trajectory yang dikumpulkan, dipangkas, diurutkan, lalu dirender sebagai prompt untuk reviewer.</p>
+<h3 id="41-apa-arti-serialize-di-sini">4.1 Apa arti "serialize" di sini?<a aria-hidden="true" class="anchor-heading icon-link" href="#41-apa-arti-serialize-di-sini"></a></h3>
+<p>"Serialize" artinya mengubah beberapa hasil reasoning yang terpisah menjadi satu representasi konteks terstruktur.</p>
+<p>Contoh:</p>
+<ul>
+<li>kumpulkan output T1–T4</li>
+<li>ekstrak hipotesis dan evidence penting</li>
+<li>label setiap thinker</li>
+<li>gabungkan menjadi satu paket prompt</li>
+</ul>
+<p>Atomic idea: serialization = mengubah output terpisah menjadi konteks yang bisa dibaca ulang.</p>
+<h3 id="42-kenapa-butuh-memory-cache">4.2 Kenapa butuh memory cache?<a aria-hidden="true" class="anchor-heading icon-link" href="#42-kenapa-butuh-memory-cache"></a></h3>
+<p>Karena Heavy Thinking adalah workflow dua tahap.</p>
+<p>Tahap 1: parallel reasoning.
+Tahap 2: sequential deliberation.</p>
+<p>Tanpa cache, reviewer tidak punya bahan. Memory cache berfungsi sebagai jembatan antar fase: catatan sementara yang menyimpan kandidat trajectory agar deliberator bisa membandingkan.</p>
+<p>Analogi: thinker = analis, memory cache = map berisi notulen mereka, deliberator = reviewer senior.</p>
+<h3 id="43-di-level-mana-cache-ini-hidup">4.3 Di level mana cache ini hidup?<a aria-hidden="true" class="anchor-heading icon-link" href="#43-di-level-mana-cache-ini-hidup"></a></h3>
+<p>Cache ini hidup di level agent/workflow/harness, bukan di dalam model sebagai mekanisme native.</p>
+<p>Di workflow mode, orchestrator eksternal memanggil model beberapa kali, menyimpan output, lalu menyusun prompt deliberation. Di skill mode, instruksi skill memandu orchestration ini, tetapi secara operasional cache tetap dibangun di luar parameter model.</p>
+<p>Atomic idea: serialized memory cache adalah runtime artifact, bukan learned memory di weights.</p>
+<h3 id="44-apa-isi-cache-nya">4.4 Apa isi cache-nya?<a aria-hidden="true" class="anchor-heading icon-link" href="#44-apa-isi-cache-nya"></a></h3>
+<p>Cache berisi versi terstruktur dari trajectory, bukan dump mentah.</p>
+<p>Isi yang ideal:</p>
+<ul>
+<li>hipotesis tiap thinker,</li>
+<li>evidence kunci,</li>
+<li>jawaban kandidat,</li>
+<li>indikasi counter-evidence,</li>
+<li>label thinker,</li>
+<li>metadata verification.</li>
+</ul>
+<p>Bentuknya bisa berupa teks terformat, JSON, markdown, atau blok prompt terstruktur.</p>
+<p>Atomic idea: cache menyimpan bahan minimum yang cukup untuk dibandingkan.</p>
+<h3 id="45-apa-bedanya-dengan-kv-cache-model">4.5 Apa bedanya dengan KV-cache model?<a aria-hidden="true" class="anchor-heading icon-link" href="#45-apa-bedanya-dengan-kv-cache-model"></a></h3>
+<p>KV-cache transformer adalah cache internal untuk attention, dipakai model di dalam inference pipeline.</p>
+<p>Serialized memory cache adalah cache eksternal untuk reasoning artifact yang dikelola agent/harness.</p>
+<p>KV-cache = cache komputasi.
+Serialized memory cache = cache reasoning.</p>
+<h3 id="46-kenapa-harus-di-prune-dan-di-shuffle">4.6 Kenapa harus di-prune dan di-shuffle?<a aria-hidden="true" class="anchor-heading icon-link" href="#46-kenapa-harus-di-prune-dan-di-shuffle"></a></h3>
+<p>Pruning diperlukan karena full trajectory terlalu panjang untuk prompt deliberator. Tanpa pruning, context window bisa meledak, evidence tenggelam, dan reviewer kewalahan.</p>
+<p>Shuffling diperlukan untuk mitigasi bias posisi: reviewer tidak selalu terpengaruh oleh jawaban awal atau akhir. Ini mengurangi bias prompt, tetapi bukan menghilangkan bias internal model.</p>
+<p>Atomic idea: cache adalah mekanisme presentasi evidence, bukan sekadar penyimpanan.</p>
+<h3 id="47-bedanya-dengan-conversation-history-biasa">4.7 Bedanya dengan conversation history biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#47-bedanya-dengan-conversation-history-biasa"></a></h3>
+<p>Conversation history adalah urutan pesan chat. Serialized memory cache adalah scratchpad terstruktur untuk satu task inferensi.</p>
+<p>Cache lebih spesifik: ia memuat hipotesis, evidence, dan struktur per thinker, bukan sekadar dialog user-assistant.</p>
+<p>Atomic idea: serialized memory cache adalah working memory eksternal untuk workflow, bukan histori obrolan biasa.</p>
+<h2 id="5-kenapa-deliberation-lebih-baik-dari-majority-voting">5. Kenapa deliberation lebih baik dari majority voting?<a aria-hidden="true" class="anchor-heading icon-link" href="#5-kenapa-deliberation-lebih-baik-dari-majority-voting"></a></h2>
+<p>Majority voting hanya melihat apa yang paling sering muncul.</p>
+<p>Deliberation menilai kualitas reasoning.</p>
+<p>Perbedaan inti:</p>
+<ul>
+<li>Voting: "jawaban mana paling populer?"</li>
+<li>Deliberation: "reasoning mana paling valid?"</li>
+</ul>
+<p>Ini krusial ketika jawaban benar adalah minoritas dan mayoritas sama-sama salah.</p>
+<h2 id="6-di-benchmark-apa-metode-ini-berhasil-dan-di-mana-lemah">6. Di benchmark apa metode ini berhasil dan di mana lemah?<a aria-hidden="true" class="anchor-heading icon-link" href="#6-di-benchmark-apa-metode-ini-berhasil-dan-di-mana-lemah"></a></h2>
+<p>HeavySkill unggul di benchmark correctness-oriented:</p>
+<ul>
+<li>AIME25,</li>
+<li>BeyondAIME,</li>
+<li>HMMT25-Feb,</li>
+<li>GPQA-Diamond.</li>
+</ul>
+<p>Di tugas preference-oriented, gain bisa kecil atau negatif:</p>
+<ul>
+<li>Arena-Hard,</li>
+<li>IMO Answer Bench,</li>
+<li>tugas gaya / opini.</li>
+</ul>
+<p>Intinya: HeavySkill bagus untuk pertanyaan yang punya sinyal benar-salah, kurang stabil untuk pertanyaan subjektif.</p>
+<h2 id="7-implikasi-untuk-agentic-coding-dan-ai-engineering">7. Implikasi untuk agentic coding dan AI engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#7-implikasi-untuk-agentic-coding-dan-ai-engineering"></a></h2>
+<p>Buat agentic coding, takeaway utama adalah:</p>
+<ul>
+<li>pisahkan generating options dari evaluating options,</li>
+<li>gunakan tool feedback sebagai evidence,</li>
+<li>jangan berharap single-pass jawaban cukup untuk masalah kompleks,</li>
+<li>jangan biarkan agent "reflect forever." Batasi iterasi.</li>
+</ul>
+<p>Workflow yang ideal:</p>
+<ul>
+<li>parallel agents menghasilkan hipotesis,</li>
+<li>serialized cache menyimpan evidence,</li>
+<li>deliberator membandingkan dan menyintesis,</li>
+<li>final answer diverifikasi oleh test/tool.</li>
+</ul>
+<h2 id="8-failure-mode-penting">8. Failure mode penting<a aria-hidden="true" class="anchor-heading icon-link" href="#8-failure-mode-penting"></a></h2>
+<p>Heavy Thinking gagal jika:</p>
+<ul>
+<li>trajectory tidak beragam,</li>
+<li>deliberator hanya ikut mayoritas,</li>
+<li>cache terlalu panjang atau terlalu dipangkas,</li>
+<li>task terlalu subjektif,</li>
+<li>reflection berlebihan tanpa evidence,</li>
+<li>tool feedback tidak dipakai.</li>
+</ul>
+<p>Khususnya:</p>
+<ul>
+<li>kalau semua thinker sama, parallel reasoning jadi echo chamber.</li>
+<li>kalau reviewer bias, deliberation bisa memilih jawaban yang nyaman, bukan yang benar.</li>
+</ul>
+<p>Mitigasi yang lebih kuat:</p>
+<ul>
+<li>desain role-based thinker dengan lensa berbeda,</li>
+<li>struktur cache jadi evidence+hypothesis, bukan narasi panjang,</li>
+<li>randomize order dan anonymize thinker,</li>
+<li>minta reviewer menilai bukti, kontra-evidence, dan kemungkinan kegagalan,</li>
+<li>pakai second-pass verification untuk task penting.</li>
+</ul>
+<h2 id="9-analogi-praktis">9. Analogi praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#9-analogi-praktis"></a></h2>
+<p>Heavy Thinking mirip mini review board:</p>
+<ul>
+<li>beberapa orang beri solusi sendiri-sendiri,</li>
+<li>satu moderator/reviewer baca semuanya,</li>
+<li>moderator memilih atau menggabungkan solusi terbaik.</li>
+</ul>
+<p>Bukan satu orang langsung menjawab.</p>
+<h2 id="takeaway">Takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway"></a></h2>
+<p>Heavy Thinking bukan "AI mikir panjang." Lebih tepat:
+<strong>AI membuat beberapa percobaan berpikir secara terpisah, lalu satu AI reviewer membaca semua percobaan itu dan membuat keputusan final.</strong></p>
+<p>Ini adalah pattern kerja AI yang bisa dipakai di agentic harness.</p>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+<li><a href="/sotoy/notes/zettel.20260508142459">AI slop is research if bounded; it becomes architecture if it survives too long</a></li>
+<li><a href="/sotoy/notes/zettel.20260508152050">HeavySkill turns parallel reasoning plus deliberation into a reusable agentic skill</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-harness (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">heavy-thinking (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260508152050">HeavySkill turns parallel reasoning plus deliberation into a reusable agentic skill</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.08">2026-05-08</a></li>
+</ul>

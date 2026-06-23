@@ -1,0 +1,192 @@
+<h1 id="overtrust-workflow-detail-cara-kerja-local-scanner-dan-trust-boundary">Overtrust workflow detail: cara kerja local scanner dan trust boundary<a aria-hidden="true" class="anchor-heading icon-link" href="#overtrust-workflow-detail-cara-kerja-local-scanner-dan-trust-boundary"></a></h1>
+<p>Overtrust buat gue bukan alat yang cuma "ngasih daftar issue". Dari cara kerjanya, dia lebih kayak audit lokal untuk trust boundary workstation.</p>
+<p>Yang bikin Overtrust beda adalah workflow-nya:</p>
+<ul>
+<li>dia jalanin scan lokal tanpa cloud,</li>
+<li>dia klasifikasi file dan process,</li>
+<li>dia hitung risiko dengan rule deterministik,</li>
+<li>dia keluarkan output yang bisa ditriage.</li>
+</ul>
+<p>Bukti ini nggak cuma feeling: kode asli Overtrust di <code>.references/overtrust</code> nunjukin prosesnya jelas. Bahkan sebagian besar logikanya memang hardcoded: pattern secret di <code>secrets.cpp</code>, heuristik file kind di <code>classifier.cpp</code>, scoring rule di <code>manifest.cpp</code>, dan privilege/process rule di <code>procscanner_linux.cpp</code>.</p>
+<h3 id="evidence-langsung-dari-kode">Evidence langsung dari kode<a aria-hidden="true" class="anchor-heading icon-link" href="#evidence-langsung-dari-kode"></a></h3>
+<p>Di <code>src/main.cpp</code>, eksekusi utama masuk ke <code>overtrust::ScanEngine</code> dan <code>run_headless()</code>. Itu berarti target scan, progress, dan hasil JSON semuanya dikelola di executable, bukan di cloud.</p>
+<p>Di <code>src/scanner/engine.cpp</code>, ada fase-fase ini:</p>
+<pre class="language-cpp"><code class="language-cpp"><span class="token comment">// Phase 1: Walk filesystem</span>
+<span class="token function">walk_directory</span><span class="token punctuation">(</span>fs<span class="token double-colon punctuation">::</span><span class="token function">path</span><span class="token punctuation">(</span>target_<span class="token punctuation">)</span><span class="token punctuation">,</span> files<span class="token punctuation">,</span> total<span class="token punctuation">,</span> ignore_patterns<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Phase 2: Classify + scan each file</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span><span class="token operator">&#x26;</span> path <span class="token operator">:</span> files<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    FileKind kind <span class="token operator">=</span> <span class="token function">classify_file</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>kind<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> FileKind<span class="token double-colon punctuation">::</span>VsCodeExtension<span class="token operator">:</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+      <span class="token keyword">case</span> FileKind<span class="token double-colon punctuation">::</span>NpmPackageJson<span class="token operator">:</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+      <span class="token keyword">case</span> FileKind<span class="token double-colon punctuation">::</span>Dockerfile<span class="token operator">:</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>kind <span class="token operator">==</span> FileKind<span class="token double-colon punctuation">::</span>TextFile <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">auto</span> secrets <span class="token operator">=</span> <span class="token function">scan_for_secrets</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> pstr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span><span class="token operator">&#x26;</span> s <span class="token operator">:</span> secrets<span class="token punctuation">)</span> <span class="token function">emit</span><span class="token punctuation">(</span><span class="token function">secret_to_finding</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> pstr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Phase 3: Process scan</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span><span class="token operator">&#x26;</span> f <span class="token operator">:</span> <span class="token function">scan_processes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">emit</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Phase 4: Build trust graph + compute score</span>
+</code></pre>
+<p>Di <code>src/scanner/classifier.cpp</code>, Overtrust pakai heuristik path dan nama file untuk mengidentifikasi target risiko:</p>
+<pre class="language-cpp"><code class="language-cpp"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">path_contains</span><span class="token punctuation">(</span>pathstr<span class="token punctuation">,</span> <span class="token string">"/.aws/"</span><span class="token punctuation">)</span> <span class="token operator">&#x26;&#x26;</span> <span class="token punctuation">(</span>name <span class="token operator">==</span> <span class="token string">"credentials"</span> <span class="token operator">||</span> name <span class="token operator">==</span> <span class="token string">"config"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> FileKind<span class="token double-colon punctuation">::</span>AwsCredentials<span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">path_contains</span><span class="token punctuation">(</span>pathstr<span class="token punctuation">,</span> <span class="token string">"/.kube/"</span><span class="token punctuation">)</span> <span class="token operator">&#x26;&#x26;</span> name <span class="token operator">==</span> <span class="token string">"config"</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> FileKind<span class="token double-colon punctuation">::</span>KubeConfig<span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>name <span class="token operator">==</span> <span class="token string">".bash_history"</span> <span class="token operator">||</span> name <span class="token operator">==</span> <span class="token string">".zsh_history"</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> FileKind<span class="token double-colon punctuation">::</span>ShellHistory<span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>name <span class="token operator">==</span> <span class="token string">"package.json"</span> <span class="token operator">&#x26;&#x26;</span> <span class="token function">path_contains</span><span class="token punctuation">(</span>pathstr<span class="token punctuation">,</span> <span class="token string">"/.vscode/extensions/"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> FileKind<span class="token double-colon punctuation">::</span>VsCodeExtension<span class="token punctuation">;</span>
+</code></pre>
+<p>Di <code>src/scanner/secrets.cpp</code>, secret detection pakai lima langkah:</p>
+<ol>
+<li>keyword pre-filter (<code>pat.keyword</code>)</li>
+<li>regex scan (<code>std::regex re(pat.regex_str)</code>)</li>
+<li>entropy check</li>
+<li>false positive guard</li>
+<li>PEM/source-code guard</li>
+</ol>
+<p>Contoh:</p>
+<pre class="language-cpp"><code class="language-cpp"><span class="token keyword">if</span> <span class="token punctuation">(</span>content<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>pat<span class="token punctuation">.</span>keyword<span class="token punctuation">)</span> <span class="token operator">==</span> std<span class="token double-colon punctuation">::</span>string<span class="token double-colon punctuation">::</span>npos<span class="token punctuation">)</span>
+    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">shannon_entropy</span><span class="token punctuation">(</span>matched<span class="token punctuation">)</span> <span class="token operator">&#x3C;</span> pat<span class="token punctuation">.</span>min_entropy<span class="token punctuation">)</span>
+    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">is_false_positive</span><span class="token punctuation">(</span>matched<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">continue</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Dan untuk scan process, <code>src/scanner/procscanner_linux.cpp</code> ternyata nggak cuma baca PID. Dia filter system daemon, kemudian flag:</p>
+<ul>
+<li>proses user dengan kapabilitas berbahaya (<code>CAP_SYS_PTRACE</code>, <code>CAP_SYS_ADMIN</code>),</li>
+<li>root process tanpa seccomp,</li>
+<li>proses yang buka sensitive file descriptor,</li>
+<li>agent AI yang baca sensitive file.</li>
+</ul>
+<p>Seperti di kode:</p>
+<pre class="language-cpp"><code class="language-cpp"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">is_ai_tool</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span> <span class="token operator">&#x26;&#x26;</span> <span class="token operator">!</span>p<span class="token punctuation">.</span>sensitive_fds<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"PROC-004"</span><span class="token punctuation">,</span> Severity<span class="token double-colon punctuation">::</span>Critical<span class="token punctuation">,</span> <span class="token number">9.5</span><span class="token punctuation">,</span>
+        <span class="token string">"AI tool "</span> <span class="token operator">+</span> proc_label <span class="token operator">+</span> <span class="token string">" is reading sensitive files"</span><span class="token punctuation">,</span>
+        <span class="token string">"Open sensitive FDs: "</span> <span class="token operator">+</span> std<span class="token double-colon punctuation">::</span><span class="token function">to_string</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>sensitive_fds<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Jadi bukti dari repo memang konsisten: Overtrust bukan sekadar secret scanner. Dia punya sequencing jelas, rule deterministik, dan process-aware logic yang bisa jadi dasar trust boundary check.</p>
+<p>Ini bukan review cloud, bukan inference AI, dan jelas juga bukan pentest runtime. Overtrust lebih cocok kalau lo lagi mau cek: apakah ada komponen lokal yang bisa nyentuh secret, atau apakah ada process/tool yang bisa nge-eksekusi command berbahaya.</p>
+<h3 id="kerjaannya-dari-gue-lihat">Kerjaannya dari gue lihat<a aria-hidden="true" class="anchor-heading icon-link" href="#kerjaannya-dari-gue-lihat"></a></h3>
+<p>Walau terdengar sederhana, Overtrust sebenarnya punya beberapa layer logika:</p>
+<ul>
+<li><code>walker.cpp</code> untuk jalanin filesystem dan apply ignore path.</li>
+<li><code>classifier.cpp</code> untuk menebak jenis file atau artefak.</li>
+<li><code>manifest.cpp</code> buat parse manifest VS Code, npm, Dockerfile.</li>
+<li><code>secrets.cpp</code> buat deteksi secret, keyword, regex, entropy, dan guard false positive.</li>
+<li><code>procscanner_linux.cpp</code> / <code>procscanner_win.cpp</code> buat scan process dan privilege.</li>
+</ul>
+<p>Intinya: Overtrust nggak cuma "baca file dan flag". Dia juga nanya soal konteks. Contohnya:</p>
+<ul>
+<li>apakah file itu credential wajar?</li>
+<li>apakah proses ini berjalan dengan privilege tinggi?</li>
+<li>apakah ekstensi editor punya auth provider?</li>
+<li>apakah npm script atau Dockerfile jalanin <code>curl | bash</code>?</li>
+</ul>
+<p>Semua ini dikerjain secara lokal, nggak dikirim ke cloud.</p>
+<h3 id="flow-yang-gue-nangkep">Flow yang gue nangkep<a aria-hidden="true" class="anchor-heading icon-link" href="#flow-yang-gue-nangkep"></a></h3>
+<p>Pertama, Overtrust inisialisasi scan. Lo kasih root path, dia crawl file lokal. Yang menarik: dia nggak cuma ngebaca repo, tapi dia juga ngecek file di luar repo seperti <code>~/.aws/credentials</code> dan <code>~/.kube/config</code>.</p>
+<p>Kedua, dia klasifikasi konten. Gue lihat beberapa contoh penting:</p>
+<ul>
+<li><code>Dockerfile</code> bisa berarti risiko root/container atau <code>curl | bash</code>.</li>
+<li><code>package.json</code> / <code>npmrc</code> bisa jadi tanda install script berbahaya atau credential lepas.</li>
+<li>dotfile seperti <code>.env</code>, <code>.npmrc</code>, <code>.pypirc</code> fokus ke credential state.</li>
+<li>manifest extension VS Code bisa ngasih sinyal runtime extension yang punya terminal/auth access.</li>
+</ul>
+<p>Kalau file itu punya ciri secret, Overtrust nggak langsung flag 100%. Dia cek format, entropy, dan apakah keyword itu masuk akal. Jadi ini bukan alarm tanpa filtro.</p>
+<h3 id="beda-paling-penting-process-dan-privilege">Beda paling penting: process dan privilege<a aria-hidden="true" class="anchor-heading icon-link" href="#beda-paling-penting-process-dan-privilege"></a></h3>
+<p>Bagian ini yang bikin Overtrust bukan sekadar secret scanner biasa.</p>
+<p>Untuk Linux, dia lihat process yang jalan dengan privilege kayak:</p>
+<ul>
+<li><code>CAP_SYS_PTRACE</code></li>
+<li><code>CAP_SYS_ADMIN</code></li>
+<li>file descriptor sensitif</li>
+</ul>
+<p>Untuk Windows, dia lihat token seperti:</p>
+<ul>
+<li><code>SeDebugPrivilege</code></li>
+<li><code>SeTcbPrivilege</code></li>
+<li>elevated token</li>
+</ul>
+<p>Jadi, bukan cuma "ada secret di disk". Dia juga nanya, "ada process yang bisa baca secret itu sekarang nggak?"</p>
+<h3 id="evaluasi-trust-boundary">Evaluasi trust boundary<a aria-hidden="true" class="anchor-heading icon-link" href="#evaluasi-trust-boundary"></a></h3>
+<p>Dari seluruh deteksi tadi, Overtrust merangkai risk boundary:</p>
+<ul>
+<li>apakah extension editor bisa jalankan terminal atau akses data?</li>
+<li>apakah process punya privilege yang bisa ngexfiltrate?</li>
+<li>apakah ada manifest yang nge-trigger command berbahaya?</li>
+<li>apakah credential file itu accessible?</li>
+</ul>
+<p>Gue suka bagian ini karena dia mendorong kita mikir ulang tentang workstation: bukan cuma repo, tapi boundary antara manusia, tool, dan secret.</p>
+<h3 id="outputnya-bukan-sekadar-flag">Outputnya bukan sekadar flag<a aria-hidden="true" class="anchor-heading icon-link" href="#outputnya-bukan-sekadar-flag"></a></h3>
+<p>Hasil scan Overtrust bukan list issue doang. Dia ngasih skor, kategori, dan konteks. Dari situ, lo bisa langsung triage:</p>
+<ul>
+<li>issue mana kritis karena process privileged?</li>
+<li>issue mana low-risk karena file credentialnya nggak aktif atau hanyalah config dev?</li>
+<li>issue mana false positive karena manifest cuma buat dev biasa?</li>
+</ul>
+<p>Makanya gue bilang, kalau <code>notes.security.overtrust</code> cuma ringkas, kita bisa kehilangan inti workflow lokal dan trust boundary yang sebenarnya.</p>
+<h3 id="kenapa-ini-penting-buat-gue">Kenapa ini penting buat gue<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting-buat-gue"></a></h3>
+<p>Overtrust jadi relevan buat gue di dua keadaan:</p>
+<ul>
+<li>sebelum jalanin agentic tool, cek dulu apakah workstation punya trust gap.</li>
+<li>saat nge-review lingkungan dev, karena perhatian seharusnya nggak berhenti di repo.</li>
+</ul>
+<p>Kalau lo cuma anggap ini <code>secrets scanner</code>, lo kelewatan. Ini lebih tentang "siapa yang bisa baca secret" dan "siapa yang bisa ngejalanin command".</p>
+<h3 id="kelemahan-yang-harus-diakui">Kelemahan yang harus diakui<a aria-hidden="true" class="anchor-heading icon-link" href="#kelemahan-yang-harus-diakui"></a></h3>
+<p>Sekalipun gue suka, gue juga ngerasa ini bukan jawaban semua.</p>
+<ul>
+<li>ini bukan vulnerability scanner aplikasi.</li>
+<li>ini bukan alat untuk runtime exploit di cloud.</li>
+<li>ini nggak punya threat intel package reputation.</li>
+<li>ini rule-based, jadi butuh maintenance kalau ekosistem tool atau extension bergeser.</li>
+</ul>
+<p>Jadi dalam gaya gue: ini bagus buat audit lokal dan boundary, tapi jangan disalahartikan sebagai pengganti pentest atau SAST.</p>
+<h3 id="hubungan-dengan-note-ringkasan-overtrust">Hubungan dengan note ringkasan Overtrust<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-dengan-note-ringkasan-overtrust"></a></h3>
+<p><code>notes.security.overtrust</code> tetap versi high-level. Note ini gue buat supaya ada versi detail yang jelas gaya gue dan tetap cerita dari sudut pandang developer.</p>
+<p>Kalau lo mau baca yang ringkas dulu, buka <code>[[notes.security.overtrust]]</code>.</p>
+<h2 id="related-notes">Related Notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+<li><a href="/sotoy/notes/notes.security.agentic-coding-permission-boundary">Agentic coding permission boundary dan risiko filesystem lokal</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-docs">Deepsec docs: workflow harness, bukan scanner sekali jalan</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-harness">Deepsec: security harness untuk codebase besar</a></li>
+</ul>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><code>https://github.com/cheese-cakee/overtrust</code></li>
+<li><code>.references/overtrust</code></li>
+<li><code>src/main.cpp</code></li>
+<li><code>src/scanner/engine.cpp</code></li>
+<li><code>src/scanner/classifier.cpp</code></li>
+<li><code>src/scanner/secrets.cpp</code></li>
+<li><code>src/scanner/procscanner_linux.cpp</code></li>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">overtrust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-coding (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777995556481">Audit trust boundary lokal sebagai ide keamanan developer</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust-evaluation">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+<li><a href="/sotoy/notes/notes.security.tanstack-postmortem">TanStack npm supply-chain compromise — postmortem notes</a></li>
+<li><a href="/sotoy/notes/notes.security.trusted-publishing-checklist">Trusted publishing: kritik argumen dan checklist operasional</a></li>
+<li><a href="/sotoy/notes/zettel.literature.overtrust">Overtrust sebagai literature note: audit local trust boundary</a></li>
+</ul>

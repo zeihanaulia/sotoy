@@ -1,0 +1,25 @@
+<h1 id="review-comments-should-be-encoded-as-guardrails-not-left-in-pr-threads">Review comments should be encoded as guardrails, not left in PR threads<a aria-hidden="true" class="anchor-heading icon-link" href="#review-comments-should-be-encoded-as-guardrails-not-left-in-pr-threads"></a></h1>
+<p>Review comments seperti "jangan query DB di loop" atau "ini rawan N+1" bukan hanya feedback untuk satu PR. Itu judgement operasional yang harus dipindahkan ke workflow sebagai guardrail, bukan disimpan di thread review.</p>
+<p>Jika peringatan yang sama terus muncul, senior engineer paling bernilai ketika dia tidak lagi mengulanginya di review. Yang lebih penting adalah membuat rule atau sensor yang mencegah kelas kesalahan itu, misalnya:</p>
+<ul>
+<li>Semgrep rule untuk pola query di loop</li>
+<li>regression test query count</li>
+<li>runtime profiler / request path observability</li>
+<li>stable <code>./.ai/commands/verify.sh</code> yang menjalankan semua sensor tersebut</li>
+</ul>
+<p>Dengan begini, knowledge jadi reusable dan review manusia bisa fokus ke judgement domain/arsitektur, bukan koreksi kesalahan operasional yang berulang.</p>
+<p>Related:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.self-hosted-agent-runner">Self-Hosted Cloud Agent Runner</a></li>
+<li><a href="/sotoy/notes/til.ai.semgrep.guardrails">Semgrep sebagai guardrail agentic engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260506180000">verify.sh is a verification entrypoint, not a sensor</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">guardrail (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">review (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+</ol>

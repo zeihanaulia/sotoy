@@ -1,0 +1,144 @@
+<h1 id="evaluasi-overtrust-konsep-bagus-tapi-rule-based-dan-belum-all-cover">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover<a aria-hidden="true" class="anchor-heading icon-link" href="#evaluasi-overtrust-konsep-bagus-tapi-rule-based-dan-belum-all-cover"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue lihat Overtrust sebagai proof-of-concept yang menarik: dia fokus ke workstation trust boundary, bukan cuma secret scanning. Itu ide bagus dan agak under-explored di dunia agentic tooling.</p>
+<p>Tapi jangan salah: implementation-nya memang hardcoded, dan itu bikin dia lebih cocok sebagai scanner rule-based dibandingkan produk mature yang comprehensive.</p>
+<h2 id="apa-yang-sudah-dia-cover">Apa yang sudah dia cover<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-sudah-dia-cover"></a></h2>
+<p>Dari kode dan README, Overtrust ngelakuin beberapa hal penting:</p>
+<ul>
+<li>scan filesystem lokal dan ignore path dengan rule <code>.overtrustignore</code> / <code>.trustignore</code></li>
+<li>klasifikasi file lewat path heuristik dan magic bytes (<code>classifier.cpp</code>)</li>
+<li>parse manifest VS Code, npm, Dockerfile untuk deteksi ekstensi, install script, dan <code>curl | bash</code> (<code>manifest.cpp</code>)</li>
+<li>secret detection dengan keyword pre-filter + regex + entropy + false-positive guard (<code>secrets.cpp</code>)</li>
+<li>process scan di Linux untuk capabilities, seccomp, sensitive FD, dan AI tool detection (<code>procscanner_linux.cpp</code>)</li>
+<li>output report + trust score + JSON export + optional exit-code</li>
+</ul>
+<p>Itu kombinasi yang menarik karena dia nyambungin dua domain: file-level exposure dan runtime process privilege.</p>
+<h2 id="apakah-ini-sudah-meng-cover-semua">Apakah ini sudah meng-cover semua?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-ini-sudah-meng-cover-semua"></a></h2>
+<p>Jawabannya: nggak. Overtrust sengaja hardcoded, jadi dia hanya cover apa yang sudah dituliskan di kodenya.</p>
+<p>Contoh coverage yang dipastikan:</p>
+<ul>
+<li><code>aws credentials</code> di <code>~/.aws/</code></li>
+<li><code>kubeconfig</code> di <code>~/.kube/config</code></li>
+<li>shell history file</li>
+<li>SSH private key patterns</li>
+<li>Dockerfile root / <code>curl | bash</code></li>
+<li>VS Code extension auth providers, terminal access, debugger, always-on activation</li>
+<li>known AI tool names seperti Cursor, Copilot, Codeium</li>
+<li>pattern secret seperti <code>sk-</code>, <code>ghp_</code>, <code>xoxb-</code>, <code>PEM</code>, dan lain-lain</li>
+</ul>
+<p>Karena semua itu hardcoded, risiko utamanya:</p>
+<ul>
+<li>kalau secret atau tool baru muncul, Overtrust nggak akan tangkep sampai rulesnya diupdate</li>
+<li>kalau file disimpan di lokasi tak terduga atau pakai nama nggak standar, classifier bisa miss</li>
+<li><code>is_ai_tool()</code> hanya berdasarkan nama proses yang disebutkan di kode</li>
+<li>process scan cuma lihat privilege dan sensitive FDs, bukan apakah data benar-benar keluar lewat jaringan</li>
+<li>tidak ada threat intel/reputation, jadi hanya indikator statis</li>
+</ul>
+<p>Jadi jangan kira ini all-cover. Dia cover sejumlah domain penting dengan cara deterministik, tapi dia bukan oracle workstation security.</p>
+<h2 id="flaw-utama-yang-gue-tangkep">Flaw utama yang gue tangkep<a aria-hidden="true" class="anchor-heading icon-link" href="#flaw-utama-yang-gue-tangkep"></a></h2>
+<h3 id="1-rule-based-bukan-learning">1. Rule-based, bukan learning<a aria-hidden="true" class="anchor-heading icon-link" href="#1-rule-based-bukan-learning"></a></h3>
+<p>Bukan flaw kalau memang tujuannya deterministik. Tapi efeknya adalah maintenance burden dan blind spot. <code>secrets.cpp</code> pake regex + entropy + FP guard — bagus, tapi kalau format secret baru atau prefix baru muncul, lo harus patch kodenya.</p>
+<h3 id="2-heuristik-path-bisa-dilewati">2. Heuristik path bisa dilewati<a aria-hidden="true" class="anchor-heading icon-link" href="#2-heuristik-path-bisa-dilewati"></a></h3>
+<p>Kalau attacker/misal dev menyimpan credential di <code>~/config/aws.config</code> bukan <code>~/.aws/credentials</code>, Overtrust bisa saja miss. Sama dengan manifest: kalau extension pakai nama package lain dan ngasih auth capability tanpa kebiasaan <code>contributes.authentication</code>, tool ini bisa terlewat.</p>
+<h3 id="3-ai-tool-detection-terbatas">3. AI tool detection terbatas<a aria-hidden="true" class="anchor-heading icon-link" href="#3-ai-tool-detection-terbatas"></a></h3>
+<p><code>is_ai_tool()</code> cuma cek nama dan command line matching string seperti <code>copilot</code>, <code>cursor</code>, <code>claude</code>. Ini gampang dilewati dengan nama proses lain atau wrapper script.</p>
+<h3 id="4-process-scan-masih-statis">4. Process scan masih statis<a aria-hidden="true" class="anchor-heading icon-link" href="#4-process-scan-masih-statis"></a></h3>
+<p>Proses yang buka sensitive FD atau punya <code>CAP_SYS_ADMIN</code> itu warning bagus, tapi belum berarti exploit path selesai. Kalau process sudah punya akses tapi tidak benar-benar menggunakan data, nilai signal masih sulit.</p>
+<h3 id="5-kurang-konteks-jaringan-dan-runtime">5. Kurang konteks jaringan dan runtime<a aria-hidden="true" class="anchor-heading icon-link" href="#5-kurang-konteks-jaringan-dan-runtime"></a></h3>
+<p>Overtrust fokus workstation, tapi dia nggak lihat koneksi jaringan aktif, service binding, atau apakah app sedang mengekspose data. Di banyak threat model, itu penting.</p>
+<h3 id="6-no-policyconfig-customization-beyond-ignore">6. No policy/config customization beyond ignore<a aria-hidden="true" class="anchor-heading icon-link" href="#6-no-policyconfig-customization-beyond-ignore"></a></h3>
+<p>Dia punya ignore file. Tapi kalau lo butuh whitelist, severity tuning, atau custom rules, nggak jelas tersedia.</p>
+<h2 id="tools-sejenis-yang-lebih-mature">Tools sejenis yang lebih mature<a aria-hidden="true" class="anchor-heading icon-link" href="#tools-sejenis-yang-lebih-mature"></a></h2>
+<p>Kalau dilihat domainnya, Overtrust sejatinya berdiri di tengah beberapa kategori yang jauh lebih matang.</p>
+<h3 id="secretfile-scanning">Secret/file scanning<a aria-hidden="true" class="anchor-heading icon-link" href="#secretfile-scanning"></a></h3>
+<ul>
+<li><a href="https://github.com/trufflesecurity/trufflehog">truffleHog</a>: scanner yang fokus ke history Git dan file system untuk pattern secret, credentials, dan konfigurasi sensitif.</li>
+<li><a href="https://github.com/zricethezav/gitleaks">gitleaks</a>: secret scanner untuk repo dan pipeline dengan rules library yang bisa di-custom.</li>
+<li><a href="https://github.com/Yelp/detect-secrets">detect-secrets</a>: pre-commit secret detection engine yang lebih kuat karena bisa integrate ke workflow Git.</li>
+<li><a href="https://github.com/awslabs/git-secrets">git-secrets</a>: AWS-centric secret prevention di Git hooks.</li>
+<li><a href="https://github.com/betterleaks/betterleaks">betterleaks</a>: secrets scanner modern dengan fokus performa dan konfigurabilitas.</li>
+<li><a href="https://github.com/newrelic/rusty-hog">rusty-hog</a>: secret scanning berbasis Rust untuk kecepatan dan rule set yang kuat.</li>
+</ul>
+<p>Overtrust punya overlap di bagian secret detection, tapi targetnya beda. Overtrust bukan cuma scan file; dia juga hubungkan secret dengan file type, manifest, dan process lokal. Tool mature di atas lebih bagus untuk scan repo/commit history, aturan secret yang kontinu, dan false-positive tuning.</p>
+<h3 id="manifestscript-auditing">Manifest/script auditing<a aria-hidden="true" class="anchor-heading icon-link" href="#manifestscript-auditing"></a></h3>
+<ul>
+<li><a href="https://github.com/hadolint/hadolint">hadolint</a>: Dockerfile linter yang cek best practice, compliance, dan potensi risk.</li>
+<li><code>npm audit</code>: built-in audit untuk package dependency dan vulnerability di ekosistem npm.</li>
+<li><a href="https://github.com/replicatedhq/dockerfilelint">dockerfilelint</a>: linter Dockerfile lain dengan rule-based audit.</li>
+<li><code>npm-package-arg</code>: tooling parse/manipulasi package spec, berguna untuk audit package manifest.</li>
+</ul>
+<p>Overtrust juga parse manifest dan cari pola berbahaya seperti <code>curl | bash</code>, extension auth provider, dan npm install script. Bedanya: tool khusus seperti <code>hadolint</code> atau <code>npm audit</code> punya coverage rule library jauh lebih luas, sementara Overtrust fokus ke kondisi lokal developer yang bisa jadi trigger eksfiltrasi atau build-time risk.</p>
+<h3 id="hostprocess-monitoring">Host/process monitoring<a aria-hidden="true" class="anchor-heading icon-link" href="#hostprocess-monitoring"></a></h3>
+<ul>
+<li><a href="https://github.com/falcosecurity/falco">Falco</a>: real-time runtime security monitoring dengan rule untuk proses, syscall, dan perilaku host.</li>
+<li><a href="https://github.com/osquery/osquery">osquery</a>: query-based visibility untuk state host, proses, dan konfigurasi.</li>
+<li><a href="https://github.com/draios/sysdig">sysdig</a>: observability runtime untuk proses, network, dan system call.</li>
+<li><code>auditd</code>: Linux audit daemon untuk event security dan perubahan file.</li>
+<li><code>Process Explorer</code>: tool Windows Sysinternals untuk inspeksi runtime process dan handle.</li>
+</ul>
+<p>Bagian process scan Overtrust paling mirip domain ini, tapi sangat terbatas. Overtrust lebih ke snapshot lokal dan flags privilege/sensitive FD; bukan continuous detection atau alerting runtime. Falco/osquery/sysdig/auditd punya observability jauh lebih kaya dan mature untuk threat hunting.</p>
+<h3 id="workstation--endpoint-security">Workstation / endpoint security<a aria-hidden="true" class="anchor-heading icon-link" href="#workstation--endpoint-security"></a></h3>
+<ul>
+<li>CrowdStrike dan SentinelOne: EDR komersial dengan agent, telemetry, threat intelligence, dan respons otomatis.</li>
+<li>GitGuardian Desktop: desktop-focused secret monitoring yang mendeteksi secret di file lokal dan clipboard.</li>
+</ul>
+<p>Di sini perbedaan paling besar: Overtrust adalah open-source audit prototype yang jalan sekali dan lokal. EDR produk mature punya cloud intelligence, deteksi behaviour, dan policy enforcement. GitGuardian Desktop lebih dekat secara goal secret detection, tapi bukan trust boundary audit yang menggabungkan process + manifest + secret dalam satu scan.</p>
+<p>Dari pencarian GitHub, ada juga beberapa open-source lokal workstation/config scanners, tapi belum besar dan biasanya sangat spesifik. Contohnya <code>Host-Config-Review-Scanner</code> atau proyek audit config workstation; mereka lebih niche dan belum mature sebagai produk umum.</p>
+<p>Intinya: komponen dasar Overtrust bukan baru. Yang unik adalah packaging file, manifest, secret, dan process scan jadi satu audit lokal untuk developer workstation. Itu masih niche, bukan benar-benar tanpa precedent.</p>
+<h2 id="apakah-ini-ide-bagus-yang-gak-kepikiran-banyak-orang">Apakah ini ide bagus yang gak kepikiran banyak orang?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-ini-ide-bagus-yang-gak-kepikiran-banyak-orang"></a></h2>
+<p>Iya dan nggak.</p>
+<p>Iya, karena ide "scan workstation sebelum ngasih agentic tool akses" itu bagus. Kebanyakan engineering security masih fokus ke repo atau pipeline, sementara agentic tools benar-benar memperluas attack surface ke workstation. Itu masih relatif under-explored.</p>
+<p>Tidak, karena komponennya sendiri bukan ide baru. Secret scanners, manifest auditors, dan process/host monitoring sudah ada, dan bahkan ada beberapa repo open-source yang mulai ngejar local workstation audit. Yang agak lebih unik adalah packaging keduanya jadi satu "local trust boundary scanner" untuk developer.</p>
+<p>Jadi kalau lo tanya apakah ini sepenuhnya out-of-the-box: tidak. Kalau lo tanya apakah ini arah yang layak diseriusin di konteks agentic coding, jawabannya iya.</p>
+<h2 id="kesimpulan-gue">Kesimpulan gue<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan-gue"></a></h2>
+<p>Overtrust itu bagus sebagai eksperimen dan direction.</p>
+<ul>
+<li>Strength: local, deterministic, berjalan tanpa cloud, fokus trust boundary.</li>
+<li>Weakness: rule-based, hardcoded, blind spot untuk format/penamaan baru, dan tidak punya runtime network context.</li>
+<li>Posisi: lebih layak disebut prototype/tool audit kerja daripada produk mature.</li>
+</ul>
+<p>Kalau lo mau ambil pelajaran dari Overtrust, hal yang worth diadopsi adalah:</p>
+<ul>
+<li>audit lokal itu penting untuk agentic workflows</li>
+<li>jangan cuma cek secret files; cek process privilege dan tool ownership juga</li>
+<li>hardcoded rules bisa cepat deployment, tapi butuh pipeline update kalau threat berubah</li>
+</ul>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><code>https://github.com/cheese-cakee/overtrust</code></li>
+<li><code>.references/overtrust</code> (local clone dari repo Overtrust)</li>
+<li><code>https://github.com/trufflesecurity/trufflehog</code></li>
+<li><code>https://github.com/zricethezav/gitleaks</code></li>
+<li><code>https://github.com/Yelp/detect-secrets</code></li>
+<li><code>https://github.com/falcosecurity/falco</code></li>
+<li><code>https://github.com/osquery/osquery</code></li>
+<li><code>https://www.gitguardian.com/desktop</code></li>
+</ul>
+<h2 id="rekomendasi-note">Rekomendasi note<a aria-hidden="true" class="anchor-heading icon-link" href="#rekomendasi-note"></a></h2>
+<ul>
+<li><code>notes.security.overtrust</code> jadi summary high-level,</li>
+<li><code>notes.security.overtrust.workflow-detail</code> jadi detail implementasi,</li>
+<li>note ini cocok jadi evaluasi kekuatan vs flaw.</li>
+</ul>
+<h2 id="related-notes">Related Notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+<li><a href="/sotoy/notes/notes.security.agentic-coding-permission-boundary">Agentic coding permission boundary dan risiko filesystem lokal</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-docs">Deepsec docs: workflow harness, bukan scanner sekali jalan</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-harness">Deepsec: security harness untuk codebase besar</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">overtrust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">evaluation (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777995556481">Audit trust boundary lokal sebagai ide keamanan developer</a></li>
+<li><a href="/sotoy/notes/zettel.literature.overtrust">Overtrust sebagai literature note: audit local trust boundary</a></li>
+</ul>

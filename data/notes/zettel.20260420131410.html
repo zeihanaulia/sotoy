@@ -1,0 +1,76 @@
+<h1 id="project-context-dan-feature-context-punya-fungsi-berbeda">Project context dan feature context punya fungsi berbeda<a aria-hidden="true" class="anchor-heading icon-link" href="#project-context-dan-feature-context-punya-fungsi-berbeda"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Project context dan feature context bukan dua nama untuk hal yang sama.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Ini penting supaya kita nggak salah pakai satu solusi untuk dua problem yang beda.</p>
+<p>Project context memberi dasar stabil: bahasa proyek, stack, pola arsitektur, konvensi coding, dan aturan umum yang berlaku di seluruh repositori. Feature context memberi rekaman hidup dari keputusan spesifik, constraint, alternatif yang ditolak, dan titik terbuka untuk satu fitur atau saga kerja tertentu.</p>
+<h2 id="perbedaannya">Perbedaannya<a aria-hidden="true" class="anchor-heading icon-link" href="#perbedaannya"></a></h2>
+<ul>
+<li>
+<p>Project context:</p>
+<ul>
+<li>stabil dan relatif jarang berubah</li>
+<li>dibaca oleh banyak sesi/fitur</li>
+<li>menjawab pertanyaan seperti “apa framework utama?”, “bagaimana middleware ditangani?”, “apakah proyek ini monorepo atau single repo?”</li>
+<li>contoh: <code>Project uses Fastify, Postgres with JSONB, tenant-aware middleware, no GraphQL for v1</code></li>
+</ul>
+</li>
+<li>
+<p>Feature context:</p>
+<ul>
+<li>cepat berubah dan berkembang selama pengembangan</li>
+<li>hanya relevan untuk satu fitur atau satu perjalanan keputusan</li>
+<li>menjawab pertanyaan seperti “kenapa kita pilih BullMQ langsung?”, “apa yang sudah dipertimbangkan dan ditolak?”, “apa yang belum selesai?”</li>
+<li>contoh: <code>Decision: BullMQ direct retry; Rejected: RetryQueue wrapper due to unnecessary indirection; Open question: rate limiting approach</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="use-case">Use case<a aria-hidden="true" class="anchor-heading icon-link" href="#use-case"></a></h2>
+<ul>
+<li>
+<p>Project context use case:</p>
+<ul>
+<li>memulai sesi AI baru untuk proyek lama.</li>
+<li>memperkenalkan karakteristik umum proyek ke AI tanpa mengulang seluruh sejarah fitur.</li>
+<li>mempercepat onboarding atau warm start: “project context says we use Fastify and tenant-aware auth, so start suggestions within that frame.”</li>
+</ul>
+</li>
+<li>
+<p>Feature context use case:</p>
+<ul>
+<li>melanjutkan pengembangan feature yang berlangsung beberapa sesi.</li>
+<li>menghindari AI mengulang ide yang sudah ditolak di sesi sebelumnya.</li>
+<li>membuat sesi baru menjadi warm start dengan state: “feature doc says Email-only v1, no retry abstraction, keep existing auth middleware.”</li>
+</ul>
+</li>
+</ul>
+<h2 id="kenapa-jangan-disamakan">Kenapa jangan disamakan<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-jangan-disamakan"></a></h2>
+<p>Kalau kita mengandalkan satu dokumen saja, dua risiko muncul:</p>
+<ol>
+<li>project context jadi terlalu kabur untuk keputusan mikro — AI tahu stack, tapi tidak tahu apakah <code>RetryQueue</code> sudah ditolak;</li>
+<li>feature context jadi terlalu berat jika diperlakukan seperti dokumentasi proyek — terlalu banyak detail sesi, cepat usang, dan sulit dikelola.</li>
+</ol>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 13.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 13</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

@@ -1,0 +1,330 @@
+<h1 id="codex-macos-sandboxing-dengan-seatbelt">Codex macOS sandboxing dengan Seatbelt<a aria-hidden="true" class="anchor-heading icon-link" href="#codex-macos-sandboxing-dengan-seatbelt"></a></h1>
+<h2 id="ringkasan-utama">Ringkasan utama<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasan-utama"></a></h2>
+<p>Sandbox Codex lokal di macOS bukan container atau VM. Ia adalah permission boundary yang dijalankan oleh OS. Proses tetap jalan di mesin lokal, tapi aksesnya dikontrol oleh Seatbelt lewat <code>sandbox-exec</code> dan sandbox profile.</p>
+<h2 id="1-proses-tetap-lokal-batasannya-yang-beda">1. Proses tetap lokal, batasannya yang beda<a aria-hidden="true" class="anchor-heading icon-link" href="#1-proses-tetap-lokal-batasannya-yang-beda"></a></h2>
+<p>Dalam eksperimen kita, Codex menjalankan command di mesin sendiri. Tidak ada mesin remote, tidak ada container Linux terpisah. Perbedaannya adalah command tersebut dibungkus dengan profile sandbox, lalu macOS Seatbelt mengecek setiap akses.</p>
+<p>Jadi alur dasarnya adalah:</p>
+<ul>
+<li>Codex ingin menjalankan command.</li>
+<li>Command dijalankan melalui <code>sandbox-exec</code> dengan profile tertentu.</li>
+<li>Seatbelt memutuskan apakah akses diperbolehkan.</li>
+<li>Kalau tidak, muncul <code>Operation not permitted</code>.</li>
+</ul>
+<p>Artinya sandbox lebih mirip pagar di sekitar proses, bukan ruang terpisah.</p>
+<h2 id="2-seatbelt-sebagai-layer-tambahan-di-atas-unix-permission">2. Seatbelt sebagai layer tambahan di atas Unix permission<a aria-hidden="true" class="anchor-heading icon-link" href="#2-seatbelt-sebagai-layer-tambahan-di-atas-unix-permission"></a></h2>
+<p>Seatbelt bukanlah sistem file. Ia adalah mekanisme tambahan di OS yang mengevaluasi permintaan proses.</p>
+<p>Kalau dilihat dari perspektif akses:</p>
+<ul>
+<li>Unix/macOS permission mengecek apakah user boleh mengakses file.</li>
+<li>Seatbelt mengecek apakah proses dengan profile ini boleh mengakses file.</li>
+</ul>
+<p>Dalam eksperimen, proses yang sandboxed bisa ditolak membaca file yang sebenarnya bisa diakses oleh user normal. Itu contoh nyata batasan dua lapis.</p>
+<h2 id="3-sandbox-exec-dan-profile">3. <code>sandbox-exec</code> dan profile<a aria-hidden="true" class="anchor-heading icon-link" href="#3-sandbox-exec-dan-profile"></a></h2>
+<p><code>sandbox-exec</code> adalah wrapper CLI yang menjalankan command dengan profile sandbox. Format dasarnya:</p>
+<pre class="language-bash"><code class="language-bash">sandbox-exec -f profile.sb <span class="token builtin class-name">command</span> args
+</code></pre>
+<p>Atau langsung lewat <code>-p</code> dengan profile inline. Contoh yang berhasil:</p>
+<pre class="language-bash"><code class="language-bash">sandbox-exec -p <span class="token string">'(version 1) (allow default)'</span> /bin/echo ok
+</code></pre>
+<p>Itu menunjukkan sandbox aktif dan bisa menjalankan command sederhana.</p>
+<h2 id="4-codex-local-di-macos-generate-policy-runtime-bukan-nulis-sb">4. Codex local di macOS generate policy runtime, bukan nulis <code>.sb</code><a aria-hidden="true" class="anchor-heading icon-link" href="#4-codex-local-di-macos-generate-policy-runtime-bukan-nulis-sb"></a></h2>
+<p>Yang penting dipahami: Codex lokal biasanya tidak membuat file <code>.sb</code> permanen untuk user. Ia mengonversi config seperti <code>sandbox_mode</code>, <code>writable_roots</code>, <code>network_access</code>, dan <code>shell_environment_policy</code> menjadi model permission internal.</p>
+<p>Di source Codex, <code>seatbelt.rs</code> include template SBPL bawaan seperti <code>seatbelt_base_policy.sbpl</code> dan <code>seatbelt_network_policy.sbpl</code>. Lalu runtime Codex menyusun <code>full_policy</code> sebagai string, dan memanggil <code>/usr/bin/sandbox-exec -p "..." -- &#x3C;command></code>. Artinya aturan sandbox dikirim langsung lewat argumen <code>-p</code>, bukan disimpan sebagai file user-visible.</p>
+<p>Jadi <code>~/.codex/config.toml</code> adalah tempat kita mengatur intent. <code>sandbox_mode</code> dan <code>writable_roots</code> menjadi rules yang di-render ke SBPL di memori, sementara user tidak perlu edit <code>.sb</code> langsung.</p>
+<h2 id="5-profile-menentukan-aturan-akses">5. Profile menentukan aturan akses<a aria-hidden="true" class="anchor-heading icon-link" href="#5-profile-menentukan-aturan-akses"></a></h2>
+<p>Profile Seatbelt ditulis dengan S-expression. Contoh paling longgar:</p>
+<pre class="language-lisp"><code class="language-lisp"><span class="token punctuation">(</span><span class="token car">version</span> <span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token car">allow</span> default<span class="token punctuation">)</span>
+</code></pre>
+<p>Kalau kita tambahkan deny untuk folder tertentu, aturan berubah jadi:</p>
+<pre class="language-lisp"><code class="language-lisp"><span class="token punctuation">(</span><span class="token car">allow</span> default<span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token car">deny</span> file-read*
+  <span class="token punctuation">(</span><span class="token car">subpath</span> <span class="token string">"$HOME/codex-sandbox-lab/outside"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token car">deny</span> file-write*
+  <span class="token punctuation">(</span><span class="token car">subpath</span> <span class="token string">"$HOME/codex-sandbox-lab/outside"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Dengan model blacklist seperti ini, semua boleh kecuali satu folder.</p>
+<h2 id="5-blacklist-vs-whitelist">5. Blacklist vs whitelist<a aria-hidden="true" class="anchor-heading icon-link" href="#5-blacklist-vs-whitelist"></a></h2>
+<p>Model blacklist mudah dipakai untuk eksperimen, tapi tetap longgar. Contohnya ketika profile hanya menolak <code>outside</code>, shell masih bisa melihat isi <code>$HOME</code> karena <code>allow default</code> masih aktif.</p>
+<p>Model whitelist yang lebih ketat adalah:</p>
+<ul>
+<li>deny semua akses ke <code>$HOME</code></li>
+<li>allow baca/tulis workspace</li>
+<li>allow baca folder script yang diperlukan</li>
+</ul>
+<p>Dengan model ini, perintah <code>ls "$HOME"</code> gagal, tetapi <code>cat workspace/app.txt</code> berhasil.</p>
+<p>Itu lebih mendekati pola Codex <code>workspace-write</code>.</p>
+<h2 id="6-deny-default-terlalu-brutal-untuk-macos-modern">6. <code>deny default</code> terlalu brutal untuk macOS modern<a aria-hidden="true" class="anchor-heading icon-link" href="#6-deny-default-terlalu-brutal-untuk-macos-modern"></a></h2>
+<p>Kita mencoba <code>deny default</code> lalu mengizinkan proses dan path penting. Hasilnya profile abort.</p>
+<p>Maknanya: proses yang kelihatannya sederhana masih butuh banyak akses implisit seperti dynamic loader, metadata, locale, atau mach service. Jadi:</p>
+<ul>
+<li><code>deny default</code> lebih aman secara prinsip,</li>
+<li>tapi sulit stabil di praktik.</li>
+</ul>
+<p>Praktik yang lebih realistis adalah <code>allow default + deny spesifik</code> atau <code>deny HOME + allow workspace</code>.</p>
+<h2 id="7-current-working-directory-perlu-diperhatikan">7. Current working directory perlu diperhatikan<a aria-hidden="true" class="anchor-heading icon-link" href="#7-current-working-directory-perlu-diperhatikan"></a></h2>
+<p>Sandbox mempengaruhi <code>getcwd()</code> saat shell start. Kalau profile menutup <code>$HOME</code> sementara current directory berada di path yang tidak diizinkan, shell bisa gagal dengan pesan:</p>
+<pre class="language-text"><code class="language-text">shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+</code></pre>
+<p>Solusinya adalah menjalankan sandbox dari dalam workspace yang diizinkan.</p>
+<h2 id="8-batasan-utama-sandbox">8. Batasan utama sandbox<a aria-hidden="true" class="anchor-heading icon-link" href="#8-batasan-utama-sandbox"></a></h2>
+<p>Eksperimen malicious script menunjukkan:</p>
+<ul>
+<li>baca workspace → berhasil</li>
+<li>baca outside secret → ditolak</li>
+<li>tulis workspace → berhasil</li>
+<li>tulis outside secret → ditolak</li>
+</ul>
+<p>Itu menegaskan bahwa sandbox bisa menahan akses keluar boundary. Tapi ia tidak membedakan apakah perubahan di dalam workspace baik atau jahat.</p>
+<h2 id="9-workspace-writable-bukan-berarti-aman">9. Workspace writable bukan berarti aman<a aria-hidden="true" class="anchor-heading icon-link" href="#9-workspace-writable-bukan-berarti-aman"></a></h2>
+<p>Kalau workspace diizinkan tulis, setiap skrip jahat yang ada di dalamnya bisa melakukan perubahan berbahaya seperti <code>rm -rf ./src</code> atau menyisipkan backdoor ke <code>package.json</code>.</p>
+<p>Sandbox hanya menjawab pertanyaan “proses boleh ke mana?”, bukan “apakah proses ini niatnya baik?”.</p>
+<p>Jadi kontrol tambahan tetap perlu:</p>
+<ul>
+<li><code>git diff</code></li>
+<li><code>git status</code></li>
+<li>review perubahan</li>
+<li>rollback jika perlu</li>
+</ul>
+<h2 id="10-network-deny-bisa-mengurangi-eksfiltrasi">10. Network deny bisa mengurangi eksfiltrasi<a aria-hidden="true" class="anchor-heading icon-link" href="#10-network-deny-bisa-mengurangi-eksfiltrasi"></a></h2>
+<p>Kita juga tes profile yang menolak <code>network*</code>. Hasilnya <code>curl</code> jadi gagal resolve host.</p>
+<p>Itu efektif untuk menghalangi dependency jahat yang mencoba mengirim data keluar. Tapi efeknya hanya berlaku jika network memang diblokir oleh profile.</p>
+<h2 id="11-workaround-jangan-mulai-codex-dari-shell-yang-sudah-punya-secret">11. Workaround: jangan mulai Codex dari shell yang sudah punya secret<a aria-hidden="true" class="anchor-heading icon-link" href="#11-workaround-jangan-mulai-codex-dari-shell-yang-sudah-punya-secret"></a></h2>
+<p>Masalahnya bukan Seatbelt menyensor env. Masalahnya secret sudah ikut naik ke proses dari parent shell. Sandbox membatasi file dan network, tapi environment variable itu seperti kertas yang sudah dikasih ke proses sejak lahir. Kalau proses sudah memegang kertas itu, Seatbelt tidak otomatis menariknya kembali.</p>
+<p>Workaround paling simpel adalah jalankan Codex dari environment bersih:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">env</span> -i <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">HOME</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$HOME</span>"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">SHELL</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$SHELL</span>"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">TERM</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$TERM</span>"</span> <span class="token punctuation">\</span>
+  codex
+</code></pre>
+<p>Dengan <code>env -i</code>, proses dimulai tanpa variabel environment dari shell lama. Hanya variabel yang kita set ulang yang akan ikut.</p>
+<p>Kalau mau masuk ke folder project dulu:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /path/to/project
+
+<span class="token function">env</span> -i <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">HOME</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$HOME</span>"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">SHELL</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$SHELL</span>"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">TERM</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$TERM</span>"</span> <span class="token punctuation">\</span>
+  codex
+</code></pre>
+<p>Ini mencegah variabel seperti <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, <code>OPENAI_API_KEY</code>, <code>GITHUB_TOKEN</code>, <code>NPM_TOKEN</code>, atau <code>DATABASE_URL</code> ikut dibawa, kecuali sengaja dimasukkan lagi.</p>
+<h2 id="12-setup-codex-cli-lokal-di-codexconfigtoml">12. Setup Codex CLI lokal di <code>~/.codex/config.toml</code><a aria-hidden="true" class="anchor-heading icon-link" href="#12-setup-codex-cli-lokal-di-codexconfigtoml"></a></h2>
+<p>Untuk membuat perilaku Codex mirip eksperimen <code>sandbox-exec</code>, gue menyarankan konfigurasi user-level ini:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token comment"># ~/.codex/config.toml</span>
+
+<span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"workspace-write"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"on-request"</span>
+<span class="token key property">approvals_reviewer</span> <span class="token punctuation">=</span> <span class="token string">"user"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">sandbox_workspace_write</span><span class="token punctuation">]</span>
+<span class="token key property">network_access</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">writable_roots</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token key property">exclude_tmpdir_env_var</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+<span class="token key property">exclude_slash_tmp</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">shell_environment_policy</span><span class="token punctuation">]</span>
+<span class="token key property">inherit</span> <span class="token punctuation">=</span> <span class="token string">"core"</span>
+<span class="token key property">ignore_default_excludes</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">exclude</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"*KEY*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*TOKEN*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*SECRET*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*PASSWORD*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*CREDENTIAL*"</span><span class="token punctuation">,</span>
+  <span class="token string">"AWS_*"</span><span class="token punctuation">,</span>
+  <span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">,</span>
+  <span class="token string">"GITHUB_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"GH_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"NPM_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"DATABASE_URL"</span><span class="token punctuation">,</span>
+  <span class="token string">"PGPASSWORD"</span>
+<span class="token punctuation">]</span>
+<span class="token key property">include_only</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token key property">set</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Konsepnya:</p>
+<ul>
+<li><code>sandbox_mode = "workspace-write"</code> berarti Codex boleh baca/tulis workspace, bukan filesystem bebas.</li>
+<li><code>approval_policy = "on-request"</code> berarti kalau butuh network atau akses di luar boundary, Codex harus minta izin.</li>
+<li><code>inherit = "core"</code> membuat Codex hanya membawa variabel inti yang normal, bukan secret shell.</li>
+<li><code>exclude</code> menolak glob env sensitif supaya secret env tidak ikut ke proses yang spawn dari Codex.</li>
+</ul>
+<h2 id="13-kalau-repo-asing-lebih-ketat-dengan-inherit--none">13. Kalau repo asing, lebih ketat dengan <code>inherit = "none"</code><a aria-hidden="true" class="anchor-heading icon-link" href="#13-kalau-repo-asing-lebih-ketat-dengan-inherit--none"></a></h2>
+<p>Untuk repo yang benar-benar tidak dipercaya, upgrade env policy menjadi lebih mirip <code>env -i</code>:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">shell_environment_policy</span><span class="token punctuation">]</span>
+<span class="token key property">inherit</span> <span class="token punctuation">=</span> <span class="token string">"none"</span>
+<span class="token key property">ignore_default_excludes</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">include_only</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"HOME"</span><span class="token punctuation">,</span>
+  <span class="token string">"USER"</span><span class="token punctuation">,</span>
+  <span class="token string">"LOGNAME"</span><span class="token punctuation">,</span>
+  <span class="token string">"PATH"</span><span class="token punctuation">,</span>
+  <span class="token string">"SHELL"</span><span class="token punctuation">,</span>
+  <span class="token string">"TERM"</span><span class="token punctuation">,</span>
+  <span class="token string">"TMPDIR"</span>
+<span class="token punctuation">]</span>
+<span class="token key property">exclude</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"*KEY*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*TOKEN*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*SECRET*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*PASSWORD*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*CREDENTIAL*"</span><span class="token punctuation">,</span>
+  <span class="token string">"AWS_*"</span><span class="token punctuation">,</span>
+  <span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">,</span>
+  <span class="token string">"GITHUB_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"GH_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"NPM_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"DATABASE_URL"</span><span class="token punctuation">,</span>
+  <span class="token string">"PGPASSWORD"</span>
+<span class="token punctuation">]</span>
+<span class="token key property">set</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Ini akan memaksa Codex spawn process dengan env yang jauh lebih kecil, tapi bisa juga bikin beberapa tool dev gagal. Kalau perlu, tambahkan env spesifik satu per satu.</p>
+<h2 id="14-wrapper-codex-safe-tetap-berguna">14. Wrapper <code>codex-safe</code> tetap berguna<a aria-hidden="true" class="anchor-heading icon-link" href="#14-wrapper-codex-safe-tetap-berguna"></a></h2>
+<p>Meski sudah ada config, wrapper adalah pagar awal yang mencegah proses Codex sendiri lahir dari shell penuh secret.</p>
+<p>Di <code>~/.zshrc</code>:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function-name function">codex-safe</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">env</span> -i <span class="token punctuation">\</span>
+    <span class="token assign-left variable"><span class="token environment constant">HOME</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$HOME</span>"</span> <span class="token punctuation">\</span>
+    <span class="token assign-left variable"><span class="token environment constant">USER</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$USER</span>"</span> <span class="token punctuation">\</span>
+    <span class="token assign-left variable"><span class="token environment constant">LOGNAME</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$LOGNAME</span>"</span> <span class="token punctuation">\</span>
+    <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"</span> <span class="token punctuation">\</span>
+    <span class="token assign-left variable"><span class="token environment constant">SHELL</span></span><span class="token operator">=</span><span class="token string">"<span class="token variable">${<span class="token environment constant">SHELL</span><span class="token operator">:-</span><span class="token operator">/</span>bin<span class="token operator">/</span>zsh}</span>"</span> <span class="token punctuation">\</span>
+    <span class="token assign-left variable"><span class="token environment constant">TERM</span></span><span class="token operator">=</span><span class="token string">"<span class="token variable">${<span class="token environment constant">TERM</span><span class="token operator">:-</span>xterm-256color}</span>"</span> <span class="token punctuation">\</span>
+    <span class="token assign-left variable">TMPDIR</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${TMPDIR<span class="token operator">:-</span><span class="token operator">/</span>tmp}</span>"</span> <span class="token punctuation">\</span>
+    codex --sandbox workspace-write --ask-for-approval on-request <span class="token string">"<span class="token variable">$@</span>"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Ini membuat dua layer:</p>
+<ul>
+<li><code>codex-safe</code>: menghindari secret dari shell induk.</li>
+<li><code>shell_environment_policy</code>: menghindari secret dari process yang Codex spawn.</li>
+</ul>
+<h2 id="15-setup-per-project-hanya-untuk-root-tambahan-yang-benar-benar-perlu">15. Setup per-project hanya untuk root tambahan yang benar-benar perlu<a aria-hidden="true" class="anchor-heading icon-link" href="#15-setup-per-project-hanya-untuk-root-tambahan-yang-benar-benar-perlu"></a></h2>
+<p>Kalau repo perlu nulis ke sibling path, gunakan <code>.codex/config.toml</code> di project bukan <code>danger-full-access</code>.</p>
+<p>Contohnya:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"workspace-write"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"on-request"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">sandbox_workspace_write</span><span class="token punctuation">]</span>
+<span class="token key property">network_access</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">writable_roots</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"/Users/zeihanaulia/workspace/shared-lib"</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>Catatan penting: project <code>.codex/config.toml</code> hanya boleh dipercaya kalau repo itu memang dipercaya; kalau repo tidak dipercaya, Codex bisa skip project-scoped config.</p>
+<h2 id="16-verifikasi-dan-jangan-pakai-opsi-berbahaya-sebagai-default">16. Verifikasi dan jangan pakai opsi berbahaya sebagai default<a aria-hidden="true" class="anchor-heading icon-link" href="#16-verifikasi-dan-jangan-pakai-opsi-berbahaya-sebagai-default"></a></h2>
+<p>Setelah konfigurasi, tes dari dalam Codex:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">env</span> <span class="token operator">|</span> <span class="token function">grep</span> -Ei <span class="token string">'key|token|secret|password|credential|aws|openai|github|npm|database'</span>
+<span class="token builtin class-name">pwd</span>
+<span class="token function">ls</span> <span class="token builtin class-name">.</span>
+<span class="token function">ls</span> <span class="token string">"<span class="token environment constant">$HOME</span>"</span>
+<span class="token function">curl</span> -I https://example.com
+</code></pre>
+<p>Ekspektasinya: env sensitif hilang, workspace bisa diakses, akses <code>HOME</code> dibatasi, dan network gagal atau butuh approval.</p>
+<p>Hindari default berbahaya seperti:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"danger-full-access"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"never"</span>
+</code></pre>
+<p>Atau env policy seperti:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">inherit</span> <span class="token punctuation">=</span> <span class="token string">"all"</span>
+<span class="token key property">ignore_default_excludes</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+</code></pre>
+<h2 id="17-global-vs-per-repoproject-config">17. Global vs per repo/project config<a aria-hidden="true" class="anchor-heading icon-link" href="#17-global-vs-per-repoproject-config"></a></h2>
+<p>Codex lokal punya beberapa layer konfigurasi: global/user config, profile config, dan per-project config. Jangan anggap ini sebagai config yang sama; ini adalah hierarchy trust.</p>
+<p>Global config di <code>~/.codex/config.toml</code> harus jadi sabuk pengaman default: baseline aman untuk semua repo. Contoh yang aman:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"workspace-write"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"on-request"</span>
+<span class="token key property">approvals_reviewer</span> <span class="token punctuation">=</span> <span class="token string">"user"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">sandbox_workspace_write</span><span class="token punctuation">]</span>
+<span class="token key property">network_access</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">writable_roots</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">shell_environment_policy</span><span class="token punctuation">]</span>
+<span class="token key property">inherit</span> <span class="token punctuation">=</span> <span class="token string">"core"</span>
+<span class="token key property">ignore_default_excludes</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">exclude</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"*KEY*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*TOKEN*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*SECRET*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*PASSWORD*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*CREDENTIAL*"</span><span class="token punctuation">,</span>
+  <span class="token string">"AWS_*"</span><span class="token punctuation">,</span>
+  <span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">,</span>
+  <span class="token string">"GITHUB_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"GH_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"NPM_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"DATABASE_URL"</span><span class="token punctuation">,</span>
+  <span class="token string">"PGPASSWORD"</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>Per-project config di <code>.codex/config.toml</code> adalah izin kerja khusus untuk repo tertentu. Gunakan hanya ketika repo itu dipercaya dan butuh exception yang jelas, misalnya writable root tambahan:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"workspace-write"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"on-request"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">sandbox_workspace_write</span><span class="token punctuation">]</span>
+<span class="token key property">network_access</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">writable_roots</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"/Users/zeihanaulia/workspace/shared-lib"</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>Profile config di <code>~/.codex/.config.toml</code> atau <code>~/.codex/paranoid.config.toml</code> cocok untuk mode kerja yang berbeda tanpa memodifikasi setiap repo. Misalnya profile <code>paranoid</code> untuk repo asing:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"read-only"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"untrusted"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">shell_environment_policy</span><span class="token punctuation">]</span>
+<span class="token key property">inherit</span> <span class="token punctuation">=</span> <span class="token string">"none"</span>
+<span class="token key property">include_only</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"HOME"</span><span class="token punctuation">,</span> <span class="token string">"USER"</span><span class="token punctuation">,</span> <span class="token string">"LOGNAME"</span><span class="token punctuation">,</span> <span class="token string">"PATH"</span><span class="token punctuation">,</span> <span class="token string">"SHELL"</span><span class="token punctuation">,</span> <span class="token string">"TERM"</span><span class="token punctuation">,</span> <span class="token string">"TMPDIR"</span><span class="token punctuation">]</span>
+</code></pre>
+<p>CLI flags paling tinggi prioritas. Pakai <code>--sandbox</code>, <code>--ask-for-approval</code>, atau <code>-c</code> untuk override sementara pada satu session.</p>
+<p>Intinya:</p>
+<ul>
+<li>global = baseline aman</li>
+<li>per-project = exception spesifik untuk repo yang dipercaya</li>
+<li>profile = mode kerja yang berbeda</li>
+<li>CLI flag = override sekali jalan</li>
+</ul>
+<p>Kalau global terlalu longgar, semua repo ikut longgar. Kalau per-project terlalu dipercaya, repo jahat bisa mencoba mengubah cara Codex bekerja. Itu kenapa project config harus ditaruh hanya untuk trusted repos dan kenapa Codex skip <code>.codex/</code> di project yang untrusted.</p>
+<h2 id="18-kesimpulan-praktis">18. Kesimpulan praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#18-kesimpulan-praktis"></a></h2>
+<p>Untuk Codex lokal di macOS, model aman yang masuk akal adalah:</p>
+<ul>
+<li>gunakan <code>workspace-write</code>, bukan <code>danger-full-access</code></li>
+<li>pakai approval policy <code>on-request</code></li>
+<li>jangan izinkan network sembarangan</li>
+<li>jangan jalankan dari shell yang penuh secret env</li>
+<li>selalu cek <code>git diff</code></li>
+<li>untuk repo asing atau mencurigakan, pakai container/VM/remote sandbox</li>
+</ul>
+<p>Untuk repo cukup dipercaya, sandbox lokal bisa nyaman dan meminimalkan risiko akses luar workspace.</p>
+<h2 id="13-inti-kepercayaan-yang-sehat">13. Inti kepercayaan yang sehat<a aria-hidden="true" class="anchor-heading icon-link" href="#13-inti-kepercayaan-yang-sehat"></a></h2>
+<p>Yang paling benar dipahami adalah:</p>
+<ul>
+<li>sandbox membatasi akses,</li>
+<li>approval membatasi eskalasi,</li>
+<li>git diff membatasi perubahan diam-diam,</li>
+<li>env hygiene membatasi kebocoran token,</li>
+<li>container/VM membatasi risiko untuk kode yang tidak dipercaya.</li>
+</ul>
+<p>Sandbox adalah blast-radius reducer, bukan jaminan selesai.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">codex (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">sandboxing (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">macos (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260529150409">Sandbox OS tidak menyembunyikan environment variable yang diwariskan</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.29">2026-05-29</a></li>
+</ul>

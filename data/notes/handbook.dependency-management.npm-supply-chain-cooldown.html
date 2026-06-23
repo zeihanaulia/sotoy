@@ -1,0 +1,100 @@
+<h1 id="hardening-npm-dependency-installs-dengan-cooldown-policy">Hardening npm dependency installs dengan cooldown policy<a aria-hidden="true" class="anchor-heading icon-link" href="#hardening-npm-dependency-installs-dengan-cooldown-policy"></a></h1>
+<h2 id="kenapa-pakai-cooldown-policy">Kenapa pakai cooldown policy<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-pakai-cooldown-policy"></a></h2>
+<p>Serangan supply-chain npm sering menang di "jendela waktu pertama": versi baru dipublish, lalu project atau pipeline secara otomatis menginstal versi itu sebelum komunitas atau tooling sempat mendeteksi malicious release.</p>
+<p>Cooldown policy mengubah default behavior dependency manager dari "ambil versi terbaru" menjadi "tahan dulu versi baru sampai cukup umur".</p>
+<h2 id="kapan-policy-ini-cocok">Kapan policy ini cocok<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-policy-ini-cocok"></a></h2>
+<p>Gunakan ketika:</p>
+<ul>
+<li>repo punya jalur rilis sensitif atau produksi yang tidak boleh berubah otomatis</li>
+<li>project memakai agentic tooling, automation, atau workflow CI/CD yang sering install dependency</li>
+<li>tim perlu batasan update dependency baru tanpa memindahkan registry</li>
+<li>kamu ingin mencegah versi baru melewati pipeline hanya karena package manager default</li>
+</ul>
+<h2 id="basic-setup-dengan-pnpm">Basic setup dengan pnpm<a aria-hidden="true" class="anchor-heading icon-link" href="#basic-setup-dengan-pnpm"></a></h2>
+<p>Di <code>.pnpmrc</code> atau <code>pnpm-workspace.yaml</code>:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">minimumReleaseAge</span><span class="token punctuation">:</span> <span class="token number">10080</span>
+<span class="token key atrule">minimumReleaseAgeStrict</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+</code></pre>
+<p>Penjelasan:</p>
+<ul>
+<li><code>minimumReleaseAge: 10080</code> = versi package harus berumur minimal 7 hari sebelum pnpm boleh resolve.</li>
+<li><code>minimumReleaseAgeStrict: true</code> = policy ditegakkan keras; versi yang terlalu baru tidak akan dipilih.</li>
+</ul>
+<h2 id="lapisan-ci">Lapisan CI<a aria-hidden="true" class="anchor-heading icon-link" href="#lapisan-ci"></a></h2>
+<p>Di pipeline CI, pakai:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">pnpm</span> <span class="token function">install</span> --frozen-lockfile
+</code></pre>
+<p>Tujuan:</p>
+<ul>
+<li>CI tidak resolve dependency baru sendiri</li>
+<li>build hanya menginstal apa yang sudah ada di lockfile</li>
+<li>dependency update harus masuk lewat PR terkontrol, bukan pipeline spontan</li>
+</ul>
+<h2 id="tangani-package-internal-dan-darurat">Tangani package internal dan darurat<a aria-hidden="true" class="anchor-heading icon-link" href="#tangani-package-internal-dan-darurat"></a></h2>
+<p>Jika kamu punya package internal yang harus langsung dipakai, gunakan exception list:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">minimumReleaseAgeExclude</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> nama<span class="token punctuation">-</span>package<span class="token punctuation">-</span>internal<span class="token punctuation">-</span>elo
+</code></pre>
+<p>Aturan praktis:</p>
+<ul>
+<li>hanya exclude package yang kamu kendalikan secara penuh</li>
+<li>hindari daftar panjang exception</li>
+<li>dokumentasikan setiap pengecualian dan review periodik</li>
+</ul>
+<h2 id="build-script-allowlist">Build script allowlist<a aria-hidden="true" class="anchor-heading icon-link" href="#build-script-allowlist"></a></h2>
+<p>Install dependency npm bisa menjalankan kode melalui lifecycle script.</p>
+<p>Contoh policy ketat:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">onlyBuiltDependencies</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> esbuild
+
+<span class="token key atrule">allowBuilds</span><span class="token punctuation">:</span>
+  <span class="token key atrule">esbuild</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+</code></pre>
+<p>Ini cocok jika kamu ingin memastikan hanya dependency tertentu yang boleh menjalankan script build saat install.</p>
+<h2 id="proses-operasional-yang-disarankan">Proses operasional yang disarankan<a aria-hidden="true" class="anchor-heading icon-link" href="#proses-operasional-yang-disarankan"></a></h2>
+<ol>
+<li>review dependency update lewat PR khusus</li>
+<li>pastikan versi baru memenuhi <code>minimumReleaseAge</code></li>
+<li>commit lockfile setelah resolusi selesai</li>
+<li>CI install dengan <code>--frozen-lockfile</code></li>
+<li>jika perlu package baru sebelum 7 hari, gunakan exception yang diaudit</li>
+<li>batasi build script kepada dependency terverifikasi</li>
+</ol>
+<h2 id="kelemahan-dan-trade-off">Kelemahan dan trade-off<a aria-hidden="true" class="anchor-heading icon-link" href="#kelemahan-dan-trade-off"></a></h2>
+<ul>
+<li><code>minimumReleaseAge</code> bisa menunda security patch baru; policy ini bukan freeze, tapi delay gate.</li>
+<li>exception list membuka celah kalau tidak dikelola.</li>
+<li>toolchain lain mungkin tidak mendukung policy yang sama; ini praktis untuk pnpm.</li>
+<li>butuh budaya dependency update yang lebih sadar, bukan hanya <code>pnpm install</code> terus jalan.</li>
+</ul>
+<h2 id="integrasi-dengan-supply-chain-defense">Integrasi dengan supply-chain defense<a aria-hidden="true" class="anchor-heading icon-link" href="#integrasi-dengan-supply-chain-defense"></a></h2>
+<p>Cooldown policy ini efektif ketika digabungkan dengan:</p>
+<ul>
+<li>lockfile discipline (<code>commit lockfile</code>, <code>frozen lockfile</code> di CI)</li>
+<li>review update dependency lewat PR</li>
+<li>risk tiering package berdasarkan blast radius</li>
+<li>explicit build script allowlist</li>
+</ul>
+<h2 id="catatan-penting">Catatan penting<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-penting"></a></h2>
+<p>Policy ini bukan solusi yang menghilangkan semua risiko npm. Ia menambah lapisan yang murah dan mudah diterapkan:</p>
+<ul>
+<li>mencegah versi baru yang terlalu muda masuk otomatis</li>
+<li>membuat dependency update lebih sengaja</li>
+<li>memastikan CI hanya menjalankan dependency yang sudah dikunci</li>
+</ul>
+<p>Ini lebih ke "friction-based security" daripada "security scan".</p>
+<h2 id="related-resources">Related resources<a aria-hidden="true" class="anchor-heading icon-link" href="#related-resources"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.npm-supply-chain-cooldown-policy">NPM supply-chain cooldown policy</a></li>
+<li><a href="/sotoy/notes/notes.security.trusted-publishing-checklist">Trusted publishing: kritik argumen dan checklist operasional</a></li>
+<li><a href="/sotoy/notes/notes.security.tanstack-postmortem">TanStack npm supply-chain compromise — postmortem notes</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handbook (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">dependency-management (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pnpm (Private)</a></li>
+</ol>

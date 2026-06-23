@@ -1,0 +1,226 @@
+<h1 id="telegram-behavior-proof">Telegram Behavior Proof<a aria-hidden="true" class="anchor-heading icon-link" href="#telegram-behavior-proof"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Di sini "project" yang gue lihat adalah workflow QA evidence di OpenClaw: OpenClaw app, Telegram extension, Crabbox, Codex/GitHub workflow, dan bukti perilaku nyata.</p>
+<p>Bukan seluruh OpenClaw produk. Fokusnya: bagaimana PR ini jadi paket audit kecil, bukan cuma patch kode.</p>
+<p>Intinya:</p>
+<ul>
+<li>PR ini nggak hanya menjelaskan bug dan fix.</li>
+<li>PR ini juga membawa: runtime path, environment, before/after, evidence scope, dan area yang belum dites.</li>
+<li>Crabbox di sini bukan sekadar screen recorder. Ia adalah agent workspace control plane: prepare box, sync checkout, run remote command, collect evidence, release.</li>
+</ul>
+<h2 id="6-pertanyaan-kunci">6 pertanyaan kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#6-pertanyaan-kunci"></a></h2>
+<h3 id="1-sebenernya-openclaw-lagi-ngetes-apa">1. Sebenernya OpenClaw lagi ngetes apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#1-sebenernya-openclaw-lagi-ngetes-apa"></a></h3>
+<p>PR ini kecil, tapi karena konteksnya Telegram formatter, bug-nya bisa berdampak besar.</p>
+<p>Bug: output Telegram hilang blank line antara bullet block dan numbered section.</p>
+<p>Sebelum fix:</p>
+<pre class="language-text"><code class="language-text">report/draft.\n3. Cognee
+</code></pre>
+<p>Sesudah fix:</p>
+<pre class="language-text"><code class="language-text">report/draft.\n\n3. Cognee
+</code></pre>
+<p>Di chat interface, blank line bukan sekadar estetika. Dia adalah pembatas semantik.</p>
+<p>Atomic idea: <strong>bug kecil formatting dapat merusak struktur pesan di channel chat</strong>.</p>
+<h3 id="2-pipeline-teknisnya-kira-kira-gimana">2. Pipeline teknisnya kira-kira gimana?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-pipeline-teknisnya-kira-kira-gimana"></a></h3>
+<p>Dari PR dan bot review, alurnya bisa dipetakan seperti ini:</p>
+<pre class="language-text"><code class="language-text">Issue masuk
+  ↓
+Bug direproduksi dari input nyata
+  ↓
+Patch dibuat di Telegram formatter
+  ↓
+Unit/regression test ditambah
+  ↓
+Bot review mengecek correctness + security + changelog
+  ↓
+Crabbox menjalankan real Telegram Desktop proof
+  ↓
+Before/after GIF dipublish ke PR
+  ↓
+Label berubah jadi proof: supplied
+  ↓
+PR di-merge
+</code></pre>
+<p>Yang penting bukan satu tool sakti. Ini adalah <strong>rantai kerja</strong>.</p>
+<ul>
+<li>OpenClaw: system under test</li>
+<li>Telegram extension: area bug</li>
+<li>Formatter: kode yang diubah</li>
+<li>Codex/GitHub workflow: proses patch dan before/after</li>
+<li>Crabbox: environment, execution, evidence</li>
+<li>Bot review: gating, label, boundary</li>
+</ul>
+<h3 id="3-kenapa-bot-review-nya-penting">3. Kenapa bot review-nya penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-kenapa-bot-review-nya-penting"></a></h3>
+<p>Di PR ini ada bot yang menolak merge karena temuan teknis bukan sekadar test fail.</p>
+<p>Temuan bot:</p>
+<ul>
+<li>normalizer baru hanya melacak fenced code block</li>
+<li>Markdown juga punya indented code block</li>
+<li>normalizer bekerja sebelum parser paham struktur</li>
+<li>ini bisa membuat blank line masuk ke literal code block</li>
+</ul>
+<p>Atomic idea: <strong>semakin awal normalizer bekerja, semakin tinggi risikonya mengubah syntax yang belum dipahami</strong>.</p>
+<p>Bot tidak cuma mengatakan "error". Bot menelusuri boundary dan meminta regression guard untuk kasus indented code block.</p>
+<h3 id="4-apa-peran-crabbox-di-sini">4. Apa peran Crabbox di sini?<a aria-hidden="true" class="anchor-heading icon-link" href="#4-apa-peran-crabbox-di-sini"></a></h3>
+<p>Crabbox bukan hanya recorder. Dia adalah control plane agent workspace.</p>
+<p>Dari publiknya, Crabbox bisa:</p>
+<ul>
+<li>sewa/siapkan environment</li>
+<li>sync checkout lokal ke remote</li>
+<li>jalankan command jarak jauh</li>
+<li>stream output</li>
+<li>collect evidence</li>
+<li>release box</li>
+</ul>
+<p>Dalam PR ini evidence-nya lebih dari sekadar GIF:</p>
+<ul>
+<li>before GIF</li>
+<li>after GIF</li>
+<li>real Telegram Desktop session</li>
+<li>real Telegram user</li>
+<li>shared group</li>
+<li>model response deterministic</li>
+<li>SUT bot reply via OpenClaw Telegram</li>
+</ul>
+<h3 id="5-mengapa-model-response-harus-deterministic">5. Mengapa model response harus deterministic?<a aria-hidden="true" class="anchor-heading icon-link" href="#5-mengapa-model-response-harus-deterministic"></a></h3>
+<p>Karena tujuan proof adalah mengisolasi perubahan formatter.</p>
+<p>Jika model response berubah, before/after jadi lemah.</p>
+<p>Prinsipnya mirip eksperimen yang benar:</p>
+<ul>
+<li>kontrol prompt sama</li>
+<li>kontrol mock response sama</li>
+<li>kontrol channel sama</li>
+<li>kontrol UI sama</li>
+</ul>
+<p>Yang diuji hanya:</p>
+<ul>
+<li>formatter main vs formatter PR</li>
+</ul>
+<p>Atomic idea: <strong>real behavior proof tetap butuh controlled experiment</strong>.</p>
+<h3 id="6-kalau-mau-direproduce-levelnya-ada-berapa">6. Kalau mau direproduce, levelnya ada berapa?<a aria-hidden="true" class="anchor-heading icon-link" href="#6-kalau-mau-direproduce-levelnya-ada-berapa"></a></h3>
+<p>Jangan langsung lompat ke full Crabbox + Telegram real.</p>
+<p>Bagi jadi tiga level.</p>
+<h4 id="level-1-lokal-minimal">Level 1: Lokal minimal<a aria-hidden="true" class="anchor-heading icon-link" href="#level-1-lokal-minimal"></a></h4>
+<p>Tujuannya: buktikan formatter bug.</p>
+<p>Yang dibutuhkan:</p>
+<ul>
+<li>repo OpenClaw</li>
+<li>Node/pnpm sesuai repo</li>
+<li>file Telegram formatter</li>
+<li>test file Telegram formatter</li>
+</ul>
+<p>Contoh perintah:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">pnpm</span> <span class="token builtin class-name">test</span> extensions/telegram/src/format.test.ts
+<span class="token function">pnpm</span> <span class="token builtin class-name">exec</span> oxfmt --check --threads<span class="token operator">=</span><span class="token number">1</span> extensions/telegram/src/format.ts extensions/telegram/src/format.test.ts CHANGELOG.md
+</code></pre>
+<h4 id="level-2-integration-ish-dengan-mock-channel">Level 2: Integration-ish dengan mock channel<a aria-hidden="true" class="anchor-heading icon-link" href="#level-2-integration-ish-dengan-mock-channel"></a></h4>
+<p>Tujuannya: buktikan output path benar.</p>
+<p>Alur:</p>
+<pre class="language-text"><code class="language-text">mock model response
+  ↓
+OpenClaw Telegram formatter
+  ↓
+render ke Telegram HTML/chunks
+  ↓
+assert pemisah benar
+</code></pre>
+<p>Khususnya: cek normal reply rendering dan chunked reply rendering.</p>
+<h4 id="level-3-real-behavior-proof">Level 3: Real behavior proof<a aria-hidden="true" class="anchor-heading icon-link" href="#level-3-real-behavior-proof"></a></h4>
+<p>Baru ini mirip PR sebenarnya.</p>
+<p>Alur ideal:</p>
+<pre class="language-text"><code class="language-text">git checkout main
+run OpenClaw Telegram bot test
+kirim prompt via Telegram user ke group
+mock model deterministic
+record Telegram Desktop: main-before
+checkout PR branch
+ulang prompt sama
+record Telegram Desktop: pr-after
+publish GIF/video + notes ke PR
+</code></pre>
+<p>Kontrol penting:</p>
+<ul>
+<li>prompt sama</li>
+<li>mock response sama</li>
+<li>Telegram account/session sama</li>
+<li>chat/group sama</li>
+<li>screen size sama</li>
+<li>font/UI scale sama</li>
+<li>commit SHA jelas</li>
+<li>recording timestamp jelas</li>
+</ul>
+<h2 id="arsitektur-yang-bisa-ditiru">Arsitektur yang bisa ditiru<a aria-hidden="true" class="anchor-heading icon-link" href="#arsitektur-yang-bisa-ditiru"></a></h2>
+<p>Bagian paling penting bukan recorder. Yang paling penting adalah <strong>evidence schema</strong>.</p>
+<p>Minimal architecture:</p>
+<pre class="language-text"><code class="language-text">GitHub PR
+  ↓
+CI / GH Workflow
+  ↓
+Crabbox / Runner
+  ↓
+Real Channel
+  ↓
+Evidence Pack
+  ↓
+PR Comment
+</code></pre>
+<p>Contoh evidence schema:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Real behavior proof</span>
+
+Behavior addressed:
+<span class="token list punctuation">-</span> [jelaskan bug yang diperbaiki]
+
+Environment:
+<span class="token list punctuation">-</span> app:
+<span class="token list punctuation">-</span> channel:
+<span class="token list punctuation">-</span> OS:
+<span class="token list punctuation">-</span> commit before:
+<span class="token list punctuation">-</span> commit after:
+
+Scenario:
+<span class="token list punctuation">-</span> [siapa mengirim apa ke mana]
+<span class="token list punctuation">-</span> [response mock/model apa]
+<span class="token list punctuation">-</span> [expected visual behavior apa]
+
+Evidence:
+<span class="token list punctuation">-</span> before:
+<span class="token list punctuation">-</span> after:
+<span class="token list punctuation">-</span> logs:
+
+Observed before:
+<span class="token list punctuation">-</span> ...
+
+Observed after:
+<span class="token list punctuation">-</span> ...
+
+What was not tested:
+<span class="token list punctuation">-</span> ...
+</code></pre>
+<p>GIF/video tanpa konteks itu lemah. GIF + commit + scenario + expected result + scope not-tested yang membuatnya menjadi audit evidence.</p>
+<h2 id="insight-terakhir">Insight terakhir<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-terakhir"></a></h2>
+<p>Project ini paling menarik bukan karena "mereka bikin GIF before/after".</p>
+<p>Sebab yang lebih penting:</p>
+<ul>
+<li>mereka sedang membangun workflow di mana perubahan kode harus membawa bukti perilaku nyata</li>
+<li>PR jadi paket audit kecil, bukan sekadar patch</li>
+<li>evidence harus terstruktur agar tidak overclaim</li>
+</ul>
+<p>Kalau mau mulai di project sendiri:</p>
+<ol>
+<li>pilih flow yang susah dipercaya hanya dari diff</li>
+<li>buat deterministic fixture input</li>
+<li>jalankan main vs patch</li>
+<li>record behavior dengan alat yang ada</li>
+<li>attach artifact + context</li>
+<li>tulis batasan apa yang tidak dites</li>
+</ol>
+<p>Video proof bukan test utama. Dia adalah <strong>lapisan trust di atas test</strong>.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">qa (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">evidence (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openclaw (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">telegram (Private)</a></li>
+</ol>

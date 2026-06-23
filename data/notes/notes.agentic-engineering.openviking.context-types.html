@@ -1,0 +1,169 @@
+<h1 id="openviking-context-types">OpenViking context types<a aria-hidden="true" class="anchor-heading icon-link" href="#openviking-context-types"></a></h1>
+<p><strong>context types</strong> di OpenViking bukan "context window" LLM dan bukan prompt context biasa. Di OpenViking, context berarti semua bahan yang bisa dipakai agent untuk tahu, mengingat, dan bertindak.</p>
+<h2 id="1-pertanyaan-kunci-yang-gue-pegang">1. Pertanyaan kunci yang gue pegang<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci-yang-gue-pegang"></a></h2>
+<p>Ada enam pertanyaan inti yang bikin konsep ini jelas buat gue:</p>
+<ol>
+<li>Kenapa OpenViking membagi context jadi 3 tipe?</li>
+<li>Apa itu Resource?</li>
+<li>Apa itu Memory?</li>
+<li>Apa itu Skill?</li>
+<li>Kenapa Memory dibagi jadi 8 kategori?</li>
+<li>Apa gunanya unified search lintas tiga tipe ini?</li>
+</ol>
+<h2 id="2-kenapa-harus-dibagi-jadi-resource-memory-skill">2. Kenapa harus dibagi jadi Resource, Memory, Skill?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-harus-dibagi-jadi-resource-memory-skill"></a></h2>
+<p>OpenViking memisahkan konteks berdasarkan fungsi kognitif agent. Ini bukan sekadar taxonomy folder, tapi desain untuk mencegah agent mencampur "pengetahuan", "pengalaman", dan "kemampuan" ke satu tumpukan RAG yang kabur.</p>
+<p>Kalau semua data masuk satu vector DB flat, agent bisa salah anggap antara:</p>
+<ul>
+<li>dokumen referensi,</li>
+<li>preferensi user,</li>
+<li>pengalaman historis,</li>
+<li>definisi kemampuan,</li>
+<li>aturan resmi.</li>
+</ul>
+<p>OpenViking memilih:</p>
+<ul>
+<li><strong>Resource</strong> = referensi,</li>
+<li><strong>Memory</strong> = pembelajaran,</li>
+<li><strong>Skill</strong> = aksi.</li>
+</ul>
+<p>Ini mirip dengan cara manusia bekerja:</p>
+<ul>
+<li>buku/manual untuk tahu,</li>
+<li>pengalaman pribadi untuk ingat,</li>
+<li>keterampilan untuk bertindak.</li>
+</ul>
+<h2 id="3-resource-pengetahuan-dan-aturan">3. Resource: pengetahuan dan aturan<a aria-hidden="true" class="anchor-heading icon-link" href="#3-resource-pengetahuan-dan-aturan"></a></h2>
+<p>Resource adalah external knowledge yang relatif statis. Ini sumber yang user atau developer masukkan supaya agent punya basis pengetahuan.</p>
+<p>Karakteristik Resource:</p>
+<ul>
+<li><strong>User-driven</strong>: biasanya ditambahkan oleh user.</li>
+<li><strong>Static content</strong>: tidak berubah otomatis setiap session.</li>
+<li><strong>Structured storage</strong>: disimpan dalam hierarchy seperti <code>viking://resources/...</code>.</li>
+</ul>
+<p>Contoh Resource:</p>
+<ul>
+<li>API docs,</li>
+<li>product manual,</li>
+<li>FAQ,</li>
+<li>code repo,</li>
+<li>research paper,</li>
+<li>technical spec.</li>
+</ul>
+<p>Jadi Resource itu bukan memori agent. Ini adalah knowledge base yang agent baca.</p>
+<h2 id="4-memory-kognisi-yang-dipelajari-agent">4. Memory: kognisi yang dipelajari agent<a aria-hidden="true" class="anchor-heading icon-link" href="#4-memory-kognisi-yang-dipelajari-agent"></a></h2>
+<p>Memory adalah konteks yang dihasilkan dari interaksi. Ini bukan hanya preferensi user; ini juga pengalaman agent sendiri.</p>
+<p>Karakteristik Memory:</p>
+<ul>
+<li><strong>Agent-driven</strong>: diekstrak atau dicatat oleh agent.</li>
+<li><strong>Dynamic updates</strong>: berubah seiring waktu.</li>
+<li><strong>Personalized</strong>: bisa spesifik ke user atau agent.</li>
+</ul>
+<p>Contoh user memory:</p>
+<ul>
+<li>User prefers structured explanations.</li>
+<li>User works on project Alpha.</li>
+<li>User dislikes vague answers.</li>
+</ul>
+<p>Contoh agent memory:</p>
+<ul>
+<li>When debugging sandbox issues, check env variables first.</li>
+<li>For this repo, tests often fail due to fixture paths.</li>
+</ul>
+<p>Kalau dibedakan:</p>
+<ul>
+<li><strong>User memory</strong> = agent belajar tentang user.</li>
+<li><strong>Agent memory</strong> = agent belajar dari pekerjaannya sendiri.</li>
+</ul>
+<h2 id="5-delapan-kategori-memory">5. Delapan kategori Memory<a aria-hidden="true" class="anchor-heading icon-link" href="#5-delapan-kategori-memory"></a></h2>
+<p>Gue catat bahwa page ini memakai versi 8 kategori memory. Ini lebih rinci daripada overview 6 kategori.</p>
+<ul>
+<li><strong>profile</strong></li>
+<li><strong>preferences</strong></li>
+<li><strong>entities</strong></li>
+<li><strong>events</strong></li>
+<li><strong>cases</strong></li>
+<li><strong>patterns</strong></li>
+<li><strong>tools</strong></li>
+<li><strong>skills</strong></li>
+</ul>
+<h3 id="51-profile">5.1 profile<a aria-hidden="true" class="anchor-heading icon-link" href="#51-profile"></a></h3>
+<p>Lokasi: <code>user/memories/profile.md</code></p>
+<p>Profile adalah kartu identitas ringkas. Informasi dasar user digabung, bukan dipecah-pecah.</p>
+<h3 id="52-preferences">5.2 preferences<a aria-hidden="true" class="anchor-heading icon-link" href="#52-preferences"></a></h3>
+<p>Lokasi: <code>user/memories/preferences/</code></p>
+<p>Preferences adalah preferensi topikal yang appendable.</p>
+<h3 id="53-entities">5.3 entities<a aria-hidden="true" class="anchor-heading icon-link" href="#53-entities"></a></h3>
+<p>Lokasi: <code>user/memories/entities/</code></p>
+<p>Entities adalah memory tentang orang, project, organisasi, produk.</p>
+<h3 id="54-events">5.4 events<a aria-hidden="true" class="anchor-heading icon-link" href="#54-events"></a></h3>
+<p>Lokasi: <code>user/memories/events/</code></p>
+<p>Events adalah record historis. Biasanya tidak diperbarui.</p>
+<h3 id="55-cases">5.5 cases<a aria-hidden="true" class="anchor-heading icon-link" href="#55-cases"></a></h3>
+<p>Lokasi: <code>agent/memories/cases/</code></p>
+<p>Cases adalah pengalaman task konkret. Sifatnya immutable.</p>
+<h3 id="56-patterns">5.6 patterns<a aria-hidden="true" class="anchor-heading icon-link" href="#56-patterns"></a></h3>
+<p>Lokasi: <code>agent/memories/patterns/</code></p>
+<p>Patterns adalah generalisasi dari cases. Sifatnya mergeable.</p>
+<h3 id="57-tools">5.7 tools<a aria-hidden="true" class="anchor-heading icon-link" href="#57-tools"></a></h3>
+<p>Lokasi: <code>agent/memories/tools/</code></p>
+<p>Tools adalah memory tentang penggunaan tools dan best practice.</p>
+<h3 id="58-skills">5.8 skills<a aria-hidden="true" class="anchor-heading icon-link" href="#58-skills"></a></h3>
+<p>Lokasi: <code>agent/memories/skills/</code></p>
+<p>Skills memory adalah pengalaman/strategi menjalankan skill, bukan definisi skill itu sendiri.</p>
+<h2 id="6-skill-kemampuan-yang-bisa-dipanggil-agent">6. Skill: kemampuan yang bisa dipanggil agent<a aria-hidden="true" class="anchor-heading icon-link" href="#6-skill-kemampuan-yang-bisa-dipanggil-agent"></a></h2>
+<p>Skill adalah capability yang dapat diinvoke. Definisi skill relatif statis, tapi memory tentang skill dapat berubah.</p>
+<p>Skill memiliki sifat:</p>
+<ul>
+<li><strong>Defined capability</strong>,</li>
+<li><strong>Relatively static</strong>,</li>
+<li><strong>Callable</strong>.</li>
+</ul>
+<p>Ini berbeda dengan skill memory, yang adalah pengalaman menjalankan skill.</p>
+<h2 id="7-resource-vs-memory-vs-skill-secara-tajam">7. Resource vs Memory vs Skill secara tajam<a aria-hidden="true" class="anchor-heading icon-link" href="#7-resource-vs-memory-vs-skill-secara-tajam"></a></h2>
+<p>Contoh satu task:</p>
+<ul>
+<li>Resource = dokumen dan kode yang dibaca.</li>
+<li>Memory = pengalaman historis dan preferensi.</li>
+<li>Skill = prosedur atau tool yang dipanggil.</li>
+</ul>
+<p>Resource menjawab "agent tahu apa?"
+Memory menjawab "agent belajar apa dari pengalaman?"
+Skill menjawab "agent bisa melakukan apa?"</p>
+<h2 id="8-unified-search-kenapa-penting">8. Unified search: kenapa penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#8-unified-search-kenapa-penting"></a></h2>
+<p>Unified search adalah pencarian lintas Resource, Memory, dan Skill dalam satu sistem.</p>
+<p>Satu query bisa menghasilkan tiga jenis jawaban sekaligus:</p>
+<ul>
+<li>resource relevan,</li>
+<li>memory relevan,</li>
+<li>skill relevan.</li>
+</ul>
+<p>Ini membuat agent bisa memutuskan bukan hanya berdasarkan dokumen, tapi juga berdasarkan pengalaman dan kemampuan.</p>
+<h2 id="9-insight-penutup">9. Insight penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#9-insight-penutup"></a></h2>
+<p>Kesan terbesar gue: OpenViking membagi context bukan supaya lebih rumit, tapi supaya agent tidak salah kaprah. Resource, Memory, Skill adalah tiga mode kognitif yang berbeda. Agent yang matang harus tahu bedanya antara apa yang dia tahu, apa yang dia ingat, dan apa yang dia bisa lakukan.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault/daily.journal.2026.06.03 (Private)</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openviking (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-types (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

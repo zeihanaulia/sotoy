@@ -1,0 +1,401 @@
+<h1 id="agentic-workflow-simulation-jira--confluence-state-mapping">Agentic workflow simulation: Jira + Confluence state mapping<a aria-hidden="true" class="anchor-heading icon-link" href="#agentic-workflow-simulation-jira--confluence-state-mapping"></a></h1>
+<p>Gue bikin simulasi ini supaya bisa melihat lebih jelas dua lapis state yang sering keblurr di agentic workflow: backlog/ticket dan pipeline agent.</p>
+<h2 id="konteks">Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#konteks"></a></h2>
+<p>Arti <strong>states</strong> di sini adalah dua lapis state:</p>
+<ol>
+<li><strong>state backlog/ticket</strong>: Epic → Task → To Do → In Progress → Done / On Hold</li>
+<li><strong>state pipeline agent</strong>: Intake → Canonicalize → Groom → Execute → Verify → Publish → Reconcile → Audit</li>
+</ol>
+<p>Simulasi ini menunjukkan bahwa agent tidak langsung membaca task lalu ngoding. Agent lebih dulu mengubah niat manusia menjadi state yang bisa dikontrol: requirement jadi backlog item, backlog item jadi fix plan, fix plan jadi diff, diff jadi evidence, evidence jadi status Jira.</p>
+<hr>
+<h2 id="skenario">Skenario<a aria-hidden="true" class="anchor-heading icon-link" href="#skenario"></a></h2>
+<h3 id="epic">Epic<a aria-hidden="true" class="anchor-heading icon-link" href="#epic"></a></h3>
+<pre class="language-text"><code class="language-text">EPIC-100
+Title: Improve Account Security
+Goal: memperkuat keamanan akun user
+</code></pre>
+<h3 id="task">Task<a aria-hidden="true" class="anchor-heading icon-link" href="#task"></a></h3>
+<pre class="language-text"><code class="language-text">SEC-123
+Title: Add rate limiting to login endpoint
+Status: To Do
+Description: See Confluence page: Account Security Hardening v2
+</code></pre>
+<h3 id="confluence-detail">Confluence detail<a aria-hidden="true" class="anchor-heading icon-link" href="#confluence-detail"></a></h3>
+<pre class="language-text"><code class="language-text">Confluence: Account Security Hardening v2
+
+Requirement:
+- Login endpoint harus punya rate limit 5 percobaan gagal per 10 menit per user/email.
+- Jika limit tercapai, API mengembalikan HTTP 429.
+- Event harus dicatat ke security log.
+- Existing successful login flow tidak boleh berubah.
+
+Acceptance Criteria:
+1. Failed login attempt dihitung per email normalized.
+2. Setelah 5 failed attempt dalam 10 menit, request berikutnya kena 429.
+3. Counter reset setelah successful login.
+4. Unit test mencakup normal login, failed login, lockout, dan reset.
+5. Tidak boleh menyimpan password/token di log.
+</code></pre>
+<hr>
+<h2 id="state-0--epic-sebagai-konteks-besar">State 0 — Epic sebagai konteks besar<a aria-hidden="true" class="anchor-heading icon-link" href="#state-0--epic-sebagai-konteks-besar"></a></h2>
+<p>Di awal, Epic hanya memberikan arah besar.</p>
+<p>Agent belum boleh ngoding dari Epic langsung karena Epic terlalu luas dan ambigu.</p>
+<h3 id="tindakan-agent">Tindakan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#tindakan-agent"></a></h3>
+<pre class="language-text"><code class="language-text">Baca Epic
+↓
+Cari linked tasks
+↓
+Cari linked Confluence page
+↓
+Klasifikasikan sebagai security hardening work
+</code></pre>
+<h3 id="output-sementara">Output sementara<a aria-hidden="true" class="anchor-heading icon-link" href="#output-sementara"></a></h3>
+<pre class="language-text"><code class="language-text">Epic detected:
+- Domain: account security
+- Scope: login flow
+- Linked task: SEC-123
+- Source doc: Confluence Account Security Hardening v2
+</code></pre>
+<p><strong>Atomic idea</strong>: Epic memberi arah, bukan instruksi eksekusi.</p>
+<hr>
+<h2 id="state-1--intake-membaca-task-dan-confluence">State 1 — Intake: membaca task dan Confluence<a aria-hidden="true" class="anchor-heading icon-link" href="#state-1--intake-membaca-task-dan-confluence"></a></h2>
+<p>Agent mengambil detail dari Jira dan Confluence, lalu mengekstrak requirement ke field standar.</p>
+<h3 id="tindakan-agent-1">Tindakan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#tindakan-agent-1"></a></h3>
+<pre class="language-text"><code class="language-text">SEC-123
+↓
+Confluence page
+↓
+Structured requirement extraction
+</code></pre>
+<h3 id="hasil-intake">Hasil intake<a aria-hidden="true" class="anchor-heading icon-link" href="#hasil-intake"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"confluence:Account Security Hardening v2"</span><span class="token punctuation">,</span>
+  <span class="token property">"jira_key"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"epic"</span><span class="token operator">:</span> <span class="token string">"EPIC-100"</span><span class="token punctuation">,</span>
+  <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Add rate limiting to login endpoint"</span><span class="token punctuation">,</span>
+  <span class="token property">"requirement"</span><span class="token operator">:</span> <span class="token string">"Limit failed login attempts to 5 per 10 minutes per normalized email"</span><span class="token punctuation">,</span>
+  <span class="token property">"acceptance_criteria"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"Failed login attempt counted per normalized email"</span><span class="token punctuation">,</span>
+    <span class="token string">"6th failed attempt within 10 minutes returns HTTP 429"</span><span class="token punctuation">,</span>
+    <span class="token string">"Successful login resets failed-attempt counter"</span><span class="token punctuation">,</span>
+    <span class="token string">"Security event is logged without secrets"</span><span class="token punctuation">,</span>
+    <span class="token string">"Unit tests cover success, failure, lockout, reset"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"tags"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"security"</span><span class="token punctuation">,</span> <span class="token string">"auth"</span><span class="token punctuation">,</span> <span class="token string">"rate-limit"</span><span class="token punctuation">,</span> <span class="token string">"backend"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"owner"</span><span class="token operator">:</span> <span class="token string">"backend"</span><span class="token punctuation">,</span>
+  <span class="token property">"priority"</span><span class="token operator">:</span> <span class="token string">"high"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="gate-intake">Gate intake<a aria-hidden="true" class="anchor-heading icon-link" href="#gate-intake"></a></h3>
+<p>Agent hanya boleh lanjut kalau:</p>
+<ul>
+<li>Ada Jira key</li>
+<li>Ada source reference</li>
+<li>Ada requirement jelas</li>
+<li>Ada acceptance criteria</li>
+<li>Ada owner</li>
+<li>Ada priority</li>
+</ul>
+<p>Kalau Confluence kosong atau link mati, status masuk <code>On Hold / Needs Clarification</code>.</p>
+<p><strong>Atomic idea</strong>: agent baru boleh bekerja kalau requirement sudah bisa diuji.</p>
+<hr>
+<h2 id="state-2--canonicalization-cek-duplicate-dan-kecocokan">State 2 — Canonicalization: cek duplicate dan kecocokan<a aria-hidden="true" class="anchor-heading icon-link" href="#state-2--canonicalization-cek-duplicate-dan-kecocokan"></a></h2>
+<p>Agent mengecek apakah task ini benar-benar baru atau sudah ada item serupa.</p>
+<h3 id="tindakan-agent-2">Tindakan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#tindakan-agent-2"></a></h3>
+<ul>
+<li>bandingkan dengan canonical backlog</li>
+<li>hitung similarity</li>
+<li>tentukan tier confidence</li>
+</ul>
+<h3 id="simulasi">Simulasi<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi"></a></h3>
+<pre class="language-text"><code class="language-text">SEC-123 vs SEC-089 = 0.61
+SEC-123 vs SEC-101 = 0.55
+SEC-123 vs existing exact key = 1.00
+</code></pre>
+<p>Confidence tinggi karena Jira key jelas dan detail cocok.</p>
+<h3 id="output">Output<a aria-hidden="true" class="anchor-heading icon-link" href="#output"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"canonical_id"</span><span class="token operator">:</span> <span class="token string">"AUTO-SEC-LOGIN-RATE-LIMIT-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"jira_key"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"confidence"</span><span class="token operator">:</span> <span class="token number">0.91</span><span class="token punctuation">,</span>
+  <span class="token property">"decision"</span><span class="token operator">:</span> <span class="token string">"eligible_for_autonomous_grooming"</span><span class="token punctuation">,</span>
+  <span class="token property">"related_items"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"SEC-089"</span><span class="token punctuation">,</span> <span class="token string">"SEC-101"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"source_of_truth"</span><span class="token operator">:</span> <span class="token string">"canonical_backlog"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Atomic idea</strong>: duplicate dan overlap harus dibereskan sebelum agent menulis kode.</p>
+<hr>
+<h2 id="state-3--grooming-requirement-jadi-fix-plan">State 3 — Grooming: requirement jadi fix plan<a aria-hidden="true" class="anchor-heading icon-link" href="#state-3--grooming-requirement-jadi-fix-plan"></a></h2>
+<p>Agent tidak langsung memperbaiki kode. Dia membuat rencana kerja yang actionable.</p>
+<h3 id="tindakan-agent-3">Tindakan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#tindakan-agent-3"></a></h3>
+<ul>
+<li>identifikasi file relevan</li>
+<li>buat fix_strategy</li>
+<li>buat verification_plan</li>
+</ul>
+<h3 id="contoh-fix-plan">Contoh fix plan<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-fix-plan"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"ticket"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"priority_score"</span><span class="token operator">:</span> <span class="token number">94</span><span class="token punctuation">,</span>
+  <span class="token property">"priority_type"</span><span class="token operator">:</span> <span class="token string">"security_hardening"</span><span class="token punctuation">,</span>
+  <span class="token property">"area"</span><span class="token operator">:</span> <span class="token string">"backend/auth"</span><span class="token punctuation">,</span>
+  <span class="token property">"relevant_paths"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"backend/auth/login.py"</span><span class="token punctuation">,</span>
+    <span class="token string">"backend/auth/rate_limit.py"</span><span class="token punctuation">,</span>
+    <span class="token string">"backend/security/audit_log.py"</span><span class="token punctuation">,</span>
+    <span class="token string">"tests/auth/test_login.py"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"fix_strategy"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"Add failed-login counter keyed by normalized email"</span><span class="token punctuation">,</span>
+    <span class="token string">"Enforce 5 failed attempts per 10 minutes"</span><span class="token punctuation">,</span>
+    <span class="token string">"Return HTTP 429 when threshold exceeded"</span><span class="token punctuation">,</span>
+    <span class="token string">"Reset counter after successful login"</span><span class="token punctuation">,</span>
+    <span class="token string">"Emit sanitized security log event"</span><span class="token punctuation">,</span>
+    <span class="token string">"Add unit tests for success, failure, lockout, reset"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"verification_plan"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"Run auth unit tests"</span><span class="token punctuation">,</span>
+    <span class="token string">"Run security log test"</span><span class="token punctuation">,</span>
+    <span class="token string">"Run lint"</span><span class="token punctuation">,</span>
+    <span class="token string">"Check no password/token logged"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"confidence"</span><span class="token operator">:</span> <span class="token number">0.88</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Status Jira masih <code>To Do</code>.</p>
+<p><strong>Atomic idea</strong>: grooming menghasilkan rencana, bukan perubahan.</p>
+<hr>
+<h2 id="state-4--claim-lock-agent-mengambil-ticket">State 4 — Claim Lock: agent mengambil ticket<a aria-hidden="true" class="anchor-heading icon-link" href="#state-4--claim-lock-agent-mengambil-ticket"></a></h2>
+<p>Sebelum eksekusi, agent harus mengunci ticket secara eksternal.</p>
+<h3 id="tindakan-agent-4">Tindakan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#tindakan-agent-4"></a></h3>
+<pre class="language-text"><code class="language-text">SEC-123: To Do → In Progress
+</code></pre>
+<h3 id="output-1">Output<a aria-hidden="true" class="anchor-heading icon-link" href="#output-1"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"ticket"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"transition"</span><span class="token operator">:</span> <span class="token string">"To Do -> In Progress"</span><span class="token punctuation">,</span>
+  <span class="token property">"claim_owner"</span><span class="token operator">:</span> <span class="token string">"lane4-worker-2"</span><span class="token punctuation">,</span>
+  <span class="token property">"run_id"</span><span class="token operator">:</span> <span class="token string">"RUN-2026-05-12-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"status"</span><span class="token operator">:</span> <span class="token string">"claimed"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Atomic idea</strong>: ownership harus terlihat di Jira sebelum agent mengubah kode.</p>
+<hr>
+<h2 id="state-5--execution-patch-di-isolated-worktree">State 5 — Execution: patch di isolated worktree<a aria-hidden="true" class="anchor-heading icon-link" href="#state-5--execution-patch-di-isolated-worktree"></a></h2>
+<p>Agent membuat perubahan di ruang isolasi.</p>
+<h3 id="tindakan-agent-5">Tindakan agent<a aria-hidden="true" class="anchor-heading icon-link" href="#tindakan-agent-5"></a></h3>
+<ul>
+<li>buat isolated worktree</li>
+<li>apply patch</li>
+<li>generate diff</li>
+<li>simpan evidence</li>
+</ul>
+<h3 id="contoh-diff-summary">Contoh diff summary<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-diff-summary"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"run_id"</span><span class="token operator">:</span> <span class="token string">"RUN-2026-05-12-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"ticket"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"diff_summary"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"files_changed"</span><span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+    <span class="token property">"lines_added"</span><span class="token operator">:</span> <span class="token number">142</span><span class="token punctuation">,</span>
+    <span class="token property">"lines_removed"</span><span class="token operator">:</span> <span class="token number">18</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"risk_tier"</span><span class="token operator">:</span> <span class="token string">"extended_verification"</span><span class="token punctuation">,</span>
+  <span class="token property">"reason"</span><span class="token operator">:</span> <span class="token string">"diff between 50 and 200 lines"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Atomic idea</strong>: agent boleh mengubah kode, tapi hanya di ruang isolasi dan dengan evidence.</p>
+<hr>
+<h2 id="state-6--verification-executor-tidak-boleh-jadi-auditor">State 6 — Verification: executor tidak boleh jadi auditor<a aria-hidden="true" class="anchor-heading icon-link" href="#state-6--verification-executor-tidak-boleh-jadi-auditor"></a></h2>
+<p>Verifier terpisah menjalankan quality gate.</p>
+<h3 id="verifikasi-yang-dijalankan">Verifikasi yang dijalankan<a aria-hidden="true" class="anchor-heading icon-link" href="#verifikasi-yang-dijalankan"></a></h3>
+<ul>
+<li>unit tests</li>
+<li>lint/static analysis</li>
+<li>security checks</li>
+<li>mutation/state checks</li>
+</ul>
+<h3 id="pass">Pass<a aria-hidden="true" class="anchor-heading icon-link" href="#pass"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"ticket"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"product_verifier"</span><span class="token operator">:</span> <span class="token string">"pass"</span><span class="token punctuation">,</span>
+  <span class="token property">"security_verifier"</span><span class="token operator">:</span> <span class="token string">"pass"</span><span class="token punctuation">,</span>
+  <span class="token property">"mutation_check"</span><span class="token operator">:</span> <span class="token string">"pass"</span><span class="token punctuation">,</span>
+  <span class="token property">"result"</span><span class="token operator">:</span> <span class="token string">"verified"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Jira: <code>In Progress → Done</code></p>
+<h3 id="fail">Fail<a aria-hidden="true" class="anchor-heading icon-link" href="#fail"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"ticket"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"product_verifier"</span><span class="token operator">:</span> <span class="token string">"fail"</span><span class="token punctuation">,</span>
+  <span class="token property">"failed_test"</span><span class="token operator">:</span> <span class="token string">"test_successful_login_resets_failed_attempt_counter"</span><span class="token punctuation">,</span>
+  <span class="token property">"result"</span><span class="token operator">:</span> <span class="token string">"requeue"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Jira: <code>In Progress → To Do</code></p>
+<p><strong>Atomic idea</strong>: yang memutuskan selesai adalah verifier independen, bukan agent yang membuat patch.</p>
+<hr>
+<h2 id="state-7--publication-hasil-ditulis-ke-jira">State 7 — Publication: hasil ditulis ke Jira<a aria-hidden="true" class="anchor-heading icon-link" href="#state-7--publication-hasil-ditulis-ke-jira"></a></h2>
+<p>Jika verification pass atau fail, agent mem-publish hasil dengan konteks.</p>
+<h3 id="contoh-komentar-pass">Contoh komentar pass<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-komentar-pass"></a></h3>
+<pre class="language-text"><code class="language-text">Automation result: VERIFIED
+
+Run ID: RUN-2026-05-12-001
+Source: Confluence Account Security Hardening v2
+Epic: EPIC-100
+Ticket: SEC-123
+
+Changes:
+- Added failed login rate limiting per normalized email.
+- Added HTTP 429 response after threshold.
+- Added reset on successful login.
+- Added sanitized security logging.
+- Added unit tests for success, failure, lockout, reset.
+
+Verification:
+- Auth unit tests: PASS
+- Security log tests: PASS
+- Lint/static analysis: PASS
+- Secret logging check: PASS
+
+Evidence:
+- diff: evidence/RUN-2026-05-12-001/diff.patch
+- test output: evidence/RUN-2026-05-12-001/tests.log
+- verifier output: evidence/RUN-2026-05-12-001/verifier.json
+</code></pre>
+<h3 id="contoh-komentar-fail">Contoh komentar fail<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-komentar-fail"></a></h3>
+<pre class="language-text"><code class="language-text">Automation result: FAILED VERIFICATION
+
+Run ID: RUN-2026-05-12-001
+Ticket: SEC-123
+
+Failure:
+- test_successful_login_resets_failed_attempt_counter failed.
+
+Action:
+- Ticket returned to To Do for re-grooming.
+- Patch worktree discarded.
+- Evidence saved for review.
+</code></pre>
+<p><strong>Atomic idea</strong>: Jira update harus menjelaskan keputusan, bukan sekadar mengubah status.</p>
+<hr>
+<h2 id="state-8--reconciliation-canonical-backlog-diperbarui">State 8 — Reconciliation: canonical backlog diperbarui<a aria-hidden="true" class="anchor-heading icon-link" href="#state-8--reconciliation-canonical-backlog-diperbarui"></a></h2>
+<p>Setelah Jira berubah, canonical backlog juga disinkronkan.</p>
+<h3 id="pass-1">Pass<a aria-hidden="true" class="anchor-heading icon-link" href="#pass-1"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"canonical_id"</span><span class="token operator">:</span> <span class="token string">"AUTO-SEC-LOGIN-RATE-LIMIT-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"jira_key"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"epic"</span><span class="token operator">:</span> <span class="token string">"EPIC-100"</span><span class="token punctuation">,</span>
+  <span class="token property">"state"</span><span class="token operator">:</span> <span class="token string">"done"</span><span class="token punctuation">,</span>
+  <span class="token property">"last_run_id"</span><span class="token operator">:</span> <span class="token string">"RUN-2026-05-12-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"source_doc"</span><span class="token operator">:</span> <span class="token string">"Confluence Account Security Hardening v2"</span><span class="token punctuation">,</span>
+  <span class="token property">"verification"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"product"</span><span class="token operator">:</span> <span class="token string">"pass"</span><span class="token punctuation">,</span>
+    <span class="token property">"security"</span><span class="token operator">:</span> <span class="token string">"pass"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"completed_at"</span><span class="token operator">:</span> <span class="token string">"2026-05-12T..."</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="fail-1">Fail<a aria-hidden="true" class="anchor-heading icon-link" href="#fail-1"></a></h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"canonical_id"</span><span class="token operator">:</span> <span class="token string">"AUTO-SEC-LOGIN-RATE-LIMIT-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"jira_key"</span><span class="token operator">:</span> <span class="token string">"SEC-123"</span><span class="token punctuation">,</span>
+  <span class="token property">"state"</span><span class="token operator">:</span> <span class="token string">"to_do"</span><span class="token punctuation">,</span>
+  <span class="token property">"last_run_id"</span><span class="token operator">:</span> <span class="token string">"RUN-2026-05-12-001"</span><span class="token punctuation">,</span>
+  <span class="token property">"failure_reason"</span><span class="token operator">:</span> <span class="token string">"reset counter test failed"</span><span class="token punctuation">,</span>
+  <span class="token property">"next_action"</span><span class="token operator">:</span> <span class="token string">"regroom"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Atomic idea</strong>: state eksternal dan internal harus sinkron.</p>
+<hr>
+<h2 id="state-9--audit-trail-evidence-chain-lengkap">State 9 — Audit Trail: evidence chain lengkap<a aria-hidden="true" class="anchor-heading icon-link" href="#state-9--audit-trail-evidence-chain-lengkap"></a></h2>
+<p>Evidence folder per run menyimpan semua keputusan.</p>
+<pre class="language-text"><code class="language-text">evidence/
+  RUN-2026-05-12-001/
+    input.json
+    source_refs.json
+    confluence_snapshot.md
+    jira_before.json
+    fix_plan.json
+    diff.patch
+    test_output.log
+    security_verifier.json
+    jira_receipt.json
+    final_status.json
+</code></pre>
+<h3 id="jawaban-audit">Jawaban audit<a aria-hidden="true" class="anchor-heading icon-link" href="#jawaban-audit"></a></h3>
+<p>Jika ditanya, "Kenapa SEC-123 ditutup?" jawaban harus berbasis evidence chain, bukan klaim model.</p>
+<p><strong>Atomic idea</strong>: trust datang dari evidence chain, bukan dari klaim model.</p>
+<hr>
+<h2 id="batas-autonomy-yang-realistis">Batas autonomy yang realistis<a aria-hidden="true" class="anchor-heading icon-link" href="#batas-autonomy-yang-realistis"></a></h2>
+<p>Agent hanya boleh lanjut jika:</p>
+<ul>
+<li>requirement jelas</li>
+<li>acceptance criteria testable</li>
+<li>fix plan sudah dikenal</li>
+<li>diff size masih dalam batas</li>
+<li>verifier dapat membuktikan hasil</li>
+<li>tidak butuh keputusan arsitektural baru</li>
+</ul>
+<p>Jika salah satu tidak terpenuhi, agent harus berhenti dan minta manusia:</p>
+<ul>
+<li><code>On Hold</code> jika requirement tidak testable</li>
+<li><code>Human review</code> jika arsitektural judgment diperlukan</li>
+</ul>
+<hr>
+<h2 id="ringkasan-state-lengkap">Ringkasan state lengkap<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasan-state-lengkap"></a></h2>
+<pre class="language-text"><code class="language-text">[EPIC-100]
+Improve Account Security
+    ↓
+[SEC-123 - To Do]
+Task linked to Confluence requirement
+    ↓
+[S1 Intake]
+Agent baca Jira + Confluence
+Extract requirement + acceptance criteria
+    ↓
+[S2 Canonicalize]
+Cek duplicate, mapping, confidence score
+confidence 0.91
+    ↓
+[S3 Groom]
+Buat fix_plan + relevant_paths + verification_plan
+Masuk fix_queue
+    ↓
+[S4 Claim]
+Jira: To Do → In Progress
+Agent worker dapat lock
+    ↓
+[S5 Execute]
+Agent apply patch di isolated worktree
+Generate diff + evidence
+    ↓
+[S6 Verify]
+Verifier terpisah jalan:
+tests + lint + security + mutation check
+    ↓
+    ┌───────────────┬────────────────┐
+    │ PASS          │ FAIL           │
+    ↓               ↓
+Jira: Done      Jira: To Do
+Publish result  Publish failure
+Reconcile       Re-groom next cycle
+    ↓
+[S7 Audit]
+Evidence chain tersimpan
+</code></pre>
+<hr>
+<h2 id="insight">Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#insight"></a></h2>
+<p>Yang paling penting adalah transformasi ini:</p>
+<pre class="language-text"><code class="language-text">narasi requirement → acceptance criteria → fix plan → diff → verifier result → Jira transition → audit evidence
+</code></pre>
+<p>Kalau salah satu rantai putus, sistem harus berhenti atau minta manusia. Di situlah bedanya workflow agentic yang aman dengan agent coding yang cuma agresif.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">jira (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">confluence (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">backlog (Private)</a></li>
+</ol>

@@ -1,0 +1,17 @@
+<h1 id="installer-dependency-bisa-jadi-initial-access-dan-ide-config-bisa-jadi-persistence">Installer dependency bisa jadi initial access dan IDE config bisa jadi persistence<a aria-hidden="true" class="anchor-heading icon-link" href="#installer-dependency-bisa-jadi-initial-access-dan-ide-config-bisa-jadi-persistence"></a></h1>
+<p>TIL: di supply-chain dev modern, malware sering tidak muncul sebagai binary mencolok. Bentuknya lebih ke "installer script" dan "config hook" yang dipicu oleh event.</p>
+<p>Contoh red flag:</p>
+<ul>
+<li><code>package.json</code> dengan <code>postinstall</code> atau <code>install</code> script yang menjalankan <code>node scripts/setup.mjs</code></li>
+<li><code>.vscode/tasks.json</code> yang menjalankan <code>node .vscode/setup.mjs</code></li>
+<li><code>.claude/settings.json</code> / <code>.claude/setup.mjs</code></li>
+</ul>
+<p>Yang penting adalah: bukan sekadar apakah file itu ada, tapi apakah ada jalur eksekusi dari file itu ke event di mesin gue.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-tooling (Private)</a></li>
+</ol>

@@ -1,0 +1,21 @@
+<h1 id="porting-sistem-zig-organik-ke-rust-modular-sering-butuh-negosiasi-ulang-arsitektur">Porting sistem Zig organik ke Rust modular sering butuh negosiasi ulang arsitektur<a aria-hidden="true" class="anchor-heading icon-link" href="#porting-sistem-zig-organik-ke-rust-modular-sering-butuh-negosiasi-ulang-arsitektur"></a></h1>
+<p>Thread Jarred Sumner menunjukkan klaim berikut:</p>
+<p>Kalau lo punya sistem performa-sensitif dan heavily interconnected yang tumbuh organik di Zig, porting ke Rust modular bukan soal syntax. Itu soal:</p>
+<ul>
+<li>memutus cyclic dependency dengan crate boundary,</li>
+<li>memutus konsep tagged pointer / dynamic interface dengan trait/object/enum,</li>
+<li>menegosiasi ulang apakah heterogeneity dibayar di runtime atau compile-time.</li>
+</ul>
+<p>Jangan anggap Rust port sebagai sekadar refactor. Anggap itu sebagai redesign arsitektur dengan trade-off baru.</p>
+<p>Referensi: <a href="/sotoy/notes/notes.software-architechture.bun-rust-porting">Bun porting dari Zig ke Rust: masalah layering, crates, dan tagged pointer</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a class="color-tag" style="--tag-color: #7a6a4f;" href="/sotoy/notes/tags.software-architechture">software-architechture</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">zig (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">bun (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>

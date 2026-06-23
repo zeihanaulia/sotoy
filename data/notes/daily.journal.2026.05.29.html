@@ -1,0 +1,111 @@
+<h1 id="2026-05-29">2026-05-29<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-05-29"></a></h1>
+<h2 id="hari-ini-gue-ngulik-codex-sandbox-di-macos-dari-sudut-env-hygiene">Hari ini gue ngulik Codex sandbox di macOS dari sudut env hygiene<a aria-hidden="true" class="anchor-heading icon-link" href="#hari-ini-gue-ngulik-codex-sandbox-di-macos-dari-sudut-env-hygiene"></a></h2>
+<p>Gue sudah paham bahwa Seatbelt itu batasan akses proses, bukan secret manager. Yang bikin masalah bukan karena sandbox "bocor"; yang bikin masalah adalah kalau gue mulai Codex dari terminal yang sudah punya API key dan token.</p>
+<h2 id="insight-utama-yang-gue-dapat">Insight utama yang gue dapat<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-utama-yang-gue-dapat"></a></h2>
+<p>Kalau proses child sudah memegang env var secret dari parent shell, Seatbelt nggak otomatis menariknya lagi. Itu kayak lo sudah ngasih kertas berisi password ke anak, terus lo pasang pagar di sekitar dia: pagar nggak bisa bikin kertas itu hilang.</p>
+<p>Jadi pola yang lebih masuk akal adalah:</p>
+<ul>
+<li>jangan mulai Codex dari terminal yang penuh token</li>
+<li>bersihkan environment dulu dengan <code>env -i</code></li>
+<li>whitelist hanya variabel yang aman seperti <code>HOME</code>, <code>PATH</code>, <code>SHELL</code>, <code>TERM</code></li>
+<li>jangan export secret global di <code>~/.zshrc</code></li>
+<li>pakai Keychain/secret manager dengan approval eksplisit bila perlu</li>
+</ul>
+<h2 id="workaround-operasional-yang-gue-rekam">Workaround operasional yang gue rekam<a aria-hidden="true" class="anchor-heading icon-link" href="#workaround-operasional-yang-gue-rekam"></a></h2>
+<p>Bukan: minta Seatbelt menyensor env.
+Ini: mulai Codex dari shell yang bersih.</p>
+<p>Contoh yang gue catat:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">env</span> -i <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">HOME</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$HOME</span>"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">SHELL</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$SHELL</span>"</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable"><span class="token environment constant">TERM</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$TERM</span>"</span> <span class="token punctuation">\</span>
+  codex
+</code></pre>
+<p>Solusi gampangnya: buat <code>codex-safe</code> di <code>~/.zshrc</code>, lalu jalankan Codex lewat situ. Itu yang harus jadi kebiasaan untuk repo yang belum sepenuhnya gue percaya.</p>
+<h2 id="setup-codex-lokal-yang-gue-simpan">Setup Codex lokal yang gue simpan<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-codex-lokal-yang-gue-simpan"></a></h2>
+<p>Gue juga nyimpen konfigurasi user-level di <code>~/.codex/config.toml</code> supaya perilaku Codex CLI/IDE lebih mirip eksperimen <code>sandbox-exec</code>:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">sandbox_mode</span> <span class="token punctuation">=</span> <span class="token string">"workspace-write"</span>
+<span class="token key property">approval_policy</span> <span class="token punctuation">=</span> <span class="token string">"on-request"</span>
+<span class="token key property">approvals_reviewer</span> <span class="token punctuation">=</span> <span class="token string">"user"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">sandbox_workspace_write</span><span class="token punctuation">]</span>
+<span class="token key property">network_access</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">writable_roots</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token key property">exclude_tmpdir_env_var</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+<span class="token key property">exclude_slash_tmp</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">shell_environment_policy</span><span class="token punctuation">]</span>
+<span class="token key property">inherit</span> <span class="token punctuation">=</span> <span class="token string">"core"</span>
+<span class="token key property">ignore_default_excludes</span> <span class="token punctuation">=</span> <span class="token boolean">false</span>
+<span class="token key property">exclude</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"*KEY*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*TOKEN*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*SECRET*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*PASSWORD*"</span><span class="token punctuation">,</span>
+  <span class="token string">"*CREDENTIAL*"</span><span class="token punctuation">,</span>
+  <span class="token string">"AWS_*"</span><span class="token punctuation">,</span>
+  <span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">,</span>
+  <span class="token string">"GITHUB_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"GH_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"NPM_TOKEN"</span><span class="token punctuation">,</span>
+  <span class="token string">"DATABASE_URL"</span><span class="token punctuation">,</span>
+  <span class="token string">"PGPASSWORD"</span>
+<span class="token punctuation">]</span>
+<span class="token key property">include_only</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token key property">set</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Ini baseline yang gue pake: workspace masih bisa dikerjain, network dimatikan, env sensitif tidak diwariskan, dan root tambahan cuma dibuka kalau perlu. Kalau repo asing, gue lebih ketat lagi dengan <code>inherit = "none"</code> dan <code>include_only</code> minimal. Baru kalau ada tool yang benar-benar butuh env spesifik, gue tambahkan satu per satu.</p>
+<h2 id="global-vs-per-repoproject">Global vs per repo/project<a aria-hidden="true" class="anchor-heading icon-link" href="#global-vs-per-repoproject"></a></h2>
+<p>Gue sekarang melihatnya sebagai layer konfigurasi Codex, bukan setting sandbox macOS mentah. Global config di <code>~/.codex/config.toml</code> adalah sabuk pengaman default yang harus konservatif. Per-project config di <code>.codex/config.toml</code> adalah izin kerja khusus untuk repo tertentu, dan hanya boleh dipakai kalau repo itu dipercaya.</p>
+<p>Profile config <code>~/.codex/.config.toml</code> berguna untuk mode kerja yang berbeda—misalnya <code>paranoid</code> untuk repo asing atau <code>internal</code> untuk repo kantor. CLI flags paling kuat; pakai untuk override satu sesi tanpa mengubah config.</p>
+<p>Jadi prinsipnya:</p>
+<ul>
+<li>global = baseline aman</li>
+<li>per-project = exception spesifik</li>
+<li>profile = mode kerja</li>
+<li>CLI flag = override sementara</li>
+</ul>
+<p>Itu yang bikin setup Codex lebih sehat daripada sekadar nge-DIY <code>sandbox-exec</code>.</p>
+<h2 id="hasil-eksperimen-yang-gue-ingat">Hasil eksperimen yang gue ingat<a aria-hidden="true" class="anchor-heading icon-link" href="#hasil-eksperimen-yang-gue-ingat"></a></h2>
+<ul>
+<li><code>sandbox-exec</code> bisa menahan akses file/network di luar workspace.</li>
+<li>tapi <code>FAKE_API_KEY</code> masih muncul kalau env dari parent shell ikut.</li>
+<li>workspace writable tetap bisa diubah kalau profile mengizinkan.</li>
+<li>network deny bisa memblokir eksfiltrasi, tapi env var tetap bisa dibaca kalau sudah diwariskan.</li>
+<li>current working directory juga penting: kalau shell dijalankan dari path yang tidak diizinkan, buka shell bisa error <code>getcwd</code>.</li>
+</ul>
+<h2 id="kenapa-ini-penting-buat-workflow-gue">Kenapa ini penting buat workflow gue<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting-buat-workflow-gue"></a></h2>
+<p>Karena gue mau pakai Codex lokal tanpa ngasih false sense of security. Sandbox itu bagian yang penting, tapi bukan satu-satunya. Gue butuh:</p>
+<ul>
+<li>shell bersih sebagai lapisan pertama</li>
+<li>approval policy untuk network/escalation</li>
+<li>git diff untuk review perubahan workspace</li>
+<li>secret manager daripada export global</li>
+</ul>
+<p>Kalau repo asing atau mencurigakan, gue masih pakai container/VM/remote sandbox.</p>
+<h2 id="antirez-gpt-vs-opus-dan-lag-evaluasi-komunitas">Antirez, GPT vs Opus, dan lag evaluasi komunitas<a aria-hidden="true" class="anchor-heading icon-link" href="#antirez-gpt-vs-opus-dan-lag-evaluasi-komunitas"></a></h2>
+<p><a href="https://x.com/antirez/status/2060017203592761819">https://x.com/antirez/status/2060017203592761819</a></p>
+<p>Hari ini gue juga nyimak tweet Antirez tentang bagaimana internet baru “ngeh” kalau GPT sudah lebih baik dari Opus. Gue baca itu bukan cuma soal model, tapi soal proses opini di komunitas AI.</p>
+<p>Intinya: dia membacanya sebagai kritik terhadap lag evaluasi. Model frontier berubah dalam hitungan minggu atau bulan, tapi opini orang sering masih stuck di pengalaman lama, brand reputation, atau benchmark yang telat.</p>
+<p>Yang gue tangkap:</p>
+<ul>
+<li>Antirez tidak cuma bilang “GPT lebih bagus”. Dia bilang: kenapa hal yang menurut dia obvious butuh berbulan-bulan supaya komunitas menyadarinya.</li>
+<li>Banyak orang tetap nempel ke Opus karena brand memory, bubble informasi, dan vibe Twitter.</li>
+<li>Benchmark publik lama sering terlalu dangkal untuk pekerjaan engineering nyata.</li>
+<li>DeepSWE muncul sebagai boundary baru yang coba ukur agentic coding panjang, tapi itu tetap satu lensa, bukan jawaban final.</li>
+<li>Yang paling penting: kalau mau benar-benar tahu, punya pipeline evaluasi sendiri terhadap task nyata lo lebih kuat daripada cuma ngikutin leaderboard atau tweet.</li>
+</ul>
+<p>Gue sendiri pakai ini sebagai reminder: jangan anggap model “selalu sama” dari pengalaman beberapa bulan lalu. Kalau gue cuma pakai benchmark atau opini orang lain, kemungkinan besar gue akan ketinggalan.</p>
+<h2 id="tautan-terkait">Tautan terkait<a aria-hidden="true" class="anchor-heading icon-link" href="#tautan-terkait"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.codex-macos-sandboxing">Codex macOS sandboxing dengan Seatbelt</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">codex (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">sandboxing (Private)</a></li>
+</ol>

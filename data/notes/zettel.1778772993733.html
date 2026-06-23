@@ -1,0 +1,28 @@
+<h1 id="clone-dan-rcrefcellt-adalah-sinyal-ownership-flow-yang-belum-jelas">clone() dan Rc&#x3C;RefCell&#x3C;T>> adalah sinyal ownership flow yang belum jelas<a aria-hidden="true" class="anchor-heading icon-link" href="#clone-dan-rcrefcellt-adalah-sinyal-ownership-flow-yang-belum-jelas"></a></h1>
+<h2 id="klaim">Klaim<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim"></a></h2>
+<p><code>clone()</code> yang tersebar dan <code>Rc&#x3C;RefCell&#x3C;T>></code> yang berulang kali digunakan adalah sinyal desain ownership yang kabur, bukan bukti desain Rust yang solid.</p>
+<h2 id="bukti">Bukti<a aria-hidden="true" class="anchor-heading icon-link" href="#bukti"></a></h2>
+<p>Preface menggambarkan kedua pola ini sebagai escape hatch yang valid, tapi berbahaya jika dijadikan default untuk menghindari pemikiran ownership.</p>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li><code>clone()</code> dapat menyelesaikan compile error tetapi menyembunyikan alur data dan biaya runtime.</li>
+<li><code>Rc&#x3C;RefCell&#x3C;T>></code> bisa membuat shared mutable state kembali seperti gaya OOP, sehingga menurunkan keuntungan compile-time safety Rust.</li>
+<li>Desain Rust yang baik menggunakannya sebagai alat khusus, bukan sebagai arsitektur utama.</li>
+</ul>
+<h2 id="hubungan">Hubungan<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.design-patterns-and-best-practices-in-rust">Rust-native design lebih dari sekadar pattern</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ownership (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">design (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

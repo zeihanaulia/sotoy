@@ -1,0 +1,36 @@
+<h1 id="ai-model-reliability--the-workhorse-concept">AI Model Reliability &#x26; The Workhorse Concept<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-model-reliability--the-workhorse-concept"></a></h1>
+<h2 id="pergeseran-kriteria-dari-benchmark-ke-reliability">Pergeseran Kriteria: Dari Benchmark ke Reliability<a aria-hidden="true" class="anchor-heading icon-link" href="#pergeseran-kriteria-dari-benchmark-ke-reliability"></a></h2>
+<p>Selama ini kita sering terjebak dalam perang benchmark atau kecepatan respons. Tapi kalau melihat perspektif antirez soal Claude (Fable) vs GPT 5.5, ada pergeseran menarik dalam menilai "model terbaik".</p>
+<p>Kuncinya bukan lagi di <em>output</em> akhir yang benar, tapi di <strong>reliability proses</strong>.</p>
+<h3 id="reliability-vs-accuracy">Reliability vs Accuracy<a aria-hidden="true" class="anchor-heading icon-link" href="#reliability-vs-accuracy"></a></h3>
+<p>Akurasi itu soal "apakah jawabannya benar?". Reliability itu soal "apakah proses berpikirnya bisa dipercaya?".</p>
+<p>Model yang reliable nggak cuma kasih jawaban, tapi:</p>
+<ol>
+<li>Melakukan langkah-langkah yang terorganisir.</li>
+<li>Punya pemahaman mendalam soal problem kompleks.</li>
+<li>Menghindari <em>nonsense loop</em> (kondisi di mana AI terlihat bekerja tapi sebenarnya tidak maju).</li>
+</ol>
+<h3 id="trade-off-speed-vs-depth">Trade-off: Speed vs Depth<a aria-hidden="true" class="anchor-heading icon-link" href="#trade-off-speed-vs-depth"></a></h3>
+<p>Ada harga yang harus dibayar untuk reliability: <strong>Latency</strong>.</p>
+<p>Model seperti Fable mungkin jauh lebih lambat daripada GPT 5.5. Namun, dalam kerja engineering, <em>speed</em> yang tinggi tapi salah arah justru membuang waktu karena kita harus melakukan debugging lebih lama. </p>
+<p>Jadi, rumusnya: <strong>Lambat tapi benar-benar mikir > Cepat tapi nonsense loop.</strong></p>
+<h3 id="konsep-workhorse-model">Konsep "Workhorse Model"<a aria-hidden="true" class="anchor-heading icon-link" href="#konsep-workhorse-model"></a></h3>
+<p>Muncul istilah <em>workhorse model</em>. Bedanya dengan model demo yang "keren" adalah stabilitasnya saat dipakai harian untuk kerja berat. </p>
+<p>Benchmark mengukur performa di tugas terisolasi, tapi <em>workhorse</em> mengukur apakah model tetap stabil, runut, dan berguna dalam workflow nyata yang panjang dan kompleks.</p>
+<h3 id="strategi-pragmatis-anti-vendor-lock-in">Strategi Pragmatis: Anti-Vendor Lock-in<a aria-hidden="true" class="anchor-heading icon-link" href="#strategi-pragmatis-anti-vendor-lock-in"></a></h3>
+<p>Satu prinsip penting dalam menggunakan alat produksi AI adalah jangan pernah mengikat diri pada satu provider. Karena landscape AI berubah sangat cepat, strategi terbaik adalah tetap fleksibel dan menggunakan model yang paling reliable untuk tugas spesifik pada saat itu.</p>
+<p>Referensi: <a href="https://x.com/antirez/status/2064448256113873281">https://x.com/antirez/status/2064448256113873281</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-models (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">productivity (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260611100001">Reliability > Accuracy in AI Workflows</a></li>
+<li><a href="/sotoy/notes/zettel.20260611100002">The Workhorse Model Concept</a></li>
+<li><a href="/sotoy/notes/zettel.20260611100003">AI Vendor Agnosticism</a></li>
+</ul>

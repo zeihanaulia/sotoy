@@ -1,0 +1,50 @@
+<h1 id="behavior-coverage-vs-code-coverage">Behavior Coverage vs Code Coverage<a aria-hidden="true" class="anchor-heading icon-link" href="#behavior-coverage-vs-code-coverage"></a></h1>
+<h2 id="konsep">Konsep<a aria-hidden="true" class="anchor-heading icon-link" href="#konsep"></a></h2>
+<p>Dalam pengembangan software, sering terjadi miskonsepsi bahwa <strong>Code Coverage</strong> yang tinggi (misal 100%) menjamin kualitas software. Namun, code coverage hanya mengukur <em>execution path</em>, bukan <em>correctness</em>.</p>
+<p><strong>Behavior Coverage</strong> mengukur sejauh mana skenario-skenario penting dalam domain bisnis/teknis telah dipin (fixed) dalam test suite.</p>
+<h2 id="perbandingan">Perbandingan<a aria-hidden="true" class="anchor-heading icon-link" href="#perbandingan"></a></h2>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Dimensi</th><th>Code Coverage</th><th>Behavior Coverage</th></tr></thead><tbody><tr><td><strong>Pertanyaan Utama</strong></td><td>"Apakah baris ini pernah dijalankan?"</td><td>"Apakah behavior X untuk input Y sudah benar?"</td></tr><tr><td><strong>Metrik</strong></td><td>Persentase baris/branch yang terlewati.</td><td>Daftar skenario domain yang terverifikasi.</td></tr><tr><td><strong>Kelemahan</strong></td><td>Bisa 100% tapi output salah (missing assertions).</td><td>Lebih sulit diukur secara otomatis (butuh domain knowledge).</td></tr><tr><td><strong>Konteks AI</strong></td><td>AI bisa dengan mudah mencapai 100% coverage.</td><td>AI butuh Oracle untuk tahu behavior apa yang harus dicover.</td></tr></tbody></table></div>
+<h2 id="implikasi-dalam-ai-coding">Implikasi dalam AI Coding<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi-dalam-ai-coding"></a></h2>
+<p>Agent bisa menghasilkan ribuan test yang memberikan code coverage tinggi, tetapi test tersebut bisa jadi dangkal (tidak mengecek edge case domain). Oleh karena itu, fokus engineer harus bergeser dari mengejar angka coverage ke mendesain <strong>behavioral oracles</strong>.</p>
+<h2 id="relasi">Relasi<a aria-hidden="true" class="anchor-heading icon-link" href="#relasi"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.ai-engineering.loop-driven-development">Loop Driven Development (LDD): Solving the Oracle Problem</a>: LDD menggunakan behavior coverage sebagai indikator 'Done'.</li>
+<li><a href="/sotoy/notes/zettel.ai.the-oracle-problem">The Oracle Problem dalam AI Coding</a>: Menentukan behavior coverage membutuhkan oracle yang valid.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">testing (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">quality-assurance (Private)</a></li>
+</ol>

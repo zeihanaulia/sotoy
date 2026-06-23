@@ -1,0 +1,54 @@
+<h1 id="agent-browser-observability-itu-bukan-sekadar-klik-klik">Agent browser observability itu bukan sekadar klik-klik<a aria-hidden="true" class="anchor-heading icon-link" href="#agent-browser-observability-itu-bukan-sekadar-klik-klik"></a></h1>
+<ul>
+<li>TIL: kalau agent browser diberi kemampuan baca browser runtime, itu bukan sekadar membuat klik otomatis. Ini berarti agent bisa melihat telemetry browser seperti <strong>network requests, DOM content, screenshots, dan CDP logs</strong>.</li>
+<li>Perbedaan utama dengan agent browser biasa:
+<ul>
+<li>agent browser biasa fokus ke aksi: buka halaman, klik tombol, isi form, submit.</li>
+<li>agent dengan browser observability tambah fokus ke diagnosis: request mana yang gagal, apa isi DOM, apa yang tampak di layar, dan event browser apa yang terjadi.</li>
+</ul>
+</li>
+<li>Ini penting karena banyak kegagalan web modern tidak terlihat dari permukaan.
+<ul>
+<li>tombol tersembunyi di balik overlay,</li>
+<li>request 401 diam-diam,</li>
+<li>redirect loop,</li>
+<li>hydration gagal,</li>
+<li>elemen belum ready.</li>
+</ul>
+</li>
+<li>Use case paling nyata:
+<ul>
+<li>debugging automation failure,</li>
+<li>reverse engineering flow web app,</li>
+<li>autoresearch dengan bukti yang bisa diaudit,</li>
+<li>incident monitoring dari sisi browser,</li>
+<li>QA / regression testing yang lebih explainable,</li>
+<li>fraud / abuse investigation,</li>
+<li>evaluasi dan improvement loop untuk agent sendiri.</li>
+</ul>
+</li>
+<li>Kenapa ini menarik untuk engineering:
+<ul>
+<li>observability memberi agent ground truth yang lebih kaya.</li>
+<li>screenshot + DOM + network + CDP adalah triangulasi kebenaran.</li>
+<li>agent jadi tidak hanya operator, tapi juga sensor.</li>
+</ul>
+</li>
+<li>Batasannya:
+<ul>
+<li>observability banyak data, bukan jaminan pemahaman.</li>
+<li>noise bisa sangat besar.</li>
+<li>raw data browser bisa sensitif; perlu sanitization dan access control.</li>
+<li>tidak semua failure terlihat di browser runtime (misalnya server-side decision atau anti-bot behavior).</li>
+</ul>
+</li>
+<li>Insight: agent browser yang punya telemetry mirip dengan sistem instrumented; dia tidak cuma melakukan action, tapi bisa belajar kenapa action gagal.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">browser (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">observability (Private)</a></li>
+</ol>

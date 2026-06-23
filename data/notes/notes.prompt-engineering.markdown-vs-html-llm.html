@@ -1,0 +1,105 @@
+<h1 id="markdown-vs-html-untuk-kerja-llm-dan-kolaborasi-manusia">Markdown vs HTML untuk kerja LLM dan kolaborasi manusia<a aria-hidden="true" class="anchor-heading icon-link" href="#markdown-vs-html-untuk-kerja-llm-dan-kolaborasi-manusia"></a></h1>
+<h2 id="konteks">Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#konteks"></a></h2>
+<p>Menurut gue, thread ini bukan cuma soal artikel Thariq <code>HTML > Markdown</code>. Thread antirez itu lebih tepat dibaca sebagai reply-reply yang mengarah ke kerja nyata.</p>
+<ul>
+<li>Artikel Thariq: <a href="https://x.com/trq212/status/2052809885763747935">https://x.com/trq212/status/2052809885763747935</a></li>
+<li>Thread antirez: <a href="https://x.com/antirez/status/2053113951123054963">https://x.com/antirez/status/2053113951123054963</a></li>
+</ul>
+<h2 id="inti-perdebatan">Inti perdebatan<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-perdebatan"></a></h2>
+<p>Gue nangkep bahwa ini bukan lagi sekadar "Markdown vs HTML". Ini soal <strong>optimisasi target</strong>:</p>
+<ul>
+<li>Thariq sedang ngomong soal artifact yang harus dibaca, dinavigasi, dan digunakan manusia dalam alur kerja agent.</li>
+<li>Antirez sedang ngomong soal representasi yang harus dibaca LLM dengan token economy dan semantic density.</li>
+</ul>
+<p>Jadi menurut gue:</p>
+<ul>
+<li><strong>Thariq:</strong> artifact = interface kerja.</li>
+<li><strong>antirez:</strong> artifact = semantic carrier.</li>
+</ul>
+<h2 id="kenapa-argumen-thariq-masuk-akal">Kenapa argumen Thariq masuk akal<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-argumen-thariq-masuk-akal"></a></h2>
+<p>Gue setuju kalau antitesisnya bukan sekadar visual bagus atau buruk. Thariq menunjukkan masalah konkret: output agent yang nggak dibaca manusia itu gagal, sekalipun logikanya oke.</p>
+<p>HTML dia anggap lebih baik di konteks:</p>
+<ul>
+<li>visual yang lebih kaya,</li>
+<li>navigasi dan hierarchy yang lebih jelas,</li>
+<li>preview atau prototype yang lebih bisa dipakai,</li>
+<li>review/report yang lebih mudah dipahaminya.</li>
+</ul>
+<p>Jadi di mata gue, klaim Thariq bukan bahwa HTML selalu lebih baik secara teknis. Dia bilang HTML lebih efektif di ranah "human-in-the-loop usability."</p>
+<h2 id="reply-thread-apa-yang-benar-benar-nambah-insight">Reply thread: apa yang benar-benar nambah insight?<a aria-hidden="true" class="anchor-heading icon-link" href="#reply-thread-apa-yang-benar-benar-nambah-insight"></a></h2>
+<p>Thread ini tidak hanya penuh dukungan dan sarkasme. Ada beberapa kategori penting:</p>
+<ul>
+<li><strong>Reaksi sosial / humor</strong>: komentar seperti "bad time for a twitter bug" atau "long markdown x post" lebih menunjukkan konteks percakapan daripada nambah argumen teknis.</li>
+<li><strong>Dukungan umum</strong>: "great post" atau "agreed" adalah validasi sosial, tapi bukan memperjelas scope argumentasi.</li>
+<li><strong>Counter moderat</strong>: ini yang paling berguna. Beberapa reply menyokong HTML untuk prototype, preview, atau UI-heavy artifact, sementara tetap mengakui Markdown lebih cocok untuk text-focused content dan standard workflow.</li>
+<li><strong>Posisi maksimalis Thariq</strong>: dia kadang bergerak dari "HTML efektif untuk banyak artifact" ke "HTML strictly better". Itu menurut gue titik lemah karena mengabaikan biaya diff, editing, dan portability.</li>
+</ul>
+<h2 id="counter-paling-kuat-ke-posisi-html-lebih-efektif">Counter paling kuat ke posisi "HTML lebih efektif"<a aria-hidden="true" class="anchor-heading icon-link" href="#counter-paling-kuat-ke-posisi-html-lebih-efektif"></a></h2>
+<p>Tiga kontra yang paling berpengaruh:</p>
+<ol>
+<li><strong>Knowledge vs presentation</strong>: Markdown sebagai canonical source, HTML sebagai rendered/operational surface. Ini menyelamatkan kedua format dari perang agama.</li>
+<li><strong>Markdown unggul untuk text-focused artifact</strong>: plans, docs, notes, prompt packs, reasoning memo. HTML bisa melakukannya, tapi sering jadi overkill.</li>
+<li><strong>Biaya operasional HTML</strong>: noisy diffs, fitur presentasi yang berbeda-beda, dan risiko format jadi terlalu dekoratif.</li>
+</ol>
+<p>Diskusi thread ini mempersempit klaim artikel agar lebih pragmatis. Artikel Thariq kuat sebagai argumen bahwa HTML bisa jadi lebih efektif untuk human-facing agent artifacts, tetapi klaim "HTML lebih baik untuk semua" harus diuji ulang.</p>
+<h2 id="reply-thread-arah-diskusi">Reply thread: arah diskusi<a aria-hidden="true" class="anchor-heading icon-link" href="#reply-thread-arah-diskusi"></a></h2>
+<p>Dari reply yang gue baca, diskusi nggak mengarah ke kemenangan antirez penuh, dan juga nggak membela HTML murni ala Thariq.
+Banyak reply menggeser framing dari "format mana yang lebih baik" menjadi "format mana dipakai di layer mana".</p>
+<p>Beberapa reply yang paling menentukan arah:</p>
+<ul>
+<li><strong>Markdown untuk source / agent-facing context</strong></li>
+<li><strong>HTML untuk rendered output / human-facing surface</strong></li>
+<li><strong>Hybrid, bukan replacement</strong></li>
+<li><strong>Pipeline terpisah</strong>: core reasoning tetap padat, HTML diproduksi sebagai layer final bila perlu</li>
+</ul>
+<h2 id="kenapa-antirez-menolak">Kenapa antirez menolak<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-antirez-menolak"></a></h2>
+<p>Gue nangkep posisi antirez sebagai argumen dari layer yang berbeda. Dia bilang HTML bisa jadi overkill untuk LLM karena:</p>
+<ul>
+<li>HTML biasanya lebih verbose,</li>
+<li>struktur presentasi sering menambah token tanpa menambah makna inti,</li>
+<li>LLM nggak membaca DOM secara formal seperti parser deterministik,</li>
+<li>makin banyak wrapper berarti attention budget model dipakai untuk noise.</li>
+</ul>
+<p>Jadi, kalau dilihat dari sudut itu, antirez nggak bilang "HTML buruk" secara mutlak. Dia mempertanyakan apakah HTML adalah format optimal untuk reasoning-model.</p>
+<h2 id="counter-paling-kuat-dari-thread">Counter paling kuat dari thread<a aria-hidden="true" class="anchor-heading icon-link" href="#counter-paling-kuat-dari-thread"></a></h2>
+<p>Thread memberikan counter yang cukup spesifik:</p>
+<ul>
+<li><strong>Markdown vs HTML bukan peperangan format</strong> — ini tentang fungsi artifact.</li>
+<li><strong>Markdown kuat untuk knowledge storage, versioning, diffs, and agent comms.</strong></li>
+<li><strong>HTML kuat untuk legibility, interactive review, and human-facing presentation.</strong></li>
+<li><strong>Generate HTML terpisah dari source</strong> lebih masuk akal daripada menjadikannya canonical representation.</li>
+</ul>
+<h2 id="sintesis-praktis">Sintesis praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-praktis"></a></h2>
+<p>Kalau disimpulin, menurut gue sintesisnya begini:</p>
+<ul>
+<li>pakai <strong>Markdown / format padat</strong> untuk prompt, catatan, agent context, reasoning, dan storage;</li>
+<li>pakai <strong>HTML</strong> bila kamu butuh output yang dibaca manusia, direview, atau dioperasikan;</li>
+<li>jangan pakai HTML sebagai source utama kalau goal-nya adalah reasoning model;</li>
+<li>pipeline terbaik mungkin adalah: reasoning padat dulu, lalu render ke HTML untuk presentasi jika perlu.</li>
+</ul>
+<h2 id="takeaway">Takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway"></a></h2>
+<p>Debat ini paling sehat kalau kita berhenti bertanya "format mana paling bagus" dan mulai bertanya:</p>
+<ul>
+<li>siapa pembacanya?</li>
+<li>apa fungsi artefak ini?</li>
+<li>apakah ini medium reasoning atau interface kerja?</li>
+</ul>
+<p>Dengan begitu, kita tidak lagi mengulangi perdebatan agama Markdown vs HTML, tetapi memikirkan desain workflow yang sebenarnya.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">prompt-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">markdown (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">html (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260511124516">Markdown sebagai source of truth, HTML sebagai human-facing surface</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124517">Thread Markdown vs HTML mengarah ke desain pipeline, bukan victory lap format</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+</ul>

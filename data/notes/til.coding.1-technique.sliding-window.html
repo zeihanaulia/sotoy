@@ -1,0 +1,58 @@
+<h1 id="sliding-window">Sliding Window<a aria-hidden="true" class="anchor-heading icon-link" href="#sliding-window"></a></h1>
+<p>Apa itu sliding window. Ini adalah teknik algoritma yang digunakan untuk mengjitung sesuatu secara berkelanjutan pada subarray atau substring yang berukuran tetap atau dinamis dalam sebuah array atau string.</p>
+<p>Pake gambar biar muda bayanginnya. Bagaimana menjumlahkan setiap 3 angka dari subarray. Teukan jumlah paling besarnya.</p>
+<p><img src="/sotoy/assets/til.coding.1-technique.sliding-window/image.png" alt="alt text"></p>
+<p>Berdasarkan gambar di atas, Logikanya berarti gimana caranya bisa jumlahin angka</p>
+<ul>
+<li>1, 2, 6 = 9</li>
+<li>2, 6, 2 = 10</li>
+<li>6, 2, 4 = 12</li>
+<li>2, 4, 1 = 7</li>
+</ul>
+<p>Jadi logikannya gini</p>
+<pre class="language-go"><code class="language-go">
+<span class="token keyword">func</span> <span class="token function">findMax</span><span class="token punctuation">(</span>arr <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> k <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+
+	<span class="token comment">// Mengambil panjang array</span>
+	n <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span>
+
+	<span class="token comment">// Cek apakah panjang array kurang dari k</span>
+	<span class="token keyword">if</span> n <span class="token operator">&#x3C;</span> k <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token number">0</span>
+	<span class="token punctuation">}</span>
+
+	sum <span class="token operator">:=</span> <span class="token number">0</span>
+
+	<span class="token comment">// Hitung jumlah awal dari subarray pertama dengan panjang k</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&#x3C;</span> k<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		sum <span class="token operator">+=</span> arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+        <span class="token comment">// Debugging</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"Sum iterasi %v: Tambah: %v, Sum Sekarang: %v \n"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> sum<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// Set nilai maksimum sebagai sum pertama</span>
+	max <span class="token operator">:=</span> sum
+
+	<span class="token comment">// Geser jendela ke kanan satu per satu</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> k<span class="token punctuation">;</span> i <span class="token operator">&#x3C;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		<span class="token comment">// Kurangi elemen paling kiri dari jendela sebelumnya dan tambah elemen baru di kanan</span>
+		sum <span class="token operator">=</span> sum <span class="token operator">-</span> arr<span class="token punctuation">[</span>i<span class="token operator">-</span>k<span class="token punctuation">]</span> <span class="token operator">+</span> arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+
+		<span class="token comment">// Debugging: Cetak elemen yang keluar dan masuk serta jumlah saat ini</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Buang:"</span><span class="token punctuation">,</span> arr<span class="token punctuation">[</span>i<span class="token operator">-</span>k<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"Tambah:"</span><span class="token punctuation">,</span> arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"Sum Sekarang:"</span><span class="token punctuation">,</span> sum<span class="token punctuation">)</span>
+
+		<span class="token comment">// Perbarui max jika jumlah saat ini lebih besar</span>
+		<span class="token keyword">if</span> max <span class="token operator">&#x3C;</span> sum <span class="token punctuation">{</span>
+			max <span class="token operator">=</span> sum
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// Kembalikan jumlah maksimum yang ditemukan</span>
+	<span class="token keyword">return</span> max
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/window-sliding-technique/">https://www.geeksforgeeks.org/window-sliding-technique/</a></li>
+</ul>

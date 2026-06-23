@@ -1,0 +1,145 @@
+<h1 id="semgrep-sebagai-sast--static-analysis-tool">Semgrep sebagai SAST / static analysis tool<a aria-hidden="true" class="anchor-heading icon-link" href="#semgrep-sebagai-sast--static-analysis-tool"></a></h1>
+<p>Yang gue lihat dari repo Semgrep resmi di <code>.references/semgrep</code>:</p>
+<ul>
+<li>Semgrep bukan alat AI; dia adalah application security tool untuk SAST dan static code analysis.</li>
+<li>Repo ini bukan cuma script Python sekali jalan. Dia sudah port ke OCaml dan dibangun dengan <code>dune</code>.</li>
+<li><code>src/osemgrep/cli/CLI.ml</code> adalah entry point utama untuk CLI. Dia nge-dispatch per subcommand seperti <code>scan</code>, <code>ci</code>, <code>login</code>, <code>logout</code>, <code>lsp</code>, <code>show</code>, <code>test</code>, dan <code>validate</code>.</li>
+<li>Kalau command tertentu belum ter-handle di port OCaml, ada fallback ke <code>Pysemgrep.Fallback</code>, jadi Semgrep masih bisa support edge case lama via Python.</li>
+</ul>
+<p>Inti arsitekturnya bisa dibagi jadi tiga lapisan:</p>
+<ol>
+<li>
+<p>CLI / subcommand dispatch</p>
+<ul>
+<li><code>src/osemgrep/cli/CLI.ml</code>: baca argv, tentukan subcommand, kirim ke <code>Scan_subcommand.main</code>, <code>Ci_subcommand.main</code>, dll.</li>
+<li>Ada hook untuk fitur Pro / publish, tapi yang paling penting <code>scan</code> adalah default.</li>
+</ul>
+</li>
+<li>
+<p>Rule parsing dan model</p>
+<ul>
+<li><code>src/parsing/Parse_rule_formula.ml</code>: parser untuk <code>pattern</code>, <code>pattern-inside</code>, <code>pattern-either</code>, <code>pattern-regex</code>, dan variabel metapola.</li>
+<li><code>src/rule/Rule.ml</code>: mendefinisikan struktur rule Semgrep, metadata, layout, dan opsi tambahan seperti <code>severity</code>, <code>languages</code>, <code>message</code>.</li>
+<li>Parser ini ternyata menangani lebih dari sekadar string: dia juga mengecek <code>metavariable-type</code>, <code>focus-metavariable</code>, dan opsi <code>aliengrep/spacegrep</code> untuk target yang bukan sekadar sintaks standar.</li>
+</ul>
+</li>
+<li>
+<p>Matching engine</p>
+<ul>
+<li><code>src/engine/Match_search_mode.ml</code>: mengatur bagaimana pattern dicocokkan terhadap tree kode, terutama perbedaan antara <code>pattern:</code> dan <code>pattern-inside:</code> atau gabungan pattern.</li>
+<li><code>src/engine/Match_rules.ml</code>: orkestrasi rule matching, termasuk penggabungan hasil dan bagaimana engine menjalankan rule terhadap AST target.</li>
+<li><code>src/matching/Pattern_vs_code.ml</code>: bekerja di level yang lebih rendah untuk mencocokkan pattern AST dengan kode sumber sebenarnya.</li>
+<li><code>src/engine/Xpattern_matcher.ml</code> + <code>src/engine/Xpattern_match_*</code>: berbagai backend matching untuk regex, spacegrep, dan bahasa custom.</li>
+</ul>
+</li>
+</ol>
+<p>Karena Semgrep adalah "semantic grep", cara kerjanya bukan sekadar regex. Dia:</p>
+<ul>
+<li>memparsing source code ke AST / struktur yang bisa dimatch,</li>
+<li>memparsing pattern Semgrep yang ditulis seperti kode biasa,</li>
+<li>menemukan kecocokan antara pattern dan kode, termasuk metavariabel seperti <code>$X</code>, <code>$Y</code>, dan repetition patterns,</li>
+<li>lalu mengeluarkan temuan berdasarkan rule metadata.</li>
+</ul>
+<h3 id="use-case-praktis-semgrep">Use case praktis Semgrep<a aria-hidden="true" class="anchor-heading icon-link" href="#use-case-praktis-semgrep"></a></h3>
+<ol>
+<li>
+<p>Guardrail MR / PR</p>
+<ul>
+<li><code>verify.sh</code> bisa menjalankan <code>semgrep --config .semgrep.yml</code> dan gagal jika rule N+1 atau <code>repository call in loop</code> terpenuhi.</li>
+<li>Ini cocok buat pakai kembali judgement senior: kalau reviewer sering komentar <code>hati-hati N+1</code>, bisa ubah jadi rule Semgrep.</li>
+</ul>
+</li>
+<li>
+<p>CI / pre-commit linting</p>
+<ul>
+<li>Semgrep bisa jadi security lint yang jalan di pipeline sebelum test suite penuh.</li>
+<li>Contohnya: deteksi <code>subprocess.run(..., shell=True)</code> atau <code>eval(...)</code> di Python.</li>
+</ul>
+</li>
+<li>
+<p>Security scanning dan policy enforcement</p>
+<ul>
+<li>Untuk SAST, Semgrep OSS bagus untuk pola sintaks lokal.</li>
+<li>Untuk dataflow/cross-file analysis, Semgrep AppSec Platform yang menyediakan kemampuan tambahan.</li>
+</ul>
+</li>
+<li>
+<p>IDE support</p>
+<ul>
+<li>rules dipakai di editor untuk deteksi langsung, bukan hanya batch scan.</li>
+<li>Ini jadi cepat feedback loop untuk developer.</li>
+</ul>
+</li>
+<li>
+<p>Custom rule authoring</p>
+<ul>
+<li>tim bisa bikin rule khusus domain: <code>dangerous HTTP header handling</code>, <code>raw SQL builder</code>, <code>untrusted input ke logging</code>, <code>N+1 query pattern</code>.</li>
+</ul>
+</li>
+</ol>
+<h3 id="contoh-rule-yang-bisa-dibuat">Contoh rule yang bisa dibuat<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-rule-yang-bisa-dibuat"></a></h3>
+<p>Basic find:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">id</span><span class="token punctuation">:</span> insecure<span class="token punctuation">-</span>shell<span class="token punctuation">-</span>call
+    <span class="token key atrule">languages</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>python<span class="token punctuation">]</span>
+    <span class="token key atrule">severity</span><span class="token punctuation">:</span> WARNING
+    <span class="token key atrule">message</span><span class="token punctuation">:</span> <span class="token string">"Jangan pake shell=True di subprocess.run"</span>
+    <span class="token key atrule">pattern</span><span class="token punctuation">:</span> subprocess.run(<span class="token punctuation">...</span><span class="token punctuation">,</span> shell=True)
+</code></pre>
+<p><code>pattern-inside</code> untuk target yang lebih sempit:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">id</span><span class="token punctuation">:</span> insecure<span class="token punctuation">-</span>exec<span class="token punctuation">-</span>in<span class="token punctuation">-</span>handler
+    <span class="token key atrule">languages</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>python<span class="token punctuation">]</span>
+    <span class="token key atrule">severity</span><span class="token punctuation">:</span> ERROR
+    <span class="token key atrule">message</span><span class="token punctuation">:</span> <span class="token string">"Eksekusi shell di dalam request handler"</span>
+    <span class="token key atrule">pattern-inside</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+      def handle_request(...):
+          ...</span>
+    <span class="token key atrule">pattern</span><span class="token punctuation">:</span> subprocess.run(<span class="token punctuation">...</span><span class="token punctuation">,</span> shell=True)
+</code></pre>
+<p><code>pattern-either</code> untuk logic OR:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">id</span><span class="token punctuation">:</span> sql<span class="token punctuation">-</span>injection<span class="token punctuation">-</span>or<span class="token punctuation">-</span>raw<span class="token punctuation">-</span>sql
+    <span class="token key atrule">languages</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>python<span class="token punctuation">]</span>
+    <span class="token key atrule">severity</span><span class="token punctuation">:</span> WARNING
+    <span class="token key atrule">message</span><span class="token punctuation">:</span> <span class="token string">"Raw SQL atau string concatenation berbahaya"</span>
+    <span class="token key atrule">pattern-either</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">pattern</span><span class="token punctuation">:</span> execute("SELECT " + <span class="token punctuation">...</span>)
+      <span class="token punctuation">-</span> <span class="token key atrule">pattern</span><span class="token punctuation">:</span> raw_sql(<span class="token punctuation">...</span>)
+</code></pre>
+<p>Metavariable pattern:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">id</span><span class="token punctuation">:</span> n<span class="token punctuation">-</span>plus<span class="token punctuation">-</span>one<span class="token punctuation">-</span>candidate
+    <span class="token key atrule">languages</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>python<span class="token punctuation">]</span>
+    <span class="token key atrule">severity</span><span class="token punctuation">:</span> WARNING
+    <span class="token key atrule">message</span><span class="token punctuation">:</span> <span class="token string">"Kemungkinan N+1: loop dengan query di dalamnya"</span>
+    <span class="token key atrule">pattern-inside</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+      for $ITEM in $COLLECTION:
+          $DB.query(...)</span>
+</code></pre>
+<pre><code>
+Contoh ini yang paling relevan buat `verify.sh`: rule Semgrep ini bisa jadi sensor awal, sebelum pipeline coba verifikasi behavior query count nyata.
+
+### Hal penting yang gue catat dari repo
+
+- Repo ini memang salah satunya port ke OCaml, bukan versi Python semata. Jadi kodenya bukan hanya `semgrep` CLI Python, tapi engine yang lebih native.
+- Fallback ke `Pysemgrep.Fallback` masih ada, artinya sebagian perintah lama masih didukung lewat Python jika OCaml belum lengkap.
+- Rule parsing dan matching adalah dua stage berbeda: parse YAML/`pattern:` dulu, lalu match ke AST/kode.
+- `pattern-inside` bukan cuma nested search biasa; engine punya semantik khusus untuk menggabungkan ruang lingkup pattern dengan window di sekitarnya.
+
+Kalau mau, gue bisa tambahkan section `how to inspect rule hits di repo` dengan file pointer seperti `src/engine/Match_rules.ml` dan `src/matching/Pattern_vs_code.ml` untuk jadikan note ini lebih teknis lagi.
+</code></pre>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">sast (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">semgrep (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">static-analysis (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+</ul>

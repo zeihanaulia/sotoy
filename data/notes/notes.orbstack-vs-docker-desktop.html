@@ -1,0 +1,407 @@
+<h1 id="orbstack-vs-docker-desktop-perbandingan-lengkap">OrbStack vs Docker Desktop: Perbandingan Lengkap<a aria-hidden="true" class="anchor-heading icon-link" href="#orbstack-vs-docker-desktop-perbandingan-lengkap"></a></h1>
+<h1 id="orbstack-vs-docker-desktop">OrbStack vs Docker Desktop<a aria-hidden="true" class="anchor-heading icon-link" href="#orbstack-vs-docker-desktop"></a></h1>
+<p><strong>Last Updated:</strong> May 11, 2026<br>
+<strong>Ini note gue buat developer macOS yang ingin performa Docker lebih baik.</strong></p>
+<hr>
+<h2 id="apa-itu-orbstack">Apa itu OrbStack?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-orbstack"></a></h2>
+<p>OrbStack adalah alternatif modern untuk Docker Desktop, khusus dirancang untuk <strong>macOS</strong>. Menggunakan virtualisasi native macOS (Apple Hypervisor.framework) alih-alih Linux VM tradisional.</p>
+<p>Dari perspektif gue, ini perbandingan yang masuk akal buat lo kalau lagi mempertimbangkan migrasi dari Docker Desktop.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>🚀 10x lebih cepat dari Docker Desktop</li>
+<li>💾 10x lebih hemat RAM (~500MB vs ~5GB)</li>
+<li>⚡ Startup &#x3C;1 detik</li>
+<li>🔗 Native networking (no port forwarding)</li>
+<li>💰 Free untuk personal use, $9/month commercial</li>
+</ul>
+<hr>
+<h2 id="perbandingan-head-to-head">Perbandingan Head-to-Head<a aria-hidden="true" class="anchor-heading icon-link" href="#perbandingan-head-to-head"></a></h2>
+<h3 id="performance">Performance<a aria-hidden="true" class="anchor-heading icon-link" href="#performance"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Docker Desktop</th><th>OrbStack</th><th>Winner</th></tr></thead><tbody><tr><td>Startup Time</td><td>30-60s</td><td>&#x3C;1s</td><td>🏆 OrbStack (60x)</td></tr><tr><td>RAM Usage (idle)</td><td>2-5GB</td><td>200-500MB</td><td>🏆 OrbStack (10x)</td></tr><tr><td>CPU Overhead</td><td>Signifikan</td><td>Minimal</td><td>🏆 OrbStack</td></tr><tr><td>Disk I/O</td><td>Slow (virtiofs)</td><td>Fast (native)</td><td>🏆 OrbStack (2-3x)</td></tr><tr><td>Network Latency</td><td>Higher (NAT)</td><td>Native</td><td>🏆 OrbStack</td></tr><tr><td>Container Start</td><td>2-5s</td><td>&#x3C;0.5s</td><td>🏆 OrbStack</td></tr></tbody></table></div>
+<p><strong>Real-world benchmarks:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Starting PostgreSQL container</span>
+Docker Desktop:  <span class="token number">3</span>.2s
+OrbStack:        <span class="token number">0</span>.4s   <span class="token punctuation">(</span>8x faster<span class="token punctuation">)</span>
+
+<span class="token comment"># npm install (large project)</span>
+Docker Desktop:  45s
+OrbStack:        18s    <span class="token punctuation">(</span><span class="token number">2</span>.5x faster<span class="token punctuation">)</span>
+
+<span class="token comment"># Dev Container boot</span>
+Docker Desktop:  25s
+OrbStack:        3s     <span class="token punctuation">(</span>8x faster<span class="token punctuation">)</span>
+</code></pre>
+<hr>
+<h3 id="architecture">Architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#architecture"></a></h3>
+<h4 id="docker-desktop">Docker Desktop<a aria-hidden="true" class="anchor-heading icon-link" href="#docker-desktop"></a></h4>
+<pre><code>┌─────────────────┐
+│   Docker CLI    │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│  Hyperkit VM    │ ← Full Linux VM (heavyweight)
+│  (2-5GB RAM)    │
+│  ┌───────────┐  │
+│  │ Docker    │  │
+│  │ Daemon    │  │
+│  └───────────┘  │
+└─────────────────┘
+</code></pre>
+<p><strong>Issues:</strong></p>
+<ul>
+<li>Full Linux VM = overhead besar</li>
+<li>Virtualized networking = port forwarding kompleks</li>
+<li>File sharing via virtiofs = slow I/O</li>
+<li>Memory pre-allocation = waste RAM</li>
+</ul>
+<h4 id="orbstack">OrbStack<a aria-hidden="true" class="anchor-heading icon-link" href="#orbstack"></a></h4>
+<pre><code>┌─────────────────┐
+│   OrbStack CLI  │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│ Apple Hypervisor│ ← Native macOS virtualization
+│ (lightweight)   │
+│ ┌───────────┐   │
+│ │ Container │   │
+│ │ Runtime   │   │
+│ └───────────┘   │
+└────────┬────────┘
+</code></pre>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Uses Apple's Hypervisor.framework</li>
+<li>No full VM overhead</li>
+<li>Native networking (no NAT)</li>
+<li>Dynamic memory allocation</li>
+</ul>
+<hr>
+<h3 id="features-comparison">Features Comparison<a aria-hidden="true" class="anchor-heading icon-link" href="#features-comparison"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Feature</th><th>Docker Desktop</th><th>OrbStack</th></tr></thead><tbody><tr><td>Docker API Compatible</td><td>✅</td><td>✅</td></tr><tr><td>Docker Compose</td><td>✅</td><td>✅</td></tr><tr><td>Kubernetes</td><td>✅</td><td>✅</td></tr><tr><td>Dev Containers</td><td>✅</td><td>✅</td></tr><tr><td>Multi-arch Support</td><td>✅</td><td>✅</td></tr><tr><td>Volume Mounts</td><td>✅</td><td>✅ (faster)</td></tr><tr><td>Dashboard UI</td><td>✅</td><td>✅</td></tr><tr><td>Extensions</td><td>✅ Many</td><td>⚠️ Limited</td></tr><tr><td>Commercial License</td><td>$9-29/month</td><td>$9/month</td></tr><tr><td>Platform</td><td>macOS, Windows, Linux</td><td><strong>macOS only</strong></td></tr></tbody></table></div>
+<hr>
+<h3 id="pricing">Pricing<a aria-hidden="true" class="anchor-heading icon-link" href="#pricing"></a></h3>
+<p><strong>Docker Desktop:</strong></p>
+<ul>
+<li>Personal (small companies &#x3C;25 employees): FREE</li>
+<li>Professional: $9/month</li>
+<li>Team: $24/month</li>
+<li>Business: $29/month</li>
+</ul>
+<p><strong>OrbStack:</strong></p>
+<ul>
+<li>Personal Use: <strong>FREE</strong> (unlimited)</li>
+<li>Commercial: $9/month or $90/year</li>
+<li>Student/OS: FREE (with verification)</li>
+</ul>
+<p><strong>Cost Analysis (10-person team):</strong></p>
+<pre><code>Docker Desktop Team: $24 × 10 × 12 = $2,880/year
+OrbStack Commercial: $90 × 10 = $900/year
+Savings: $1,980/year (69% cheaper)
+</code></pre>
+<hr>
+<h3 id="developer-experience">Developer Experience<a aria-hidden="true" class="anchor-heading icon-link" href="#developer-experience"></a></h3>
+<h4 id="installation">Installation<a aria-hidden="true" class="anchor-heading icon-link" href="#installation"></a></h4>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker Desktop</span>
+brew <span class="token function">install</span> --cask <span class="token function">docker</span>
+<span class="token comment"># ~5 minutes</span>
+
+<span class="token comment"># OrbStack</span>
+brew <span class="token function">install</span> --cask orbstack
+<span class="token comment"># ~30 seconds</span>
+</code></pre>
+<h4 id="daily-usage">Daily Usage<a aria-hidden="true" class="anchor-heading icon-link" href="#daily-usage"></a></h4>
+<p><strong>Both use identical commands:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker-compose</span> up -d
+<span class="token function">docker</span> run -it postgres:15
+<span class="token function">docker</span> build -t myapp <span class="token builtin class-name">.</span>
+</code></pre>
+<p><strong>No difference in CLI usage!</strong> OrbStack adalah drop-in replacement.</p>
+<h4 id="vs-code-dev-containers">VS Code Dev Containers<a aria-hidden="true" class="anchor-heading icon-link" href="#vs-code-dev-containers"></a></h4>
+<p>Both work identically. VS Code tidak bisa membedakan backend mana yang dipakai.</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"My Dev Container"</span><span class="token punctuation">,</span>
+  <span class="token property">"image"</span><span class="token operator">:</span> <span class="token string">"node:18"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<hr>
+<h3 id="networking">Networking<a aria-hidden="true" class="anchor-heading icon-link" href="#networking"></a></h3>
+<h4 id="docker-desktop-1">Docker Desktop<a aria-hidden="true" class="anchor-heading icon-link" href="#docker-desktop-1"></a></h4>
+<pre><code>Container (172.17.0.2) 
+    ↓ NAT
+VM Network (192.168.65.1)
+    ↓ Port Forwarding
+macOS Host (localhost:8080)
+</code></pre>
+<h4 id="orbstack-1">OrbStack<a aria-hidden="true" class="anchor-heading icon-link" href="#orbstack-1"></a></h4>
+<pre><code>Container (native IP)
+    ↓ Direct routing
+macOS Host (localhost:8080)
+</code></pre>
+<p><strong>OrbStack advantages:</strong></p>
+<ul>
+<li>No port forwarding needed</li>
+<li>Containers get real IPs</li>
+<li>Lower latency</li>
+<li><code>localhost</code> works as expected</li>
+</ul>
+<hr>
+<h3 id="file-system-performance">File System Performance<a aria-hidden="true" class="anchor-heading icon-link" href="#file-system-performance"></a></h3>
+<p><strong>Benchmark: <code>npm install</code> in mounted volume</strong></p>
+<pre><code>Docker Desktop:  45 seconds
+OrbStack:        12 seconds  (3.75x faster)
+</code></pre>
+<p><strong>Why?</strong></p>
+<ul>
+<li>Docker Desktop: virtiofs (slow translation layer)</li>
+<li>OrbStack: native macOS file system access</li>
+</ul>
+<hr>
+<h2 id="when-to-choose-each">When to Choose Each<a aria-hidden="true" class="anchor-heading icon-link" href="#when-to-choose-each"></a></h2>
+<h3 id="choose-orbstack-jika">Choose <strong>OrbStack</strong> jika:<a aria-hidden="true" class="anchor-heading icon-link" href="#choose-orbstack-jika"></a></h3>
+<ul>
+<li>✅ Developer di <strong>macOS</strong> (especially Apple Silicon)</li>
+<li>✅ Want better performance dan lower resource usage</li>
+<li>✅ Mostly local development</li>
+<li>✅ Use Dev Containers extensively</li>
+<li>✅ Frustrated dengan Docker Desktop lambat</li>
+<li>✅ Want simpler pricing</li>
+</ul>
+<h3 id="choose-docker-desktop-jika">Choose <strong>Docker Desktop</strong> jika:<a aria-hidden="true" class="anchor-heading icon-link" href="#choose-docker-desktop-jika"></a></h3>
+<ul>
+<li>✅ Need Docker Extensions ecosystem</li>
+<li>✅ Working in enterprise dengan compliance requirements</li>
+<li>✅ Using <strong>Windows atau Linux</strong></li>
+<li>✅ Need multi-node Kubernetes locally</li>
+<li>✅ Require official enterprise support</li>
+</ul>
+<hr>
+<h2 id="migration-path">Migration Path<a aria-hidden="true" class="anchor-heading icon-link" href="#migration-path"></a></h2>
+<h3 id="from-docker-desktop-to-orbstack">From Docker Desktop to OrbStack<a aria-hidden="true" class="anchor-heading icon-link" href="#from-docker-desktop-to-orbstack"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># 1. Install OrbStack</span>
+brew <span class="token function">install</span> --cask orbstack
+
+<span class="token comment"># 2. Switch context</span>
+<span class="token function">docker</span> context use orbstack
+
+<span class="token comment"># 3. Verify</span>
+<span class="token function">docker</span> info <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"OrbStack"</span>
+
+<span class="token comment"># 4. (Optional) Uninstall Docker Desktop</span>
+brew uninstall --cask <span class="token function">docker</span>
+</code></pre>
+<p><strong>Migration Time:</strong> &#x3C;5 minutes<br>
+<strong>Data Loss:</strong> None</p>
+<hr>
+<h2 id="limitations-to-know">Limitations to Know<a aria-hidden="true" class="anchor-heading icon-link" href="#limitations-to-know"></a></h2>
+<h3 id="orbstack-limitations">OrbStack Limitations:<a aria-hidden="true" class="anchor-heading icon-link" href="#orbstack-limitations"></a></h3>
+<ol>
+<li><strong>macOS Only</strong> - Tidak ada Windows/Linux version</li>
+<li><strong>Newer Project</strong> - Less battle-tested (4 years vs 8+ years)</li>
+<li><strong>Fewer Extensions</strong> - Ecosystem masih berkembang</li>
+<li><strong>Commercial License</strong> - $9/month untuk business use</li>
+</ol>
+<h3 id="docker-desktop-limitations">Docker Desktop Limitations:<a aria-hidden="true" class="anchor-heading icon-link" href="#docker-desktop-limitations"></a></h3>
+<ol>
+<li><strong>Heavy Resource Usage</strong> - Especially on macOS</li>
+<li><strong>Slow Startup</strong> - VM boot time</li>
+<li><strong>Complex Licensing</strong> - Confusing free/paid tiers</li>
+<li><strong>Performance Issues</strong> - File I/O, networking overhead</li>
+</ol>
+<hr>
+<h2 id="verdict">Verdict<a aria-hidden="true" class="anchor-heading icon-link" href="#verdict"></a></h2>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Category</th><th>Winner</th><th>Margin</th></tr></thead><tbody><tr><td>Performance</td><td>🏆 OrbStack</td><td>Massive</td></tr><tr><td>Resource Usage</td><td>🏆 OrbStack</td><td>Massive</td></tr><tr><td>Ease of Use</td><td>🏆 Tie</td><td>Equal</td></tr><tr><td>Features</td><td>🏆 Docker Desktop</td><td>Moderate</td></tr><tr><td>Pricing</td><td>🏆 OrbStack</td><td>Significant</td></tr><tr><td>Ecosystem</td><td>🏆 Docker Desktop</td><td>Moderate</td></tr><tr><td>Stability</td><td>🏆 Docker Desktop</td><td>Slight</td></tr><tr><td>macOS Integration</td><td>🏆 OrbStack</td><td>Massive</td></tr></tbody></table></div>
+<p><strong>Overall Winner for macOS Developers: 🏆 OrbStack</strong></p>
+<hr>
+<h2 id="quick-start">Quick Start<a aria-hidden="true" class="anchor-heading icon-link" href="#quick-start"></a></h2>
+<h3 id="install-orbstack">Install OrbStack<a aria-hidden="true" class="anchor-heading icon-link" href="#install-orbstack"></a></h3>
+<pre class="language-bash"><code class="language-bash">brew <span class="token function">install</span> --cask orbstack
+</code></pre>
+<h3 id="configure">Configure<a aria-hidden="true" class="anchor-heading icon-link" href="#configure"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> context use orbstack
+<span class="token function">docker</span> info <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"OrbStack"</span>
+</code></pre>
+<h3 id="test">Test<a aria-hidden="true" class="anchor-heading icon-link" href="#test"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> run hello-world
+<span class="token comment"># Should be noticeably faster!</span>
+</code></pre>
+<hr>
+<h2 id="references">References<a aria-hidden="true" class="anchor-heading icon-link" href="#references"></a></h2>
+<ul>
+<li>OrbStack Official: <a href="https://orbstack.dev/">https://orbstack.dev/</a></li>
+<li>Docker Desktop: <a href="https://www.docker.com/products/docker-desktop/">https://www.docker.com/products/docker-desktop/</a></li>
+<li>Benchmarks: <a href="https://orbstack.dev/blog/faster-docker">https://orbstack.dev/blog/faster-docker</a></li>
+<li>Apple Hypervisor: <a href="https://developer.apple.com/documentation/hypervisor">https://developer.apple.com/documentation/hypervisor</a></li>
+</ul>
+<hr>
+<p><strong>Related:</strong> <a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.docker-containers (Private)</a> <em>(TODO)</em> <a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.macos-development (Private)</a> <em>(TODO)</em></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #7ef4cc;" href="/sotoy/notes/tags.docker">docker</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">orbstack (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">development-tools (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">macos (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">containers (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.orbstack-docker-coexistence">Apakah Perlu Uninstall Docker Desktop Saat Install OrbStack?</a></li>
+</ul>

@@ -1,0 +1,7 @@
+
+HeavySkill menyatakan bahwa pola kerja "parallel reasoning → deliberation" dapat dipaketkan sebagai skill yang dibaca oleh agentic harness.
+
+Dengan kata lain, peningkatan performa agent sering bukan karena framework lebih rumit, tetapi karena proses kognitif yang jelas: generate beberapa reasoning trajectory, simpan sebagai evidence, lalu gunakan satu tahap deliberasi untuk memilih dan mensintesis jawaban final.
+
+Related:
+- [[notes.agentic-engineering.heavyskill-heavy-thinking-as-inner-skill]]

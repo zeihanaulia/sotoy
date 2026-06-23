@@ -1,0 +1,192 @@
+<h1 id="trusted-publishing-kritik-argumen-dan-checklist-operasional">Trusted publishing: kritik argumen dan checklist operasional<a aria-hidden="true" class="anchor-heading icon-link" href="#trusted-publishing-kritik-argumen-dan-checklist-operasional"></a></h1>
+<h2 id="tesis-utama">Tesis utama<a aria-hidden="true" class="anchor-heading icon-link" href="#tesis-utama"></a></h2>
+<p>Trusted publishing memverifikasi asal rilis paket lewat OIDC, Sigstore, dan provenance attestation. Itu menjawab "siapa yang publish" dan "jalur CI mana". Tapi itu tidak menjawab apakah pihak yang publish itu masih dalam kontrol yang aman atau apakah intent publish itu sah.</p>
+<h2 id="bagian-yang-kuat">Bagian yang kuat<a aria-hidden="true" class="anchor-heading icon-link" href="#bagian-yang-kuat"></a></h2>
+<ol>
+<li>
+<p><strong>Perbedaan authenticity vs agency</strong></p>
+<ul>
+<li>authenticity = artefak datang dari jalur resmi</li>
+<li>agency = identitas itu masih benar-benar mengendalikan proses
+Artikel kuat karena menunjukkan bahwa provenance valid tidak otomatis berarti kontrol publish tidak terkompromi.</li>
+</ul>
+</li>
+<li>
+<p><strong>Failure mode realistis</strong></p>
+<ul>
+<li>maintainer atau endpoint dikompromi lewat social engineering</li>
+<li>session/token aktif diambil alih</li>
+<li>provenance dan identity checks tetap hijau
+Ini bukan skenario teoretis; ini pola nyata yang menembus banyak supply chain incident.</li>
+</ul>
+</li>
+<li>
+<p><strong>Solusi yang masuk akal</strong></p>
+<ul>
+<li>minimum release age sebagai delay gate</li>
+<li>anomaly detection pada perilaku publish</li>
+<li>dual-control publishing untuk release high-impact
+Semua ini menambah lapisan selain provenance.</li>
+</ul>
+</li>
+</ol>
+<h2 id="bagian-yang-berisiko-misleading">Bagian yang berisiko misleading<a aria-hidden="true" class="anchor-heading icon-link" href="#bagian-yang-berisiko-misleading"></a></h2>
+<ol>
+<li>
+<p><strong>Argumen "provenance lebih buruk dari tidak berguna"</strong></p>
+<ul>
+<li>itu terlalu retoris.</li>
+<li>provenance tetap berguna untuk audit asal, policy enforcement, dan investigasi.</li>
+<li>masalahnya adalah provenance <strong>insufficient as a standalone trust signal</strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Potensi overemphasis pada social engineering saja</strong></p>
+<ul>
+<li>social engineering adalah ancaman besar, tapi bukan satu-satunya.</li>
+<li>supply chain juga butuh mitigasi untuk misconfiguration, dependency hijacking, dan runtime compromise.</li>
+</ul>
+</li>
+<li>
+<p><strong>Dual-control tanpa konteks operasional</strong></p>
+<ul>
+<li>ideal secara prinsip, tapi bisa memberatkan project kecil dan memperlambat hotfix.</li>
+<li>perlu risk-based penerapan, bukan aturan universal.</li>
+</ul>
+</li>
+</ol>
+<h2 id="kontrol-relevan-untuk-tim-software">Kontrol relevan untuk tim software<a aria-hidden="true" class="anchor-heading icon-link" href="#kontrol-relevan-untuk-tim-software"></a></h2>
+<h3 id="maintainerreleaser">Maintainer/releaser<a aria-hidden="true" class="anchor-heading icon-link" href="#maintainerreleaser"></a></h3>
+<ul>
+<li>batasi device dan browser profile untuk aktivitas release</li>
+<li>jangan install software review/link DM/Slack tanpa verifikasi independen</li>
+<li>review sesi login aktif secara berkala</li>
+<li>dokumentasikan jalur publish resmi</li>
+<li>pertimbangkan dual approval untuk paket high-impact</li>
+</ul>
+<h3 id="repo--dependency-consumption">Repo &#x26; dependency consumption<a aria-hidden="true" class="anchor-heading icon-link" href="#repo--dependency-consumption"></a></h3>
+<ul>
+<li>pin commit hash untuk GitHub Actions, base image, dan git-based dependency</li>
+<li>commit lockfile dan gunakan lockfile di CI</li>
+<li>jangan auto-approve latest release untuk jalur sensitif</li>
+<li>kasih buffer/cooling period untuk dependency baru</li>
+<li>klasifikasikan dependency berdasarkan blast radius</li>
+</ul>
+<h3 id="cicd">CI/CD<a aria-hidden="true" class="anchor-heading icon-link" href="#cicd"></a></h3>
+<ul>
+<li>pisahkan runner/job untuk publishing/signing dari pipeline umum</li>
+<li>minimalkan secret scope dan egress di job sensitif</li>
+<li>review floating references dan install scripts</li>
+<li>gunakan provenance sebagai syarat minimum, bukan syarat cukup</li>
+</ul>
+<h3 id="organisasiprocess">Organisasi/Process<a aria-hidden="true" class="anchor-heading icon-link" href="#organisasiprocess"></a></h3>
+<ul>
+<li>ajarkan bahwa identity validation bukan safety guarantee</li>
+<li>anggap compromise maintainer dan endpoint sebagai threat model nyata</li>
+<li>siapkan prosedur freeze dependency updates saat upstream incident</li>
+<li>simulasikan skenario maintainer compromise atau malicious upstream release</li>
+</ul>
+<h2 id="kontrol-murah-impact-besar">Kontrol murah, impact besar<a aria-hidden="true" class="anchor-heading icon-link" href="#kontrol-murah-impact-besar"></a></h2>
+<ol>
+<li>
+<p><strong>Lockfile discipline</strong></p>
+<ul>
+<li>commit lockfile, pastikan CI pakai lockfile yang sama</li>
+<li>ini murah dan langsung memperkecil blast radius dependency drift</li>
+</ul>
+</li>
+<li>
+<p><strong>Pinning floating references</strong></p>
+<ul>
+<li>hindari <code>latest</code>, floating action versions, dan git tags di jalur sensitif</li>
+<li>ini mencegah perubahan tak terduga di pipeline</li>
+</ul>
+</li>
+<li>
+<p><strong>Review dependency update route</strong></p>
+<ul>
+<li>jangan biarkan update dependency masuk prod cuma karena versi baru keluar</li>
+<li>ini membantu memecah risiko update dari feature change</li>
+</ul>
+</li>
+<li>
+<p><strong>Minimum release age / cooldown</strong></p>
+<ul>
+<li>delay pakai package baru pada jalur sensitif selama 24–72 jam atau lebih untuk tooling sensitif</li>
+<li>ini murah karena mostly policy, tapi sangat efektif untuk serangan epoch awal</li>
+</ul>
+</li>
+<li>
+<p><strong>Least privilege secret scope</strong></p>
+<ul>
+<li>batasi akses secret di hanya job yang perlu</li>
+<li>ini mencegah dependency compromise dari menjalar ke publish/signing path</li>
+</ul>
+</li>
+</ol>
+<h2 id="checklist-operasional">Checklist operasional<a aria-hidden="true" class="anchor-heading icon-link" href="#checklist-operasional"></a></h2>
+<h3 id="level-maintainer">Level maintainer<a aria-hidden="true" class="anchor-heading icon-link" href="#level-maintainer"></a></h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Device/browsing terpadu untuk aktivitas release dipisah dari aktivitas umum</li>
+<li class="task-list-item"><input type="checkbox" disabled> Tidak install software review dari link DM/Slack/email tanpa verifikasi lain</li>
+<li class="task-list-item"><input type="checkbox" disabled> Publish terlokalisir melalui workflow resmi, bukan session browser random</li>
+<li class="task-list-item"><input type="checkbox" disabled> Sesi login aktif diperiksa secara berkala</li>
+<li class="task-list-item"><input type="checkbox" disabled> Paket high-impact punya dual approval atau gate tambahan</li>
+</ul>
+<h3 id="level-repo">Level repo<a aria-hidden="true" class="anchor-heading icon-link" href="#level-repo"></a></h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Lockfile committed dan dipakai di CI</li>
+<li class="task-list-item"><input type="checkbox" disabled> GitHub Actions dan git dependency dipin ke commit hash</li>
+<li class="task-list-item"><input type="checkbox" disabled> Floating tag/reference di release pipeline diminimalkan</li>
+<li class="task-list-item"><input type="checkbox" disabled> Update dependency sensitive lewat PR khusus dan review</li>
+<li class="task-list-item"><input type="checkbox" disabled> Buat kategori dependency berdasarkan risk/impact</li>
+</ul>
+<h3 id="level-cicd">Level CI/CD<a aria-hidden="true" class="anchor-heading icon-link" href="#level-cicd"></a></h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Runner pipeline signing/release terpisah dari pipeline sehari-hari</li>
+<li class="task-list-item"><input type="checkbox" disabled> Secret hanya tersedia di job yang benar-benar perlu</li>
+<li class="task-list-item"><input type="checkbox" disabled> Egress low/no untuk job sensitif jika memungkinkan</li>
+<li class="task-list-item"><input type="checkbox" disabled> Release workflow punya approval step dan tidak langsung auto-publish</li>
+<li class="task-list-item"><input type="checkbox" disabled> Provenance/attestation diverifikasi, tapi tidak dijadikan satu-satunya syarat</li>
+</ul>
+<h3 id="level-organisasi">Level organisasi<a aria-hidden="true" class="anchor-heading icon-link" href="#level-organisasi"></a></h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Threat model memasukkan kompromi maintainer dan session hijack</li>
+<li class="task-list-item"><input type="checkbox" disabled> Ada policy cooling period untuk dependency baru di jalur sensitif</li>
+<li class="task-list-item"><input type="checkbox" disabled> Ada proses incident freeze untuk upstream malicious release</li>
+<li class="task-list-item"><input type="checkbox" disabled> Ada latihan tabletop supply chain compromise</li>
+<li class="task-list-item"><input type="checkbox" disabled> Tim paham bahwa "signed" tidak otomatis berarti "safe"</li>
+</ul>
+<h2 id="level-penggunaan-checklist">Level penggunaan checklist<a aria-hidden="true" class="anchor-heading icon-link" href="#level-penggunaan-checklist"></a></h2>
+<p>Checklist ini paling berguna di beberapa level sekaligus:</p>
+<ul>
+<li><strong>maintainer</strong>: kontrol endpoint dan publish behavior</li>
+<li><strong>repo</strong>: dependency pinning, lockfile, update route</li>
+<li><strong>CI/CD</strong>: pipeline isolation, secret scope, approval gate</li>
+<li><strong>organisasi</strong>: threat model, policy, incident readiness</li>
+</ul>
+<p>Untuk implementasi cepat, mulailah di layer repo/CI. Setelah itu, perluas ke maintainer hygiene dan organisasi policy.</p>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+<li><a href="/sotoy/notes/notes.security.tanstack-postmortem">TanStack npm supply-chain compromise — postmortem notes</a></li>
+</ul>
+<h2 id="catatan-penting">Catatan penting<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-penting"></a></h2>
+<p>Trusted publishing tetap punya nilai. Nilainya adalah membantu memverifikasi asal dan membantu investigasi. Nilainya tidak sama dengan pembuktian bahwa publish itu aman.</p>
+<p>Jadi janganlah menyimpulkan dari artikel ini bahwa provenance tidak penting. Kesimpulan yang lebih tepat adalah: provenance itu <strong>satu lapis</strong>, bukan <strong>satu-satunya lapis</strong>.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">trusted-publishing (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/handbook.dependency-management.npm-supply-chain-cooldown">Hardening npm dependency installs dengan cooldown policy</a></li>
+<li><a href="/sotoy/notes/notes.security.npm-supply-chain-cooldown-policy">NPM supply-chain cooldown policy</a></li>
+<li><a href="/sotoy/notes/notes.security.tanstack-postmortem">TanStack npm supply-chain compromise — postmortem notes</a></li>
+</ul>

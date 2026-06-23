@@ -1,0 +1,125 @@
+<h1 id="chapter-1--the-saas-mindset">Chapter 1 — The SaaS Mindset<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-1--the-saas-mindset"></a></h1>
+<p>Chapter 1 ini terasa seperti pergeseran cara pikir. Setelah Preface bilang kenapa buku ini perlu ada, di chapter ini Golding bikin kita sepakat dulu bahwa SaaS bukan sekadar teknologi atau deployment model.</p>
+<p>Yang paling gue ingat adalah dua kalimat ini:</p>
+<blockquote>
+<p>“It’s essential for SaaS architects to understand that SaaS is not a technology-first mindset.”</p>
+</blockquote>
+<blockquote>
+<p>“With SaaS, we shift from creating a product to creating a service.”</p>
+</blockquote>
+<p>Itu bukan jargon. Itu mengubah pusat perhatian dari "apa yang dibangun" jadi "bagaimana value itu terus dialami." Kalau kamu masih nganggap SaaS cuma berarti cloud, Kubernetes, atau multi-tenant DB, kamu bakal gagal nangkap ruh chapter ini.</p>
+<h2 id="1-product-mindset-fokus-ke-apa-yang-dibangun">1) Product mindset fokus ke apa yang dibangun<a aria-hidden="true" class="anchor-heading icon-link" href="#1-product-mindset-fokus-ke-apa-yang-dibangun"></a></h2>
+<p>Kalau kamu building product, yang biasanya kamu tanyakan adalah:</p>
+<ul>
+<li>fitur apa yang dibutuhkan?</li>
+<li>capability apa yang harus tersedia?</li>
+<li>gap mana yang bisa ditutup?</li>
+<li>ini bisa dijual nggak?</li>
+</ul>
+<p>Golding bilang model product-centric biasanya masih cukup untuk software yang diinstall per-customer. Di situ, fokusnya adalah barangnya ada, lalu customer membeli.</p>
+<h2 id="2-service-mindset-fokus-ke-bagaimana-value-dialami">2) Service mindset fokus ke bagaimana value dialami<a aria-hidden="true" class="anchor-heading icon-link" href="#2-service-mindset-fokus-ke-bagaimana-value-dialami"></a></h2>
+<p>Begitu masuk SaaS, pertanyaannya berubah jadi:</p>
+<ul>
+<li>onboarding semudah apa?</li>
+<li>time to value cepat atau lama?</li>
+<li>seberapa sering downtime terjadi?</li>
+<li>feedback user masuk seberapa cepat?</li>
+<li>update terasa sebagai improvement berkelanjutan atau gangguan?</li>
+</ul>
+<p>Analogi restorannya pas: makanan itu product. Salam di pintu, air minum, kecepatan waiter, itu service.</p>
+<p>Di SaaS, aplikasi bisa fiturnya lengkap, tapi kalau pengalaman onboarding, reliability, dan support jelek, tenant akan tetap sakit hati.</p>
+<h2 id="3-product-bisa-statis-service-harus-terus-hidup">3) Product bisa statis, service harus terus hidup<a aria-hidden="true" class="anchor-heading icon-link" href="#3-product-bisa-statis-service-harus-terus-hidup"></a></h2>
+<p>Product mentality mudah jatuh pada pola "kita bikin, lalu customer gunakan." Service mentality nggak bisa kayak gitu. Service itu selalu berjalan.</p>
+<p>Dalam model SaaS, tenant hanya melihat permukaan service. Mereka nggak peduli patch, konfigurasi infra, atau deployment pipeline. Mereka peduli apakah mereka terus dapat value.</p>
+<p>Jadi operation bukan urusan belakang layar saja. Uptime, deployment, dan onboarding adalah bagian dari experience yang dirasakan tenant.</p>
+<h2 id="4-service-mindset-berbeda-dari-product-mindset-secara-konseptual">4) Service mindset berbeda dari product mindset secara konseptual<a aria-hidden="true" class="anchor-heading icon-link" href="#4-service-mindset-berbeda-dari-product-mindset-secara-konseptual"></a></h2>
+<p>Model software lama sering sales-driven. Itu bisa membuat organisasi kejar one-off request demi menutup deal.</p>
+<p>Tapi Golding bilang:</p>
+<blockquote>
+<p>“the needs of the many should always outweigh the needs of the few.”</p>
+</blockquote>
+<p>Ini penting. Service mindset bilang:</p>
+<ul>
+<li>jangan korbankan kualitas sistem untuk satu customer besar,</li>
+<li>jangan biarkan satu fitur khusus merusak agility dan operability untuk semua tenant.</li>
+</ul>
+<p>Keputusan SaaS harus dilihat secara sistemik, bukan per deal.</p>
+<h2 id="5-success-metric-berubah">5) Success metric berubah<a aria-hidden="true" class="anchor-heading icon-link" href="#5-success-metric-berubah"></a></h2>
+<p>Di product mindset, metrik sukses biasanya:</p>
+<ul>
+<li>feature completeness,</li>
+<li>roadmap delivery,</li>
+<li>win rate,</li>
+<li>customer acquisition.</li>
+</ul>
+<p>Di service mindset, metriknya melebar jadi:</p>
+<ul>
+<li>onboarding completion time,</li>
+<li>time to value,</li>
+<li>availability / reliability,</li>
+<li>release frequency,</li>
+<li>support responsiveness,</li>
+<li>feedback loop,</li>
+<li>retention / churn,</li>
+<li>tenant satisfaction.</li>
+</ul>
+<p>Bukan sekadar "fitur selesai", tapi "apakah service experience membaik?"</p>
+<h2 id="6-organisasi-harus-berubah-juga">6) Organisasi harus berubah juga<a aria-hidden="true" class="anchor-heading icon-link" href="#6-organisasi-harus-berubah-juga"></a></h2>
+<p>Ini bukan cuma urusan PM atau arsitek. Semua peran terpengaruh.</p>
+<ul>
+<li>Product owner harus mikir onboarding dan operational attributes.</li>
+<li>Engineer harus mikir apakah solusi mempercepat perubahan, meningkatkan reliabilitas, dan memudahkan operasi.</li>
+<li>QA harus menjaga kualitas experience, bukan sekadar memvalidasi fitur.</li>
+</ul>
+<p>Kalau kamu masih building product, organisasi cenderung build lalu handoff. Kalau kamu building service, semua orang harus rapat karena semua orang ikut bentuk pengalaman tenant.</p>
+<h2 id="7-ini-penting-karena-saas-menurut-golding-adalah-service-centric">7) Ini penting karena SaaS menurut Golding adalah service-centric<a aria-hidden="true" class="anchor-heading icon-link" href="#7-ini-penting-karena-saas-menurut-golding-adalah-service-centric"></a></h2>
+<p>Definisi SaaS yang dia hadirkan adalah:</p>
+<blockquote>
+<p>“a low-friction, service-centric model that maximizes value for customers and providers.”</p>
+</blockquote>
+<p>Fokusnya: low-friction dan service-centric. Jadi SaaS bukan cuma software yang bisa diakses lewat internet. SaaS adalah software yang dibungkus sebagai experience berkelanjutan dengan friction rendah.</p>
+<p>Kalau kamu masih tertarik pada product-only, kamu akan lupa friction seperti:</p>
+<ul>
+<li>daftar yang susah,</li>
+<li>setup lama,</li>
+<li>billing yang nggak jelas,</li>
+<li>support lambat,</li>
+<li>rollout yang mengganggu.</li>
+</ul>
+<p>Semua itu bukan "fitur", tapi mereka masih membunuh value.</p>
+<h2 id="synthesizing-product-vs-service-dalam-saas">Synthesizing: product vs service dalam SaaS<a aria-hidden="true" class="anchor-heading icon-link" href="#synthesizing-product-vs-service-dalam-saas"></a></h2>
+<p>Kalau gue ringkas:</p>
+<p><strong>Building product</strong> = optimalisasi pada apa yang dibuat.
+<strong>Building service</strong> = optimalisasi pada bagaimana value terus dialami.</p>
+<p>Di SaaS, Golding jelas memihak yang kedua. Karena tenant nggak beli sekadar fitur. Mereka membeli pengalaman yang terus hidup.</p>
+<h2 id="bagaimana-chapter-ini-mendukung-keseluruhan-buku">Bagaimana chapter ini mendukung keseluruhan buku<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-chapter-ini-mendukung-keseluruhan-buku"></a></h2>
+<p>Chapter 1 tidak hanya mengajarkan istilah baru. Dia memindahkan pusat cara mikir:</p>
+<ul>
+<li>dari "apa yang saya bangun" ke "bagaimana tenant merasakan value"</li>
+<li>dari "shared infra vs dedicated" ke "apakah service yang dirasakan tetap terpusat dan rapi"</li>
+<li>dari "kejar one-off deal" ke "jaga service kolektif"</li>
+</ul>
+<p>Itu membuat bab selanjutnya bukan langsung soal teknis. Mereka jadi soal bagaimana pola teknis itu membantu tujuan layanan dan bisnis.</p>
+<p>Kalau lo mau, next kita bisa bikin <strong>10 takeaways paling penting dari Chapter 1</strong> atau langsung ke <strong>Chapter 2: Multi-Tenant Architecture Fundamentals</strong>.</p>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.chapter-1.close-reading">Chapter 1 Close Reading — The SaaS Mindset</a></li>
+</ol>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">saas (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">mindset (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">multi-tenancy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures">Building Multi-Tenant SaaS Architectures</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124500">SaaS sebagai unified operational service model, bukan label infrastruktur</a></li>
+<li><a href="/sotoy/notes/zettel.20260511130100">SaaS success metrics harus mengukur service experience, bukan hanya fitur selesai</a></li>
+<li><a href="/sotoy/notes/zettel.moc.multi-tenant-saas">MOC: Multi-Tenant SaaS Architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.10">2026-05-10</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+</ul>

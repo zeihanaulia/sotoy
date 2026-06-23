@@ -1,0 +1,53 @@
+<h1 id="interrogatory-llm-llm-sebagai-pewawancara-konteks">Interrogatory LLM: LLM sebagai pewawancara konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#interrogatory-llm-llm-sebagai-pewawancara-konteks"></a></h1>
+<h2 id="definisi">Definisi<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi"></a></h2>
+<p>Interrogatory LLM adalah pola di mana LLM dipakai sebagai pewawancara aktif untuk menggali konteks dari manusia. Bukan sekadar menjawab pertanyaan, tetapi membuat pertanyaan terstruktur yang mengekstrak requirement, constraint, domain knowledge, dan asumsi penting.</p>
+<p>Link: <a href="https://martinfowler.com/bliki/InterrogatoryLLM.html">https://martinfowler.com/bliki/InterrogatoryLLM.html</a></p>
+<p>Di artikel Martin Fowler, istilah ini bukan berarti interogasi kasar. Ini lebih dekat ke proses: LLM bertanya satu per satu, manusia menjawab, lalu model menyusun konteks yang bisa dipakai oleh sesi atau model lain.</p>
+<h2 id="mengapa-perlu-wawancara">Mengapa perlu wawancara?<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-perlu-wawancara"></a></h2>
+<p>Fowler menunjukkan bahwa kegagalan task kompleks biasanya bukan karena modelnya bodoh. Kegagalannya karena konteks yang dikirim ke model tidak lengkap.</p>
+<p>Dalam praktiknya, manusia sering tidak menulis semua detail penting di awal. Interrogatory LLM memindahkan beban itu dari "tulis semua requirement dulu" menjadi "jawab pertanyaan yang muncul".</p>
+<h2 id="kenapa-satu-pertanyaan-dalam-satu-waktu">Kenapa satu pertanyaan dalam satu waktu?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-satu-pertanyaan-dalam-satu-waktu"></a></h2>
+<p>Satu pertanyaan atomik menjaga percakapan terfokus.</p>
+<p>Kalau LLM menanyakan banyak hal sekaligus, jawaban cenderung parsial, dangkal, atau hilang. Dengan satu pertanyaan, setiap respons jadi bahan untuk pertanyaan berikutnya.</p>
+<p>Ini membuat elicitation jadi incremental dan lebih mirip wawancara manusia yang baik.</p>
+<h2 id="dokumen-vs-review">Dokumen vs review<a aria-hidden="true" class="anchor-heading icon-link" href="#dokumen-vs-review"></a></h2>
+<p>Fowler membedakan dua peran utama:</p>
+<ul>
+<li><code>create</code>: LLM menginterview expert untuk membangun dokumen konteks dari nol.</li>
+<li><code>review</code>: LLM membaca dokumen yang sudah ada, lalu mewawancarai expert untuk memeriksa akurasi dan gap.</li>
+</ul>
+<p>Model lain bisa memakai dokumen itu sebagai input yang lebih stabil. Jadi interrogatory LLM bukan hanya cara membuat prompt lagi—dia juga bisa menjadi fasilitator review dokumen.</p>
+<h2 id="insight-yang-lebih-besar">Insight yang lebih besar<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-yang-lebih-besar"></a></h2>
+<p>Interrogatory LLM adalah proses context engineering.</p>
+<p>Kalau prompt biasa masih dipandang sebagai perintah sekali tembak, pola ini menempatkan prompt final sebagai hasil dari pipeline wawancara:</p>
+<ol>
+<li>tacit knowledge →</li>
+<li>elicitation oleh LLM →</li>
+<li>context document →</li>
+<li>execution / review</li>
+</ol>
+<p>Dengan begitu, prompt bukan lagi ditulis langsung. Dia diproduksi dari percakapan yang benar.</p>
+<h2 id="korelasi-konsep-lain">Korelasi konsep lain<a aria-hidden="true" class="anchor-heading icon-link" href="#korelasi-konsep-lain"></a></h2>
+<ul>
+<li>requirements elicitation: expert sering tidak tahu cara menulis kebutuhan, tetapi tahu domainnya. Interrogatory LLM mirip dengan analis yang menggali kebutuhan lewat pertanyaan.</li>
+<li>rubber duck debugging: bedanya, "bebek" di sini bertanya balik, bukan sekadar mendengar.</li>
+<li>knowledge management: ini cara ringan untuk mengeluarkan pengetahuan dari kepala orang yang tidak suka menulis.</li>
+</ul>
+<h2 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h2>
+<p>Artikel ini menggeser fokus dari "prompt engineering" ke "context engineering".</p>
+<p>LLM terbaik sekalipun masih akan membuat keputusan buruk kalau konteksnya salah. Interrogatory LLM membantu memastikan konteks itu lebih lengkap, terstruktur, dan lebih mudah divalidasi.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">prompt-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-engineering (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/handbook.ai.code-vocabulary-and-bounded-context">Design Code Vocabulary dan Bounded Context untuk AI-assisted Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-coding.what-is-code">What Is Code? — code sebagai vocabulary dan model konsep</a></li>
+</ul>

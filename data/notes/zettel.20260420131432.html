@@ -1,0 +1,60 @@
+<h1 id="nilai-anchoring-ditentukan-oleh-overhead-dokumentasi-versus-biaya-kehilangan-konteks">Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#nilai-anchoring-ditentukan-oleh-overhead-dokumentasi-versus-biaya-kehilangan-konteks"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Kalau bikin dokumen lebih mahal daripada nge-rebuild sesi, itu tanda belum cocok.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Ini jadi alat evaluasi praktis, bukan prinsip dogmatis.</p>
+<h2 id="maksud-overhead-dokumentasi">Maksud Overhead Dokumentasi<a aria-hidden="true" class="anchor-heading icon-link" href="#maksud-overhead-dokumentasi"></a></h2>
+<p>Overhead dokumentasi berarti biaya tambahan yang muncul karena membuat, memperbarui, dan memelihara dokumentasi feature. Ini bisa berupa:</p>
+<ul>
+<li>waktu menulis ringkasan keputusan,</li>
+<li>usaha menyinkronkan dokumen dengan kode dan status nyata,</li>
+<li>review dan percobaan agar dokumen tetap akurat.</li>
+</ul>
+<p>Jika fitur sangat kecil atau hanya butuh satu sesi, biaya ini bisa lebih besar daripada cuma mengulang sedikit konteks di chat.</p>
+<h2 id="biaya-kehilangan-konteks">Biaya Kehilangan Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#biaya-kehilangan-konteks"></a></h2>
+<p>Biaya kehilangan konteks terjadi ketika sesi baru harus membangun ulang semua asumsi. Ini nyata dalam bentuk:</p>
+<ul>
+<li>waktu yang terbuang menjelaskan lagi keputusan sebelumnya,</li>
+<li>AI yang mengulang alternatif yang sudah ditolak,</li>
+<li>kesalahan karena alasan keputusan tidak lagi terlihat,</li>
+<li>sesi panjang yang dipaksa bertahan supaya konteks tidak hilang.</li>
+</ul>
+<p>Contoh praktis: jika sebuah fitur butuh diskusi multi-hari, tanpa feature document maka setiap sesi akan butuh rekap ulang, dan risiko AI lupa alasan <code>RetryQueue</code> ditolak atau constraint <code>email-only</code> semakin besar.</p>
+<h2 id="kapan-enggak-worth-it">Kapan Enggak Worth It<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-enggak-worth-it"></a></h2>
+<ul>
+<li>task eksplorasi sekali jalan yang selesai dalam satu jam,</li>
+<li>bug fix kecil dengan konteks jelas dari kode yang ada,</li>
+<li>sesion proof-of-concept yang tidak akan dilanjutkan.</li>
+</ul>
+<p>Dalam kasus ini, membuat dokumentasi feature adalah overhead yang tidak sebanding.</p>
+<h2 id="kapan-worth-it">Kapan Worth It<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-worth-it"></a></h2>
+<ul>
+<li>fitur yang tersebar beberapa sesi,</li>
+<li>keputusan arsitektur yang kompleks,</li>
+<li>tim atau AI session berganti-ganti,</li>
+<li>ketika kehilangan konteks berpotensi menyebabkan ratusan menit rework.</li>
+</ul>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 35.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 35</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

@@ -1,0 +1,127 @@
+<h1 id="yeoman-scaffolding-engine-untuk-frontend-modern">Yeoman: scaffolding engine untuk frontend modern<a aria-hidden="true" class="anchor-heading icon-link" href="#yeoman-scaffolding-engine-untuk-frontend-modern"></a></h1>
+<h2 id="yeoman-itu-apa">Yeoman itu apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#yeoman-itu-apa"></a></h2>
+<p>Yeoman adalah scaffolding engine untuk project web, bukan runtime framework.
+Dia muncul sebagai tool untuk membuat kerangka kerja awal: struktur folder, config build, dependency, testing setup, dan template file.
+Inti ide Yeoman adalah: jangan mulai project web dari file kosong.</p>
+<p>Catatan: artikel ini dirancang supaya bisa dibaca sendiri. Semua penjelasan di sini lengkap tanpa harus buka note lain.</p>
+<p>Yeoman bekerja lewat ecosystem generator. Setiap generator adalah plugin yang bisa dipakai untuk kickstart project baru atau menambah bagian tertentu ke project yang sudah ada.</p>
+<ul>
+<li><code>yo</code> = command-line engine.</li>
+<li><code>generator-*</code> = template dan opini untuk jenis project tertentu.</li>
+<li><code>prompt</code> = interaksi konfigurasi saat scaffold berjalan.</li>
+</ul>
+<p>Jadi: <strong>Yeoman = scaffolding engine</strong>.</p>
+<h2 id="kenapa-yeoman-terasa-penting-banget-di-era-20122015">Kenapa Yeoman terasa penting banget di era 2012–2015?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-yeoman-terasa-penting-banget-di-era-20122015"></a></h2>
+<p>Karena waktu itu frontend sudah terlalu kompleks untuk lagi-lagi mulai dari nol.
+Sebelum Yeoman, startup project sering berarti:</p>
+<ul>
+<li>cari library lewat GitHub atau StackOverflow,</li>
+<li>pilih antara Bower / npm / RequireJS / Browserify,</li>
+<li>tulis konfigurasi Grunt/Gulp manual,</li>
+<li>siapkan testing dengan Karma/Jasmine/Mocha,</li>
+<li>bungkus asset Sass/Less/Autoprefixer sendiri,</li>
+<li>atur live reload dan production build sendiri.</li>
+</ul>
+<p>Yeoman hadir saat frontend sudah masuk fase industrialisasi.
+Dia memberi satu cara untuk menjahit semua bagian itu jadi wizard awal, sehingga tim nggak lagi fokus ke setup tetapi ke domain aplikasi.</p>
+<p><strong>Era 2012–2015 cocok buat Yeoman</strong> karena:</p>
+<ul>
+<li>belum ada pemenang tooling universal,</li>
+<li>banyak framework masih baru dan toolingnya tersebar,</li>
+<li>tim frontend butuh standar onboarding,</li>
+<li>developer mulai merasa setup project lebih berbahaya daripada kode fitur.</li>
+</ul>
+<h2 id="masalah-apa-yang-yeoman-coba-selesaikan">Masalah apa yang Yeoman coba selesaikan?<a aria-hidden="true" class="anchor-heading icon-link" href="#masalah-apa-yang-yeoman-coba-selesaikan"></a></h2>
+<p>Masalah inti Yeoman bukan sekadar "generator file".
+Yeoman mencoba menyelesaikan tiga masalah sekaligus:</p>
+<ol>
+<li><strong>fragmentasi tooling</strong>
+<ul>
+<li>npm, Bower, Grunt, Gulp, RequireJS, Browserify, Karma, Jasmine, Sass, Less.</li>
+<li>Semua punya API dan cara set up berbeda.</li>
+</ul>
+</li>
+<li><strong>boilerplate manual</strong>
+<ul>
+<li>struktur folder, config, dan skrip build sering di-copy dari repo lama.</li>
+<li>copy-paste bikin project baru rawan salah.</li>
+</ul>
+</li>
+<li><strong>onboarding inconsistent</strong>
+<ul>
+<li>developer baru harus tahu banyak tooling sekaligus.</li>
+<li>generator jadi satu titik input untuk menyesuaikan opsi project.</li>
+</ul>
+</li>
+</ol>
+<p>Jadi Yeoman bukan hanya membuat file, tapi memformalkan workflow: generate + install dependency + siap kerja.</p>
+<h2 id="kenapa-sekarang-namanya-jarang-terdengar">Kenapa sekarang namanya jarang terdengar?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-sekarang-namanya-jarang-terdengar"></a></h2>
+<p>Karena idenya menang, produknya harus mundur.</p>
+<p>Yeoman membuka kategori baru: scaffolding CLI untuk web app.
+Setelah kategori itu terbukti penting, banyak framework dan platform mulai membawa generator sendiri.</p>
+<ul>
+<li>Angular punya <code>ng new</code></li>
+<li>React punya <code>create-react-app</code></li>
+<li>Vue punya Vue CLI / Vite starter</li>
+<li>Next.js punya <code>create-next-app</code></li>
+<li>NestJS punya <code>nest new</code></li>
+<li>Rails, Laravel, Spring Initializr punya generator masing-masing</li>
+</ul>
+<p>Yeoman terlalu generik ketika ekosistem mulai memilih tooling yang terikat langsung ke framework.
+Hasilnya, Yeoman tetap relevan sebagai konsep, tapi namanya tidak lagi jadi brand utama.</p>
+<h2 id="warisan-idenya-ke-tooling-modern">Warisan idenya ke tooling modern<a aria-hidden="true" class="anchor-heading icon-link" href="#warisan-idenya-ke-tooling-modern"></a></h2>
+<p>Yeoman memberi dua warisan utama:</p>
+<ol>
+<li>
+<p><strong>Pembiasaan scaffolding</strong></p>
+<ul>
+<li>mulai project lewat command khusus.</li>
+<li>pilih opsi awal lewat prompt.</li>
+<li>otomatis pasang dependency dan setup file.</li>
+</ul>
+</li>
+<li>
+<p><strong>Generator sebagai extensible template</strong></p>
+<ul>
+<li>generator bisa dibuat untuk banyak jenis project.</li>
+<li>ini adalah cikal bakal pendekatan CLI yang bisa di-extend oleh komunitas.</li>
+</ul>
+</li>
+</ol>
+<p>Tooling modern mewarisi pola ini, tetapi dengan fokus yang lebih sempit:</p>
+<ul>
+<li><code>npm create vite@latest</code> = starter modern untuk dev server + bundler,</li>
+<li><code>create-react-app</code> = generator khusus React,</li>
+<li><code>ng new</code> = generator yang dikemas dalam framework Angular,</li>
+<li><code>nx generate</code> / <code>turbo</code> = generator yang berorientasi monorepo.</li>
+</ul>
+<p>Yeoman bisa dipahami sebagai jembatan antara:</p>
+<p>Manual setup → boilerplate repo → Yeoman generator → framework CLI → meta-framework starter.</p>
+<h2 id="kenapa-yeoman-bukan-framework">Kenapa Yeoman bukan framework?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-yeoman-bukan-framework"></a></h2>
+<p>Ini penting.
+Yeoman hanya bantu bikin struktur awal.
+Dia tidak menentukan runtime aplikasi.</p>
+<p>Kalau lo pakai generator AngularJS 2014, Yeoman hanya bikin folder, file, dan config yang dibutuhkan. Setelah itu, aplikasi tetap jalan di AngularJS.
+Kalau generatornya untuk Chrome extension, hasilnya tetap extension yang runtime-nya bukan Yeoman.</p>
+<p>Jadi salah kaprah terbesar adalah mengira Yeoman sebagai "tool yang mengikat project". Padahal Yeoman cuma "mandor proyek" yang bantu siapkan pondasi.</p>
+<h2 id="insight">Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#insight"></a></h2>
+<p>Yeoman adalah tanda bahwa frontend bukan lagi sekadar halaman HTML statis.
+Dia menandai peralihan mental model: web app sekarang adalah project dengan lifecycle <code>create -> build -> test -> lint -> deploy</code>.</p>
+<p>Kalau memahami Yeoman dengan benar, lo bukan cuma tahu command <code>yo</code>.
+Lo tahu kenapa generator jadi penting, kenapa framework CLI berkembang, dan kenapa sekarang startup project modern biasanya dimulai dengan <code>npm create</code> atau <code>create-...</code>.</p>
+<h3 id="catatan-singkat">Catatan singkat<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-singkat"></a></h3>
+<ul>
+<li>Yeoman penting karena era 2012–2015 tooling frontend sudah broken, tetapi belum ada satu standar.</li>
+<li>Yeoman menyelesaikan fragmentation dan onboarding.</li>
+<li>Kini idenya hidup lagi di CLI framework modern, meski nama Yeoman jarang muncul.</li>
+<li><code>yo code</code> adalah gambaran yang tepat: generator yang memotong boilerplate, bukan mengganti logika.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vscode (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">yeoman (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">tooling (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">history (Private)</a></li>
+</ol>

@@ -1,0 +1,49 @@
+<h1 id="qwen35-397b-a17b-fp8-di-vllm-kebutuhan-h100-dan-kapasitas-runtime">Qwen3.5-397B-A17B-FP8 di vLLM: kebutuhan H100 dan kapasitas runtime<a aria-hidden="true" class="anchor-heading icon-link" href="#qwen35-397b-a17b-fp8-di-vllm-kebutuhan-h100-dan-kapasitas-runtime"></a></h1>
+<p>Dari riset singkat yang gue lakukan, ada angka konkret yang penting buat memperjelas kenapa 40 GPU H100 belum otomatis menjamin stabilitas.</p>
+<h3 id="temuan-utama">Temuan utama<a aria-hidden="true" class="anchor-heading icon-link" href="#temuan-utama"></a></h3>
+<ul>
+<li>Untuk <code>Qwen3.5-397B-A17B-FP8</code>, berat bobot model di FP8 sekitar <strong>397 GB</strong>.</li>
+<li>Runtime footprint naik jadi sekitar <strong>457–476 GB</strong> saat termasuk overhead aktivasi dan framework.</li>
+<li>Untuk vLLM, ini artinya konfigurasi paling realistis adalah <strong>8×H100 80GB</strong> (640 GB total VRAM) dengan sekitar <strong>100–119 GB</strong> tersisa untuk KV cache setelah <code>vLLM</code> cap 576 GB.</li>
+</ul>
+<h3 id="implikasi-untuk-self-host">Implikasi untuk self-host<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi-untuk-self-host"></a></h3>
+<ul>
+<li>Angka ini menunjukkan bahwa satu replica model besar Qwen3.5 FP8 saja memerlukan <strong>8 GPU H100</strong>, bukan 1 atau 2.</li>
+<li>Kalau lo bicara banyak concurrent coding sessions, GPU count bukan satu-satunya pertimbangan. Masih butuh:
+<ul>
+<li>admission control / queueing</li>
+<li>pool isolation</li>
+<li>limit output tokens</li>
+<li>limit concurrency per replica</li>
+<li>monitoring KV cache usage</li>
+</ul>
+</li>
+</ul>
+<h3 id="sumber-eksternal">Sumber eksternal<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber-eksternal"></a></h3>
+<ul>
+<li><a href="https://www.spheron.network/blog/deploy-qwen-3-5-gpu-cloud/">Deploy Qwen 3.5 on GPU Cloud: Hardware Requirements and Setup Guide (2026)</a> — menyebut runtime footprint FP8 sekitar <strong>457–476 GB</strong> dan butuh <strong>8×H100 80GB</strong> dengan sisa KV cache sekitar <strong>100–119 GB</strong> setelah batas vLLM 576 GB.</li>
+<li><a href="https://huggingface.co/Qwen/Qwen3.5-397B-A17B-FP8">Qwen/Qwen3.5-397B-A17B-FP8 di Hugging Face</a> — model card referensi.</li>
+<li><a href="https://www.modelscope.cn/models/Qwen/Qwen3.5-397B-A17B-FP8">ModelScope Qwen3.5-397B-A17B-FP8</a> — halaman model China yang juga mencatat model FP8.</li>
+</ul>
+<h3 id="kenapa-ini-relevan">Kenapa ini relevan<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-relevan"></a></h3>
+<p>Di konteks diskusi kita, data ini menguatkan bahwa masalah utama bukan cuma "40 GPU apakah cukup?". Masalah yang nyata adalah:</p>
+<ul>
+<li><code>Qwen3.5-397B-A17B-FP8</code> sudah butuh 8×H100 untuk satu deployment replica</li>
+<li>stabilitas multi-user juga bergantung pada runtime kebijakan dan vLLM scheduler</li>
+<li>manual <code>/compact</code> adalah workaround state, bukan bukti bahwa GPU sudah cukup</li>
+</ul>
+<p>Kalau lo mau, gue bisa tambahkan juga catatan singkat ini ke <code>til.ai.vllm-opencode-context-pressure.md</code> sebagai bukti angka kapasitas. </p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vllm (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">qwen (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">gpu (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/til.ai.vllm-opencode-context-pressure">OpenCode + vLLM failure sering karena context pressure, bukan param kecil</a></li>
+</ul>

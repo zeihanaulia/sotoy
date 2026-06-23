@@ -1,0 +1,137 @@
+<h1 id="context-database">Context Database<a aria-hidden="true" class="anchor-heading icon-link" href="#context-database"></a></h1>
+<p>Hari ini gue baca page OpenViking, dan yang paling ngena buat gue adalah saat mereka tidak cuma menyebutnya sebagai produk memory. Di catatan gue, OpenViking itu adalah <strong>context database</strong>: database yang nggak cuma nyimpan data, tapi menyusun data supaya agent bisa ambil konteks yang tepat saat bekerja.</p>
+<h2 id="pertanyaan-kunci-yang-gue-pegang">Pertanyaan kunci yang gue pegang<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-kunci-yang-gue-pegang"></a></h2>
+<p>Ada tujuh pertanyaan inti yang bikin gue bisa bedain OpenViking dari memory provider biasa:</p>
+<ol>
+<li>OpenViking sebenarnya menyelesaikan masalah apa?</li>
+<li>Kenapa dia pakai paradigma file system?</li>
+<li>Apa bedanya Resource, Memory, dan Skill?</li>
+<li>Gimana sistem L0/L1/L2 bekerja?</li>
+<li>Apa itu directory recursive retrieval?</li>
+<li>Kenapa retrieval trace penting?</li>
+<li>Gimana OpenViking bikin agent "smarter with use"?</li>
+</ol>
+<h2 id="istilah-yang-gue-kunci">Istilah yang gue kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#istilah-yang-gue-kunci"></a></h2>
+<p>Gue pakai makna ini ketika baca page OpenViking:</p>
+<ul>
+<li><strong>Context database</strong> = database yang bukan cuma nyimpen data, tapi menyusun data supaya agent bisa mengambil konteks yang tepat.</li>
+<li><strong>Resource</strong> = pengetahuan relatif statis seperti docs, repo code, FAQ, atau halaman web.</li>
+<li><strong>Memory</strong> = cognition agent/user: preferensi, pengalaman task, keputusan, dan pola yang berubah.</li>
+<li><strong>Skill</strong> = capability yang bisa dipanggil agent: tools, MCP, instruksi, atau workflow.</li>
+<li><strong>viking:// URI</strong> = alamat unik untuk menemukan context di virtual filesystem OpenViking.</li>
+<li><strong>L0/L1/L2</strong> = layer konteks bertingkat: abstract, overview, detail.</li>
+</ul>
+<h2 id="masalah-yang-openviking-ingin-selesaikan">Masalah yang OpenViking ingin selesaikan<a aria-hidden="true" class="anchor-heading icon-link" href="#masalah-yang-openviking-ingin-selesaikan"></a></h2>
+<p>OpenViking nggak datang sebagai solusi "kami punya vector DB lebih bagus". Ini lebih ke masalah manajemen konteks yang kacau: memory di satu tempat, resource di tempat lain, skill tersebar di plugin atau endpoint.</p>
+<p>Gue suka bahwa page-nya mendefinisikan problem secara jelas:</p>
+<ul>
+<li><strong>Context fragmentation</strong></li>
+<li><strong>Context explosion</strong></li>
+<li><strong>Poor retrieval quality</strong></li>
+<li><strong>Context opacity</strong></li>
+<li><strong>Limited memory iteration</strong></li>
+</ul>
+<p>Kalau dibandingin sama RAG tradisional, OpenViking ngeliat ini bukan sekadar potong dokumen jadi chunk. Context harus punya struktur, path, folder, level ringkasan, dan jejak retrieval.</p>
+<h2 id="kenapa-pakai-paradigma-filesystem">Kenapa pakai paradigma filesystem?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-pakai-paradigma-filesystem"></a></h2>
+<p>OpenViking mendorong agent berpikir dalam bentuk file system, bukan tumpukan chunk.</p>
+<p>Buat gue, tiga keuntungan utamanya adalah:</p>
+<ul>
+<li><strong>Path deterministik</strong>: agent bisa refer ke <code>viking://resources/my_project/docs/api.md</code>, bukan cuma berharap similarity search nemu chunk yang tepat.</li>
+<li><strong>Hierarki</strong>: project, docs, memories, skills punya tempat masing-masing.</li>
+<li><strong>Navigasi</strong>: agent bisa <code>ls</code>, <code>read</code>, <code>abstract</code>, <code>overview</code> — mirip browsing folder.</li>
+</ul>
+<p>Ini membuat OpenViking lebih ke sistem navigasi konteks. Vector DB menjawab "chunk mana yang mirip?". OpenViking menjawab "lokasi konteksnya di mana, dan detail mana yang harus dibuka?".</p>
+<h2 id="resource-memory-skill-tiga-jenis-konteks-yang-harus-dibedakan">Resource, Memory, Skill: tiga jenis konteks yang harus dibedakan<a aria-hidden="true" class="anchor-heading icon-link" href="#resource-memory-skill-tiga-jenis-konteks-yang-harus-dibedakan"></a></h2>
+<p>Page ini bikin gue lebih jelas tentang batas-batasnya.</p>
+<ul>
+<li><strong>Resource</strong> = pengetahuan statis. Project docs, code repo, FAQ, API docs. Kalau lo lagi ngebangun coding agent atau support agent, resource ini adalah basis pengetahuan.</li>
+<li><strong>Memory</strong> = learning yang dinamis. User preferences, pengalaman task, keputusan, pola. Ini mirip Honcho, tapi di OpenViking memory dipisahin sebagai konteks yang berubah seiring waktu.</li>
+<li><strong>Skill</strong> = capability yang bisa dipanggil. Tool, MCP endpoint, instruksi, workflow. Bukan isi dokumen, tapi fungsi / kemampuan.</li>
+</ul>
+<p>Gue suka bahwa OpenViking menyatukan ketiganya ke satu filesystem, sebab itu bikin konteks agent nggak tercerai-berai.</p>
+<h2 id="l0l1l2-cara-mereka-ngehindarin-context-stuffing">L0/L1/L2: cara mereka ngehindarin context stuffing<a aria-hidden="true" class="anchor-heading icon-link" href="#l0l1l2-cara-mereka-ngehindarin-context-stuffing"></a></h2>
+<p>Ini bagian yang paling masuk akal buat gue.</p>
+<ul>
+<li><strong>L0 = Abstract</strong>: ringkas banget, cukup untuk filtering awal.</li>
+<li><strong>L1 = Overview</strong>: lebih panjang, sekitar 2.000 token, cukup untuk paham struktur dan bagian penting.</li>
+<li><strong>L2 = Detail</strong>: full content, dibuka kalau perlu.</li>
+</ul>
+<p>Kalau agent bekerja, modelnya mirip manusia:</p>
+<ul>
+<li>lihat judul / abstrak dulu</li>
+<li>baca overview untuk tahu bagian mana yang penting</li>
+<li>baru baca detail kalau perlu</li>
+</ul>
+<p>Dengan cara ini, OpenViking menghindari prompt stuffing dan membuat retrieval jadi bertahap.</p>
+<h2 id="directory-recursive-retrieval">Directory recursive retrieval<a aria-hidden="true" class="anchor-heading icon-link" href="#directory-recursive-retrieval"></a></h2>
+<p>Gue nangkep ini sebagai salah satu fitur paling khas mereka.</p>
+<p>Bukan cuma mencari chunk top-k. OpenViking pertama menempatkan query ke direktori relevan, lalu mengeksplorasi isi folder itu secara bertahap.</p>
+<p>Prosesnya kira-kira:</p>
+<ul>
+<li>analisis intent</li>
+<li>cari direktori kandidat</li>
+<li>eksplorasi file dalam direktori</li>
+<li>turunin ke subdirectory jika perlu</li>
+<li>agregasi hasil</li>
+</ul>
+<p>Jadi retrieval-nya mirip browsing rak buku, bukan ngacak-ngacak tumpukan fotokopi.</p>
+<h2 id="kenapa-retrieval-trace-penting">Kenapa retrieval trace penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-retrieval-trace-penting"></a></h2>
+<p>Ini yang bikin OpenViking beda dari RAG biasa.</p>
+<p>Kalau retrieval gagal, lo bisa lihat: directory mana dibuka, file mana yang dipilih, kenapa kandidat itu muncul. Itu penting buat debug agent production.</p>
+<p>Tanpa trace, agent cuma kasih jawaban. Dengan trace, lo bisa audit kenapa jawaban itu muncul.</p>
+<h2 id="memory-self-iteration-dan-agent-yang-belajar-dari-use">Memory self-iteration dan agent yang belajar dari use<a aria-hidden="true" class="anchor-heading icon-link" href="#memory-self-iteration-dan-agent-yang-belajar-dari-use"></a></h2>
+<p>OpenViking nggak cuma nyimpen memory user. Dia juga punya loop extraction untuk agent:</p>
+<ul>
+<li>hasil task</li>
+<li>feedback user</li>
+<li>outcome session</li>
+</ul>
+<p>Lalu dia update memory directories secara async.</p>
+<p>Ini bikin agent bisa belajar dari kasus dan pola, bukan cuma ingat preferensi user.</p>
+<h2 id="openviking-vs-honcho">OpenViking vs Honcho<a aria-hidden="true" class="anchor-heading icon-link" href="#openviking-vs-honcho"></a></h2>
+<p>Karena gue juga lagi baca Honcho, ini perbandingannya penting.</p>
+<ul>
+<li>Honcho = <strong>peer-centric</strong>. Fokus ke siapa peer itu, apa representation-nya, gimana dia berubah.</li>
+<li>OpenViking = <strong>context-filesystem-centric</strong>. Fokus ke di mana konteksnya, jenisnya apa, level detail mana yang dibuka.</li>
+</ul>
+<p>Keduanya bisa saling melengkapi, tapi filosofinya beda.</p>
+<h2 id="kapan-openviking-cocok">Kapan OpenViking cocok?<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-openviking-cocok"></a></h2>
+<p>OpenViking masuk akal kalau lo perlu:</p>
+<ul>
+<li>self-hosted context database</li>
+<li>knowledge base yang terstruktur</li>
+<li>project docs / repo besar</li>
+<li>retrieval yang bisa diaudit</li>
+<li>hierarchical context loading</li>
+<li>memory user + memory agent</li>
+</ul>
+<p>Kalau problem lo cuma preferensi user sederhana, mungkin ini bisa overkill.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.hermes-agent.memory-providers">Memory Providers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.stateful-memory">Stateful Memory</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault/daily.journal.2026.06.03 (Private)</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openviking (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-database (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+</ul>

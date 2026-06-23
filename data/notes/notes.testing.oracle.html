@@ -1,0 +1,101 @@
+<h1 id="oracle-dalam-software-testing">Oracle dalam software testing<a aria-hidden="true" class="anchor-heading icon-link" href="#oracle-dalam-software-testing"></a></h1>
+<h2 id="apa-itu-oracle">Apa itu oracle?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-oracle"></a></h2>
+<p>Di konteks thread ini, "oracle" bukan Oracle perusahaan atau database.
+Oracle adalah sumber kebenaran yang dipakai test untuk memutuskan apakah hasil program benar atau salah.</p>
+<p>Kalau lo punya fungsi:</p>
+<pre class="language-text"><code class="language-text">input -> program -> output
+</code></pre>
+<p>oracle adalah mekanisme yang ngecek:</p>
+<p>"untuk input ini, output yang benar harusnya apa?"</p>
+<p>Kalau inputnya <code>2 + 2</code>, oracle-nya bisa berupa <code>4</code>.</p>
+<h2 id="asal-kata-oracle">Asal kata oracle<a aria-hidden="true" class="anchor-heading icon-link" href="#asal-kata-oracle"></a></h2>
+<p>Secara harafiah, "oracle" berasal dari pengertian lama tentang sumber jawaban yang dipercaya.
+Di mitologi, oracle adalah orang atau tempat yang dianggap memberi nasihat bijak, ramalan, atau keputusan dari kekuatan lebih tinggi.</p>
+<p>Jadi bukan karena bulan, bukan karena perusahaan Oracle.
+Istilah ini dipakai karena fungsinya mirip: memberikan jawaban atau keputusan yang dianggap sahih.</p>
+<h2 id="makna-oracle-dalam-konteks-testing">Makna oracle dalam konteks testing<a aria-hidden="true" class="anchor-heading icon-link" href="#makna-oracle-dalam-konteks-testing"></a></h2>
+<p>Dalam software testing, istilah itu dipakai sebagai metafora.
+Oracle bukan pelaksana program; dia adalah otoritas yang menjawab apakah output sudah sesuai.</p>
+<p>Dengan kata lain:</p>
+<ul>
+<li>di dunia nyata, oracle = penasehat atau lembaga yang mengeluarkan keputusan benar/salah</li>
+<li>di testing, oracle = sumber yang menentukan kebenaran hasil program</li>
+</ul>
+<p>Jadi di konteks thread Rhys:</p>
+<ul>
+<li>implementasi baru itu eksekutor</li>
+<li>test itu prosedur pemeriksaan</li>
+<li>oracle itu yang bilang "ini lulus" atau "ini gagal"</li>
+</ul>
+<h2 id="beda-oracle-dengan-test">Beda oracle dengan test<a aria-hidden="true" class="anchor-heading icon-link" href="#beda-oracle-dengan-test"></a></h2>
+<p>Sering kedengerannya sama, padahal beda.</p>
+<ul>
+<li>test = prosedur yang menjalankan pengecekan</li>
+<li>oracle = sumber kebenaran yang dipakai test untuk menilai hasil</li>
+</ul>
+<p>Analogi:</p>
+<ul>
+<li>test = guru yang ngasih soal dan ngecek jawaban</li>
+<li>oracle = kunci jawaban</li>
+</ul>
+<p>Jadi test tanpa oracle cuma jalanin program, tapi belum bisa bilang benar atau salah.</p>
+<h2 id="contoh-oracle">Contoh oracle<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-oracle"></a></h2>
+<p>A. Expected value langsung</p>
+<pre class="language-text"><code class="language-text">input: add(2, 3)
+expected: 5
+</code></pre>
+<p>Oracle-nya: <code>5</code>.</p>
+<p>B. Golden file / snapshot</p>
+<pre class="language-text"><code class="language-text">input: transpile(file.js)
+expected: output cocok dengan file snapshot
+</code></pre>
+<p>Oracle-nya: snapshot/golden output.</p>
+<p>C. Behavior-level oracle</p>
+<pre class="language-text"><code class="language-text">request HTTP tertentu
+expected: status 200 + body tertentu
+</code></pre>
+<p>Oracle-nya: kontrak API.</p>
+<p>D. Differential oracle</p>
+<pre class="language-text"><code class="language-text">jalankan implementasi lama dan baru
+hasil harus sama
+</code></pre>
+<p>Oracle-nya: implementasi lama yang dipercaya.</p>
+<h2 id="kenapa-oracle-penting-di-rewrite-bun">Kenapa oracle penting di rewrite Bun?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-oracle-penting-di-rewrite-bun"></a></h2>
+<p>Karena rewrite besar berarti implementasi berubah total.
+Pertanyaannya jadi:</p>
+<p>"gimana kita tahu hasil baru masih benar?"</p>
+<p>Jawabannya: karena ada oracle yang tidak ikut ditulis ulang bareng implementasinya.</p>
+<p>Kalau implementasi dan oracle ditulis ulang dalam "bahasa mental" yang sama, verifikasi jadi rentan:</p>
+<ul>
+<li>bukan verifikasi yang independen</li>
+<li>tapi dua bug yang saling setuju</li>
+</ul>
+<h2 id="ketika-oracle-bisa-jelek">Ketika oracle bisa jelek<a aria-hidden="true" class="anchor-heading icon-link" href="#ketika-oracle-bisa-jelek"></a></h2>
+<p>Oracle juga bisa salah atau terlalu lemah.
+Contoh oracle jelek:</p>
+<ul>
+<li>test cuma cek program tidak crash</li>
+<li>snapshot gampang di-update tanpa dipahami</li>
+<li>mock berlebihan sampai behavior asli tidak diuji</li>
+<li>test terlalu nempel ke struktur internal, bukan behavior</li>
+<li>oracle ikut diubah supaya test hijau</li>
+</ul>
+<p>Di kasus rewrite, inilah yang mau dihindari.</p>
+<h2 id="ringkasnya">Ringkasnya<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasnya"></a></h2>
+<p>Oracle adalah sumber kebenaran yang dipakai test untuk menilai apakah software berperilaku benar.
+Kalau lo lagi rewrite besar, kualitas oracle sering lebih penting daripada kecepatan nulis implementasi baru.</p>
+<h2 id="kaitan">Kaitan<a aria-hidden="true" class="anchor-heading icon-link" href="#kaitan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.software-architechture.bun-rewrite-oracle">Bun rewrite Zig → Rust: oracle test dan validasi independen</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">testing (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-testing (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">oracle (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">validation (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">bun (Private)</a></li>
+</ol>

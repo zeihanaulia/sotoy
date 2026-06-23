@@ -1,0 +1,125 @@
+<h1 id="what-is-code--code-sebagai-vocabulary-dan-model-konsep">What Is Code? — code sebagai vocabulary dan model konsep<a aria-hidden="true" class="anchor-heading icon-link" href="#what-is-code--code-sebagai-vocabulary-dan-model-konsep"></a></h1>
+<h2 id="apa-yang-gue-tangkap-dari-what-is-code">Apa yang gue tangkap dari "What Is Code?"<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-gue-tangkap-dari-what-is-code"></a></h2>
+<p>Gue baca artikel Unmesh Joshi di Martin Fowler: <a href="https://martinfowler.com/articles/what-is-code.html">https://martinfowler.com/articles/what-is-code.html</a>. Dia ngajak gue mikir ulang apa makna code di era LLM.</p>
+<p>Unmesh pakai definisi code dua lapis:</p>
+<ol>
+<li>code sebagai instruksi mesin,</li>
+<li>code sebagai model konseptual domain.</li>
+</ol>
+<h3 id="dua-aspek-utama-code">Dua aspek utama code<a aria-hidden="true" class="anchor-heading icon-link" href="#dua-aspek-utama-code"></a></h3>
+<p><strong>Pertama, code sebagai instruksi mesin.</strong></p>
+<p>Ini jawaban untuk "mesin harus ngapain". Code memberi tahu komputer apa yang harus dilakukan: menghitung, menyimpan data, memanggil API, mengubah status, mengirim response. Kalau instruksinya valid, program bisa jalan. Di era LLM, bagian ini makin dikomoditisasi.</p>
+<p><strong>Kedua, code sebagai model konseptual domain.</strong></p>
+<p>Ini jawaban untuk "sistem ini memahami dunia seperti apa". Code tidak sekadar menyimpan logika. Dia juga membangun vocabulary dan boundary: <code>Customer</code>, <code>Cart</code>, <code>Order</code>, <code>Payment</code>, <code>Shipment</code>, <code>Refund</code>, <code>Inventory</code>. Tidak sekadar nama bagus; setiap konsep membawa makna dan aturan lokal.</p>
+<p>Contoh konkret: <code>Cart</code> bukan <code>Order</code>, <code>PaymentAuthorized</code> bukan <code>PaymentCaptured</code>, <code>Shipment</code> bukan <code>Delivery</code>.</p>
+<p>Kalau kita cuma fokus ke lapis pertama, LLM sudah bisa bantu banyak. Syntax, boilerplate, endpoint, dan adapter bisa dihasilkan cepat. Tapi lapis kedua itulah yang paling menentukan apakah codebase masih bisa dipahami, dipelihara, dan dikembangkan.</p>
+<h2 id="kenapa-vocabulary-codebase-penting">Kenapa vocabulary codebase penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-vocabulary-codebase-penting"></a></h2>
+<p>Artikel ini menekankan: codebase yang baik adalah representasi vocabulary tertentu.</p>
+<p>Vocabulary/domain language di sini bukan sekadar nama variabel enak dibaca. Ini adalah kumpulan istilah yang dipakai codebase untuk memodelkan domain.</p>
+<p>Kata seperti <code>Order</code>, <code>Invoice</code>, <code>Settlement</code>, <code>Refund</code>, <code>Catalog</code>, <code>SKU</code>, <code>Customer</code>, <code>Repository</code>, <code>TransactionLog</code>, <code>Policy</code>, <code>Workflow</code> membawa makna, aturan, boundary, dan ekspektasi perilaku.</p>
+<p>Vocabulary penting karena codebase bukan cuma kumpulan instruksi. Codebase adalah bahasa bersama.</p>
+<p>Kalau bahasanya jelas, manusia dan LLM bisa bekerja di atas model yang sama. Kalau bahasanya kacau, semua orang menebak — termasuk LLM.</p>
+<p>Contoh e-commerce yang nempel:</p>
+<ul>
+<li><code>Cart</code> adalah niat membeli yang belum final.</li>
+<li><code>Order</code> adalah komitmen pembelian.</li>
+<li><code>Invoice</code> adalah dokumen/tagihan finansial.</li>
+</ul>
+<p>Kalau codebase pake semua itu sebagai <code>data</code>, <code>item</code>, <code>record</code>, atau <code>transaction</code>, domain-nya jadi kabur. Mesin mungkin tetap jalan, tapi manusia susah memahami apa yang sebenarnya terjadi.</p>
+<p>Vocabulary juga membuat makna domain jadi eksplisit.</p>
+<p><code>PaymentCaptured</code> langsung memberitahu: uang sudah benar-benar ditangkap/settled.
+<code>PaymentAuthorized</code> memberitahu: uang belum tentu sudah masuk.</p>
+<p>Bandingkan dengan <code>payment_status = "success"</code>. "Success" itu apa? Authorized? Captured? Settled? Verified? Reconciled?</p>
+<p>Vocabulary juga menjaga boundary.</p>
+<p><code>Customer</code> di billing bisa berarti legal entity yang menerima invoice.
+<code>Customer</code> di support bisa berarti orang yang membuka tiket.
+<code>Customer</code> di e-commerce bisa berarti buyer account.</p>
+<p>Kalau semua dipaksa pakai satu model <code>Customer</code>, codebase bisa jadi kacau. Domain language yang baik membantu kita sadar: ini harus dipisah bounded context-nya.</p>
+<p>Vocabulary menentukan kualitas abstraction. Contoh bagus:</p>
+<ul>
+<li><code>RefundPolicy</code> menunjukkan ada aturan refund yang bisa berubah dan diuji.</li>
+<li><code>RefundRequest</code>, <code>RefundApproval</code>, <code>RefundSettlement</code> menunjukkan lifecycle refund yang eksplisit.</li>
+</ul>
+<p>Kalau hanya <code>processRefund()</code>, semua aturan bisa numpuk di satu tempat.</p>
+<p>Tapi hati-hati: terlalu banyak vocabulary palsu juga berbahaya. LLM kerap bikin istilah seperti <code>Manager</code>, <code>Handler</code>, <code>Factory</code>, <code>Orchestrator</code>, <code>Coordinator</code> tanpa domain yang jelas. Kelihatan rapi, tapi maknanya kosong.</p>
+<p>Di sinilah cognitive debt muncul: code punya banyak istilah, tapi tim tidak benar-benar paham artinya.</p>
+<p>Jadi vocabulary yang baik harus memenuhi dua syarat:</p>
+<ol>
+<li>mencerminkan domain nyata.</li>
+<li>dipahami bersama oleh tim.</li>
+</ol>
+<p>Kalau cuma terdengar keren tapi tidak dipahami, itu bukan domain language. Itu kabut.</p>
+<p>Contoh yang nempel di gue:</p>
+<ul>
+<li><code>TransactionLog</code> biasanya diasosiasikan dengan append-only, ordering, durability, replay.</li>
+<li><code>Cache</code> biasanya berarti data bisa stale dan harus diinvalidate.</li>
+<li><code>Repository</code> biasanya berarti abstraction terhadap persistence.</li>
+</ul>
+<p>Jadi vocabulary bukan kosmetik. Itu adalah medium diskusi antara manusia dan mesin.</p>
+<h2 id="bounded-context-dan-arti-lokal-kata">Bounded context dan arti lokal kata<a aria-hidden="true" class="anchor-heading icon-link" href="#bounded-context-dan-arti-lokal-kata"></a></h2>
+<p>Unmesh kasih pelajaran bahwa satu kata bisa beda arti di konteks yang berbeda.</p>
+<p><code>Customer</code> di e-commerce beda dengan <code>Customer</code> di CRM atau di support system. Karena itu bounded context penting: batasan di mana vocabulary tertentu valid.</p>
+<p>Kalau codebase tidak punya bounded context yang jelas, LLM akan mengandalkan asosiasi umum dari internet. Hasilnya bisa terlihat wajar, tapi tidak cocok dengan model lokal perusahaan.</p>
+<h2 id="programming-language-sebagai-alat-berpikir">Programming language sebagai alat berpikir<a aria-hidden="true" class="anchor-heading icon-link" href="#programming-language-sebagai-alat-berpikir"></a></h2>
+<p>Artikelnya juga nyanggah klaim "natural language aja cukup".</p>
+<p>Programming language bukan sekadar alat untuk merekam desain yang sudah jadi. Bahasa pemrograman ikut membentuk desain itu.</p>
+<ul>
+<li>Go mendorong pola concurrency dan channel.</li>
+<li>Java mendorong object model dan interface.</li>
+<li>Rust memaksa ownership dan boundary safety.</li>
+<li>FP mendorong komposisi dan immutability.</li>
+</ul>
+<p>Jadi kalau kita cuma pakai LLM untuk generate code tanpa ikut berpikir lewat bahasa pemrograman, kita melewatkan proses discovery yang penting.</p>
+<h2 id="cognitive-debt-di-era-llm">Cognitive debt di era LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#cognitive-debt-di-era-llm"></a></h2>
+<p>Ini yang paling nyeremin.</p>
+<p>Unmesh bilang code bisa compile dan tests bisa pass, tapi jika tim tidak paham model konseptual di belakang struktur itu, codebase menambah vocabulary tanpa shared understanding.</p>
+<p>LLM bisa mempercepat pemasukan vocabulary baru: <code>Service</code>, <code>Repository</code>, <code>Factory</code>, <code>EventBus</code>, <code>CommandHandler</code>, <code>ConsensusModule</code>. Semua terdengar keren. Tapi apakah tim paham kenapa abstraction itu ada? Apakah namanya sesuai kebutuhan lokal? Apakah boundary-nya benar?</p>
+<p>Kalau tidak, hasilnya bukan technical debt biasa. Itu menjadi cognitive debt.</p>
+<h2 id="kenapa-codebase-yang-bagus-adalah-context-dan-harness-untuk-llm">Kenapa codebase yang bagus adalah context dan harness untuk LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-codebase-yang-bagus-adalah-context-dan-harness-untuk-llm"></a></h2>
+<p>Unmesh menempatkan codebase sebagai konteks utama untuk LLM. Bukan hanya prompt, tetapi struktur code sendiri:</p>
+<ul>
+<li>nama-nama yang konsisten,</li>
+<li>abstraction yang jelas,</li>
+<li>tests yang mendefinisikan behavior,</li>
+<li>types yang membatasi kesalahan,</li>
+<li>invariant yang eksplisit,</li>
+<li>boundary yang bersih.</li>
+</ul>
+<p>Itu adalah harness dan signal permanen buat LLM.</p>
+<p>Kalau codebase kacau, prompt apa pun cuma menambal sebentar.</p>
+<h2 id="hubungan-ke-artikel-lain">Hubungan ke artikel lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-artikel-lain"></a></h2>
+<p>Artikel ini nyambung ke apa yang gue baca sebelumnya:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.prompt-engineering.interrogatory-llm">Interrogatory LLM: LLM sebagai pewawancara konteks</a> — Fowler: LLM sebagai pewawancara konteks.</li>
+<li><a href="/sotoy/notes/notes.prompt-engineering.harper-llm-codegen-workflow">Harper Reed: LLM codegen workflow</a> — Harper: konteks itu dijadikan spec, plan, dan eksekusi bertahap.</li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.agentic-coding.is-a-trap (Private)</a> — agentic coding bisa memicu cognitive debt kalau kita melewatkan proses berpikir sendiri.</li>
+</ul>
+<p>Dari ketiganya, gue nangkep rangkaian utama:</p>
+<ol>
+<li>gali konteks,</li>
+<li>bentuk spec dan plan,</li>
+<li>eksekusi incremental,</li>
+<li>jaga vocabulary dan model konseptual.</li>
+</ol>
+<p>Kalau berhenti di "kode jalan", elo belum sampai ke inti engineering.</p>
+<h2 id="pertanyaan-yang-gue-bawa-pulang">Pertanyaan yang gue bawa pulang<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-gue-bawa-pulang"></a></h2>
+<ul>
+<li>Apakah vocabulary baru yang LLM tambahkan di codebase benar-benar sesuai bounded context?</li>
+<li>Apakah tim paham model konseptual di balik abstraction itu?</li>
+<li>Apakah code ini memperjelas domain atau cuma menambah jargon?</li>
+<li>Apakah kita membuat codebase sebagai medium komunikasi, bukan sekadar container instruksi mesin?</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vocabulary (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cognitive-debt (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/handbook.ai.code-vocabulary-and-bounded-context">Design Code Vocabulary dan Bounded Context untuk AI-assisted Engineering</a></li>
+</ul>

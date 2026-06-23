@@ -1,0 +1,326 @@
+<h1 id="the-developers-guide-to-ai--part-iv-adapting-models-to-real-world-tasks">The Developer’s Guide to AI — Part IV: Adapting Models to Real-World Tasks<a aria-hidden="true" class="anchor-heading icon-link" href="#the-developers-guide-to-ai--part-iv-adapting-models-to-real-world-tasks"></a></h1>
+<h2 id="part-iv-adapting-models-to-real-world-tasks">Part IV: Adapting Models to Real-World Tasks<a aria-hidden="true" class="anchor-heading icon-link" href="#part-iv-adapting-models-to-real-world-tasks"></a></h2>
+<h3 id="problem-statement">Problem statement<a aria-hidden="true" class="anchor-heading icon-link" href="#problem-statement"></a></h3>
+<p>Part IV berdiri di titik ketika task sudah terlalu spesifik buat pendekatan generik. Prompt sudah dioptimalkan, retrieval sudah jalan, tapi model masih sering salah di taxonomy internal, format output, dan gaya domain. Intinya: tugasnya adalah memutuskan kapan kita memerlukan perubahan pada model itu sendiri.</p>
+<p>Bagian ini bukannya langsung suruh fine-tune. Dia malah buka dengan sakit yang jelas: inbox perusahaan yang kebanjiran email campur aduk. Di situ gue ngerasa gue lagi mendorong kita untuk mengenali peralihan fokus, dari "bikin model ngerti dokumen" ke "bikin model ngerti niat pesan".</p>
+<p>Yang bikin bagian pembuka ini nendang adalah satu kutipan ini:</p>
+<blockquote>
+<p>“Although the agent could handle the content of some emails, the bigger problem was not answering them. It was understanding what they were.”</p>
+</blockquote>
+<p>Kalimat itu memisahkan dua mesin yang sering kita samakan: jawaban generatif versus klasifikasi intent. Untuk inbox, jawaban cuma setengah dari masalah. Sebelum model boleh dijadikan pahlawan auto-reply, dia harus mampu jadi petugas triase. Sales inquiry, press request, support ticket, spam—semua itu butuh label dan routing dulu. Kalau salah taruh, urusannya jadi tidak hanya salah jawab, tapi salah proses.</p>
+<p>Gue suka cara buku ini nggak menjadikan RAG sebagai jawaban universal. Ia membangun pola yang konsisten: prompt engineering sukses, lalu RAG sukses, lalu muncul bottleneck baru. Setelah RAG mengurus knowledge retrieval, tiba saatnya berkata, "ini masalahnya bukan lagi kurang konteks, ini masalahnya kurang insting task-spesifik."</p>
+<p>Dari pembuka Part IV, yang terasa jelas adalah batas RAG. RAG kuat untuk memberi model akses ke fakta produk atau dokumen dukungan. Tapi tugas inbox ini lebih ke: apakah model bisa membedakan pola pitch sales versus support, atau mengenali urgency versus general inquiry. Itu bukan sekadar kata yang relevan, itu adalah taxonomy internal dan kebiasaan operasional yang perlu dipelajari.</p>
+<p>Pertanyaan krusialnya bukan "bisa promptnya diatur lagi?" Melainkan "apakah model bisa diajari perbedaan halus yang berulang di data nyata kita?" Itu yang membuat fine-tuning terasa earned, bukan default. Fine-tuning di sini mulai masuk ketika task sudah cukup sempit, berulang, dan membutuhkan konsistensi di luar konteks sekadar dokumen.</p>
+<p>Dan buku ini juga memberi satu pengingat yang sangat bagus: fine-tuning membutuhkan data. Bukan cuma data banyak, tapi data yang merefleksikan dunia sebenarnya—email nyata perusahaan dengan label yang benar. Synthetic email bisa membantu, tapi kalau model dilatih terlalu banyak pada email sintetis, bisa jadi performanya mengecewakan di email asli. Intinya: dataset nyata sering kali lebih bernilai daripada contoh yang gampang dibikin.</p>
+<p>Jadi buat gue, pembuka Part IV ini menegaskan satu hal: Phase pertama adalah ngasih model konteks. Phase kedua adalah ngajarin model kebiasaan khusus task. Kalau sebelumnya kita ngobrol tentang prompt dan RAG, sekarang kita diarahkan ke adaptasi model sebagai langkah logis berikutnya ketika workflow bisnis mulai butuh routing, klasifikasi, dan keputusan yang konsisten.</p>
+<h2 id="chapter-9-why-and-when-to-customize-a-model">Chapter 9: Why and When to Customize a Model<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-9-why-and-when-to-customize-a-model"></a></h2>
+<p>Chapter 9 terasa seperti gerbang keputusan. Sampai titik ini, buku sudah ngajarin beberapa level intervensi: panggil model apa adanya, perbaiki prompt, kasih context lewat RAG, dan bangun retrieval pipeline. Bab ini yang kemudian menjelaskan kapan semua itu masih cukup, dan kapan lo harus mulai mengubah modelnya sendiri.</p>
+<p>Dari tiga kutipan yang mereka sorot, gue sebenarnya sedang membangun decision tree yang penting:</p>
+<blockquote>
+<p>“For most generic tasks, building a new model isn’t necessary..."</p>
+</blockquote>
+<blockquote>
+<p>“When you need the LLM to answer questions or generate content based on information that was not in its original training data... RAG is the ideal approach.”</p>
+</blockquote>
+<blockquote>
+<p>“When faced with a situation such as this... you have two ways forward: Build a new model from scratch. Fine-tune a pretrained model.”</p>
+</blockquote>
+<p>Dari situ, logic bab ini jelas: jangan fine-tune terlalu cepat. Ini bukan bab “ayo fine-tune.” Ini bab “bikin hierarchy intervensi.” Kalau masalahnya masih generic, prompt engineering sering cukup. Kalau masalahnya berhubungan dengan data eksternal atau privat, RAG adalah jawaban yang lebih tepat. Baru kalau masalahnya deep specialization atau task-specific behavior, kita mulai mempertimbangkan customization.</p>
+<p>Bagian awal Chapter 9 menguatkan baseline itu dengan sangat baik. Mereka mulai dengan satu kebenaran yang sehat: penggunaan model via Ollama, Hugging Face, ChatGPT, atau Gemini berarti kita sedang memakai pretrained model. Ini bukan malu. Ini justru nilai besar modern AI. Pretrained model menyelamatkan kita dari kerja raksasa membangun fondasi dari nol.</p>
+<p>Itu kenapa kalimatnya terasa penting:</p>
+<blockquote>
+<p>“These kinds of pretrained generic models save time and effort because we don’t have to build foundational models from scratch.”</p>
+</blockquote>
+<p>Kalimat ini seakan bilang: value terbesar AI sekarang adalah bukan pada kemampuan model sendiri, tapi pada kemampuan kita untuk memanfaatkannya.</p>
+<p>Lalu bab ini memberi tiga lapisan keputusan yang rapi. Kalau task masih berada di domain umum model, pakai prompt. Kalau problemnya adalah model tidak tahu data terbaru atau privat, pakai RAG. Kalau yang diperlukan bukan sekadar fakta, tapi kebiasaan format, jargon internal, atau output yang sangat spesifik, maka customization mulai relevan.</p>
+<p>Manufacturing report jadi contoh yang menarik karena dia memetakan batas prompt dan RAG. Model bisa diberi fakta lewat RAG, tapi itu tidak otomatis memberinya kebiasaan yang konsisten dalam format dan jargon proprietary. Di situ kita baru bisa merasakan perbedaan antara masalah knowledge dan masalah behavior. RAG bagus untuk factual grounding. Fine-tuning bagus untuk consistent specialized behavior.</p>
+<p>Gue kemudian menempatkan dua opsi depan muka: build a new model from scratch atau fine-tune a pretrained model. Ini bukan statement dogmatis. Ini soal trade-off. Build from scratch tawarkan kontrol penuh, tapi butuh data, compute, dan expertise yang sangat besar. Fine-tuning memanfaatkan knowledge yang sudah ada, jadi jauh lebih realistis untuk mayoritas developer dan tim.</p>
+<p>Satu insight yang menurut gue penting adalah ini:</p>
+<blockquote>
+<p>“At times, a fine-tuned model with lower parameters can outperform a generic model with billions of parameters.”</p>
+</blockquote>
+<p>Ini bukan sekadar puitis. Ini mengingatkan kita bahwa fit spesifik sering lebih berharga daripada kekuatan umum yang besar tapi tidak fokus. Untuk use case yang sempit, model kecil yang sudah diadaptasi kadang lebih baik, lebih murah, dan lebih mudah dideploy.</p>
+<p>Chapter 9 juga membuat pembedaan yang sangat berguna antara strategi fine-tuning dan metode eksekusinya. Strategi yang mereka sebut adalah self-supervised, supervised, dan reinforcement learning. Metode yang dibahas adalah jalur no-code versus technical. Itu penting karena banyak orang mencampur-adukkan “fine-tuning” menjadi satu hal tunggal.</p>
+<p>Self-supervised itu seperti model menebak kata berikutnya dari data mentah—cocok kalau yang kita butuhkan adalah style atau pattern tanpa label eksplisit. Supervised adalah flashcard input-output, dan ini sangat relevan untuk task seperti classification atau template generation. RL fine-tuning masuk ketika “jawaban bagus” tidak bisa direpresentasikan hanya sebagai label, tapi sebagai preferensi atau reward.</p>
+<p>Di sisi lain, no-code tools seperti Hugging Face AutoTrain diposisikan sebagai jalan masuk yang lebih ringan. Mereka memperlihatkan bahwa fine-tuning tidak harus langsung identik dengan script GPU neraka. Tapi gue juga tetap bilang: no-code sering menjadi black box. Kalau lo mau kontrol dan pemahaman lebih, jalan technical tetap perlu dilalui.</p>
+<p>Akhirnya, bab ini menutup dengan struktur yang deceptively simple:</p>
+<blockquote>
+<p>“Prepare the data. Fine-tune the model. Test the new model.”</p>
+</blockquote>
+<p>Kalimat ini sederhana, tapi itu kekuatannya. Fine-tuning jadi workflow yang bisa dikelola, bukan misteri. Dan kalau mau jujur, biasanya bottleneck terbesar ada di data dan evaluasi, bukan di training loop-nya sendiri.</p>
+<p>Jadi buat gue, Chapter 9 bukan cuma ngajarin teknik adaptation. Dia ngajarin cara memilih jalur. Ini adalah bab yang memastikan kita tahu kapan masalah kita masih bisa diselesaikan dengan prompt/RAG, dan kapan kita harus mulai mengubah modelnya secara sadar.</p>
+<h2 id="chapter-10-preparing-data-for-fine-tuning">Chapter 10: Preparing Data for Fine-Tuning<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-10-preparing-data-for-fine-tuning"></a></h2>
+<p>Kalau Chapter 9 adalah bab keputusan, Chapter 10 adalah bab persiapan bahan mentah. Di sini fokusnya bergeser dari strategi besar ke satu hal yang sering diremehkan: data.</p>
+<p>Kalimat pembukanya baik, tapi bukan sekadar textbook:</p>
+<blockquote>
+<p>“A well-prepared dataset is crucial for the success of any ML model, as it directly influences the model’s ability to learn and generalize.”</p>
+</blockquote>
+<p>Itu terasa seperti thesis bab ini. Fine-tuning yang bagus sering kalah atau menang di data, bukan di training code.</p>
+<p>Chapter 10 membuat dua prinsip itu jelas:</p>
+<ol>
+<li>model belajar dari data,</li>
+<li>model gagal karena data.</li>
+</ol>
+<p>Dari situ, bab ini nggak lagi ngomong model atau GPU. Dia ngomong tentang cara membuat task jadi bisa dipelajari secara benar oleh model.</p>
+<h3 id="1-chapter-ini-sebenarnya-tentang-apa">1) Chapter ini sebenarnya tentang apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#1-chapter-ini-sebenarnya-tentang-apa"></a></h3>
+<p>Bab ini membuka dengan roadmap bab: curate relevant data, select and label email, convert textual labels into numerical format, dan organize into training, validation, and testing sets.</p>
+<p>Kalau gue gambar struktur babnya, bentuknya seperti pipeline:</p>
+<div class="mermaid">
+  flowchart LR
+    A[Raw emails] --> B[Select relevant samples]
+    B --> C[Assign labels]
+    C --> D[Encode labels]
+    D --> E[Split into train / validation / test]
+    E --> F[Save as reusable dataset]
+</div>
+<p>Itu penting karena bab ini sedang menunjukkan bahwa dataset building itu pipeline, bukan sekadar file collection.</p>
+<h3 id="2-theres-no-need-to-look-beyond-your-own-inbox">2) “There’s no need to look beyond your own inbox.”<a aria-hidden="true" class="anchor-heading icon-link" href="#2-theres-no-need-to-look-beyond-your-own-inbox"></a></h3>
+<p>Ini kutipan yang sederhana tapi kuat.</p>
+<blockquote>
+<p>“To prepare the dataset, there’s no need to look beyond your own inbox.”</p>
+</blockquote>
+<p>Ini melawan insting umum orang saat bicara ML: cari benchmark publik, cari dataset besar, cari data generik yang “resmi”. Untuk task spesifik seperti email classification, data terbaik biasanya adalah data nyata dari task lo sendiri.</p>
+<p>Itu prinsip yang digarisbawahi bab ini: task-specific model adaptation harus dimulai dari task-specific data reality.</p>
+<h3 id="3-manual-labeling-itu-gak-glamor-tapi-inti-kualitas">3) Manual labeling itu gak glamor, tapi inti kualitas<a aria-hidden="true" class="anchor-heading icon-link" href="#3-manual-labeling-itu-gak-glamor-tapi-inti-kualitas"></a></h3>
+<p>Di sini ditegaskan bahwa jika email belum terkategori, lo harus meluangkan waktu untuk memilih sampel representatif dan memberi label yang simpel tapi konsisten.</p>
+<p>Kata kuncinya adalah representative sample, bukan jumlah besar semata. Dataset kecil tapi representatif sering lebih kuat daripada dataset besar tapi bermasalah distribusinya.</p>
+<p>Ini juga bukan sekadar administratif. Ini proses mengubah realitas bisnis menjadi bentuk yang bisa dipelajari model.</p>
+<h3 id="4-label-example-yang-dipakai-buku-itu-sengaja-spesifik">4) Label example yang dipakai buku itu sengaja spesifik<a aria-hidden="true" class="anchor-heading icon-link" href="#4-label-example-yang-dipakai-buku-itu-sengaja-spesifik"></a></h3>
+<p>Buku pakai label <code>IN_Bank</code>, <code>IN_School</code>, <code>US_Bank</code>, <code>US_School</code>. Pilihan ini bagus karena menunjukkan bahwa fine-tuning cocok untuk narrow distinctions yang meaningful untuk satu konteks.</p>
+<p>Contoh ini tidak dimaksudkan untuk ditiru mentah-mentah. Pesan pentingnya adalah: label lo harus datang dari task lo sendiri, dan bisa jadi jauh lebih sempit / kontekstual daripada kategori umum.</p>
+<h3 id="5-structuring-the-raw-data-text--label">5) Structuring the raw data: text + label<a aria-hidden="true" class="anchor-heading icon-link" href="#5-structuring-the-raw-data-text--label"></a></h3>
+<p>Format dataset yang dipakai buku itu sederhana tapi fundamental: dua kolom <code>text</code> dan <code>label</code>. Dalam supervised classification, basic form ini memang yang paling esensial.</p>
+<p>Yang menarik adalah keputusan desain yang muncul di sini: apakah inputnya full email atau summary? Full email memberi detail lebih banyak, tapi juga lebih noisy. Summary ringkas, tapi bisa kehilangan nuance. Ini menunjukkan bahwa dataset prep sudah memuat keputusan desain sebelum training dimulai.</p>
+<h3 id="6-encoding-labels-kenapa-label-harus-jadi-angka">6) Encoding labels: kenapa label harus jadi angka?<a aria-hidden="true" class="anchor-heading icon-link" href="#6-encoding-labels-kenapa-label-harus-jadi-angka"></a></h3>
+<p>Gue menjelaskan bahwa ML model memproses numerik, jadi label kategorikal perlu diubah ke ID angka.</p>
+<p>Ini bukan sekadar kebutuhan teknis. Ini juga soal memastikan mapping label konsisten dan mudah diterjemahkan kembali ke label manusia.</p>
+<p>Angka kategori di sini bukan ordinal; dia murni ID. Itu penting untuk dipahami.</p>
+<h3 id="7-splitting-the-data-ini-bukan-formalitas">7) Splitting the data: ini bukan formalitas<a aria-hidden="true" class="anchor-heading icon-link" href="#7-splitting-the-data-ini-bukan-formalitas"></a></h3>
+<p>Bagian splitting adalah salah satu bagian paling penting. Bab ini menekankan train/validation/test sekalian shuffle supaya model tidak belajar pola dari urutan data.</p>
+<p>Train untuk belajar, validation untuk memantau dan tune, test untuk evaluasi final. Ini soal epistemic honesty dalam eksperimen ML.</p>
+<h3 id="8-dari-12-file-ke-3-file-membangun-dataset-global">8) Dari 12 file ke 3 file: membangun dataset global<a aria-hidden="true" class="anchor-heading icon-link" href="#8-dari-12-file-ke-3-file-membangun-dataset-global"></a></h3>
+<p>Mereka mulai dengan empat kategori yang masing-masing di-split, lalu menggabungkannya kembali menjadi satu train file, satu validation file, satu test file. Ini menunjukkan bahwa model seharusnya belajar satu problem multi-class classification, bukan empat classifier terpisah.</p>
+<h3 id="9-hugging-face-datasets-dataset-sebagai-objek-self-describing">9) Hugging Face Datasets: dataset sebagai objek self-describing<a aria-hidden="true" class="anchor-heading icon-link" href="#9-hugging-face-datasets-dataset-sebagai-objek-self-describing"></a></h3>
+<p>Buku ini tidak berhenti pada CSV mentah. Mereka memperkenalkan Hugging Face Datasets karena dataset yang baik harus membawa skema dan metadata, bukan cuma file mentah.</p>
+<p>Dataset yang self-describing membuat pipeline downstream lebih aman dan reproducible.</p>
+<h3 id="10-feature-dan-schema-detail-kecil-tapi-penting">10) “Feature” dan schema: detail kecil tapi penting<a aria-hidden="true" class="anchor-heading icon-link" href="#10-feature-dan-schema-detail-kecil-tapi-penting"></a></h3>
+<p>Saat mereka mendefinisikan feature <code>text</code> dan <code>label</code>, itu bukan sekadar teknis. Itu sedang memperkenalkan data contract yang jelas.</p>
+<p>Jika schema longgar, error bisa masuk diam-diam.</p>
+<h3 id="11-casting-label-jadi-classlabel">11) Casting label jadi <code>ClassLabel</code><a aria-hidden="true" class="anchor-heading icon-link" href="#11-casting-label-jadi-classlabel"></a></h3>
+<p>Ini langkah yang keliatan kecil, tapi sangat penting.</p>
+<p>Dengan meng-cast label ke <code>ClassLabel</code>, data jadi lebih tegas. Label bukan string arbitrer lagi, tapi kategori terdefinisi dengan domain nilai terbatas.</p>
+<p>Ini adalah bentuk schema hardening yang membuat pipeline lebih aman.</p>
+<h3 id="12-youve-completed-the-heavy-lifting-of-data-engineering">12) “You’ve completed the heavy lifting of data engineering.”<a aria-hidden="true" class="anchor-heading icon-link" href="#12-youve-completed-the-heavy-lifting-of-data-engineering"></a></h3>
+<p>Kalimat ini jujur dan penting. Banyak orang menganggap data prep sebelah mata, padahal bab ini bilang justru itulah pekerjaan beratnya.</p>
+<p>Training code bisa ringkas, tapi dataset yang rapi dan representatif adalah pekerjaan yang memakan waktu.</p>
+<h3 id="13-hubungan-chapter-10-dengan-chapter-9">13) Hubungan Chapter 10 dengan Chapter 9<a aria-hidden="true" class="anchor-heading icon-link" href="#13-hubungan-chapter-10-dengan-chapter-9"></a></h3>
+<p>Chapter 9 = memutuskan apakah fine-tuning dibutuhkan.
+Chapter 10 = menyiapkan bahan belajar untuk fine-tuning.</p>
+<p>Tanpa Chapter 10, fine-tuning terasa magis. Dengan Chapter 10, fine-tuning jadi proses belajar yang sangat bergantung pada kualitas materi.</p>
+<h3 id="14-kutipan-paling-penting-dari-chapter-10">14) Kutipan paling penting dari Chapter 10<a aria-hidden="true" class="anchor-heading icon-link" href="#14-kutipan-paling-penting-dari-chapter-10"></a></h3>
+<blockquote>
+<p>“A well-prepared dataset is crucial...”</p>
+</blockquote>
+<blockquote>
+<p>“there’s no need to look beyond your own inbox.”</p>
+</blockquote>
+<blockquote>
+<p>“Aim for at least 50 to 100 emails for each category...”</p>
+</blockquote>
+<blockquote>
+<p>“the classification labels ... need to be in a numerical format”</p>
+</blockquote>
+<blockquote>
+<p>“If we did [use all data for training], the model might memorize the data instead of learning general patterns...”</p>
+</blockquote>
+<blockquote>
+<p>“Libraries like Hugging Face’s Datasets library solve this problem...”</p>
+</blockquote>
+<blockquote>
+<p>“Congratulations! You’ve successfully created your first properly formatted dataset for fine-tuning.”</p>
+</blockquote>
+<h3 id="15-sintesis-besar-chapter-10">15) Sintesis besar Chapter 10<a aria-hidden="true" class="anchor-heading icon-link" href="#15-sintesis-besar-chapter-10"></a></h3>
+<p>Chapter 10 mengajarkan bahwa fine-tuning dimulai bukan dari model, tapi dari dataset yang representatif, konsisten, dan bisa dievaluasi dengan jujur. Gue menunjukkan bagaimana memilih email nyata dari inbox sendiri, memberi label yang relevan, mengubah label menjadi ID numerik, lalu membagi data ke train/validation/test agar model tidak sekadar menghafal. Setelah itu, dataset mentah ditingkatkan menjadi objek yang lebih kokoh dengan Hugging Face Datasets.</p>
+<p>Kalau dipadatkan:</p>
+<p><strong>Chapter 10 mengubah contoh-contoh email acak menjadi kurikulum pembelajaran yang bisa dipahami model.</strong></p>
+<p>Jadi sebenarnya yang sedang terjadi di Chapter 10 ini apa?</p>
+<p><strong>Gue sedang memindahkan task bisnis ke bentuk pedagogis yang bisa dipelajari mesin.</strong></p>
+<p>Dan itu esensi dari data preparation:</p>
+<ul>
+<li>realitas bisnis → contoh,</li>
+<li>contoh → label,</li>
+<li>label → schema,</li>
+<li>schema → dataset,</li>
+<li>dataset → bahan belajar model.</li>
+</ul>
+<p>★ Insight ─────────────────────────────────────</p>
+<ol>
+<li>Data preparation bukan tahap administratif, tapi tahap desain pembelajaran model.</li>
+<li>Fine-tuning yang bagus sangat bergantung pada kualitas kategori, representativitas sampel, dan split evaluasi.</li>
+<li>Hugging Face Datasets memperkenalkan dataset sebagai objek yang membawa makna, tipe, dan kontrak penggunaan.</li>
+<li>Menyiapkan data berarti lebih dari kumpulkan file—itu termasuk schema, mapping, dan pipeline reproducibility.</li>
+<li>Setelah bab ini, fine-tuning seharusnya tidak lagi terlihat seperti proses magis, tapi seperti proses belajar terstruktur.</li>
+</ol>
+<h2 id="chapter-11-fine-tuning-models-in-practice">Chapter 11: Fine-Tuning Models in Practice<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-11-fine-tuning-models-in-practice"></a></h2>
+<p>Kalau Chapter 9 itu bab keputusan, dan Chapter 10 itu bab menyiapkan bahan ajar, maka Chapter 11 adalah bab ketika semuanya benar-benar dijalankan. Ini titik di mana buku berhenti bicara “kenapa fine-tuning penting” dan mulai bilang: ini workflow riilnya kalau lo benar-benar mau melatih model untuk task lo.</p>
+<p>Ada dua baris pembuka yang langsung bikin ekspektasi lo turun ke bumi:</p>
+<blockquote>
+<p>“Now it’s time for your first hands-on fine-tuning experience.”</p>
+</blockquote>
+<blockquote>
+<p>“Fine-tuning is a time-consuming process.”</p>
+</blockquote>
+<p>Dua quote ini penting. Mereka menegaskan bahwa Chapter 11 bukan magic show. Ini proses yang butuh waktu, compute, dan disiplin eksperimen.</p>
+<h3 id="1-bab-ini-dibuka-dengan-dua-model-sekaligus">1) Bab ini dibuka dengan dua model sekaligus<a aria-hidden="true" class="anchor-heading icon-link" href="#1-bab-ini-dibuka-dengan-dua-model-sekaligus"></a></h3>
+<p>Pilihan dua model ini menurut gue cerdas:</p>
+<ul>
+<li><code>distilbert/distilbert-base-uncased</code></li>
+<li><code>Qwen/Qwen2.5-0.5B-Instruct</code></li>
+</ul>
+<p>Dua model ini menunjukkan bahwa “fine-tuning” bukan satu jalan tunggal. Ada jalur model klasifikasi biasa dan ada jalur LLM kecil. Itu membuat bab ini terasa lebih realistis dan lebih berguna.</p>
+<h4 id="a-distilbert">a. DistilBERT<a aria-hidden="true" class="anchor-heading icon-link" href="#a-distilbert"></a></h4>
+<p>Ini model klasifikasi yang lebih klasik. Jadi pas buat menjelaskan workflow yang paling rapi:</p>
+<ul>
+<li>tokenization,</li>
+<li>Trainer API,</li>
+<li>evaluasi akurasi,</li>
+<li>perubahan performa yang gampang dimengerti.</li>
+</ul>
+<h4 id="b-qwen-05b-instruct">b. Qwen 0.5B Instruct<a aria-hidden="true" class="anchor-heading icon-link" href="#b-qwen-05b-instruct"></a></h4>
+<p>Ini LLM kecil. Jadi dia cocok buat nunjukin:</p>
+<ul>
+<li>chat/prompt template,</li>
+<li>format instruction,</li>
+<li>PEFT/LoRA,</li>
+<li>kenapa fine-tuning LLM beda dari fine-tuning classifier biasa.</li>
+</ul>
+<p>Jadi bab ini ingin lo lihat satu hal penting: <strong>fine-tuning itu family of workflows, bukan satu script universal.</strong></p>
+<h3 id="2-baseline-dulu-ini-salah-satu-prinsip-terbaik-di-bab-ini">2) Baseline dulu: ini salah satu prinsip terbaik di bab ini<a aria-hidden="true" class="anchor-heading icon-link" href="#2-baseline-dulu-ini-salah-satu-prinsip-terbaik-di-bab-ini"></a></h3>
+<p>Bab ini sehat banget karena mulai dari baseline. Sebelum training, mereka ukur dulu performa model yang dipilih dalam zero-shot classification. Tanpa baseline, angka setelah fine-tuning gampang kehilangan konteks.</p>
+<p>Hasil baseline yang mereka tunjukin:</p>
+<ul>
+<li>Google Gemini: <strong>100%</strong></li>
+<li>DistilBERT: <strong>69%</strong></li>
+<li>Qwen 0.5B Instruct: <strong>58%</strong></li>
+</ul>
+<p>Hasil ini penting karena menunjukkan dua hal:</p>
+<ul>
+<li>model besar yang kuat memang bisa sangat bagus tanpa fine-tuning,</li>
+<li>model kecil punya gap performa yang bisa ditutup dengan fine-tuning.</li>
+</ul>
+<p>Dengan kata lain, fine-tuning di sini bukan eksperimen akademik. Ini pertanyaan ekonomis: bisa nggak model yang lebih murah dan lebih mudah dijalankan didekatkan ke model besar pada task sempit?</p>
+<div class="mermaid">
+  flowchart LR
+    A[Task: email classification] --> B[Measure zero-shot baseline]
+    B --> C1[Gemini: 100%]
+    B --> C2[DistilBERT: 69%]
+    B --> C3[Qwen 0.5B: 58%]
+    C2 --> D[Need improvement via fine-tuning]
+    C3 --> D
+</div>
+<h3 id="3-fine-tuning-classifier-jalur-yang-paling-rapi">3) Fine-tuning classifier: jalur yang paling rapi<a aria-hidden="true" class="anchor-heading icon-link" href="#3-fine-tuning-classifier-jalur-yang-paling-rapi"></a></h3>
+<p>DistilBERT jadi babak pertama karena dia paling “direct”. Task-nya jelas: input teks, output label. Ini menunjukkan bentuk fine-tuning yang paling bersih dan paling gampang dipahami.</p>
+<p>Pipeline dasarnya:</p>
+<div class="mermaid">
+  flowchart TD
+    A[Load labeled dataset] --> B[Tokenizer]
+    B --> C[Tokenized dataset]
+    C --> D[Data collator]
+    D --> E[Load pretrained classification model]
+    E --> F[Set training arguments]
+    F --> G[Trainer]
+    G --> H[Train]
+    H --> I[Evaluate]
+    I --> J[Save model]
+</div>
+<p>Bagian ini penting karena modelnya didesain untuk task itu. Jadi hasil fine-tuning 69% → 100% bukan sekadar angka impresif, tapi pernyataan bahwa untuk task klasifikasi sempit dan terlabel jelas, model kecil bisa jadi sangat efektif.</p>
+<h3 id="4-fine-tuning-llm-jangan-langsung-skip-prompt-engineering">4) Fine-tuning LLM: jangan langsung skip prompt engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#4-fine-tuning-llm-jangan-langsung-skip-prompt-engineering"></a></h3>
+<p>Setelah classifier, bab ini naik ke LLM. Dan yang gue suka adalah mereka nggak langsung bilang fine-tuning itu solusi otomatis. Mereka malah tanya:</p>
+<blockquote>
+<p>“Why Not Prompt Engineering?”</p>
+</blockquote>
+<p>Itu pertanyaan sehat banget. Di banyak workflow nyata, prompt engineering masih jadi baseline terbaik untuk biaya dan kecepatan. Fine-tuning baru relevan saat lo butuh:</p>
+<ul>
+<li>performa lebih tinggi,</li>
+<li>adaptasi domain lebih dalam,</li>
+<li>perilaku lebih konsisten,</li>
+<li>generalisasi di niche task.</li>
+</ul>
+<p>Bukan karena modelnya keren, tapi karena masalahnya memang sudah melewati batas yang bisa diselesaikan cuma dengan prompt.</p>
+<h3 id="5-peft--lora-teknik-lahir-dari-constraint">5) PEFT / LoRA: teknik lahir dari constraint<a aria-hidden="true" class="anchor-heading icon-link" href="#5-peft--lora-teknik-lahir-dari-constraint"></a></h3>
+<p>Bab ini nggak ngebahas LoRA karena dia lagi tren. LoRA dibahas sebagai respons terhadap realitas biaya dan hardware.</p>
+<p>Yang penting di sini adalah intinya:</p>
+<ul>
+<li>full fine-tuning mahal,</li>
+<li>butuh banyak compute,</li>
+<li>berisiko overfitting dan catastrophic forgetting,</li>
+<li>sementara LoRA memungkinkan hanya sebagian kecil parameter yang dilatih.</li>
+</ul>
+<p>LoRA kerjanya seperti pasang adapter kecil di model yang dibekukan. Jadi bukan remodel total, tapi update terarah pada bagian penting.</p>
+<div class="mermaid">
+  flowchart LR
+    A[Pretrained base model weights] --> B[Frozen]
+    C[Small LoRA adapter layers] --> D[Trainable]
+    B --> E[PEFT model]
+    D --> E
+    E --> F[Task-adapted behavior with fewer trainable params]
+</div>
+<h3 id="6-dataset-llm-bukan-dataset-classifier-biasa">6) Dataset LLM bukan dataset classifier biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#6-dataset-llm-bukan-dataset-classifier-biasa"></a></h3>
+<p>Ini salah satu pergeseran mental terbesar di chapter ini.</p>
+<p>Untuk classifier, datasetnya text + label. Untuk LLM, datasetnya harus menjadi chat-style example:</p>
+<ul>
+<li>system</li>
+<li>user</li>
+<li>assistant</li>
+</ul>
+<p>Jadi lo nggak cuma ngajarin model untuk memetakan input ke class ID. Lo mengajarinya pola percakapan: format, role, instruction, jawaban.</p>
+<p>Itu penting karena kalau formatnya salah, model bisa bingung, output bisa berantakan, dan kualitas fine-tuning turun.</p>
+<div class="mermaid">
+  flowchart LR
+    A[Chapter 10 labeled dataset
+text + numeric label] --> B[Convert to chat-style training examples]
+    B --> C[system / user / assistant messages]
+    C --> D[apply_chat_template]
+    D --> E[LLM fine-tuning dataset]
+</div>
+<h3 id="7-hasilnya-qwen-naik-dari-58-ke-9302">7) Hasilnya: Qwen naik dari 58% ke 93.02%<a aria-hidden="true" class="anchor-heading icon-link" href="#7-hasilnya-qwen-naik-dari-58-ke-9302"></a></h3>
+<p>Ini angka yang menarik. Qwen fine-tuned 93.02% tidak setara langsung dengan DistilBERT 100%. Itu karena kedua model punya objective yang berbeda.</p>
+<p>DistilBERT adalah classifier khusus; outputnya sempit dan langsung. Qwen adalah LLM generatif yang dipaksa belajar classification dari pola percakapan. Jadi 93% sudah menunjukkan bahwa LoRA + dataset yang tepat bisa mendorong model kecil cukup jauh tanpa biaya full fine-tuning.</p>
+<p>Dari sini pelajaran pentingnya:</p>
+<ul>
+<li>model khusus bisa lebih efisien untuk task klasifikasi murni,</li>
+<li>tapi LLM fine-tuned memberi fleksibilitas lebih besar untuk task instruction/chat,</li>
+<li>dan pilihan model harus didasarkan pada bentuk task, bukan hanya karena LLM lagi hype.</li>
+</ul>
+<h3 id="8-sintesis-besar-chapter-11">8) Sintesis besar Chapter 11<a aria-hidden="true" class="anchor-heading icon-link" href="#8-sintesis-besar-chapter-11"></a></h3>
+<p>Kalau gue ringkas, Chapter 11 sedang membangun pola pikir eksekusi yang disiplin:</p>
+<ul>
+<li>mulai dari baseline,</li>
+<li>pilih model sesuai bentuk task,</li>
+<li>fine-tuning adalah pipeline lengkap,</li>
+<li>teknik efisien seperti PEFT/LoRA penting,</li>
+<li>dan evaluasi setelah training adalah keharusan.</li>
+</ul>
+<p>Dengan begitu, bab ini bukan hanya tutorial code. Dia menanamkan workflow eksperimen: data prep, tokenization/template, config, trainer, evaluasi.</p>
+<p>Kalimat yang paling kena buat gue di chapter ini adalah:</p>
+<blockquote>
+<p>“Now it’s time for your first hands-on fine-tuning experience.”</p>
+</blockquote>
+<p>It menandai transisi dari konsep ke eksekusi. Dan itu tepat: Chapter 11 adalah saat kita akhirnya benar-benar menjalankan apa yang sudah dibangun di Chapter 9 dan 10.</p>
+<h3 id="9-hubungan-chapter-11-dengan-9-dan-10">9) Hubungan Chapter 11 dengan 9 dan 10<a aria-hidden="true" class="anchor-heading icon-link" href="#9-hubungan-chapter-11-dengan-9-dan-10"></a></h3>
+<p>Chapter 9 memutuskan apakah fine-tuning perlu.
+Chapter 10 menyiapkan dataset.
+Chapter 11 menjalankan proses itu.</p>
+<p>Tanpa Chapter 11, fine-tuning tetap terasa abstrak. Dengan Chapter 11, fine-tuning menjadi workflow yang bisa diukur dan dievaluasi.</p>
+<p><strong>Chapter 11 membuktikan bahwa model kecil, yang dilatih dengan data yang tepat dan teknik efisien, bisa berubah dari “lumayan” menjadi sangat berguna untuk task nyata.</strong></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">book-summary (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>

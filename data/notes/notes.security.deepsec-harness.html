@@ -1,0 +1,151 @@
+<h1 id="deepsec-security-harness-untuk-codebase-besar">Deepsec: security harness untuk codebase besar<a aria-hidden="true" class="anchor-heading icon-link" href="#deepsec-security-harness-untuk-codebase-besar"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue sekarang nangkep Deepsec bukan sebagai scanner biasa. Menurut gue dia lebih kayak "security harness" yang ngatur agent, bukan cuma ngasih AI buat ngecek kode.</p>
+<h2 id="masalah-fundamental-yang-diselesaikan-deepsec">Masalah fundamental yang diselesaikan Deepsec<a aria-hidden="true" class="anchor-heading icon-link" href="#masalah-fundamental-yang-diselesaikan-deepsec"></a></h2>
+<ul>
+<li>repo modern terlalu besar buat direview manual.</li>
+<li>bug keamanan sering muncul dari relasi antar file, bukan pattern tunggal.</li>
+<li>scanner tradisional jago rule, tapi lemah kalau konteksnya kompleks.</li>
+<li>problem nyata biasanya ada di flow: auth, permission, webhook, server action, dan boundary data.</li>
+<li>Deepsec berusaha menemukan area sensitif dulu, kemudian ngerjain investigasi yang lebih dalam.</li>
+</ul>
+<h2 id="apa-itu-security-harness">Apa itu "security harness"?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-security-harness"></a></h2>
+<ul>
+<li>buat gue, harness itu sistem yang ngatur proses, bukan cuma model.</li>
+<li>dia merangkum: menentukan scope, ngejalain agent, validasi, ngasih severity, dan nempelkan owner.</li>
+<li>ini bedanya Deepsec sama scanner yang output-nya cuma "ada issue" tanpa bukti.</li>
+<li>kalau cuma scanner, outputnya mentah. kalau harness, outputnya mesti bisa ditindaklanjuti.</li>
+</ul>
+<h2 id="workflow-deepsec">Workflow Deepsec<a aria-hidden="true" class="anchor-heading icon-link" href="#workflow-deepsec"></a></h2>
+<h3 id="1-scan">1. Scan<a aria-hidden="true" class="anchor-heading icon-link" href="#1-scan"></a></h3>
+<ul>
+<li>Deepsec mulai dari regex-only scan ke seluruh file.</li>
+<li>menurut gue ini langkah bagus: LLM mahal, jadi pakai dulu cara murah untuk cari hotspot.</li>
+<li>ini mirip cara kerja security engineer: jangan baca semua file, cari yang berisiko dulu.</li>
+</ul>
+<h3 id="2-investigate">2. Investigate<a aria-hidden="true" class="anchor-heading icon-link" href="#2-investigate"></a></h3>
+<ul>
+<li>setelah kandidat ketemu, baru agent masuk.</li>
+<li>agent ini nggak cuma cari pattern. dia nonton flow, cek mitigasi, lihat reachable path, dan nilai impact.</li>
+<li>intinya: bukan sekadar "ada input user". yang penting adalah "apakah kontrolnya cukup?"</li>
+</ul>
+<h3 id="3-revalidate">3. Revalidate<a aria-hidden="true" class="anchor-heading icon-link" href="#3-revalidate"></a></h3>
+<ul>
+<li>ini yang penting buat gue.</li>
+<li>Deepsec nggak berhenti di satu pass. ada run kedua buat ngecek hasil pertama.</li>
+<li>revalidate berfungsi buat nurunin false positive dan ngoreksi severity.</li>
+<li>kalau agent cuma sekali, hasilnya sering overclaim.</li>
+</ul>
+<h3 id="4-enrich">4. Enrich<a aria-hidden="true" class="anchor-heading icon-link" href="#4-enrich"></a></h3>
+<ul>
+<li>Deepsec nggak cuma kasih issue, tapi coba nempelkan metadata dan owner.</li>
+<li>ini penting karena kalau issue nggak punya pemilik, dia bakal mati di dashboard.</li>
+<li>temuan security harus bisa ditangani engineering, bukan cuma dicatat.</li>
+</ul>
+<h3 id="5-export">5. Export<a aria-hidden="true" class="anchor-heading icon-link" href="#5-export"></a></h3>
+<ul>
+<li>hasilnya bisa diekspor jadi instruksi, ticket, atau prompt agent lain.</li>
+<li>menurut gue ini poin kritis: output harus bisa langsung dipakai, bukan cuma "ada masalah".</li>
+</ul>
+<h2 id="use-case-realistis">Use case realistis<a aria-hidden="true" class="anchor-heading icon-link" href="#use-case-realistis"></a></h2>
+<h3 id="audit-repo-besar-sebelum-release">Audit repo besar sebelum release<a aria-hidden="true" class="anchor-heading icon-link" href="#audit-repo-besar-sebelum-release"></a></h3>
+<ul>
+<li>Deepsec paling masuk akal buat app yang kompleks: multi-tenant, admin API, billing, webhook.</li>
+<li>nggak semua commit perlu diskip. lebih cocok sebelum major release atau audit domain berisiko.</li>
+</ul>
+<h3 id="scheduled-audit-area-berisiko">Scheduled audit area berisiko<a aria-hidden="true" class="anchor-heading icon-link" href="#scheduled-audit-area-berisiko"></a></h3>
+<ul>
+<li>menurut gue, lebih sehat jalankan berkala di repo penting.</li>
+<li>hasilnya masuk backlog security, lalu ditriage sebelum sprint.</li>
+</ul>
+<h3 id="fokus-area-sensitif">Fokus area sensitif<a aria-hidden="true" class="anchor-heading icon-link" href="#fokus-area-sensitif"></a></h3>
+<ul>
+<li>yang worth: auth/session, RBAC/ABAC, tenant isolation, payment, webhook, upload, fetch, secret management.</li>
+<li>ini bikin Deepsec nggak jadi "satpam semua file".</li>
+</ul>
+<h3 id="custom-matcher">Custom matcher<a aria-hidden="true" class="anchor-heading icon-link" href="#custom-matcher"></a></h3>
+<ul>
+<li>temuan awal nggak cukup. yang paling berguna adalah jika temuan itu jadi matcher baru.</li>
+<li>contoh: kalau satu endpoint admin ilang permission check, bikin matcher buat cari pola serupa.</li>
+</ul>
+<h3 id="maintainer-oss">Maintainer OSS<a aria-hidden="true" class="anchor-heading icon-link" href="#maintainer-oss"></a></h3>
+<ul>
+<li>Deepsec juga bisa bantu OSS maintainer yang butuh laporan actionable.</li>
+<li>tapi disclosure harus hati-hati.</li>
+</ul>
+<h2 id="batasan-dan-risiko">Batasan dan risiko<a aria-hidden="true" class="anchor-heading icon-link" href="#batasan-dan-risiko"></a></h2>
+<ul>
+<li>false positive masih ada.</li>
+<li>Deepsec bukan oracle. output tetap perlu triage manusia.</li>
+<li>kualitas sangat bergantung model, prompt, dan budget.</li>
+<li>biaya bisa besar kalau scan full repo tanpa prioritas.</li>
+<li>kalau codebase dieksekusi lewat cloud, kontrol source code masih penting.</li>
+<li>finding yang nggak actionable malah jadi beban.</li>
+</ul>
+<h2 id="implementasi-sehat-buat-dunia-nyata">Implementasi sehat buat dunia nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#implementasi-sehat-buat-dunia-nyata"></a></h2>
+<ul>
+<li>jangan langsung scan semua repo.</li>
+<li>mulai dari satu repo penting dan satu domain risiko.</li>
+<li>bikin rubric triage: validitas, reachable, impact, auth/public, confidence.</li>
+<li>ekspor langsung ke ticket dengan owner dan bukti.</li>
+<li>buat custom matcher dari temuan valid.</li>
+<li>scan manual dulu sebelum release besar, baru scale.</li>
+<li>CI gate cuma di area tertentu jika SNR-nya sudah bagus.</li>
+</ul>
+<h2 id="korelasi-konsep-lain">Korelasi konsep lain<a aria-hidden="true" class="anchor-heading icon-link" href="#korelasi-konsep-lain"></a></h2>
+<ul>
+<li>SAST: Deepsec pakai rule awal, tapi nambah reasoning kontekstual.</li>
+<li>fuzzing: keduanya eksploratif. fuzzing punya oracle crash; Deepsec butuh verifikasi semantik.</li>
+<li>pentest: Deepsec agak mirip pola pikir pentester, tapi manusia masih lebih kuat di konteks bisnis dan exploit kompleks.</li>
+<li>Secure SDLC: Deepsec bisa jadi lapisan baru di antara SAST dan pentest manusia.</li>
+</ul>
+<h2 id="insight-penting">Insight penting<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-penting"></a></h2>
+<ul>
+<li>Deepsec bukan cuma agent. dia sistem kerja.</li>
+<li>tanpa scan awal, agent keborosan.</li>
+<li>tanpa investigation, scan cuma pattern matcher.</li>
+<li>tanpa revalidate, output rentan noisy.</li>
+<li>tanpa enrich, temuan bisa hilang.</li>
+<li>tanpa export, hasil nggak masuk workflow.</li>
+<li>yang penting bukan "pakai model apa", tapi "bagaimana temuan diverifikasi dan dikonversi jadi patch".</li>
+</ul>
+<h2 id="referensi-terkait">Referensi terkait<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-terkait"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179908">AI security review perlu harness dan triage, bukan hanya agent</a></li>
+</ul>
+<h2 id="related-zettels">Related Zettels<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettels"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179969">Security harness lebih penting daripada single AI agent</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179970">Revalidation dan ownership adalah kunci agar output agent tidak menjadi noise</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179973">Parallel agents hanya berguna jika hasilnya didedup dan dikonsolidasikan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179975">Rule-based checks tetap penting di era AI-native security</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179977">Custom matcher mengubah temuan menjadi aturan yang bisa dipakai ulang</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179979">Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179981">Finding keamanan butuh bukti yang actionable kapan pun bisa</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179982">Ownership adalah bagian dari penyelesaian security finding</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">deepsec (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179967">Agentic coding tools adalah process dengan permission, bukan autocomplete</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179969">Security harness lebih penting daripada single AI agent</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179971">Deterministic local scanners melengkapi AI scanners dalam keamanan developer workflow</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179973">Parallel agents hanya berguna jika hasilnya didedup dan dikonsolidasikan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179977">Custom matcher mengubah temuan menjadi aturan yang bisa dipakai ulang</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179981">Finding keamanan butuh bukti yang actionable kapan pun bisa</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179982">Ownership adalah bagian dari penyelesaian security finding</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-challenges">Deepsec challenge: orchestration, false positives, cost, dan workflow</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust-evaluation">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+</ul>

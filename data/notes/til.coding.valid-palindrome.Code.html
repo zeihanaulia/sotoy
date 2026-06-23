@@ -1,0 +1,50 @@
+<h1 id="code">Code<a aria-hidden="true" class="anchor-heading icon-link" href="#code"></a></h1>
+<h2 id="brute-force">Brute Force<a aria-hidden="true" class="anchor-heading icon-link" href="#brute-force"></a></h2>
+<pre class="language-go"><code class="language-go">
+<span class="token keyword">func</span> <span class="token function">isPalindrome</span><span class="token punctuation">(</span>s <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	forward <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">ToLower</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">ReplaceAll</span><span class="token punctuation">(</span><span class="token function">cleanString</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">" "</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">var</span> backward <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span>
+	<span class="token keyword">for</span> right <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>forward<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> right <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> right<span class="token operator">--</span> <span class="token punctuation">{</span>
+		backward <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>backward<span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">"%c"</span><span class="token punctuation">,</span> forward<span class="token punctuation">[</span>right<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	backwardString <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">Join</span><span class="token punctuation">(</span>backward<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> backwardString <span class="token operator">==</span> forward <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">true</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> nonAlphanumericRegex <span class="token operator">=</span> regexp<span class="token punctuation">.</span><span class="token function">MustCompile</span><span class="token punctuation">(</span><span class="token string">`[^a-zA-Z0-9 ]+`</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">cleanString</span><span class="token punctuation">(</span>str <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> nonAlphanumericRegex<span class="token punctuation">.</span><span class="token function">ReplaceAllString</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="two-pointer">Two Pointer<a aria-hidden="true" class="anchor-heading icon-link" href="#two-pointer"></a></h2>
+<pre class="language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">isPalindrome</span><span class="token punctuation">(</span>s <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	left <span class="token operator">:=</span> <span class="token number">0</span>
+	right <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span>
+
+	<span class="token keyword">for</span> left <span class="token operator">&#x3C;</span> right <span class="token punctuation">{</span>
+		<span class="token keyword">for</span> left <span class="token operator">&#x3C;</span> right <span class="token operator">&#x26;&#x26;</span> <span class="token operator">!</span><span class="token function">isAlphanumeric</span><span class="token punctuation">(</span><span class="token function">rune</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>left<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			left<span class="token operator">++</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">for</span> left <span class="token operator">&#x3C;</span> right <span class="token operator">&#x26;&#x26;</span> <span class="token operator">!</span><span class="token function">isAlphanumeric</span><span class="token punctuation">(</span><span class="token function">rune</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>right<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			right<span class="token operator">--</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">if</span> unicode<span class="token punctuation">.</span><span class="token function">ToLower</span><span class="token punctuation">(</span><span class="token function">rune</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>left<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> unicode<span class="token punctuation">.</span><span class="token function">ToLower</span><span class="token punctuation">(</span><span class="token function">rune</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>right<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token boolean">false</span>
+		<span class="token punctuation">}</span>
+
+		right<span class="token operator">--</span>
+		left<span class="token operator">++</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">isAlphanumeric</span><span class="token punctuation">(</span>c <span class="token builtin">rune</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token char">'a'</span> <span class="token operator">&#x3C;=</span> c <span class="token operator">&#x26;&#x26;</span> c <span class="token operator">&#x3C;=</span> <span class="token char">'z'</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">(</span><span class="token char">'A'</span> <span class="token operator">&#x3C;=</span> c <span class="token operator">&#x26;&#x26;</span> c <span class="token operator">&#x3C;=</span> <span class="token char">'Z'</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">(</span><span class="token char">'0'</span> <span class="token operator">&#x3C;=</span> c <span class="token operator">&#x26;&#x26;</span> c <span class="token operator">&#x3C;=</span> <span class="token char">'9'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>

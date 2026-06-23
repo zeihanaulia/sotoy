@@ -1,0 +1,129 @@
+<h1 id="hardening-x402-pii-safe-agentic-payments">Hardening x402: PII-Safe Agentic Payments<a aria-hidden="true" class="anchor-heading icon-link" href="#hardening-x402-pii-safe-agentic-payments"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>Hardening x402 menyoroti masalah sangat spesifik: AI agent yang melakukan pembayaran otomatis lewat protokol x402 tidak hanya mengirim uang, tapi juga metadata pembayaran. Dalam field <code>resource_url</code>, <code>description</code>, dan <code>reason</code>, server bisa menyelipkan PII seperti email, nama, SSN, IBAN, nomor kartu, atau nomor telepon.</p>
+<p>Masalahnya bukan settlement on-chain. Metadata ini bisa bocor ke payment server dan facilitator API sebelum transaksi benar-benar diselesaikan. Dalam skenario agentic, bocoran ini terjadi otomatis karena agent mengikuti alur x402 tanpa review manusia.</p>
+<p>Inti problem paper:</p>
+<ul>
+<li>x402 adalah HTTP-native micropayment;</li>
+<li><code>402 Payment Required</code> memaksa agent membuat token pembayaran;</li>
+<li>token itu membawa metadata yang sering kali ditulis sendiri oleh server;</li>
+<li>metadata itu bisa mengandung data pribadi yang sebenarnya tidak perlu untuk settlement;</li>
+<li>kalau metadata dikirim apa adanya, PII terkirim sebelum pembayaran diselesaikan.</li>
+</ul>
+<h2 id="scope">Scope<a aria-hidden="true" class="anchor-heading icon-link" href="#scope"></a></h2>
+<p>Paper ini bukan tentang kriptografi x402 ataupun blockchain settlement. Ini tentang <strong>security middleware dan compliance engineering</strong> untuk agentic payment.</p>
+<p>Ini artinya fokusnya pada lapisan sebelum token ditandatangani dan dikirim, bukan pada algoritma konsensus atau wallet key management.</p>
+<h2 id="threat-model">Threat model<a aria-hidden="true" class="anchor-heading icon-link" href="#threat-model"></a></h2>
+<p>Paper mendefinisikan beberapa ancaman utama:</p>
+<ol>
+<li><strong>PII exfiltration via payment metadata</strong>: server bisa memaksa agent mengirim data pribadi di <code>resource_url</code>, <code>description</code>, atau <code>reason</code>.</li>
+<li><strong>Wallet drain</strong>: server bisa menetapkan harga tinggi atau loop pembayaran berulang.</li>
+<li><strong>Replay token</strong>: token x402 bisa menjadi bearer credential jika bocor.</li>
+</ol>
+<p>Paper secara eksplisit mengesampingkan threat yang lebih luas seperti bug konsensus on-chain, private key compromise, dan insider facilitator. Fokusnya adalah proteksi pre-execution di sisi agent.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>Paper mengusulkan <code>HardenedX402Client</code>, wrapper middleware untuk x402 client standar.</p>
+<p>Pipeline-nya:</p>
+<ul>
+<li><strong>PII filter</strong>: scan <code>resource_url</code>, <code>description</code>, dan <code>reason</code> dengan regex/NLP;</li>
+<li><strong>Policy engine</strong>: cek batas pengeluaran per-call, per-day, per-endpoint;</li>
+<li><strong>Replay guard</strong>: fingerprint token dengan HMAC-SHA256 dan dedup store;</li>
+<li><strong>Audit log</strong>: catat semua keputusan dengan JSON-L, HMAC chain, dan evidence.</li>
+</ul>
+<p>Prinsip desainnya:</p>
+<ul>
+<li>fail-safe over fail-open;</li>
+<li>zero-trust metadata;</li>
+<li>observable by default.</li>
+</ul>
+<h2 id="implementation-details">Implementation details<a aria-hidden="true" class="anchor-heading icon-link" href="#implementation-details"></a></h2>
+<p>Middleware ini berdiri di depan x402 client:</p>
+<ul>
+<li>jika PII ditemukan, request bisa diredaksi atau ditolak;</li>
+<li>jika policy dilanggar, request ditolak;</li>
+<li>jika fingerprint sudah pernah muncul, request dianggap replay;</li>
+<li>jika semua lolos, token dilanjutkan ke payment server.</li>
+</ul>
+<p>Paper menyediakan implementasi drop-in untuk x402 client, plus versi Redis-backed replay guard untuk deployment terdistribusi.</p>
+<h2 id="empirical-evaluation">Empirical evaluation<a aria-hidden="true" class="anchor-heading icon-link" href="#empirical-evaluation"></a></h2>
+<p>Paper membuat synthetic corpus 2.000 x402 metadata triple dari tujuh use case:</p>
+<ul>
+<li>AI inference</li>
+<li>data access</li>
+<li>medical</li>
+<li>compute</li>
+<li>media</li>
+<li>financial</li>
+<li>generic</li>
+</ul>
+<p>Dari 2.000 sample, 722 mengandung PII dan total 875 label entity.
+Entity yang diuji: <code>EMAIL_ADDRESS</code>, <code>PERSON</code>, <code>PHONE_NUMBER</code>, <code>US_SSN</code>, <code>CREDIT_CARD</code>, <code>IBAN_CODE</code>.</p>
+<p>Distribusi label:</p>
+<ul>
+<li>PERSON 36.7%</li>
+<li>EMAIL 35.8%</li>
+<li>IBAN 11.0%</li>
+<li>SSN 9.7%</li>
+<li>PHONE 3.7%</li>
+<li>CREDIT_CARD 3.2%</li>
+</ul>
+<p>Konfigurasi yang diuji: 42 total.</p>
+<ul>
+<li>regex-only: 7 konfigurasi</li>
+<li>NLP with threshold 0.3–0.7: 35 konfigurasi</li>
+</ul>
+<p>Rekomendasi paper:</p>
+<ul>
+<li><code>mode=nlp</code></li>
+<li><code>min_score=0.4</code></li>
+<li><code>all entities</code></li>
+</ul>
+<p>Hasil rekomendasi:</p>
+<ul>
+<li>precision 0.972</li>
+<li>recall 0.827</li>
+<li>micro-F1 0.894</li>
+<li>p99 latency 5.73 ms</li>
+</ul>
+<h2 id="key-insight">Key insight<a aria-hidden="true" class="anchor-heading icon-link" href="#key-insight"></a></h2>
+<p>Bagian terkuat paper ini adalah temuan bahwa regex cukup untuk entity terstruktur seperti email, IBAN, SSN, credit card.
+Tapi untuk <code>PERSON</code> di metadata URL atau slug, regex gagal total (F1 = 0). NLP membantu, tetapi recall PERSON hanya sekitar 0.55 karena nama sering muncul sebagai path/slug tanpa konteks bahasa natural.</p>
+<p>Itu membuat argumen paper menarik: <strong>metadata x402 bukan teks biasa, dan PII detection di situ membutuhkan pendekatan khusus.</strong></p>
+<h2 id="practical-lessons">Practical lessons<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-lessons"></a></h2>
+<ul>
+<li>jangan anggap bidang <code>reason</code> di payment token tidak berbahaya;</li>
+<li>agent-payment middleware wajib menyaring metadata sebelum eksekusi;</li>
+<li>PII detector harus diuji pada URL-structured metadata, bukan hanya natural text;</li>
+<li>false positive lebih aman daripada false negative untuk PII filter;</li>
+<li>latency NLP 5-6 ms masih feasible untuk pre-execution guard.</li>
+</ul>
+<h2 id="kritik--catatan">Kritik / catatan<a aria-hidden="true" class="anchor-heading icon-link" href="#kritik--catatan"></a></h2>
+<ul>
+<li>dataset sintetis, belum diuji traffic nyata;</li>
+<li>English-only dan slug-heavy format mungkin tidak mewakili global use case;</li>
+<li>belum ada evaluasi adversarial obfuscation;</li>
+<li>redaction bisa memutus business logic resource lookup jika terlalu agresif;</li>
+<li>replay guard in-memory perlu Redis untuk distribusi.</li>
+</ul>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>Hardening x402 mengingatkan bahwa agentic payment security adalah tentang <strong>control surface</strong>, bukan hanya model atau chain.</p>
+<p>Analoginya cocok untuk agent platform lain: sebelum agent eksekusi cara berbahaya, perlu middleware pre-execution yang memfilter metadata, enforce policy, dan audit keputusan.</p>
+<p>Insight ini juga menyambung ke zettel: <a href="/sotoy/notes/zettel.1777881761976">Pre-execution metadata filtering is essential for agentic x402 payments</a>.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2604.11430">https://arxiv.org/abs/2604.11430</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">payment (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777881761976">Pre-execution metadata filtering is essential for agentic x402 payments</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-boundary-pii-filtering">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent</a></li>
+</ul>

@@ -1,0 +1,579 @@
+<h1 id="sotoy-dependabot--npm-audit-analysis">Sotoy Dependabot &#x26; npm audit analysis<a aria-hidden="true" class="anchor-heading icon-link" href="#sotoy-dependabot--npm-audit-analysis"></a></h1>
+<h2 id="ringkasan">Ringkasan<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasan"></a></h2>
+<p>Analisis menunjukkan bahwa proyek <code>sotoy</code> sendiri memiliki dependensi langsung minimal, tetapi hasil <code>npm audit</code> mengungkap banyak alert dari tree dependency transitive.</p>
+<ul>
+<li><code>sotoy/package.json</code> hanya memiliki dependency langsung:
+<ul>
+<li><code>@dendronhq/dendron-cli@^0.122.0</code></li>
+</ul>
+</li>
+<li><code>npm audit</code> di root <code>sotoy</code> menghasilkan:
+<ul>
+<li>60 advisory</li>
+<li>120 total vulnerabilities</li>
+<li>4 <code>critical</code>, 29 <code>high</code>, 17 <code>moderate</code>, 10 <code>low</code></li>
+</ul>
+</li>
+</ul>
+<p>Proyek <code>research/dendron/packages/nextjs-template</code> juga menggunakan dependensi lama yang berpotensi memicu alert saat audit.</p>
+<hr>
+<h2 id="temuan-utama-pada-sotoy">Temuan utama pada <code>sotoy</code><a aria-hidden="true" class="anchor-heading icon-link" href="#temuan-utama-pada-sotoy"></a></h2>
+<h3 id="sumber-alert-terbesar">Sumber alert terbesar<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber-alert-terbesar"></a></h3>
+<p>Banyak issue berasal dari dependency transitive yang dibawa oleh <code>@dendronhq/dendron-cli</code>.</p>
+<h3 id="paket-bermasalah-yang-muncul-di-audit">Paket bermasalah yang muncul di audit<a aria-hidden="true" class="anchor-heading icon-link" href="#paket-bermasalah-yang-muncul-di-audit"></a></h3>
+<ul>
+<li><code>axios</code></li>
+<li><code>form-data</code></li>
+<li><code>handlebars</code></li>
+<li><code>simple-git</code></li>
+<li><code>@dendronhq/api-server</code></li>
+<li><code>@dendronhq/common-all</code></li>
+<li><code>@dendronhq/common-server</code></li>
+<li><code>@dendronhq/dendron-cli</code></li>
+<li><code>@dendronhq/dendron-viz</code></li>
+<li><code>@dendronhq/engine-server</code></li>
+<li><code>@dendronhq/pods-core</code></li>
+<li><code>@dendronhq/unified</code></li>
+<li><code>analytics-node</code></li>
+<li><code>cacache</code></li>
+<li><code>clipboardy</code></li>
+<li><code>cross-spawn</code></li>
+<li><code>execa</code></li>
+<li><code>express</code></li>
+<li><code>jws</code></li>
+<li><code>lodash</code></li>
+<li><code>make-fetch-happen</code></li>
+<li><code>minimatch</code></li>
+<li><code>node-forge</code></li>
+<li><code>node-gyp</code></li>
+<li><code>path-to-regexp</code></li>
+<li><code>picomatch</code></li>
+<li><code>remark</code></li>
+<li><code>remark-parse</code></li>
+<li><code>sqlite3</code></li>
+<li><code>tar</code></li>
+<li><code>tar-fs</code></li>
+<li><code>title</code></li>
+<li><code>trim</code></li>
+</ul>
+<h3 id="paket-moderate">Paket <code>moderate</code><a aria-hidden="true" class="anchor-heading icon-link" href="#paket-moderate"></a></h3>
+<ul>
+<li><code>@babel/runtime</code></li>
+<li><code>@mapbox/rehype-prism</code></li>
+<li><code>@octokit/graphql</code></li>
+<li><code>@octokit/request</code></li>
+<li><code>@octokit/request-error</code></li>
+<li><code>ajv</code></li>
+<li><code>brace-expansion</code></li>
+<li><code>follow-redirects</code></li>
+<li><code>js-yaml</code></li>
+<li><code>katex</code></li>
+<li><code>nanoid</code></li>
+<li><code>prismjs</code></li>
+<li><code>qs</code></li>
+<li><code>refractor</code></li>
+<li><code>rehype-katex</code></li>
+<li><code>yaml</code></li>
+<li><code>zod</code></li>
+</ul>
+<h3 id="paket-low">Paket <code>low</code><a aria-hidden="true" class="anchor-heading icon-link" href="#paket-low"></a></h3>
+<ul>
+<li><code>@sentry/node</code></li>
+<li><code>@tootallnate/once</code></li>
+<li><code>body-parser</code></li>
+<li><code>cookie</code></li>
+<li><code>diff</code></li>
+<li><code>diff2html</code></li>
+<li><code>http-proxy-agent</code></li>
+<li><code>morgan</code></li>
+<li><code>on-headers</code></li>
+<li><code>tmp</code></li>
+</ul>
+<hr>
+<h2 id="sumber-potensi-masalah-di-nextjs-template">Sumber potensi masalah di <code>nextjs-template</code><a aria-hidden="true" class="anchor-heading icon-link" href="#sumber-potensi-masalah-di-nextjs-template"></a></h2>
+<p><code>research/dendron/packages/nextjs-template</code> ditemukan menggunakan versi lama untuk beberapa paket front-end dan build:</p>
+<ul>
+<li><code>next@12.3.0</code></li>
+<li><code>react@17.0.2</code></li>
+<li><code>eslint@7.32.0</code></li>
+<li><code>typescript@4.5.4</code></li>
+<li><code>sass@1.49.0</code></li>
+<li><code>axios@0.21.4</code></li>
+<li><code>minimatch@5.1.0</code></li>
+</ul>
+<p>Paket di atas dapat menghasilkan alert tambahan pada dependensi template dan berkontribusi ke jumlah issue yang dilaporkan oleh Dependabot.</p>
+<hr>
+<h2 id="catatan-teknis">Catatan teknis<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-teknis"></a></h2>
+<ul>
+<li><code>npm --version</code> di environment ini adalah <code>11.6.2</code>.</li>
+<li><code>npm audit</code> di <code>sotoy</code> harus dijalankan di root repository karena <code>sotoy/package-lock.json</code> tersedia di sana.</li>
+<li><code>nextjs-template</code> tidak di-audit langsung karena environment saat ini tidak memiliki <code>node_modules</code> di dalam <code>research/dendron/packages/nextjs-template</code>.</li>
+</ul>
+<hr>
+<h2 id="rekomendasi-awal">Rekomendasi awal<a aria-hidden="true" class="anchor-heading icon-link" href="#rekomendasi-awal"></a></h2>
+<ol>
+<li>Evaluasi upgrade <code>@dendronhq/dendron-cli</code> ke versi terbaru yang kompatibel.</li>
+<li>Jika memungkinkan, perbarui <code>nextjs-template</code> ke versi Next.js / React / TypeScript yang lebih baru.</li>
+<li>Periksa apakah patch di Dependabot dapat diterapkan melalui override/resolution di <code>package-lock.json</code> atau dengan update package upstream.</li>
+<li>Tulis ulang audit dan dokumentasi per-tahap setelah dependensi utama diupgrade.</li>
+</ol>
+<hr>
+<h2 id="prioritas-perbaikan-per-2026-04-16">Prioritas Perbaikan (per 2026-04-16)<a aria-hidden="true" class="anchor-heading icon-link" href="#prioritas-perbaikan-per-2026-04-16"></a></h2>
+<blockquote>
+<p>Total: <strong>74 Open</strong> alert — 5 Critical, 4+ High (dari screenshot GitHub Dependabot)</p>
+<p>Semua alert berasal dari transitive dependency <code>@dendronhq/dendron-cli@^0.122.0</code>.
+Strategi utama: gunakan <code>npm overrides</code> di <code>package.json</code> untuk memaksa versi aman pada sub-dependency.</p>
+</blockquote>
+<h3 id="tier-1--critical-perbaiki-duluan">Tier 1 — CRITICAL (perbaiki duluan)<a aria-hidden="true" class="anchor-heading icon-link" href="#tier-1--critical-perbaiki-duluan"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>Package</th><th>Isu</th><th>Dependabot #</th><th>Aksi</th></tr></thead><tbody><tr><td>1</td><td><code>handlebars</code></td><td>JavaScript injection via AST Type Confusion</td><td>#102</td><td>Override ke <code>>=4.7.8</code></td></tr><tr><td>2</td><td><code>simple-git</code></td><td><code>blockUnsafeOperationsPlugin</code> bypass via case-insensitive <code>protocol.allow</code> → RCE</td><td>#100</td><td>Override ke <code>>=3.16.0</code></td></tr><tr><td>3</td><td><code>axios</code></td><td>Unrestricted Cloud Metadata Exfiltration via Header Injection Chain</td><td>#105</td><td>Override ke <code>>=1.7.4</code></td></tr><tr><td>4</td><td><code>axios</code></td><td>NO_PROXY Hostname Normalization Bypass → SSRF</td><td>#104</td><td>Override ke <code>>=1.7.4</code> (sama)</td></tr><tr><td>5</td><td><code>form-data</code></td><td>Unsafe random function untuk boundary → predictable multipart</td><td>#61</td><td>Override ke <code>>=4.0.1</code></td></tr></tbody></table></div>
+<h3 id="tier-2--high-perbaiki-setelah-critical-selesai">Tier 2 — HIGH (perbaiki setelah Critical selesai)<a aria-hidden="true" class="anchor-heading icon-link" href="#tier-2--high-perbaiki-setelah-critical-selesai"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>Package</th><th>Isu</th><th>Dependabot #</th><th>Aksi</th></tr></thead><tbody><tr><td>6</td><td><code>tar-fs</code></td><td>Extract outside specified dir via crafted tarball (path traversal)</td><td>#47, #58</td><td>Override ke <code>>=3.0.6</code></td></tr><tr><td>7</td><td><code>node-forge</code></td><td>ASN.1 Unbounded Recursion (DoS)</td><td>#72</td><td>Override ke <code>>=1.3.1</code></td></tr><tr><td>8</td><td><code>trim</code></td><td>Regular Expression Denial of Service (ReDoS)</td><td>#2</td><td>Override atau replace usage</td></tr></tbody></table></div>
+<h3 id="rencana-implementasi">Rencana Implementasi<a aria-hidden="true" class="anchor-heading icon-link" href="#rencana-implementasi"></a></h3>
+<p><strong>Langkah 1 — Tambahkan <code>overrides</code> di <code>package.json</code></strong></p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"overrides"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"handlebars"</span><span class="token operator">:</span> <span class="token string">">=4.7.8"</span><span class="token punctuation">,</span>
+    <span class="token property">"simple-git"</span><span class="token operator">:</span> <span class="token string">">=3.16.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"axios"</span><span class="token operator">:</span> <span class="token string">">=1.7.4"</span><span class="token punctuation">,</span>
+    <span class="token property">"form-data"</span><span class="token operator">:</span> <span class="token string">">=4.0.1"</span><span class="token punctuation">,</span>
+    <span class="token property">"tar-fs"</span><span class="token operator">:</span> <span class="token string">">=3.0.6"</span><span class="token punctuation">,</span>
+    <span class="token property">"node-forge"</span><span class="token operator">:</span> <span class="token string">">=1.3.1"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>Langkah 2 — Jalankan ulang install dan audit</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span>
+<span class="token function">npm</span> audit
+</code></pre>
+<p><strong>Langkah 3 — Verifikasi</strong></p>
+<p>Pastikan jumlah critical dan high berkurang setelah override diterapkan.
+Jika masih ada, periksa apakah versi yang di-override kompatibel dengan <code>@dendronhq/dendron-cli</code>.</p>
+<p><strong>Langkah 4 — Evaluasi upgrade <code>@dendronhq/dendron-cli</code></strong></p>
+<p>Cek apakah ada versi terbaru yang sudah memperbarui sub-dependency:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> outdated @dendronhq/dendron-cli
+<span class="token function">npm</span> view @dendronhq/dendron-cli versions --json <span class="token operator">|</span> <span class="token function">tail</span> -20
+</code></pre>
+<p><strong>Langkah 5 — Update <code>nextjs-template</code> (opsional, lower priority)</strong></p>
+<p>Upgrade paket di <code>research/dendron/packages/nextjs-template</code> jika digunakan aktif.</p>
+<h3 id="status-diupdate-2026-04-16">Status (diupdate 2026-04-16)<a aria-hidden="true" class="anchor-heading icon-link" href="#status-diupdate-2026-04-16"></a></h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" checked disabled> Tier 1 — Critical: override <code>handlebars@>=4.7.9</code>, <code>simple-git@>=3.32.3</code>, <code>axios@>=1.7.4</code>, <code>form-data@>=4.0.4</code></li>
+<li class="task-list-item"><input type="checkbox" checked disabled> Tier 2 — High: override <code>tar-fs@>=3.0.6</code>, <code>node-forge@>=1.3.1</code></li>
+<li class="task-list-item"><input type="checkbox" checked disabled> Verifikasi <code>npm audit</code> pasca override → <strong>0 critical</strong> (turun dari 5), total 53 (dari 74)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Remaining high (27) — lihat seksi "Sisa High Vulnerabilities" di bawah</li>
+<li class="task-list-item"><input type="checkbox" disabled> Evaluasi migrasi dari <code>@dendronhq/dendron-cli</code> (abandoned sejak Maret 2024)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Dismiss alert Dependabot di GitHub untuk package yang sudah di-cover override</li>
+</ul>
+<hr>
+<h2 id="sisa-high-vulnerabilities-27--analisis--opsi">Sisa High Vulnerabilities (27) — Analisis &#x26; Opsi<a aria-hidden="true" class="anchor-heading icon-link" href="#sisa-high-vulnerabilities-27--analisis--opsi"></a></h2>
+<blockquote>
+<p>Setelah override pertama, tersisa 27 high dari dua kelompok berbeda.</p>
+</blockquote>
+<h3 id="kelompok-a--bisa-di-override-package-eksternal">Kelompok A — Bisa di-override (package eksternal)<a aria-hidden="true" class="anchor-heading icon-link" href="#kelompok-a--bisa-di-override-package-eksternal"></a></h3>
+<p>Package-package ini punya versi aman yang tersedia di npm dan dapat di-override dari <code>package.json</code>:</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Package</th><th>Vulnerable Range</th><th>Fix Version</th><th>Issue</th></tr></thead><tbody><tr><td><code>cross-spawn</code></td><td><code>&#x3C;6.0.6</code></td><td><code>>=6.0.6</code></td><td>ReDoS</td></tr><tr><td><code>node-forge</code></td><td><code>&#x3C;1.4.0</code></td><td><code>>=1.4.0</code></td><td>Ed25519 forgery, RSA-PKCS forgery, DoS (override kita masih <code>>=1.3.1</code>)</td></tr><tr><td><code>path-to-regexp</code></td><td><code>&#x3C;0.1.13</code></td><td><code>>=0.1.13</code></td><td>ReDoS via multiple params</td></tr><tr><td><code>picomatch</code></td><td><code>&#x3C;2.3.2</code></td><td><code>>=2.3.2</code></td><td>ReDoS via extglob + method injection</td></tr><tr><td><code>tar</code></td><td><code>&#x3C;=7.5.10</code></td><td><code>>=7.5.11</code></td><td>Multiple path traversal &#x26; symlink CVEs</td></tr><tr><td><code>jws</code></td><td><code>==4.0.0</code></td><td><code>>=4.0.1</code></td><td>HMAC signature verification bypass</td></tr><tr><td><code>lodash</code></td><td><code>&#x3C;=4.17.23</code></td><td><code>>=4.17.21</code> (partial)</td><td>Prototype pollution + code injection</td></tr><tr><td><code>trim</code></td><td><code>&#x3C;0.0.3</code></td><td><code>>=0.0.3</code></td><td>ReDoS</td></tr><tr><td><code>minimatch</code></td><td><code>&#x3C;3.1.4</code> atau <code>>=5.0.0 &#x3C;5.1.8</code></td><td><code>>=3.1.4</code> dan <code>>=5.1.8</code></td><td>ReDoS via wildcards &#x26; extglob</td></tr></tbody></table></div>
+<h3 id="kelompok-b--tidak-bisa-di-override-internal-dendronhq">Kelompok B — Tidak bisa di-override (internal <code>@dendronhq/*</code>)<a aria-hidden="true" class="anchor-heading icon-link" href="#kelompok-b--tidak-bisa-di-override-internal-dendronhq"></a></h3>
+<p>Package berikut adalah bagian dari <code>@dendronhq</code> monorepo itu sendiri. Mereka vulnerable karena membawa sub-dep bermasalah di dalam build mereka, tapi npm overrides tidak bisa menjangkau ke dalam package yang sudah di-publish ke npm registry.</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Package</th><th>Via</th></tr></thead><tbody><tr><td><code>@dendronhq/common-all</code></td><td><code>minimatch</code>, <code>title</code>, <code>zod</code></td></tr><tr><td><code>@dendronhq/common-server</code></td><td><code>@dendronhq/common-all</code>, <code>@sentry/node</code></td></tr><tr><td><code>@dendronhq/engine-server</code></td><td><code>remark</code>, <code>remark-parse</code>, <code>sqlite3</code>, <code>rehype-katex</code></td></tr><tr><td><code>@dendronhq/unified</code></td><td><code>rehype-katex</code>, <code>remark</code>, <code>remark-parse</code></td></tr><tr><td><code>@dendronhq/api-server</code></td><td>(via semua di atas)</td></tr><tr><td><code>@dendronhq/pods-core</code></td><td>(via semua di atas)</td></tr><tr><td><code>@dendronhq/dendron-cli</code></td><td>(root package)</td></tr></tbody></table></div>
+<hr>
+<h2 id="opsi-penanganan-sisa-high">Opsi Penanganan Sisa High<a aria-hidden="true" class="anchor-heading icon-link" href="#opsi-penanganan-sisa-high"></a></h2>
+<h3 id="opsi-1--tambah-override-kelompok-a-rekomendasi">Opsi 1 — Tambah Override Kelompok A (Rekomendasi)<a aria-hidden="true" class="anchor-heading icon-link" href="#opsi-1--tambah-override-kelompok-a-rekomendasi"></a></h3>
+<p>Paling pragmatis. Tambahkan override untuk semua Kelompok A. Ini akan mengurangi ~15-18 high dari total 27.</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"overrides"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token property">"handlebars"</span><span class="token operator">:</span> <span class="token string">">=4.7.9"</span><span class="token punctuation">,</span>
+  <span class="token property">"simple-git"</span><span class="token operator">:</span> <span class="token string">">=3.32.3"</span><span class="token punctuation">,</span>
+  <span class="token property">"axios"</span><span class="token operator">:</span> <span class="token string">">=1.7.4"</span><span class="token punctuation">,</span>
+  <span class="token property">"form-data"</span><span class="token operator">:</span> <span class="token string">">=4.0.4"</span><span class="token punctuation">,</span>
+  <span class="token property">"tar-fs"</span><span class="token operator">:</span> <span class="token string">">=3.0.6"</span><span class="token punctuation">,</span>
+  <span class="token property">"node-forge"</span><span class="token operator">:</span> <span class="token string">">=1.4.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"cross-spawn"</span><span class="token operator">:</span> <span class="token string">">=6.0.6"</span><span class="token punctuation">,</span>
+  <span class="token property">"path-to-regexp"</span><span class="token operator">:</span> <span class="token string">">=0.1.13"</span><span class="token punctuation">,</span>
+  <span class="token property">"picomatch"</span><span class="token operator">:</span> <span class="token string">">=2.3.2"</span><span class="token punctuation">,</span>
+  <span class="token property">"tar"</span><span class="token operator">:</span> <span class="token string">">=7.5.11"</span><span class="token punctuation">,</span>
+  <span class="token property">"jws"</span><span class="token operator">:</span> <span class="token string">">=4.0.1"</span><span class="token punctuation">,</span>
+  <span class="token property">"lodash"</span><span class="token operator">:</span> <span class="token string">">=4.17.21"</span><span class="token punctuation">,</span>
+  <span class="token property">"trim"</span><span class="token operator">:</span> <span class="token string">">=0.0.3"</span><span class="token punctuation">,</span>
+  <span class="token property">"minimatch"</span><span class="token operator">:</span> <span class="token string">">=3.1.4"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Sisa setelah ini: hanya Kelompok B (<code>@dendronhq/*</code> internal) yang belum bisa diperbaiki dengan cara ini.</p>
+<p><strong>Trade-off</strong>: Ada risiko minor bahwa override versi baru tidak kompatibel dengan cara <code>@dendronhq/dendron-cli</code> menggunakan package tersebut — perlu test setelah apply.</p>
+<h3 id="opsi-2--terima-risk-untuk-kelompok-b-mitigate">Opsi 2 — Terima Risk untuk Kelompok B (Mitigate)<a aria-hidden="true" class="anchor-heading icon-link" href="#opsi-2--terima-risk-untuk-kelompok-b-mitigate"></a></h3>
+<p>Karena <code>@dendronhq/dendron-cli</code> dipakai sebagai <strong>CLI tool lokal</strong> (bukan server yang menerima input publik), banyak dari CVE Kelompok B (ReDoS di <code>minimatch</code>, prototype pollution di <code>lodash</code>) tidak relevan secara praktis — exploitnya butuh input yang dikontrol attacker ke proses yang tidak terekspos.</p>
+<p>Dismiss alert Dependabot untuk Kelompok B dengan alasan "vulnerable code path not reachable" atau "CLI tool only, no network exposure."</p>
+<h3 id="opsi-3--migrasi-dari-dendronhqdendron-cli">Opsi 3 — Migrasi dari <code>@dendronhq/dendron-cli</code><a aria-hidden="true" class="anchor-heading icon-link" href="#opsi-3--migrasi-dari-dendronhqdendron-cli"></a></h3>
+<p>Dendron CLI terakhir publish Maret 2024 dan proyeknya tidak aktif. Opsi jangka panjang:</p>
+<ul>
+<li><strong>Dendron alternatives</strong>: Cek apakah ada fork aktif atau tool pengganti untuk kebutuhan vault/notes management</li>
+<li><strong>Remove dependency</strong>: Jika Dendron CLI tidak dipakai aktif, hapus dan ganti workflow</li>
+<li><strong>Vendor-in</strong>: Clone dan build sendiri dari source di <code>research/dendron</code> (high effort, sudah didiskusikan sebelumnya)</li>
+</ul>
+<h3 id="opsi-4--gunakan-npm-audit---omitdev--production-only-scope">Opsi 4 — Gunakan <code>npm audit --omit=dev</code> / Production-only scope<a aria-hidden="true" class="anchor-heading icon-link" href="#opsi-4--gunakan-npm-audit---omitdev--production-only-scope"></a></h3>
+<p>Jika beberapa vulnerable package hanya dipakai di dev/build pipeline dan tidak di runtime produksi, flag ini membantu mempersempit scope alert yang perlu direspons.</p>
+<hr>
+<h2 id="rekomendasi-final">Rekomendasi Final<a aria-hidden="true" class="anchor-heading icon-link" href="#rekomendasi-final"></a></h2>
+<ol>
+<li><strong>Segera</strong>: Apply Opsi 1 — tambah override Kelompok A untuk menghapus semua high yang bisa di-fix</li>
+<li><strong>Short-term</strong>: Dismiss Kelompok B di Dependabot dengan justifikasi "CLI-only, no public exposure"</li>
+<li><strong>Long-term</strong>: Evaluasi migrasi atau removal <code>@dendronhq/dendron-cli</code> (Opsi 3)</li>
+</ol>
+<hr>
+<hr>
+<h2 id="analisis-risiko-untuk-httpszeihanauliagithubiosotoy">Analisis Risiko untuk <a href="https://zeihanaulia.github.io/sotoy/">https://zeihanaulia.github.io/sotoy/</a><a aria-hidden="true" class="anchor-heading icon-link" href="#analisis-risiko-untuk-httpszeihanauliagithubiosotoy"></a></h2>
+<blockquote>
+<p><strong>Konteks penting</strong>: Site ini adalah <strong>static export</strong> — <code>next build &#x26;&#x26; next export</code> di GitHub Actions, hasilnya file HTML/CSS/JS statis yang di-serve GitHub Pages.
+Tidak ada server Node.js yang berjalan di production. Semua page menggunakan <code>getStaticProps</code>, tidak ada <code>getServerSideProps</code> atau API routes.</p>
+</blockquote>
+<h3 id="konsekuensi-arsitektur-ini-terhadap-cve">Konsekuensi arsitektur ini terhadap CVE<a aria-hidden="true" class="anchor-heading icon-link" href="#konsekuensi-arsitektur-ini-terhadap-cve"></a></h3>
+<p>Mayoritas CVE di <code>next@12</code> <strong>tidak berlaku</strong> karena tidak ada server:</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CVE</th><th>Deskripsi</th><th>Relevan?</th><th>Alasan</th></tr></thead><tbody><tr><td>Next.js Authorization Bypass in Middleware</td><td>Bypass auth middleware</td><td><strong>TIDAK</strong></td><td>Middleware tidak jalan di static export</td></tr><tr><td>Next.js HTTP Request Smuggling in rewrites</td><td>Smuggling via rewrite rules</td><td><strong>TIDAK</strong></td><td>Tidak ada server</td></tr><tr><td>Next.js SSRF via Middleware Redirect</td><td>SSRF dari redirect handling</td><td><strong>TIDAK</strong></td><td>Tidak ada server</td></tr><tr><td>Next.js Image Optimization DoS</td><td>DoS via banyak request ke <code>/_next/image</code></td><td><strong>TIDAK</strong></td><td>Tidak ada image optimization server</td></tr><tr><td>Next.js Cache Poisoning / Cache Key Confusion</td><td>Poisoning CDN cache</td><td><strong>TIDAK</strong></td><td>GitHub Pages hanya serve file statis</td></tr><tr><td>Next.js Content Injection via Image API</td><td>Inject konten via image endpoint</td><td><strong>TIDAK</strong></td><td>Tidak ada endpoint</td></tr></tbody></table></div>
+<h3 id="cve-yang-benar-benar-berbahaya">CVE yang BENAR-BENAR berbahaya<a aria-hidden="true" class="anchor-heading icon-link" href="#cve-yang-benar-benar-berbahaya"></a></h3>
+<p>Karena tidak ada server runtime, risiko bergeser ke <strong>build pipeline</strong> (GitHub Actions).</p>
+<h4 id="1-babeltraverse-7232--arbitrary-code-execution-critical-build-time">1. <code>@babel/traverse &#x3C;7.23.2</code> — Arbitrary Code Execution (Critical, BUILD-TIME)<a aria-hidden="true" class="anchor-heading icon-link" href="#1-babeltraverse-7232--arbitrary-code-execution-critical-build-time"></a></h4>
+<p><strong>Berbahaya.</strong> Babel dipakai saat <code>next build</code> mengkompilasi semua JS/TS. Jika ada kode JavaScript berbahaya yang masuk ke dalam proses build (misalnya melalui dependency yang dikompromikan atau file di repo), ini bisa mengeksekusi kode arbitrer di GitHub Actions runner — di mana <code>GITHUB_TOKEN</code> dan secrets lain tersedia.</p>
+<ul>
+<li>Exploit butuh: kode JS berbahaya masuk ke dalam build process</li>
+<li>Impact: RCE di GitHub Actions runner, potential secret exfiltration</li>
+</ul>
+<p><strong>Fix</strong>: Override <code>@babel/traverse</code> ke <code>>=7.23.2</code></p>
+<h4 id="2-axios0214--multiple-cve-high-build-time--client-side">2. <code>axios@0.21.4</code> — Multiple CVE (High, BUILD-TIME + CLIENT-SIDE)<a aria-hidden="true" class="anchor-heading icon-link" href="#2-axios0214--multiple-cve-high-build-time--client-side"></a></h4>
+<p><code>axios</code> masih ada di <code>@dendronhq/common-all</code>. Meski tidak dipakai langsung di pages client-side (tidak ada <code>import axios</code> ditemukan di code), library ini bisa dieksekusi selama proses build saat Dendron CLI memproses vault.</p>
+<ul>
+<li>SSRF + credential leakage: relevan jika axios dipakai di build untuk fetch external data dengan env vars GitHub Actions</li>
+<li>CSRF: tidak relevan (tidak ada session/cookie di static site)</li>
+</ul>
+<p><strong>Fix</strong>: Override <code>axios</code> di nextjs-template juga</p>
+<h4 id="3-lodash-code-injection-via-_template-high-build-time">3. <code>lodash</code> Code Injection via <code>_.template</code> (High, BUILD-TIME)<a aria-hidden="true" class="anchor-heading icon-link" href="#3-lodash-code-injection-via-_template-high-build-time"></a></h4>
+<p><code>lodash</code> dipakai sebagai direct dependency di nextjs-template. Jika <code>_.template()</code> dipanggil dengan string yang berasal dari konten vault/notes, bisa dieksploitasi.</p>
+<ul>
+<li>Exploit butuh: content dari notes/vault diteruskan ke <code>_.template()</code></li>
+<li>Impact: code injection di build time</li>
+<li>Probabilitas rendah untuk use case notes biasa</li>
+</ul>
+<h3 id="cve-yang-low-risk-untuk-use-case-ini">CVE yang LOW RISK untuk use case ini<a aria-hidden="true" class="anchor-heading icon-link" href="#cve-yang-low-risk-untuk-use-case-ini"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Package</th><th>CVE</th><th>Kenapa Low Risk</th></tr></thead><tbody><tr><td><code>minimatch</code>, <code>cross-spawn</code>, <code>picomatch</code>, <code>micromatch</code></td><td>ReDoS</td><td>Build-time only, input adalah file paths yang dikontrol — bukan user input</td></tr><tr><td><code>ws</code></td><td>DoS via HTTP headers</td><td>Tidak ada WebSocket server</td></tr><tr><td><code>ip</code></td><td>SSRF improper classification</td><td>Hanya di <code>@react-native-community/cli</code> (dev tool, tidak di-bundle)</td></tr><tr><td><code>luxon</code></td><td>ReDoS</td><td>Input dari notes yang dikontrol sendiri</td></tr><tr><td><code>semver</code></td><td>ReDoS</td><td>Hanya di build tools, bukan runtime</td></tr><tr><td><code>json5</code></td><td>Prototype Pollution</td><td>Bukan di hot path dengan user input</td></tr><tr><td><code>immutable</code></td><td>Prototype Pollution</td><td>Tidak ada user-controlled input</td></tr><tr><td><code>flatted</code></td><td>Prototype Pollution / DoS</td><td>Tidak ada user-controlled input</td></tr><tr><td><code>braces</code>, <code>decode-uri-component</code></td><td>ReDoS / DoS</td><td>Build-time only</td></tr></tbody></table></div>
+<h3 id="prioritas-fix-untuk-nextjs-template">Prioritas Fix untuk nextjs-template<a aria-hidden="true" class="anchor-heading icon-link" href="#prioritas-fix-untuk-nextjs-template"></a></h3>
+<p><strong>Tier 1 — DONE (2026-04-16):</strong></p>
+<p>Override ditambahkan ke <code>nextjs-template/package.json</code>:</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"overrides"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token property">"trim"</span><span class="token operator">:</span> <span class="token string">"0.0.3"</span><span class="token punctuation">,</span>
+  <span class="token property">"@types/react"</span><span class="token operator">:</span> <span class="token string">"17.0.38"</span><span class="token punctuation">,</span>
+  <span class="token property">"@babel/traverse"</span><span class="token operator">:</span> <span class="token string">">=7.23.2"</span><span class="token punctuation">,</span>
+  <span class="token property">"axios"</span><span class="token operator">:</span> <span class="token string">">=1.7.4"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Hasil setelah <code>npm install</code>:</p>
+<ul>
+<li>Sebelum: <strong>3 critical</strong>, 23 high, total 53</li>
+<li>Sesudah: <strong>1 critical</strong>, 23 high, total 50</li>
+<li><code>@babel/traverse</code> → resolved ke <code>7.29.0</code> ✓</li>
+<li><code>axios</code> → resolved ke <code>1.15.0</code> ✓</li>
+</ul>
+<p>Sisa 1 critical: <code>next@12</code> itu sendiri — seluruh CVE-nya adalah server-side (middleware, image optimization, rewrites). <strong>Tidak berlaku</strong> untuk static export di GitHub Pages.</p>
+<p><strong>Tier 2 — Upgrade Next.js (jangka panjang):</strong></p>
+<p><code>next@12</code> sudah EOL. Upgrade ke <code>next@14</code> atau <code>next@15</code> akan menutup seluruh blok CVE Next.js sekaligus. Ini butuh effort lebih karena ada breaking changes, tapi ini fix yang paling bersih.</p>
+<p><strong>Tier 3 — Accept &#x26; dismiss:</strong></p>
+<p>CVE <code>next@12</code> server-side bisa di-dismiss di Dependabot dengan catatan: <em>"Not applicable — site is a static export served via GitHub Pages, no Next.js server running in production."</em></p>
+<hr>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><code>sotoy/package.json</code></li>
+<li><code>sotoy/package-lock.json</code></li>
+<li><code>nextjs-template/package.json</code></li>
+<li><code>nextjs-template/next.config.js</code></li>
+<li><code>.github/workflows/publish.yml</code></li>
+<li><a href="https://github.com/zeihanaulia/sotoy/security/dependabot">GitHub Dependabot Alerts</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">sotoy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">dependabot (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">audit (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">npm (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #c7fdb5;" href="/sotoy/notes/tags.dendron">dendron</a></li>
+</ol>

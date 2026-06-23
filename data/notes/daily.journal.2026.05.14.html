@@ -1,0 +1,143 @@
+<h1 id="2026-05-14">2026-05-14<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-05-14"></a></h1>
+<h2 id="baca-buku-rust-tentang-design-pattern">Baca buku Rust tentang design pattern<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-buku-rust-tentang-design-pattern"></a></h2>
+<p>Hari ini gue baca daftar isi dan struktur buku <em>Design Patterns and Best Practices in Rust</em>. Yang paling nyantol adalah penekanannya: ini bukan buku yang ngajarin pattern klasik satu per satu, tapi buku yang ngajarin cara mikir ulang desain agar selaras dengan Rust.</p>
+<p>Gue mulai melihat tiga layer yang berbeda:</p>
+<ul>
+<li>mental model Rust dulu,</li>
+<li>lalu terjemahan pattern lama ke idiom Rust,</li>
+<li>baru akhirnya pattern yang benar-benar native Rust.</li>
+</ul>
+<h3 id="insight-yang-gue-tangkap">Insight yang gue tangkap<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-yang-gue-tangkap"></a></h3>
+<ul>
+<li>Kalau lo pindah dari Java/C#, kebiasaan membuat class hierarchy dan object-oriented design biasanya jadi jebakan.</li>
+<li><code>Clone</code> dan <code>Rc</code> sering dipakai sebagai pelarian ketika borrow checker menolak, padahal itu bisa jadi tanda desain ownership yang kabur.</li>
+<li>Borrow checker bukan musuh; dia feedback sistem desain. Kalau dia nggak terima, berarti lo harus jawab siapa pemilik data, siapa boleh baca, siapa boleh ubah.</li>
+<li>Di Rust, pattern penting bukan karena namanya, tapi karena problem yang dia selesaikan dan apakah dia bisa di-encode di level type system.</li>
+</ul>
+<h2 id="baca-thread-claudedevs-tentang-perubahan-programmatic-usage">Baca thread ClaudeDevs tentang perubahan programmatic usage<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-thread-claudedevs-tentang-perubahan-programmatic-usage"></a></h2>
+<p>Gue baca thread terbaru ClaudeDevs: <a href="https://x.com/ClaudeDevs/status/2054610152817619388">https://x.com/ClaudeDevs/status/2054610152817619388</a>. Inti thread ini bukan cuma angka credit, tapi mental contract antara pengguna dan subscription.</p>
+<p>Yang bikin banyak orang kesal adalah framing-nya: Anthropic bilang paid plan bisa klaim "dedicated monthly credit" untuk penggunaan programmatic. Mereka juga bilang batasan subscription nggak berubah karena tetap dikhususkan buat interactive use. Tapi dari sudut developer heavy user, itu terasa seperti akses programmatic yang dulu masuk dalam subscription sekarang dipisah ke kuota baru yang lebih kecil.</p>
+<p>Dua realitas ini bisa berdiri bareng:</p>
+<ul>
+<li>Kalau lo pake Anthropic dari perspektif mereka, ini adalah upaya agar programmatic usage nggak makan limit chat/Claude Code interaktif.</li>
+<li>Kalau lo pake Claude buat agentic workflow dan SDK, ini adalah perubahan ekonomi: akses yang terasa subscription-like sekarang jadi usage-metered.</li>
+</ul>
+<p>Gue nangkep tiga alasan terbesar kemarahan ini:</p>
+<ol>
+<li>Ini tentang trust platform. Banyak orang udah bangun tooling di atas Claude Agent SDK, lalu rules billing-nya berubah setelah mereka invest waktu.</li>
+<li>Framing sebagai "free credit" bikin salah fokus. Seharusnya yang dibahas adalah apakah ini bonus, atau justru plafon baru untuk usage yang sebelumnya dianggap termasuk plan.</li>
+<li>Perubahan ini tidak cuma billing; dia memukul workflow developer, khususnya GitHub Actions, agent runner, IDE wrapper, dan third-party tools seperti Conductor / OpenClaw.</li>
+</ol>
+<p>Dari situ, gue ngebayangin konflik antara dua kategori penggunaan:</p>
+<ul>
+<li>interactive user = chat / Claude Code langsung,</li>
+<li>agentic/programmatic user = SDK, script, automation, third-party app.</li>
+</ul>
+<p>Kalau Claude memisahkan dua beban ini, secara teknis masuk akal karena programmatic bisa boros. Tapi buat developer yang beli Claude karena agentic coding, ini terasa seperti nilai utama mereka dikurangin.</p>
+<h3 id="insight-penting-yang-gue-tahan">Insight penting yang gue tahan<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-penting-yang-gue-tahan"></a></h3>
+<ul>
+<li>Perdebatan sebenarnya bukan soal kredibilitas angka credit, tapi soal reframe value lama jadi kuota baru.</li>
+<li>"Subscription limit tidak berubah" dalam bahasa Anthropic bisa tetap berarti "pengalaman gede lo berkurang" untuk developer yang pakai SDK.</li>
+<li>Saat platform mengubah aturan setelah adopsi terbentuk, istilah "rug pull" sering muncul karena ini bukan sekadar harga; ini soal landasan ekonomi tempat tooling dibangun.</li>
+</ul>
+<h3 id="kenapa-ini-relevan-buat-gue">Kenapa ini relevan buat gue<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-relevan-buat-gue"></a></h3>
+<ul>
+<li>Gue jadi lebih waspada kalau bangun workflow di atas API/SDK platform: jangan cuma hitung harga saat ini, tapi juga model governancenya.</li>
+<li>Perubahan seperti ini biasanya lebih berbahaya untuk agentic workflow daripada API biasa, karena automation bisa mengaburkan batas antara interactive dan programmatic usage.</li>
+<li>Kalau lo kerja di produk open ecosystem, perubahan batas kuota SDK bisa jadi sinyal untuk sediakan fallback atau opsi alternatif bagi pengguna heavy.</li>
+</ul>
+<h2 id="baca-martin-fowler-interrogatory-llm">Baca Martin Fowler: Interrogatory LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-martin-fowler-interrogatory-llm"></a></h2>
+<p>Gue baca artikel Martin Fowler tentang "Interrogatory LLM": LLM yang dipakai sebagai pewawancara konteks, bukan sekadar mesin jawaban. Inti artikel ini adalah memindahkan pekerjaan menulis konteks dari kepala manusia ke proses elicitation yang bisa dilakukan bertahap.</p>
+<p>Link: <a href="https://martinfowler.com/bliki/InterrogatoryLLM.html">https://martinfowler.com/bliki/InterrogatoryLLM.html</a></p>
+<p>Yang nempel adalah lima pertanyaan penting:</p>
+<ol>
+<li>Apa itu Interrogatory LLM?</li>
+<li>Kenapa LLM perlu mewawancarai manusia?</li>
+<li>Kenapa pertanyaan harus satu per satu?</li>
+<li>Apa bedanya membuat dokumen vs mereview dokumen?</li>
+<li>Apa konsekuensinya untuk knowledge work?</li>
+</ol>
+<p>Dari situ gue tangkap bahwa ini bukan sekadar prompt engineering. Ini soal mengubah konteks menjadi artefak yang layak dipakai oleh model lain. Kalau prompt biasa sering terasa sekali tembak dan rapuh, pola ini memandang prompt final sebagai produk dari percakapan yang benar.</p>
+<h3 id="insight-yang-gue-ambil">Insight yang gue ambil<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-yang-gue-ambil"></a></h3>
+<ul>
+<li>Interrogatory LLM menempatkan LLM sebagai extractor, bukan eksekutor.</li>
+<li>Satu pertanyaan atomik membantu jawaban lebih fokus dan membuat konteks lebih lengkap.</li>
+<li>LLM bisa dipakai untuk review dokumen yang sudah ada, bukan hanya membuat dokumen baru.</li>
+<li>Ini sangat relevan di organisasi di mana banyak expert nggak suka nulis, tapi mereka bisa jawab pertanyaan jika diarahkan.</li>
+<li>Intinya: prompt final yang bagus sering kali bukan ditulis langsung; dia dihasilkan dari proses wawancara konteks.</li>
+</ul>
+<h2 id="baca-harper-reed-llm-codegen-workflow">Baca Harper Reed: LLM codegen workflow<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-harper-reed-llm-codegen-workflow"></a></h2>
+<p>Gue baca artikel Harper Reed tentang workflow LLM codegen: bukan sekadar prompt langsung ke model, tapi rangkaian artefak eksplisit—brainstorming, spec, planning, execution, test/iterate.</p>
+<p>Link: <a href="https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/">https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/</a></p>
+<p>Inti artikelnya kurang lebih 6 pertanyaan penting:</p>
+<ol>
+<li>Apa workflow utama Harper untuk LLM coding?</li>
+<li>Kenapa dia mulai dari brainstorming/spec, bukan langsung coding?</li>
+<li>Kenapa planning dipisah dari execution?</li>
+<li>Apa bedanya workflow greenfield dan brownfield?</li>
+<li>Apa bahaya "over my skis" dalam AI coding?</li>
+<li>Apa insight sosial dari workflow ini: solo vs team?</li>
+</ol>
+<p>Yang paling nempel adalah ini:</p>
+<ul>
+<li>spec adalah artefak pusat, bukan dokumen administratif.</li>
+<li>planning membuat perubahan kecil yang bisa diuji, bukan lompatan besar.</li>
+<li>greenfield butuh plan-heavy workflow; brownfield butuh context extraction dari repo sebelum mengubah apa pun.</li>
+<li>"over my skis" adalah ketika velocity AI terlalu cepat sementara pemahaman manusia tertinggal.</li>
+<li>dalam tim, AI coding harus punya collaboration protocol, bukan cuma kerja single-player.</li>
+</ul>
+<p>Kalimat yang paling pas buat artikel ini: "AI coding yang bagus bukan soal model aja. Ini soal membuat LLM bergerak di rel kecil yang elo desain." </p>
+<h2 id="baca-unmesh-joshi-what-is-code">Baca Unmesh Joshi: What Is Code?<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-unmesh-joshi-what-is-code"></a></h2>
+<p>Gue baca artikel Unmesh Joshi di Martin Fowler tentang "What Is Code?": <a href="https://martinfowler.com/articles/what-is-code.html">https://martinfowler.com/articles/what-is-code.html</a>.</p>
+<p>Yang paling nyantol buat gue adalah bahwa code bukan hanya instruksi untuk mesin, tapi juga vocabulary konseptual untuk manusia, tim, dan LLM. Nama kelas, nama modul, dan istilah domain bukan kosmetik; mereka membawa asumsi, boundary, dan cara berpikir.</p>
+<p>Unmesh bikin dua poin utama:</p>
+<ul>
+<li>code sebagai instruksi mesin, yang LLM sudah mulai commoditize,</li>
+<li>code sebagai model domain, yang justru jadi nilai utama ketika AI bisa generate syntax.</li>
+</ul>
+<p>Dari situ gue jadi lebih waspada terhadap cognitive debt: nama-nama keren dan pattern enterprise bisa muncul cepat, tapi tim belum tentu paham model konseptualnya.</p>
+<h2 id="baca-thread-kun-tentang-hardened-npm-supply-chain">Baca thread Kun tentang hardened npm supply chain<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-thread-kun-tentang-hardened-npm-supply-chain"></a></h2>
+<p>Gue baca thread Kunchenguid tentang hardening supply chain npm: intinya bukan soal scan semua package, tapi soal membuat cooldown policy supaya project nggak otomatis mengambil versi baru yang baru rilis.</p>
+<p>Link: <a href="https://x.com/kunchenguid/status/2054600854553206992">https://x.com/kunchenguid/status/2054600854553206992</a></p>
+<p>Yang paling nempel adalah konsepnya: trust attachment harus ke versi package, bukan sekadar nama package. <code>chalk</code>, <code>eslint</code>, atau package terkenal bisa dipercaya dari versi lama, tapi versi baru yang muncul pagi ini tetap berisiko kalau akun maintainer disusupi.</p>
+<p>Guardrail utama yang dia pakai adalah:</p>
+<ul>
+<li><code>minimumReleaseAge: 10080</code></li>
+<li><code>minimumReleaseAgeStrict: true</code></li>
+</ul>
+<p>Artinya tiap dependency baru harus setidaknya 7 hari di registry sebelum pnpm boleh resolve dan install. Ini bukan ganti private registry; ini pake pnpm sebagai gatekeeper di depan npm registry.</p>
+<p>Gue lihat tiga lapisan praktis di desainnya:</p>
+<ol>
+<li>policy cooldown di level resolving versi baru,</li>
+<li>CI harus pakai <code>pnpm install --frozen-lockfile</code>,</li>
+<li>build script hanya boleh jalan untuk dependency yang eksplisit di-allowlist.</li>
+</ol>
+<p>Yang menarik: ini bukan security tool magis, tapi proses. Kalau dependency baru dipakai harus sadar ada buffer observasi. Kalau package internal butuh langsung, pakai <code>minimumReleaseAgeExclude</code> sebagai escape hatch — tapi jangan besar-besaran.</p>
+<p>Kalau mau adopsi, modelnya lebih ke "delay gate" ketimbang "freeze forever". Cooldown ini mesti sustainable, bukan bikin dependency management jadi ngeri.</p>
+<h2 id="baca-thread-gergely-orosz-tentang-anders-hejlsberg">Baca thread Gergely Orosz tentang Anders Hejlsberg<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-thread-gergely-orosz-tentang-anders-hejlsberg"></a></h2>
+<p>Gue baca thread Gergely Orosz soal interview/podcast Anders Hejlsberg: <a href="https://x.com/GergelyOrosz/status/2054652158231167482">https://x.com/GergelyOrosz/status/2054652158231167482</a>. Thread ini bukan cuma nostalgia Turbo Pascal, Delphi, C#, dan TypeScript. Ini soal pola besar: bahasa yang menang biasanya bukan yang paling murni teori, tapi yang paling mampu menyelesaikan friksi developer di waktu yang tepat.</p>
+<p>Yang gue tangkep ada lima poin penting:</p>
+<ol>
+<li>Anders dianggap living legend bukan karena satu bahasa, tapi karena kontribusinya di beberapa fase: Turbo Pascal, Delphi, C#, dan TypeScript.</li>
+<li>Turbo Pascal penting karena murah, cepat, dan interaktif—kombinasi yang menurunkan friksi ekonomi dan teknis.</li>
+<li>C# lahir dari tekanan ekosistem, bukan sekadar ide teknis: konflik dengan Java membuat Microsoft butuh bahasa sendiri.</li>
+<li>TypeScript menang karena tidak jadi "C# to JavaScript". Ia memperbaiki JavaScript dari dalam, bukan memaksa web keluar dari JavaScript.</li>
+<li>Desain bahasa adalah permainan 10 tahun. Versi pertama perlu waktu, versi kedua memperbaiki, versi ketiga baru terasa matang.</li>
+</ol>
+<p>Reply thread juga menarik:</p>
+<ul>
+<li>Nostalgia Turbo Pascal mengingatkan bahwa tool yang benar-benar sukses seringkali membuat developer lebih cepat mengubah ide jadi program, bukan sekadar memberi kontrol paling dekat ke mesin.</li>
+<li>Seorang reply di thread menegaskan bahwa skill besar saat ini bukan sekadar syntax JS/TS, tapi memahami type system dan modeling.</li>
+<li>Ada juga counterpoint yang bilang Anders terlalu dipuja, tapi itu justru menguatkan poin: inovasi sering ada di integrasi dan timing, bukan cuma di fitur abstrak.</li>
+<li>Ada komentar tentang tooling TypeScript di monorepo besar, yang menunjukkan tantangan selanjutnya: kinerja dan skalabilitas compiler/tooling.</li>
+<li>Ada juga klaim AI-assisted programming membuat TS lebih kuat karena typed codebase memberi sinyal yang lebih jelas untuk AI.</li>
+</ul>
+<p>Intinya, thread ini menggarisbawahi satu lesson yang gede buat gue:</p>
+<p>Bahasa yang besar menang karena kompromi yang tepat antara kompatibilitas, produktivitas, tooling, dan timing. Turbo Pascal nggak menang karena paling canggih, C# nggak lahir dari idenya saja, TypeScript nggak menang karena sekadar nambah type. Mereka menang karena membaca friksi ekosistem dengan tepat.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">design-patterns (Private)</a></li>
+</ol>

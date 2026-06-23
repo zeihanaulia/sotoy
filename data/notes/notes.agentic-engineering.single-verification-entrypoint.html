@@ -1,0 +1,120 @@
+<h1 id="single-verification-entrypoint">Single verification entrypoint<a aria-hidden="true" class="anchor-heading icon-link" href="#single-verification-entrypoint"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Buat gue, <code>./.ai/commands/verify.sh</code> bukan standar universal. Itu adalah konvensi internal yang punya fungsi spesifik: satu executable entrypoint untuk semua verifikasi minimal.</p>
+<p>Kalau <code>AGENTS.md</code> bilang "jangan selesai sebelum test pass", <code>verify.sh</code> adalah bentuk konkretnya. Dia adalah script yang bisa dijalankan agent, manusia, dan CI untuk membuktikan bahwa klaim "sudah selesai" punya bukti.</p>
+<h2 id="why-this-matters">Why this matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-matters"></a></h2>
+<p>Verifikasi sering jadi tempat agent salah tebak.
+Bukan karena agent nggak bisa menulis test, tapi karena dia sering nggak tahu command yang tepat di repo itu.</p>
+<p>Di satu repo, verifikasi bisa berarti:</p>
+<ul>
+<li><code>pnpm test</code></li>
+<li><code>npm run lint</code></li>
+<li><code>go test ./...</code></li>
+<li><code>pytest</code></li>
+<li><code>cargo test</code></li>
+<li><code>dotnet test</code></li>
+<li><code>semgrep --config auto .</code></li>
+<li><code>gitleaks detect --source . --no-git</code></li>
+<li><code>osv-scanner --recursive .</code></li>
+</ul>
+<p>Kalau agent harus menebak semua ini, dia bisa gagal atau jalankan hal yang tidak lengkap.</p>
+<p>Dengan satu entrypoint, kita membuat definisi selesai jadi executable.</p>
+<h2 id="what-verifysh-sebenarnya-adalah">What <code>verify.sh</code> sebenarnya adalah<a aria-hidden="true" class="anchor-heading icon-link" href="#what-verifysh-sebenarnya-adalah"></a></h2>
+<ul>
+<li>bukan tool khusus</li>
+<li>bukan requirement path yang wajib dinamai demikian</li>
+<li>bukan magic</li>
+<li>bukan pengganti <code>AGENTS.md</code></li>
+<li>bukan sensor otomatis</li>
+</ul>
+<p>Dia adalah: <strong>single verification entrypoint</strong>.</p>
+<p>Artinya, tim menyediakan satu command stabil yang menyatukan semua check minimal.</p>
+<p><code>verify.sh</code> hanya bisa mendeteksi N+1 jika repo sudah menaruh sensor N+1 di dalamnya: munculnya <code>semgrep</code>, regression test query-count, atau checker lain.</p>
+<p>Kalau isinya cuma:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">pnpm</span> lint
+<span class="token function">pnpm</span> typecheck
+<span class="token function">pnpm</span> <span class="token builtin class-name">test</span>
+</code></pre>
+<p>maka <code>verify.sh</code> belum tentu bisa menangkap N+1.</p>
+<p>Kalau repo ingin <code>verify.sh</code> menangkap data-layer smell seperti N+1, maka sensor itu harus ditambahkan terlebih dulu — dan <code>verify.sh</code> menjadi tombol untuk menjalankannya.</p>
+<h2 id="example">Example<a aria-hidden="true" class="anchor-heading icon-link" href="#example"></a></h2>
+<pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/usr/bin/env bash</span>
+<span class="token builtin class-name">set</span> -euo pipefail
+
+<span class="token function">pnpm</span> lint
+<span class="token function">pnpm</span> typecheck
+<span class="token function">pnpm</span> <span class="token builtin class-name">test</span>
+</code></pre>
+<p>Untuk repo yang security-sensitive, bisa ditambah:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/usr/bin/env bash</span>
+<span class="token builtin class-name">set</span> -euo pipefail
+
+<span class="token function">pnpm</span> lint
+<span class="token function">pnpm</span> typecheck
+<span class="token function">pnpm</span> <span class="token builtin class-name">test</span>
+
+gitleaks detect --source <span class="token builtin class-name">.</span> --no-git
+osv-scanner --recursive <span class="token builtin class-name">.</span>
+semgrep --config auto <span class="token builtin class-name">.</span>
+</code></pre>
+<h2 id="why-aicommands">Why <code>.ai/commands/</code>?<a aria-hidden="true" class="anchor-heading icon-link" href="#why-aicommands"></a></h2>
+<p>Itu juga bukan keharusan. Di sini pilihannya cuma supaya jelas bahwa script ini bagian dari harness agent.</p>
+<p>Bisa saja pathnya:</p>
+<ul>
+<li><code>./scripts/verify.sh</code></li>
+<li><code>./bin/verify</code></li>
+<li><code>./tools/check.sh</code></li>
+<li><code>./ci/local-check.sh</code></li>
+<li><code>make verify</code></li>
+<li><code>just verify</code></li>
+<li><code>npm run verify</code></li>
+</ul>
+<p>Yang penting bukan pathnya. Yang penting ada satu entrypoint yang stabil.</p>
+<h2 id="how-to-use-it">How to use it<a aria-hidden="true" class="anchor-heading icon-link" href="#how-to-use-it"></a></h2>
+<p>Di <code>AGENTS.md</code>, cukup tulis:</p>
+<pre class="language-text"><code class="language-text">Before completion, run:
+
+./.ai/commands/verify.sh
+</code></pre>
+<p>Setiap agent atau reviewer tahu persis apa yang harus dijalankan.</p>
+<h2 id="what-verifysh-can-catch">What verify.sh can catch<a aria-hidden="true" class="anchor-heading icon-link" href="#what-verifysh-can-catch"></a></h2>
+<p>Ada tiga level sensor N+1 yang bisa ditambahkan ke <code>verify.sh</code>:</p>
+<ol>
+<li>Static check: Semgrep atau rule sederhana yang mencari query/repo call di dalam loop.</li>
+<li>Query-count regression test: behavior test yang memverifikasi jumlah query tetap bounded untuk banyak data.</li>
+<li>Runtime/integration check: observability/profiler-based assertion pada query count selama request berjalan.</li>
+</ol>
+<p><code>verify.sh</code> sendiri bukan network inspector. Dia hanya menjalankan sensor yang sudah ada.</p>
+<p>Kalau belum ada sensor N+1, <code>verify.sh</code> tidak akan ajaib tahu ada N+1.</p>
+<h2 id="practical-benefit">Practical benefit<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-benefit"></a></h2>
+<ol>
+<li>Konsistensi. Semua pihak menjalankan command yang sama.</li>
+<li>Perubahan mudah. Tambah scan baru di script, agent nggak perlu tahu detailnya.</li>
+<li>Kurangi prompt panjang. Cukup refer ke satu command.</li>
+<li>Bukti klaim. Jika agent bilang "verified", dia bisa melaporkan hasil entrypoint yang dijalankan.</li>
+</ol>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.self-hosted-agent-runner">Self-Hosted Cloud Agent Runner</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">harness (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">verification (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260506180000">verify.sh is a verification entrypoint, not a sensor</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101200">Largest AI opportunities are new work formats, not faster old workflows</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101400">Specification fuels classical software; verification fuels agentic AI</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101800">AI moat can be a domain-specific verifier and RL environment</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101900">Automation frontier is defined by evaluator cost, not just model capability</a></li>
+<li><a href="/sotoy/notes/notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering">Andrej Karpathy: From Vibe Coding to Agentic Engineering</a></li>
+</ul>

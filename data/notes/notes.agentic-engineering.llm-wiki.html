@@ -1,0 +1,112 @@
+<h1 id="karpathy-llm-wiki-compiled-knowledge-base-vs-rag">Karpathy LLM Wiki: compiled knowledge base vs RAG<a aria-hidden="true" class="anchor-heading icon-link" href="#karpathy-llm-wiki-compiled-knowledge-base-vs-rag"></a></h1>
+<h2 id="why-this-note">Why this note<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-note"></a></h2>
+<p>Gue butuh catatan ini karena Karpathy nggak cuma bicara tentang vibe coding. Awal April 2026 dia publikasi GitHub Gist <code>llm-wiki</code> sebagai blueprint, bukan repo aplikasi besar. Itu penting: ini pola operasional, bukan produk jadi.</p>
+<p>Intinya, ini bukan sekadar transcript. Ini sumber primer yang mendefinisikan bagaimana Karpathy memikirkan LLM knowledge base sebagai:</p>
+<p>raw source → LLM compile → structured markdown wiki → query/lint/update → wiki makin matang.</p>
+<p>Note ini gue tulis untuk menangkap perbedaan kunci, arsitektur, dan ekosistem implementasi yang muncul setelahnya.</p>
+<h2 id="core-idea">Core idea<a aria-hidden="true" class="anchor-heading icon-link" href="#core-idea"></a></h2>
+<p>Dari gist itu, gue tangkap satu kontras jelas:</p>
+<ul>
+<li>mayoritas LLM+dokumen hari ini kayak RAG: upload file, ambil chunk sesuai query, jawab ulang dari awal setiap kali.</li>
+<li>LLM Wiki bukan begitu. Model membangun wiki markdown persisten yang terus dirawat.</li>
+</ul>
+<p>Jadi ketika sumber baru masuk, LLM tidak cuma mengindeks. Ia membaca, mengekstrak, mengintegrasikan ke halaman yang sudah ada, memperbarui cross-link, dan menandai kontradiksi.</p>
+<p>Quote penting dari gist:</p>
+<ul>
+<li>"The key difference: the wiki is a persistent, compounding artifact. The cross-references are already there. The contradictions have already been flagged. The synthesis already reflects everything you've read."</li>
+<li>"You never (or rarely) write the wiki yourself — the LLM writes and maintains all of it. You're in charge of sourcing, exploration, and asking the right questions."</li>
+<li>"Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase."</li>
+</ul>
+<h2 id="why-the-gist-matters">Why the gist matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-the-gist-matters"></a></h2>
+<p>Gue lihat dua hal penting dari gist ini:</p>
+<ul>
+<li>Ini bukan repo produk launch. Ini idea file yang bisa kamu copy-paste ke agen kamu.</li>
+<li>Ia menegaskan bahwa wiki harus jadi lapisan terpisah yang dimiliki LLM, sementara sumber mentah tetap immutable.</li>
+</ul>
+<p>Dengan kata lain: <code>llm-wiki</code> adalah pola operasional, bukan justifikasinya untuk bikin chat widget.</p>
+<h2 id="what-makes-it-different-from-rag">What makes it different from RAG<a aria-hidden="true" class="anchor-heading icon-link" href="#what-makes-it-different-from-rag"></a></h2>
+<ol>
+<li>RAG membaca ulang setiap kali. LLM Wiki menyimpan hasil kompilasi.</li>
+<li>RAG stateless. LLM Wiki stateful dan kembangnya bersifat kumulatif.</li>
+<li>RAG bekerja langsung pada sumber mentah. LLM Wiki menyelipkan lapisan wiki antara sumber dan query.</li>
+<li>RAG fokus jawaban cepat. LLM Wiki fokus pemahaman yang bisa dibaca, diperiksa, dan dikembangkan.</li>
+</ol>
+<p>Denser.ai menyebutnya pergeseran dari "cooking a meal from scratch every time" ke "compiled knowledge layer".</p>
+<h2 id="architecture">Architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#architecture"></a></h2>
+<p>Menurut gist, ada tiga lapisan:</p>
+<ul>
+<li>Raw sources: sumber mentah yang tetap immutable. File aslinya tetap ada di sini.</li>
+<li>Wiki: markdown yang dihasilkan LLM. Halaman konsep, entitas, ringkasan, perbandingan, sintesis.</li>
+<li>Schema: file seperti <code>CLAUDE.md</code> atau <code>AGENTS.md</code> yang memberi aturan struktur, format halaman, dan workflow.</li>
+</ul>
+<p>Tanpa schema, LLM cuma ngobrol. Dengan schema, ia jadi wiki maintainer.</p>
+<h2 id="operations">Operations<a aria-hidden="true" class="anchor-heading icon-link" href="#operations"></a></h2>
+<p>Gist menulis tiga operasi utama:</p>
+<ul>
+<li>Ingest: tambahkan sumber baru. LLM baca, ringkas, update halaman, perbarui index/log, dan jaga cross-link.</li>
+<li>Query: tanya langsung ke wiki. Jawabannya bisa jadi halaman markdown, tabel, slide deck, atau grafik. Yang bagus bisa difileback ke wiki.</li>
+<li>Lint: minta LLM cek kontradiksi, orphan page, klaim usang, gap konsep, dan broken link.</li>
+</ul>
+<p>DAIR.AI merangkum ini sebagai fase: ingest → compile → query/enhance → lint/maintain.</p>
+<h2 id="supporting-articles">Supporting articles<a aria-hidden="true" class="anchor-heading icon-link" href="#supporting-articles"></a></h2>
+<h3 id="denserai--from-rag-to-llm-wiki">Denser.ai — From RAG to LLM Wiki<a aria-hidden="true" class="anchor-heading icon-link" href="#denserai--from-rag-to-llm-wiki"></a></h3>
+<ul>
+<li>Gist Karpathy muncul 4 April 2026 sebagai "idea file", bukan product launch.</li>
+<li>Artikelnya menegaskan bahwa ini bukan menggantikan RAG, melainkan menambahkan layer compiled knowledge di atasnya.</li>
+<li>Prinsip pentingnya: compile once, query many; knowledge should compound; provenance non-negotiable; human-readable markdown lebih tahan lama daripada vector store.</li>
+</ul>
+<h3 id="dairai-academy--llm-knowledge-bases">DAIR.AI Academy — LLM Knowledge Bases<a aria-hidden="true" class="anchor-heading icon-link" href="#dairai-academy--llm-knowledge-bases"></a></h3>
+<ul>
+<li>Mereka menyebut LLM sebagai compiler yang baca raw source dan menghasilkan wiki terstruktur.</li>
+<li>Pendekatan ini bisa jalan tanpa embeddings atau vector search pada skala personal.</li>
+<li>Setiap query seharusnya bisa menambah basis pengetahuan jika outputnya difileback jadi halaman baru.</li>
+</ul>
+<h3 id="anthem-création--karpathys-llm-wiki-with-claude-and-obsidian">Anthem Création — Karpathy’s LLM Wiki with Claude and Obsidian<a aria-hidden="true" class="anchor-heading icon-link" href="#anthem-création--karpathys-llm-wiki-with-claude-and-obsidian"></a></h3>
+<ul>
+<li>Workflow praktis: copy gist ke LLM, buka folder di Obsidian, simpan sumber di folder <code>sources/</code>, lalu biarkan LLM membangun wiki.</li>
+<li>Analogi utama: wiki itu executable; raw source itu source code; jangan recompile setiap kali.</li>
+<li>Karpathy disebut mengelola wiki pribadi lebih dari 100 artikel dan 400.000 kata.</li>
+</ul>
+<h2 id="why-this-matters-untuk-agentic-engineering">Why this matters untuk agentic engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-matters-untuk-agentic-engineering"></a></h2>
+<ul>
+<li>Ini memperluas pola agentic workflow dari "AI nulis kode" ke "AI nulis dan memelihara pengetahuan".</li>
+<li>Dalam Software 3.0, LLM jadi bukan hanya interpreter kode; ia juga compiler pengetahuan.</li>
+<li>Untuk Zettelkasten/second brain, LLM Wiki lebih mirip pra-prosesor yang mengorganisir dokumen mentah sebelum gue memilih insight atomik.</li>
+<li>Penting dicatat: manusia masih harus memilih sumber, merancang schema, review wiki, dan memutuskan apa yang benar-benar nyantol.</li>
+</ul>
+<h2 id="practical-note">Practical note<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-note"></a></h2>
+<p>Kalau gue mau coba cepat:</p>
+<ul>
+<li>pisahkan folder <code>raw/</code> dan <code>wiki/</code>.</li>
+<li>bikin schema file (<code>CLAUDE.md</code> atau <code>AGENTS.md</code>) yang ngasih aturan page type, style, dan link.</li>
+<li>ingest sumber satu per satu, lalu review setiap perubahan wiki.</li>
+<li>jangan anggap query sebagai akhir. fileback hasil analisis ke wiki.</li>
+<li>jadikan <code>index.md</code> dan <code>log.md</code> sebagai kontrak sistem.</li>
+</ul>
+<h2 id="sources">Sources<a aria-hidden="true" class="anchor-heading icon-link" href="#sources"></a></h2>
+<ul>
+<li><a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f">https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f</a></li>
+<li><a href="https://denser.ai/blog/llm-wiki-karpathy-knowledge-base/">https://denser.ai/blog/llm-wiki-karpathy-knowledge-base/</a></li>
+<li><a href="https://academy.dair.ai/blog/llm-knowledge-bases-karpathy">https://academy.dair.ai/blog/llm-knowledge-bases-karpathy</a></li>
+<li><a href="https://anthemcreation.com/en/artificial-intelligence/karpathy-llm-wiki-claude-obsidian/">https://anthemcreation.com/en/artificial-intelligence/karpathy-llm-wiki-claude-obsidian/</a></li>
+</ul>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering">Karpathy — From Vibe Coding to Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/zettel.20260507153000">Karpathy LLM Wiki as knowledge compilation loop</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm-knowledge-base (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">karpathy (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering">Karpathy — From Vibe Coding to Agentic Engineering</a></li>
+</ul>

@@ -1,0 +1,416 @@
+<h1 id="reasoning">Reasoning<a aria-hidden="true" class="anchor-heading icon-link" href="#reasoning"></a></h1>
+<p>Arti yang gue pakai: <strong>“Honcho Reasoning” = mekanisme Honcho untuk mengolah message menjadi kesimpulan, pola, dan representasi peer</strong>, bukan reasoning model umum seperti “chain-of-thought LLM”.</p>
+<p>Istilah yang perlu dikunci:</p>
+<ul>
+<li>“Reasoning” di sini bukan sekadar model menjawab pertanyaan. Ini proses backend yang jalan setelah data/message masuk.</li>
+<li>“Formal logic” di sini berarti Honcho mencoba mengubah data menjadi struktur seperti premis eksplisit dan kesimpulan deduktif.</li>
+<li>“Latent information” berarti informasi yang tidak ditulis langsung, tapi bisa disimpulkan dari pola banyak interaksi.</li>
+<li>“Peer representation” adalah hasil akhirnya: model tentang user/agent/entity yang bisa dipakai agent sebagai konteks.</li>
+</ul>
+<h2 id="1-pertanyaan-kunci">1. Pertanyaan kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci"></a></h2>
+<p>Untuk ngerti Honcho Reasoning, ada 6 pertanyaan inti:</p>
+<ol>
+<li>Kenapa Honcho butuh reasoning, bukan cukup RAG?</li>
+<li>Apa yang dimaksud “latent information”?</li>
+<li>Bagaimana formal logic dipakai?</li>
+<li>Jenis reasoning apa saja yang dilakukan?</li>
+<li>Bagaimana prosesnya berjalan secara teknis?</li>
+<li>Apa trade-off dari pendekatan ini?</li>
+</ol>
+<p>★ Insight ─────────────────────────
+Honcho Reasoning adalah usaha mengubah memory dari <strong>arsip pasif</strong> menjadi <strong>pemahaman aktif</strong>.</p>
+<p>RAG biasa bertanya: “Potongan teks mana yang mirip dengan query ini?”</p>
+<p>Honcho Reasoning bertanya: “Dari semua data yang pernah masuk, apa yang bisa disimpulkan secara eksplisit, deduktif, pola, kontradiksi, dan penjelasan perilakunya?”</p>
+<p>Jadi memory-nya bukan cuma dicari. Memory-nya “dipikirkan”.
+───────────────────────────────────</p>
+<h2 id="2-kenapa-reasoning-diperlukan">2. Kenapa reasoning diperlukan?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-reasoning-diperlukan"></a></h2>
+<p>Page-nya mengkritik RAG tradisional:</p>
+<blockquote>
+<p>“Traditional RAG systems treat memory as static storage—they retrieve what was explicitly said when semantically similar queries appear.”</p>
+</blockquote>
+<p>Maksudnya: RAG bagus untuk mengambil informasi yang pernah ditulis eksplisit. Tapi RAG sering gagal menangkap informasi yang tersebar di banyak tempat.</p>
+<p>Contoh:</p>
+<p>Di session 1 elo bilang:</p>
+<pre><code>"Jawaban ini terlalu muter-muter."
+</code></pre>
+<p>Di session 2 elo bilang:</p>
+<pre><code>"Langsung ke intinya aja."
+</code></pre>
+<p>Di session 3 elo bilang:</p>
+<pre><code>"Kasih reasoning, tapi jangan normatif."
+</code></pre>
+<p>RAG bisa mengambil tiga kalimat itu kalau query cocok. Tapi Honcho ingin menyimpulkan:</p>
+<pre><code>User prefers direct explanations with reasoning, but dislikes vague hedging.
+</code></pre>
+<p>Kesimpulan itu tidak pernah elo tulis persis. Tapi ia bisa ditarik dari pola.</p>
+<p>Inilah yang disebut <strong>latent information</strong>.</p>
+<h2 id="3-apa-itu-latent-information">3. Apa itu latent information?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-apa-itu-latent-information"></a></h2>
+<p>Latent information adalah informasi tersembunyi di balik data mentah.</p>
+<p>Bukan tersembunyi secara mistis, tapi tersebar, implisit, atau perlu dirangkai.</p>
+<p>Contoh data mentah:</p>
+<pre><code>User sering meminta:
+- contoh konkret
+- breakdown step-by-step
+- koreksi kalau asumsi salah
+- jangan main tengah
+</code></pre>
+<p>Latent information-nya:</p>
+<pre><code>User values precise reasoning, concrete examples, and clear judgment over vague neutrality.
+</code></pre>
+<p>Ini bukan quote langsung. Ini hasil reasoning.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“we extract all latent information by reasoning about everything, so it’s there when you need it.”</p>
+</blockquote>
+<p>Kalimat ini penting karena menjelaskan ambisi Honcho: jangan tunggu query user cocok dengan memory. Proses dulu data menjadi kesimpulan, supaya nanti siap dipakai.</p>
+<p>Atomic idea:</p>
+<pre><code>Raw messages = bahan mentah
+Reasoning = proses ekstraksi makna
+Representation = hasil pemahaman yang bisa dipakai ulang
+</code></pre>
+<h2 id="4-formal-logic-framework-premis-dan-kesimpulan">4. Formal logic framework: premis dan kesimpulan<a aria-hidden="true" class="anchor-heading icon-link" href="#4-formal-logic-framework-premis-dan-kesimpulan"></a></h2>
+<p>Honcho bilang sistem reasoning-nya memakai <strong>formal logical reasoning</strong>.</p>
+<p>Page memberi contoh struktur data:</p>
+<pre><code>{
+  "explicit": [
+    { "content": "premise 1" },
+    { "content": "premise n" }
+  ],
+  "deductive": [
+    {
+      "premises": ["premise 1", "premise n"],
+      "conclusion": "conclusion 1"
+    }
+  ]
+}
+</code></pre>
+<p>Ini penting karena Honcho tidak ingin output reasoning cuma paragraf bebas. Ia ingin reasoning yang terstruktur:</p>
+<pre><code>Apa premisnya?
+Kesimpulan apa yang ditarik?
+Kesimpulan itu berasal dari premis mana?
+</code></pre>
+<p>Contoh versi manusia:</p>
+<pre><code>{
+  "explicit": [
+    { "content": "User said: 'Langsung ke intinya aja.'" },
+    { "content": "User said: 'Jangan terlalu normatif.'" }
+  ],
+  "deductive": [
+    {
+      "premises": [
+        "User asked to get straight to the point.",
+        "User dislikes overly normative answers."
+      ],
+      "conclusion": "User prefers direct, concrete analysis over vague general advice."
+    }
+  ]
+}
+</code></pre>
+<p>Kuncinya: reasoning Honcho mencoba menjaga hubungan antara bukti dan kesimpulan.</p>
+<p>Ini bagus karena memory yang baik harus bisa diaudit. Kalau representation bilang “user suka X”, developer idealnya bisa melacak: dari message/premis mana kesimpulan itu muncul?</p>
+<h2 id="5-jenis-reasoning-yang-dilakukan-honcho">5. Jenis reasoning yang dilakukan Honcho<a aria-hidden="true" class="anchor-heading icon-link" href="#5-jenis-reasoning-yang-dilakukan-honcho"></a></h2>
+<p>Page menyebut beberapa jenis reasoning/scaffolding:</p>
+<ol>
+<li>Explicit extraction</li>
+<li>Deductive conclusions</li>
+<li>Peer cards</li>
+<li>Consolidation</li>
+<li>Induction</li>
+<li>Abduction</li>
+</ol>
+<p>Kita pecah satu-satu.</p>
+<h3 id="51-explicit-extraction">5.1 Explicit extraction<a aria-hidden="true" class="anchor-heading icon-link" href="#51-explicit-extraction"></a></h3>
+<p>Ini mengambil hal yang memang dinyatakan langsung.</p>
+<p>Contoh message:</p>
+<pre><code>"Gue pakai macOS dan lagi belajar sandbox-exec."
+</code></pre>
+<p>Explicit extraction:</p>
+<pre><code>User uses macOS.
+User is learning sandbox-exec.
+</code></pre>
+<p>Ini level paling aman karena dekat dengan teks asli.</p>
+<h3 id="52-deductive-reasoning">5.2 Deductive reasoning<a aria-hidden="true" class="anchor-heading icon-link" href="#52-deductive-reasoning"></a></h3>
+<p>Deduksi menarik kesimpulan yang secara logis mengikuti premis.</p>
+<p>Contoh:</p>
+<p>Premis:</p>
+<pre><code>User uses macOS.
+sandbox-exec is a macOS sandboxing tool.
+</code></pre>
+<p>Kesimpulan deduktif:</p>
+<pre><code>sandbox-exec guidance is relevant to the user's environment.
+</code></pre>
+<p>Deduksi harus hati-hati. Kesimpulan harus mengikuti premis, bukan sekadar terdengar masuk akal.</p>
+<h3 id="53-peer-cards">5.3 Peer cards<a aria-hidden="true" class="anchor-heading icon-link" href="#53-peer-cards"></a></h3>
+<p>Peer card adalah ringkasan identitas/biografi penting tentang peer.</p>
+<p>Kalau peer-nya user, peer card bisa berisi:</p>
+<pre><code>- uses Indonesian casual "gue-elo" style
+- interested in AI agents, memory systems, and sandboxing
+- prefers structured, sharp explanations
+</code></pre>
+<p>Kalau peer-nya agent, peer card bisa berisi:</p>
+<pre><code>- acts as coding assistant
+- specializes in repo analysis
+- often helps with CLI setup
+</code></pre>
+<p>Peer card itu semacam kartu profil yang bisa disuntikkan ke agent supaya konteks dasarnya tidak hilang.</p>
+<h3 id="54-consolidation">5.4 Consolidation<a aria-hidden="true" class="anchor-heading icon-link" href="#54-consolidation"></a></h3>
+<p>Consolidation menggabungkan informasi yang redundant atau mendeteksi kontradiksi.</p>
+<p>Contoh redundant:</p>
+<pre><code>User prefers concise answers.
+User likes direct answers.
+User dislikes rambling.
+</code></pre>
+<p>Bisa dikonsolidasikan menjadi:</p>
+<pre><code>User prefers direct, concise answers.
+</code></pre>
+<p>Contoh kontradiksi:</p>
+<pre><code>Session lama: User prefers short answers.
+Session baru: User asks for deep dives and detailed breakdowns.
+</code></pre>
+<p>Consolidation harus bisa menandai bahwa preferensi mungkin berubah atau bergantung konteks.</p>
+<p>Ini penting karena memory yang terus bertambah tanpa konsolidasi akan jadi bising.</p>
+<h3 id="55-induction">5.5 Induction<a aria-hidden="true" class="anchor-heading icon-link" href="#55-induction"></a></h3>
+<p>Induksi adalah pattern recognition dari banyak contoh.</p>
+<p>Contoh:</p>
+<p>Dalam banyak sesi, user sering menanyakan:</p>
+<pre><code>- apa trade-off-nya?
+- failure mode-nya apa?
+- kenapa orang salah paham?
+- bandingkan dengan konsep lain
+</code></pre>
+<p>Inductive conclusion:</p>
+<pre><code>User tends to evaluate technical concepts through failure modes, trade-offs, and conceptual comparisons.
+</code></pre>
+<p>Ini bukan hasil satu message. Ini pola lintas banyak message.</p>
+<h3 id="56-abduction">5.6 Abduction<a aria-hidden="true" class="anchor-heading icon-link" href="#56-abduction"></a></h3>
+<p>Abduction adalah mencari penjelasan paling sederhana untuk perilaku yang diamati.</p>
+<p>Contoh observasi:</p>
+<pre><code>User repeatedly asks for citations.
+User questions unsourced claims.
+User flags AI-generated-looking documents.
+</code></pre>
+<p>Abductive explanation:</p>
+<pre><code>User is concerned with epistemic reliability and source quality.
+</code></pre>
+<p>Abduction ini kuat, tapi paling rawan salah. Karena ia menebak penjelasan terbaik, bukan membuktikan secara pasti.</p>
+<p>Jadi abduction harus dipakai sebagai hipotesis, bukan fakta keras.</p>
+<h2 id="6-cara-kerjanya-secara-teknis">6. Cara kerjanya secara teknis<a aria-hidden="true" class="anchor-heading icon-link" href="#6-cara-kerjanya-secara-teknis"></a></h2>
+<p>Flow-nya kira-kira begini:</p>
+<pre><code>Messages masuk
+→ disimpan langsung
+→ masuk queue background
+→ diproses dalam urutan session/peer
+→ reasoning model membuat explicit/deductive/pattern/summary
+→ hasil disimpan sebagai bagian dari peer representation
+→ di-index ke vector collections
+→ agent bisa query context saat butuh
+</code></pre>
+<p>Page bilang:</p>
+<blockquote>
+<p>“When you write messages to Honcho, they’re stored immediately and enqueued for background processing.”</p>
+</blockquote>
+<p>Ini berarti write cepat, reasoning belakangan.</p>
+<p>Lalu page bilang:</p>
+<blockquote>
+<p>“session-based queues maintain chronological consistency”</p>
+</blockquote>
+<p>Ini penting. Reasoning perlu urutan waktu. Kalau pesan diproses acak, kesimpulan bisa kacau.</p>
+<p>Contoh:</p>
+<p>Message 1:</p>
+<pre><code>"Gue dulu pakai Python."
+</code></pre>
+<p>Message 2:</p>
+<pre><code>"Sekarang gue pindah ke Rust."
+</code></pre>
+<p>Kalau urutannya kebalik, representation bisa salah.</p>
+<p>Chronological consistency menjaga agar perubahan state dibaca sesuai waktu.</p>
+<h2 id="7-token-batching-kenapa-tidak-reasoning-tiap-message">7. Token batching: kenapa tidak reasoning tiap message?<a aria-hidden="true" class="anchor-heading icon-link" href="#7-token-batching-kenapa-tidak-reasoning-tiap-message"></a></h2>
+<p>Honcho tidak langsung menjalankan reasoning untuk setiap message kecil.</p>
+<p>Page bilang Honcho menunggu sampai total token pending untuk peer representation melewati threshold sekitar <strong>1.000 token</strong>.</p>
+<p>Maksudnya:</p>
+<pre><code>Message pendek:
+"yes"
+"ok"
+"sounds good"
+</code></pre>
+<p>Tidak langsung diproses satu-satu. Mereka ditahan dulu di queue sampai cukup konteks.</p>
+<p>Kenapa?</p>
+<p>Pertama, biaya. Honcho charges based on reasoning passes, jadi terlalu sering reasoning mahal.</p>
+<p>Kedua, kualitas. Reasoning dari satu message pendek sering tidak bermakna.</p>
+<p>Ketiga, konteks. Batch 1.000 token memberi cukup bahan untuk menarik kesimpulan.</p>
+<p>Atomic idea:</p>
+<pre><code>Reasoning butuh cukup konteks.
+Terlalu sedikit data = inference rapuh.
+Terlalu sering infer = mahal.
+Batching = kompromi cost dan kualitas.
+</code></pre>
+<p>Tapi ada trade-off:</p>
+<p>Karena batching, memory baru mungkin belum langsung masuk representation sampai threshold tercapai.</p>
+<p>Jadi ada delay epistemik: sistem sudah menyimpan message, tapi belum tentu sudah “memahami” message itu.</p>
+<h2 id="8-kenapa-pakai-custom-model">8. Kenapa pakai custom model?<a aria-hidden="true" class="anchor-heading icon-link" href="#8-kenapa-pakai-custom-model"></a></h2>
+<p>Page bilang off-the-shelf LLM bisa melakukan formal reasoning, tapi tidak optimal.</p>
+<p>Honcho memakai custom models yang dilatih untuk:</p>
+<ul>
+<li>logical rigor</li>
+<li>structured output</li>
+<li>efficiency</li>
+</ul>
+<p>Maksudnya:</p>
+<p>General LLM cenderung menjawab dengan teks yang terdengar masuk akal. Tapi untuk memory system, output harus lebih disiplin:</p>
+<pre><code>premis jelas
+kesimpulan jelas
+schema konsisten
+biaya rendah
+latency terkendali
+</code></pre>
+<p>Page menyebut output-nya perlu JSON schema konsisten dengan premises dan conclusions.</p>
+<p>Ini masuk akal. Kalau output reasoning tidak konsisten, susah disimpan, dicari, digabung, dan diaudit.</p>
+<h2 id="9-reasoning-output-disimpan-di-mana">9. Reasoning output disimpan di mana?<a aria-hidden="true" class="anchor-heading icon-link" href="#9-reasoning-output-disimpan-di-mana"></a></h2>
+<p>Output reasoning seperti:</p>
+<ul>
+<li>conclusions</li>
+<li>summaries</li>
+<li>peer cards</li>
+</ul>
+<p>disimpan sebagai bagian dari <strong>peer representations</strong> dan di-index ke <strong>vector collections</strong>.</p>
+<p>Ini berarti ketika agent nanti minta context, Honcho tidak hanya mencari raw message. Ia juga mencari hasil reasoning.</p>
+<p>Contoh:</p>
+<p>Raw message:</p>
+<pre><code>"Gue gak suka jawaban yang main tengah."
+</code></pre>
+<p>Reasoned conclusion:</p>
+<pre><code>User prefers clear judgment and dislikes evasive neutrality.
+</code></pre>
+<p>Nanti kalau agent mendapat situasi yang butuh memberi opini, retrieval bisa mengambil conclusion itu, walau query user tidak memakai kata “main tengah”.</p>
+<p>Ini manfaat retrieval atas conclusion, bukan cuma retrieval atas chat log.</p>
+<h2 id="10-apa-yang-sebenarnya-dipikirkan-oleh-honcho">10. Apa yang sebenarnya “dipikirkan” oleh Honcho?<a aria-hidden="true" class="anchor-heading icon-link" href="#10-apa-yang-sebenarnya-dipikirkan-oleh-honcho"></a></h2>
+<p>Jangan bayangkan Honcho “sadar” atau “memahami” seperti manusia. Lebih tepat:</p>
+<p>Honcho menjalankan pipeline inferensi untuk membuat struktur interpretatif.</p>
+<p>Ia mencoba menjawab:</p>
+<pre><code>Apa yang eksplisit?
+Apa yang bisa disimpulkan?
+Apa pola yang berulang?
+Apa yang redundant?
+Apa yang kontradiktif?
+Apa penjelasan paling sederhana?
+Apa profil peer yang berguna?
+</code></pre>
+<p>Hasilnya bukan kebenaran mutlak. Hasilnya adalah <strong>state interpretatif</strong> yang berguna untuk agent.</p>
+<p>Ini penting: reasoning menghasilkan useful context, bukan wahyu.</p>
+<h2 id="11-failure-mode-honcho-reasoning">11. Failure mode Honcho Reasoning<a aria-hidden="true" class="anchor-heading icon-link" href="#11-failure-mode-honcho-reasoning"></a></h2>
+<p>Sistem ini powerful, tapi ada risiko.</p>
+<h3 id="failure-1-overgeneralization">Failure 1: Overgeneralization<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-1-overgeneralization"></a></h3>
+<p>Dari satu dua message, sistem bisa menyimpulkan terlalu luas.</p>
+<p>Contoh:</p>
+<p>User bilang:</p>
+<pre><code>"Jawab pendek aja, gue lagi buru-buru."
+</code></pre>
+<p>Kesimpulan salah:</p>
+<pre><code>User always prefers short answers.
+</code></pre>
+<p>Padahal konteksnya sementara.</p>
+<h3 id="failure-2-abduction-terlalu-spekulatif">Failure 2: Abduction terlalu spekulatif<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-2-abduction-terlalu-spekulatif"></a></h3>
+<p>Observasi:</p>
+<pre><code>User sering tanya soal ekonomi Indonesia.
+</code></pre>
+<p>Abduksi salah:</p>
+<pre><code>User is an economist.
+</code></pre>
+<p>Padahal mungkin user cuma tertarik politik-ekonomi.</p>
+<h3 id="failure-3-contradiction-handling-gagal">Failure 3: Contradiction handling gagal<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-3-contradiction-handling-gagal"></a></h3>
+<p>User bisa berubah.</p>
+<p>Dulu:</p>
+<pre><code>"Saya suka jawaban ringkas."
+</code></pre>
+<p>Sekarang:</p>
+<pre><code>"Dive deep satu-satu."
+</code></pre>
+<p>Sistem harus memahami bahwa preferensi tergantung konteks, bukan salah satu harus dihapus.</p>
+<h3 id="failure-4-memory-inertia">Failure 4: Memory inertia<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-4-memory-inertia"></a></h3>
+<p>Representation lama bisa terlalu kuat dan menghambat update.</p>
+<p>Agent jadi menjawab berdasarkan “profil lama” meski user sudah berubah.</p>
+<h3 id="failure-5-hidden-bias-dari-reasoning-model">Failure 5: Hidden bias dari reasoning model<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-5-hidden-bias-dari-reasoning-model"></a></h3>
+<p>Karena conclusion dibuat oleh model, ia bisa membawa bias model: menafsirkan perilaku user dengan asumsi yang tidak diminta.</p>
+<p>Jadi developer perlu audit, feedback, atau mekanisme correction.</p>
+<h2 id="12-kenapa-ini-beda-dari-ai-summary">12. Kenapa ini beda dari “AI summary”?<a aria-hidden="true" class="anchor-heading icon-link" href="#12-kenapa-ini-beda-dari-ai-summary"></a></h2>
+<p>Summary hanya merangkum.</p>
+<p>Honcho Reasoning lebih ambisius:</p>
+<pre><code>summary = apa isi data
+explicit = apa yang dinyatakan
+deductive = apa yang pasti mengikuti premis
+induction = pola dari banyak data
+abduction = penjelasan paling sederhana
+consolidation = gabung/hapus/konflik
+peer card = profil ringkas entitas
+representation = state jangka panjang
+</code></pre>
+<p>Jadi summary cuma satu komponen kecil.</p>
+<p>Kalau summary seperti “catatan rapat”, reasoning seperti “analisis berkelanjutan tentang orang/proyek/tim”.</p>
+<h2 id="13-linking-hubungan-reasoning-dengan-arsitektur-honcho">13. Linking: hubungan reasoning dengan arsitektur Honcho<a aria-hidden="true" class="anchor-heading icon-link" href="#13-linking-hubungan-reasoning-dengan-arsitektur-honcho"></a></h2>
+<p>Di arsitektur sebelumnya:</p>
+<pre><code>Workspace → Peer → Session → Message
+</code></pre>
+<p>Reasoning masuk setelah message.</p>
+<p>Relasi lengkapnya:</p>
+<pre><code>Workspace memberi batas
+Peer memberi identitas
+Session memberi konteks waktu
+Message memberi bahan mentah
+Reasoning memberi interpretasi
+Representation menyimpan state
+Context endpoint mengirim state ke agent
+</code></pre>
+<p>Jadi reasoning adalah mesin transformasi:</p>
+<pre><code>message history → learned peer state
+</code></pre>
+<p>Tanpa reasoning, Honcho cuma jadi database message + vector search.</p>
+<p>Dengan reasoning, Honcho menjadi continual memory system.</p>
+<h2 id="14-insight-penutup">14. Insight penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#14-insight-penutup"></a></h2>
+<p>★ Insight ─────────────────────────
+Honcho Reasoning paling gampang dipahami sebagai “lapisan penalaran di antara log dan memory”.</p>
+<p>Log mencatat apa yang terjadi.
+Reasoning menafsirkan apa artinya.
+Representation menyimpan pemahaman sementara.
+Agent memakai pemahaman itu untuk bertindak lebih konsisten.</p>
+<p>Kesalahan umum: mengira reasoning berarti agent “mengingat lebih banyak”. Bukan. Reasoning berarti agent mencoba <strong>mengingat dengan struktur makna</strong>, bukan cuma menumpuk riwayat.
+───────────────────────────────────</p>
+<h2 id="15-korelasi-dengan-konsep-lain">15. Korelasi dengan konsep lain<a aria-hidden="true" class="anchor-heading icon-link" href="#15-korelasi-dengan-konsep-lain"></a></h2>
+<p>Konsep pertama: <strong>event sourcing</strong>.</p>
+<p>Event sourcing:</p>
+<pre><code>events → projections/state
+</code></pre>
+<p>Honcho:</p>
+<pre><code>messages → reasoning → peer representations
+</code></pre>
+<p>Kesamaannya: state dibangun dari event/message.</p>
+<p>Bedanya: event sourcing deterministik, Honcho interpretatif.</p>
+<p>Konsep kedua: <strong>knowledge graph inference</strong>.</p>
+<p>Knowledge graph menyimpan entity dan relasi, lalu melakukan inference.</p>
+<p>Honcho mirip karena ia membangun kesimpulan tentang peer. Tapi Honcho tidak hanya mengandalkan graph yang predefined. Ia memakai reasoning model untuk menarik kesimpulan dari message.</p>
+<p>Konsep ketiga: <strong>Zettelkasten</strong>.</p>
+<p>Zettelkasten membangun jaringan pemahaman dari catatan kecil. Honcho Reasoning mencoba otomatisasi sebagian proses itu:</p>
+<pre><code>message kecil → premise → conclusion → pattern → representation
+</code></pre>
+<p>Bedanya: Zettelkasten biasanya manusia yang menghubungkan ide. Honcho memakai model untuk menghubungkan bukti dan kesimpulan.</p>
+<p>Kesimpulan pendeknya: <strong>Honcho Reasoning adalah pipeline background yang mengubah message menjadi kesimpulan terstruktur dan representation peer, supaya agent punya memory yang bukan cuma searchable, tapi bisa meniru statefulness.</strong></p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.peer-representations">Peer Representations</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.design-patterns">Honcho Design Patterns</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">memory (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.peer-representations">Peer Representations</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.stateful-memory">Stateful Memory</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

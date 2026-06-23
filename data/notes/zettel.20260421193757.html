@@ -1,0 +1,75 @@
+<h1 id="kapan-struktur-ai-native-jadi-layak-dipakai-dan-kapan-ia-justru-overkill">Kapan struktur AI-native jadi layak dipakai dan kapan ia justru overkill<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-struktur-ai-native-jadi-layak-dipakai-dan-kapan-ia-justru-overkill"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Kapan pendekatan AI-native berstruktur layak dipakai?</li>
+<li>Kapan struktur itu justru menjadi overkill?</li>
+<li>Bagaimana menilai proporsionalitas antara risiko dan proses?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Kematangan AI-native engineering tidak ditandai oleh penggunaan semua tool dan proses. Ia ditandai oleh kemampuan merutekan task ke tingkat struktur yang paling kecil tetapi masih aman.</p>
+<blockquote>
+<p>Struktur bukan tujuan. Struktur adalah cara mengelola risiko.</p>
+</blockquote>
+<h2 id="kriteria-layak-dipakai">Kriteria layak dipakai<a aria-hidden="true" class="anchor-heading icon-link" href="#kriteria-layak-dipakai"></a></h2>
+<p>Pendekatan terstruktur layak ketika:</p>
+<ul>
+<li>biaya salah tinggi,</li>
+<li>blast radius perubahan besar atau multi-file,</li>
+<li>ada banyak agent/engineer yang terlibat,</li>
+<li>ada potensi konflik teknis atau bisnis,</li>
+<li>output harus konsisten dengan sistem lama,</li>
+<li>atau area yang disentuh sensitif (security, billing, public API, data schema).</li>
+</ul>
+<p>Dalam konteks ini, struktur tambahan membantu menjaga drift agar tetap terkendali dan membuat reasoning dapat di-review.</p>
+<h2 id="kriteria-overkill">Kriteria overkill<a aria-hidden="true" class="anchor-heading icon-link" href="#kriteria-overkill"></a></h2>
+<p>Struktur menjadi overkill ketika:</p>
+<ul>
+<li>task kecil dan jelas,</li>
+<li>blast radius rendah,</li>
+<li>perubahan terisolasi dan mudah diverifikasi,</li>
+<li>artifak proses lebih mahal daripada benefitnya.</li>
+</ul>
+<p>Contoh overkill:</p>
+<ul>
+<li>mengganti teks UI kecil,</li>
+<li>memperbaiki typo,</li>
+<li>update minor pada helper lokal,</li>
+<li>bug fix sederhana dengan scope terbatas.</li>
+</ul>
+<p>Di situ, workflow ringan atau Quick Dev dengan context yang cukup sering lebih efisien.</p>
+<h2 id="menilai-proporsionalitas">Menilai proporsionalitas<a aria-hidden="true" class="anchor-heading icon-link" href="#menilai-proporsionalitas"></a></h2>
+<p>Tanya dulu:</p>
+<ul>
+<li>seberapa ambigu task ini?</li>
+<li>seberapa besar dampak salahnya?</li>
+<li>seberapa kompleks domain atau sistem yang terlibat?</li>
+<li>apakah tim bisa memvalidasi hasil dengan mudah?</li>
+</ul>
+<p>Jika jawaban menunjukkan risiko besar, layak menambah struktur. Jika jawaban menunjukkan task kecil, struktur besar hanya menambah overhead.</p>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>AI-native bukan berarti selalu pakai proses berat.</li>
+<li>Ia berarti pakai proses yang sesuai dengan risiko.</li>
+<li>Struktur yang baik adalah struktur yang bisa ditarik mundur ketika task memungkinkan.</li>
+</ul>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421174123">BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</a> — BMAD Quick Dev mengoptimalkan attention manusia, bukan sekadar kecepatan model</li>
+<li><a href="/sotoy/notes/zettel.20260421180059">Checkpoint Preview membuat review manusia fokus pada pemahaman, bukan sekadar diff</a> — Checkpoint Preview membuat review manusia fokus pada pemahaman, bukan sekadar diff</li>
+<li><a href="/sotoy/notes/zettel.20260421185424">Party Mode adalah mesin konflik terkontrol untuk menampilkan trade-off multi-agent</a> — Party Mode adalah mesin konflik terkontrol untuk menampilkan trade-off multi-agent</li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">decision-making (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">risk (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

@@ -1,0 +1,33 @@
+<h1 id="definisi-done-sebagai-verified">Definisi 'Done' sebagai 'Verified'<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi-done-sebagai-verified"></a></h1>
+<h2 id="konsep">Konsep<a aria-hidden="true" class="anchor-heading icon-link" href="#konsep"></a></h2>
+<p>Dalam workflow tradisional, seorang developer merasa selesai ketika implementasi fitur telah ditulis. Namun, dalam AI-driven development, kecepatan generate kode membuat "penulisan" menjadi trivial.</p>
+<p><strong>Verified Done</strong> adalah standar di mana sebuah tugas dianggap selesai hanya jika:</p>
+<ol>
+<li>Implementasi telah ditulis.</li>
+<li>Seluruh check (tests, linter, typecheck) telah dijalankan dalam session tersebut.</li>
+<li>Output verifikasi menunjukkan status 'Pass'.</li>
+</ol>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Tanpa definisi ini, agent cenderung mengalami "hallucination of completion"—merasa sudah selesai karena kodenya terlihat benar secara sintaksis, padahal secara behavior gagal.</p>
+<h2 id="implementasi">Implementasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implementasi"></a></h2>
+<ul>
+<li><strong>Stop Hooks</strong>: Memaksa eksekusi verifikasi tepat sebelum agent bisa mengirim pesan "Done".</li>
+<li><strong>Evidence-Based Reporting</strong>: Mewajibkan agent melampirkan output terminal sebagai bukti verifikasi.</li>
+</ul>
+<h2 id="relasi">Relasi<a aria-hidden="true" class="anchor-heading icon-link" href="#relasi"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.ai-engineering.claude-code-loop-setup">Practical Loop Setup in Claude Code: From Messenger to Reviewer</a>: Implementasi praktis menggunakan hooks di Claude Code.</li>
+<li><a href="/sotoy/notes/zettel.ai.separation-of-maker-and-checker">Pemisahan Maker dan Checker dalam Verifikasi AI</a>: Memastikan verifikasi dilakukan oleh checker yang independen.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-workflow (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">verification (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">loop-engineering (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.ai.loop-enforcement-mechanisms">Mekanisme Penegakan Loop (Loop Enforcement)</a></li>
+</ul>

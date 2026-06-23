@@ -1,0 +1,63 @@
+<h1 id="llm-membutuhkan-grounding-untuk-bisa-berguna">LLM membutuhkan grounding untuk bisa berguna<a aria-hidden="true" class="anchor-heading icon-link" href="#llm-membutuhkan-grounding-untuk-bisa-berguna"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Yang gue tangkap dari quote “It worked—sort of” adalah bahwa LLM generik memang sering memberi proof of possibility: cukup fasih untuk bikin eksperimen terasa bermakna, tapi belum cukup grounded untuk bisa dipercaya sebagai solusi nyata. Grounding itu bukan soal gaya bahasa, tapi soal apakah jawaban itu punya pijakan pada konteks dan fakta domain yang relevan.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>It worked—sort of.</p>
+</blockquote>
+<h2 id="kenapa-ini-core">Kenapa ini core<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-core"></a></h2>
+<p>Quote ini penting karena dia memecah ilusi “AI langsung beresin masalah” tanpa mematikan optimisme. Di titik ini saya mulai sadar bahwa adopsi LLM punya dua lapisan: model bisa dipanggil dan menghasilkan bahasa bagus; tapi outputnya juga harus diikat ke realitas produk dan domain.</p>
+<h2 id="apa-itu-grounding">Apa itu grounding?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-grounding"></a></h2>
+<p>Grounding adalah proses membuat jawaban model terikat pada konteks nyata: dokumen, database, source of truth, atau hasil tool yang relevan. Ini yang membuat jawaban model lebih dari sekadar fluent: dia harus grounded.</p>
+<h2 id="kenapa-grounding-penting">Kenapa grounding penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-grounding-penting"></a></h2>
+<p>Tanpa grounding, model bisa terdengar pintar tapi tetap salah karena dia hanya mengandalkan pola bahasa umum. Ini sebabnya LLM tanpa grounding sering:</p>
+<ul>
+<li>terlalu generik,</li>
+<li>salah produk,</li>
+<li>salah prosedur,</li>
+<li>atau mengarang halusinasi.</li>
+</ul>
+<p>Itu juga alasan mengapa buku menulis:</p>
+<blockquote>
+<p>"it obviously knew nothing about the team’s product."</p>
+</blockquote>
+<h2 id="grounding-vs-prompt-engineering">Grounding vs prompt engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#grounding-vs-prompt-engineering"></a></h2>
+<p>Prompt engineering fokus pada cara memberi instruksi dan struktur output. Grounding fokus pada sumber yang dipakai model sebagai pijakan. Model bisa punya prompt yang rapi, tetapi tetap salah kalau konteksnya tidak grounded.</p>
+<h2 id="grounding-bukan-jaminan-truth-absolut">Grounding bukan jaminan truth absolut<a aria-hidden="true" class="anchor-heading icon-link" href="#grounding-bukan-jaminan-truth-absolut"></a></h2>
+<p>Grounding meningkatkan peluang jawaban benar, tapi tidak menghapus kemungkinan error. Anda masih butuh:</p>
+<ul>
+<li>sumber yang relevan,</li>
+<li>retrieval yang benar,</li>
+<li>prompt yang jelas,</li>
+<li>dan batasan yang tegas.</li>
+</ul>
+<p>Grounding hanya mengurangi ruang bagi model untuk sekadar mengarang.</p>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>"Worked" menunjukkan bahwa LLM bisa menghasilkan bahasa yang wajar.</li>
+<li>"Sort of" menunjukkan bahwa fluency tidak sama dengan usefulness.</li>
+<li>Bottleneck berpindah dari "bagaimana panggil model" ke "bagaimana memberi model konteks yang benar." </li>
+<li>Pola ini berulang sepanjang buku: solusi awal cukup menjanjikan, lalu limit berikutnya baru ketemu setelah dipakai.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Part I</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">grounding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">part-i (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777272449652">Streaming token dapat diubah jadi UX responsif</a></li>
+<li><a href="/sotoy/notes/zettel.1777362905431">Grounding adalah menyuplai konteks yang hilang saat inference tanpa mengubah model</a></li>
+<li><a href="/sotoy/notes/zettel.moc.the-developers-guide-to-ai">MOC The Developer's Guide to AI</a></li>
+</ul>

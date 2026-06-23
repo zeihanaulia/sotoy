@@ -1,0 +1,140 @@
+<h1 id="openviking-architecture">OpenViking architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#openviking-architecture"></a></h1>
+<p>Link: <a href="https://docs.openviking.ai/en/concepts/01-architecture">https://docs.openviking.ai/en/concepts/01-architecture</a></p>
+<p>Hari ini gue nulis ulang pemahaman gue tentang arsitektur OpenViking, bukan deployment cloud-nya. Yang gue catat adalah struktur internal: client, service layer, modul retrieve/session/parse/compressor, storage layer, dan data flow.</p>
+<h2 id="arsitektur-besar-openviking-menurut-gue">Arsitektur besar OpenViking menurut gue<a aria-hidden="true" class="anchor-heading icon-link" href="#arsitektur-besar-openviking-menurut-gue"></a></h2>
+<p>Kalau digambarkan sederhana, OpenViking itu punya tiga wilayah utama:</p>
+<ul>
+<li><strong>Client</strong> sebagai pintu masuk.</li>
+<li><strong>Service Layer</strong> sebagai business logic reusable.</li>
+<li><strong>Core Modules</strong> sebagai mesin pencari, ingestion, session, dan kompresi.</li>
+<li><strong>Storage Layer</strong> sebagai tempat konten dan indeks disimpan.</li>
+</ul>
+<p>Jadi modelnya bukan "SDK wrapper ke vector DB". Dia lebih seperti sistem internal yang memisahkan ingestion, retrieval, session memory, compression, dan storage.</p>
+<h2 id="client--pintu-masuk-tunggal">Client = pintu masuk tunggal<a aria-hidden="true" class="anchor-heading icon-link" href="#client--pintu-masuk-tunggal"></a></h2>
+<p>Gue lihat OpenViking memposisikan Client sebagai unified entry. Dari luar, developer cukup interaksi lewat satu interface: <code>find</code>, <code>ls</code>, <code>read</code>, <code>add_resource</code>, <code>commit session</code>, dan lain-lain.</p>
+<p>Client itu remote control. Dia nggak melakukan banyak logika sendiri. Dia menyalurkan perintah ke service layer.</p>
+<h2 id="service-layer--bisnis-logic-tanpa-nempel-ke-transport">Service Layer = bisnis logic tanpa nempel ke transport<a aria-hidden="true" class="anchor-heading icon-link" href="#service-layer--bisnis-logic-tanpa-nempel-ke-transport"></a></h2>
+<p>Gue suka konsep ini karena bikin logika intinya bisa dipakai di HTTP server, CLI, atau SDK lain tanpa rewrite.</p>
+<p>Di page ini, service layer dipilah jadi beberapa service seperti:</p>
+<ul>
+<li><code>FSService</code> untuk operasi filesystem: <code>ls</code>, <code>read</code>, <code>overview</code>, <code>abstract</code>, <code>glob</code>.</li>
+<li><code>SearchService</code> untuk semantic search: <code>search</code>, <code>find</code>.</li>
+<li><code>SessionService</code> untuk manajemen session: <code>session</code>, <code>commit</code>, <code>archive</code>.</li>
+<li><code>ResourceService</code> untuk import resource/skill.</li>
+<li><code>RelationService</code> untuk relasi konteks antar item.</li>
+<li><code>PackService</code> untuk import/export/backup.</li>
+<li><code>DebugService</code> untuk observability dan retrieval trace.</li>
+</ul>
+<p>Jadi intinya: transport layer itu bebas, logika intinya tetap di service layer.</p>
+<h2 id="core-modules--mesin-internal">Core modules = mesin internal<a aria-hidden="true" class="anchor-heading icon-link" href="#core-modules--mesin-internal"></a></h2>
+<p>Bagian paling penting buat gue adalah modul retrieve, parse, session, dan compressor.</p>
+<h3 id="retrieve">Retrieve<a aria-hidden="true" class="anchor-heading icon-link" href="#retrieve"></a></h3>
+<p>Retrieve itu bukan cuma vector search. Dia modul pencarian konteks yang terdiri dari:</p>
+<ul>
+<li>intent analysis,</li>
+<li>hierarchical retrieval,</li>
+<li>rerank.</li>
+</ul>
+<p>Untuk query kompleks, OpenViking tidak langsung ke top-k chunk. Dia dulu cari direktori relevan, eksplor hierarki, lalu rerank kandidat.</p>
+<p>Kalau gue rangkum:</p>
+<ul>
+<li><code>FSService</code> tahu path yang sudah ada.</li>
+<li><code>SearchService</code> pakai makna untuk menemukan path.</li>
+<li><code>Retrieve</code> menjembatani keduanya.</li>
+</ul>
+<h3 id="parse">Parse<a aria-hidden="true" class="anchor-heading icon-link" href="#parse"></a></h3>
+<p>Parse adalah ingestion pipeline. Dia membaca dokumen, membuat struktur tree, lalu menyalin ke AGFS sebelum semantic generation.</p>
+<p>Yang penting:</p>
+<ul>
+<li>parsing dokumen itu dilakukan tanpa LLM,</li>
+<li>tree structuring dibuat dulu,</li>
+<li>semantic generation (L0/L1/L2) berjalan async.</li>
+</ul>
+<p>Jadi input mentah pertama-tama menjadi context filesystem, bukan langsung vectorized.</p>
+<h3 id="session">Session<a aria-hidden="true" class="anchor-heading icon-link" href="#session"></a></h3>
+<p>Session module yang bikin OpenViking terasa bukan sekadar store. Dia ngurus:</p>
+<ul>
+<li>message recording,</li>
+<li>compress history,</li>
+<li>archive,</li>
+<li>memory extraction,</li>
+<li>commit ke storage.</li>
+</ul>
+<p>Session commit adalah proses yang mengubah interaksi jadi memory yang bisa dicari kembali.</p>
+<h3 id="compressor">Compressor<a aria-hidden="true" class="anchor-heading icon-link" href="#compressor"></a></h3>
+<p>Compressor adalah penjaga quality memori. Dia bertugas kompresi dan deduplikasi agar memory jangka panjang tidak jadi noisy.</p>
+<p>Gue catat bahwa ini penting supaya preferensi dan pola agent tidak hanya menumpuk, tapi juga dirapikan.</p>
+<h2 id="storage-layer-agfs--vector-index">Storage layer: AGFS + Vector Index<a aria-hidden="true" class="anchor-heading icon-link" href="#storage-layer-agfs--vector-index"></a></h2>
+<p>Ini bagian yang paling bikin arsitektur OpenViking jelas bagi gue.</p>
+<h3 id="agfs">AGFS<a aria-hidden="true" class="anchor-heading icon-link" href="#agfs"></a></h3>
+<p>AGFS adalah storage konten/file. Dia menyimpan isi sebenarnya: L0/L1/L2, multimedia, dan relations.</p>
+<p>Kalau agent butuh content, sumber kebenarannya adalah AGFS.</p>
+<h3 id="vector-index">Vector Index<a aria-hidden="true" class="anchor-heading icon-link" href="#vector-index"></a></h3>
+<p>Vector Index hanya menyimpan URI, vector, dan metadata. Bukan isi file penuh.</p>
+<p>Ini mirip katalog perpustakaan. Kalau vector index selesai, agent tahu lokasi konteks. Konten lengkapnya tetap di AGFS.</p>
+<p>Gue catat bahwa ini menjaga consistency: AGFS sebagai single source of truth, vector index sebagai peta semantic.</p>
+<h2 id="data-flow-menambahkan-konteks">Data flow menambahkan konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#data-flow-menambahkan-konteks"></a></h2>
+<p>Flow yang gue tangkap untuk adding context adalah:</p>
+<pre><code>Input → Parser → TreeBuilder → AGFS → SemanticQueue → Vector Index
+</code></pre>
+<p>Prosesnya:</p>
+<ol>
+<li>input masuk,</li>
+<li>parser membentuk struktur tree,</li>
+<li>tree disimpan ke AGFS,</li>
+<li>semantic layer dibangun async,</li>
+<li>vector index dibuat dari URI + metadata.</li>
+</ol>
+<p>Ini kebalikan dari pipeline RAG biasa yang biasanya: chunk → embed → vector DB.</p>
+<h2 id="data-flow-mengambil-konteks">Data flow mengambil konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#data-flow-mengambil-konteks"></a></h2>
+<p>Flow retrievalnya:</p>
+<pre><code>Query → Intent Analysis → Hierarchical Retrieval → Rerank → Results
+</code></pre>
+<p>Jadi OpenViking tidak sekadar cari chunk paling mirip. Dia menelusuri struktur direktori, lalu mengurutkan hasilnya.</p>
+<h2 id="session-commit-dan-memory-lifecycle">Session commit dan memory lifecycle<a aria-hidden="true" class="anchor-heading icon-link" href="#session-commit-dan-memory-lifecycle"></a></h2>
+<p>Setelah sesi selesai, OpenViking mengeksekusi:</p>
+<pre><code>Messages → Compress → Archive → Memory Extraction → Storage
+</code></pre>
+<p>Yang gue catat: session commit bukan cuma arsip chat. Dia mengubah history menjadi memory yang bisa dipanggil lagi.</p>
+<h2 id="mode-deployment-embedded-vs-http">Mode deployment: embedded vs HTTP<a aria-hidden="true" class="anchor-heading icon-link" href="#mode-deployment-embedded-vs-http"></a></h2>
+<p>OpenViking mendukung dua mode:</p>
+<ul>
+<li><strong>Embedded</strong>: library lokal, cocok untuk prototipe dan lokal development.</li>
+<li><strong>HTTP</strong>: service terpisah, cocok untuk tim, multi-client, dan production.</li>
+</ul>
+<p>Embedded itu langsung dan murah. HTTP itu lebih fleksibel untuk banyak client.</p>
+<h2 id="insight-arsitektur-utama">Insight arsitektur utama<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-arsitektur-utama"></a></h2>
+<p>Gue narik dua dunia utama dari OpenViking:</p>
+<ol>
+<li>dunia deterministic: path, directory, file, URI, AGFS.</li>
+<li>dunia semantic: vector search, intent analysis, rerank, L0/L1/L2.</li>
+</ol>
+<p>OpenViking menggabungkan keduanya: filesystem yang bisa dicari secara semantic.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault/daily.journal.2026.06.03 (Private)</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openviking (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

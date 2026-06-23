@@ -1,0 +1,81 @@
+<h1 id="solusi-ini-bisa-dipasang-ke-contoh-praktis-bukan-sekadar-teori">Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori<a aria-hidden="true" class="anchor-heading icon-link" href="#solusi-ini-bisa-dipasang-ke-contoh-praktis-bukan-sekadar-teori"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Ini menunjukan bahwa konsepnya bisa jalan di workflow yang benar-benar ada.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Jadi artikel ini bukan cuma inspirasi, tapi juga contoh implementasi yang jelas.</p>
+<h2 id="bagaimana-ini-terlihat-di-artikel">Bagaimana Ini Terlihat di Artikel<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-ini-terlihat-di-artikel"></a></h2>
+<p>Di bagian "What This Looks Like in Practice", penulis menampilkan kasus nyata dari fitur Notification Service v1.</p>
+<ul>
+<li>Dokumentasi fitur dibuat sebagai working record, bukan dokumentasi formal.</li>
+<li>Isinya berisi keputusan utama, alasan, alternatif yang ditolak, open questions, dan status implementasi.</li>
+<li>Dokumen ini cukup ringkas: sekitar 50 baris, bukan ratusan halaman.</li>
+<li>Saat sesi baru dimulai, AI dapat membaca dokumen ini dan memiliki warm start tanpa mengulang kembali keseluruhan sejarah percakapan.</li>
+</ul>
+<h2 id="kenapa-contoh-ini-penting">Kenapa Contoh Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-contoh-ini-penting"></a></h2>
+<p>Contoh ini menggarisbawahi dua hal:</p>
+<ol>
+<li>Context anchoring bekerja di dunia nyata, bukan hanya sebagai ide teoretis.</li>
+<li>Implementasinya praktis: lebih mirip catatan kerja singkat daripada dokumen berat.</li>
+</ol>
+<h2 id="real-case-notification-service-v1">Real Case: Notification Service v1<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-notification-service-v1"></a></h2>
+<p>Artikel menampilkan workflow nyata untuk fitur Notification Service v1. Intinya:</p>
+<ul>
+<li>Sesi awal: keputusan desain dibuat bersama AI dan dicatat dalam fitur dokumen live.</li>
+<li>Dokumen tersebut menyimpan apa yang disepakati (<code>BullMQ direct</code>, <code>Email-only v1</code>, <code>SendGrid</code>), apa yang ditolak (<code>RetryQueue</code>), dan constraint penting (<code>tenantId</code>, <code>existing auth middleware</code>).</li>
+<li>Sesi lanjutan: dokumen dibaca ulang, sehingga AI tidak perlu menelusuri kembali seluruh history chat atau menebak keputusan sebelumnya.</li>
+<li>Setiap sesi baru bisa memulai dari dokumen tersebut sebagai warm start, sementara detail implementasi tetap di kode.</li>
+</ul>
+<h2 id="visualisasi-real-case">Visualisasi Real Case<a aria-hidden="true" class="anchor-heading icon-link" href="#visualisasi-real-case"></a></h2>
+<div class="mermaid">
+  flowchart LR
+  A[Session 1: Design &#x26; decision making]
+  B[Feature document created]
+  C[Session 2: Continue implementation]
+  D[Session 3: New AI session]
+  E[Warm start from feature document]
+  F[Feature document updated]
+
+  A --> B
+  B --> C
+  C --> F
+  F --> D
+  D --> E
+  E --> C
+
+  subgraph chat[Chat is ephemeral]
+    A
+    C
+    D
+  end
+
+  subgraph doc[Feature document persists]
+    B
+    F
+    E
+  end
+</div>
+<p>Diagram ini menunjukkan perbedaan antara obrolan yang hanya berlangsung dalam satu sesi dan dokumen fitur yang tetap tersedia sebagai state external antar sesi.</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 25.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 25</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

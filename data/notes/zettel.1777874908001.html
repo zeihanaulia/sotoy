@@ -1,0 +1,36 @@
+<h1 id="cross-session-agent-memory-becomes-a-pii-risk-without-governance">Cross-session agent memory becomes a PII risk without governance<a aria-hidden="true" class="anchor-heading icon-link" href="#cross-session-agent-memory-becomes-a-pii-risk-without-governance"></a></h1>
+<blockquote>
+<p>Memory is not just chat history. For long-lived autonomous agents, memory is an architectural control plane that decides what to store, retrieve, update, and forget.</p>
+<p>Source: <a href="https://arxiv.org/html/2603.07670v1">https://arxiv.org/html/2603.07670v1</a></p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li>Agent memory punya read path dan write path. Tanpa policy yang jelas, cross-session memory bisa mengakumulasi PII dan membentuk profil yang re-identifiable.</li>
+<li>Long context window bukan memory; memory harus bisa menilai relevansi, staleness, dan privacy scope.</li>
+<li>Untuk PII-safe agent, memory governance perlu filtering sebelum store, metadata tagging, evidence-based reflection, dan forgetting policy.</li>
+</ul>
+<p>Implikasi:</p>
+<ul>
+<li>Sistem security agent harus memperlakukan memory sebagai sumber data sensitif, bukan sekadar chat log.</li>
+<li>Episodic memory yang disimpan tanpa kontrol bisa jadi tempat PII tertumpuk dan kemudian direkonstruksi.</li>
+<li>Memory layer harus terintegrasi dengan retention policy, access scope, audit trail, dan kemampuan safe delete.</li>
+</ul>
+<p>Hubungan:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">permanent-note (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">memory (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">governance (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

@@ -1,0 +1,258 @@
+<h1 id="design-patterns-and-best-practices-in-rust">Design Patterns and Best Practices in Rust<a aria-hidden="true" class="anchor-heading icon-link" href="#design-patterns-and-best-practices-in-rust"></a></h1>
+<h2 id="ringkasan-pendek">Ringkasan pendek<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasan-pendek"></a></h2>
+<p>Buku ini kelihatan menempatkan Rust sebagai bahasa dengan mental model sendiri: bukan kelas yang dikaitkan ke OOP, tapi ownership, borrowing, tipe, dan flow data. Pattern lama dipakai bukan sebagai aturan baku, melainkan sebagai contoh problem yang harus diterjemahkan ulang.</p>
+<h2 id="preface-frame-baca-buku">Preface: frame baca buku<a aria-hidden="true" class="anchor-heading icon-link" href="#preface-frame-baca-buku"></a></h2>
+<p>Preface tidak lagi bicara tentang cara nulis syntax Rust. Ini tentang transformasi filosofi desain software di Rust. Kalimat pentingnya:</p>
+<blockquote>
+<p>"Truly effective Rust development requires a transformation in how you approach software design itself."</p>
+</blockquote>
+<p>Itu berarti menguasai <code>struct</code>, <code>trait</code>, <code>enum</code>, <code>match</code>, <code>Result</code>, ownership, borrowing, dan lifetime belum cukup. Yang mau dibongkar buku ini adalah bagaimana kita mendesain relasi antar komponen.</p>
+<p>Beberapa hal penting dari Preface:</p>
+<ul>
+<li>Ini adalah kontrak pembelajaran buku.</li>
+<li>Problem utama yang diangkat bukan "Rust sulit", tapi developer sering membawa desain dari bahasa lain ke Rust.</li>
+<li>Rust memaksa desain kelihatan: ownership kabur, dependency berantakan, atau mutability terlalu bebas akan muncul sebagai compile error.</li>
+<li>Compiler Rust bertindak sebagai reviewer desain.</li>
+<li>Transformasi yang dituju: dari memaksa Rust mengikuti desain lama menjadi membiarkan constraint Rust membentuk desain baru.</li>
+</ul>
+<p>Preface juga mengidentifikasi dua escape hatch yang sering muncul saat frustrasi:</p>
+<ul>
+<li><code>clone()</code> bertebaran untuk mengatasi ownership sulit.</li>
+<li><code>Rc&#x3C;RefCell&#x3C;T>></code> dipakai untuk mengembalikan shared mutable state.</li>
+</ul>
+<p>Keduanya bisa valid, tapi jika dipakai sebagai pelarian dari desain ownership, mereka berubah jadi anti-pattern.</p>
+<p>Bagian berikutnya adalah thesis utama Preface:</p>
+<blockquote>
+<p>“Internalizing Rust's philosophy and allowing it to shape your thinking matters more than any individual pattern or technique.”</p>
+</blockquote>
+<p>Intinya: jangan baca buku ini sebagai katalog pattern. Jangan mikir, “oh di Rust Factory Pattern begini, Strategy Pattern begini, Observer Pattern begini.” Yang penting adalah filosofi Rust yang membentuk cara lo memilih pattern.</p>
+<p>Di OOP klasik, lo mungkin bertanya:</p>
+<ul>
+<li>Class apa yang perlu dibuat?</li>
+<li>Interface-nya apa?</li>
+<li>Inheritance tree-nya gimana?</li>
+<li>Object mana yang punya method apa?</li>
+</ul>
+<p>Di Rust, pertanyaannya berubah:</p>
+<ul>
+<li>Data ini dimiliki siapa?</li>
+<li>Mutation terjadi di boundary mana?</li>
+<li>Behavior ini lebih cocok trait, enum, generic, atau closure?</li>
+<li>State ilegal bisa dicegah lewat type system gak?</li>
+<li>Apakah polymorphism perlu runtime atau cukup compile time?</li>
+</ul>
+<p>Kalau lo baca bab creational/structural/behavioral pattern dengan mindset OOP, lo akan cuma cari padanan. Kalau lo baca dengan mindset Rust, lo akan cari problem desain di balik pattern, dan bertanya: “Rust punya cara lebih natural gak?”</p>
+<p>Buku ini pakai tiga project sebagai progression:</p>
+<ul>
+<li>Bad Calculator: sengaja dibuat buruk untuk Chapter 1–4. Ini adalah cermin kesalahan, bukan app yang bagus. Tujuannya adalah melihat apa yang terjadi kalau desain Java/C++ dipaksa masuk Rust.</li>
+<li>Correct Calculator: untuk Chapter 5–8. Ini versi rebuilding. Problem yang sama dibangun ulang dengan pattern yang lebih cocok dengan ownership model dan type system Rust.</li>
+<li>Samsa microservice: untuk Chapter 9–12. Ini naik level dari calculator ke arsitektur aplikasi. Di sini pattern Rust-native mulai muncul: type system untuk compile-time safety, functional idioms, dan architectural advantage dari ownership.</li>
+</ul>
+<p>Progressionnya seperti ini:</p>
+<p>Bad Calculator
+↓
+Belajar melihat anti-pattern</p>
+<p>Correct Calculator
+↓
+Belajar menerjemahkan pattern klasik ke Rust</p>
+<p>Samsa microservice
+↓
+Belajar memakai pattern yang lahir dari Rust sendiri</p>
+<p>Ini urutan pedagogis yang bagus. Buku ini tidak langsung memberi "best practice". Dia mulai dari desain yang salah dulu, karena di Rust, memahami failure mode itu penting.</p>
+<p>Kenapa? Karena banyak kesalahan Rust bukan kesalahan syntax, tapi kesalahan mental model.</p>
+<p>★ Insight</p>
+<ul>
+<li>Bad Calculator adalah alat diagnosis. Lo diajak melihat bau desain sebelum melihat solusi.</li>
+<li>Correct Calculator adalah alat translasi. Pattern lama tidak dibuang semua, tapi diadaptasi.</li>
+<li>Samsa adalah alat sintesis. Setelah mental model berubah, baru lo bisa melihat pattern Rust-native di aplikasi lebih realistis.</li>
+<li>Urutan ini bagus karena belajar Rust design tidak bisa hanya dari contoh final yang bersih.</li>
+<li>Lo perlu melihat "kenapa desain tertentu gagal" supaya tahu kapan solusi tertentu masuk akal.</li>
+</ul>
+<p>Scope buku ini juga jelas: fokus pada design pattern, architecture decision, dan idiomatic Rust, bukan testing, benchmarking, CI/CD, deployment, atau async runtime.</p>
+<h2 id="layer-desain-yang-gue-lihat">Layer desain yang gue lihat<a aria-hidden="true" class="anchor-heading icon-link" href="#layer-desain-yang-gue-lihat"></a></h2>
+<ol>
+<li>
+<p>Thinking in Rust</p>
+<ul>
+<li>Fokus ke ownership clarity.</li>
+<li><code>Clone</code> dan <code>Rc</code> bukan solusi utama; mereka bisa jadi indikator desain yang belum jelas.</li>
+<li>Borrow checker sebagai feedback desain.</li>
+</ul>
+</li>
+<li>
+<p>Replacing traditional patterns</p>
+<ul>
+<li>Creational: associated function, builder, dan explicit initialization menggantikan Factory/Prototype.</li>
+<li>Structural: trait, newtype, enum dispatch, dan composition menggantikan inheritance.</li>
+<li>Behavioral: closure, enum state machine, iterator, trait, dan channel menggantikan Strategy/Observer/State/Command.</li>
+</ul>
+</li>
+<li>
+<p>New Rust-native patterns</p>
+<ul>
+<li>Type-driven design: encode state valid/invalid di level tipe.</li>
+<li>Functional idioms: <code>Option</code>, <code>Result</code>, iterator, combinator.</li>
+<li>Core Rust features: RAII, lifetimes, pattern matching, typestate.</li>
+</ul>
+</li>
+</ol>
+<h2 id="part-1-thinking-in-rust">Part 1: Thinking in Rust<a aria-hidden="true" class="anchor-heading icon-link" href="#part-1-thinking-in-rust"></a></h2>
+<ul>
+<li>Di banyak bahasa, design pattern lahir karena keterbatasan bahasa itu sendiri: object, inheritance, interface, mutability, lifecycle, dependency, dan runtime polymorphism. Tapi Rust punya alat desain yang berbeda: ownership, borrowing, lifetimes, traits, enums, generics, pattern matching, dan compile-time guarantees.</li>
+<li>Kalau lo datang ke Rust dengan mindset "gue mau bikin class hierarchy yang rapi", lo akan cepat frustasi.</li>
+<li>Borrow checker kelihatan seperti musuh. <code>clone()</code> dan <code>Rc</code> terasa seperti jalan pintas. Masalahnya bukan borrow checker, melainkan desain lo yang memaksa Rust jadi Java.</li>
+<li><code>Why Is Rust Different?</code> seharusnya bukan sekadar menjelaskan syntax. Ini tentang model desain: memory safety, ownership, dan type system memengaruhi cara lo membagi tanggung jawab antar komponen.</li>
+<li><code>Anti-Pattern: Designing for Object Orientation</code> menyorot bahwa OOP bukan selalu salah, tapi desain yang terlalu memaksa inheritance, mutable shared state, dan class-like abstraction bisa bikin kode kaku di Rust.</li>
+<li><code>Anti-Pattern: Using Clone and Rc Everywhere</code> adalah alarm: kalau borrow checker marah, jangan langsung <code>clone()</code> atau <code>Rc</code>-in. Itu sering menutupi desain ownership yang kabur.</li>
+<li><code>Don’t Fight the Borrow Checker</code> merangkum Part 1: borrow checker adalah feedback dan indikator bahwa aliran kepemilikan data belum jelas.</li>
+</ul>
+<h2 id="part-2-replacing-traditional-design-patterns">Part 2: Replacing Traditional Design Patterns<a aria-hidden="true" class="anchor-heading icon-link" href="#part-2-replacing-traditional-design-patterns"></a></h2>
+<ul>
+<li>Chapter 5: Creational Patterns. Di OOP kita kenal Factory, Builder, Singleton, Prototype. Di Rust, beberapa pattern berubah bentuk. Builder relevan untuk struct dengan banyak field optional. Singleton harus dipikir ulang karena global mutable state bukan natural. Rust mendorong ownership dan initialization yang eksplisit.</li>
+<li>Chapter 6: Structural Patterns. Di OOP ada Adapter, Decorator, Facade, Composite, Proxy. Di Rust, itu bisa muncul lewat traits, generics, newtype, composition, enum dispatch, atau trait objects. Bukan "class A extends class B", tapi "type ini mengimplementasikan behavior tertentu" atau "struct ini membungkus dependency tertentu." </li>
+<li>Chapter 7 &#x26; 8: Behavioral Patterns. Karena luas, mungkin dibagi menjadi "Taking Action" dan "Keeping Track." Rust sering menggeser behavioral pattern ke function, closure, enum, trait, iterator, channel, atau state yang di-encode di tipe.</li>
+<li>Value Part 2: bukan sekadar syntax translation. Pattern klasik dipreteli dulu, problem aslinya ditemukan, kemudian dipilih bentuk Rust-native yang sesuai.</li>
+<li>Trade-off penting: trait object memberi runtime fleksibilitas, generic lebih kuat di compile-time tapi bisa membuat binary membesar dan API lebih kompleks.</li>
+</ul>
+<h2 id="part-3-new-patterns-for-rust">Part 3: New Patterns for Rust<a aria-hidden="true" class="anchor-heading icon-link" href="#part-3-new-patterns-for-rust"></a></h2>
+<ul>
+<li>Chapter 9: Architectural Patterns. Fokusnya ke desain sistem yang lebih besar dan boundary. Di Rust, arsitektur bukan cuma soal pattern микро, tapi juga ownership boundary antar module, error boundary, concurrency boundary, dan dependency flow.</li>
+<li>Chapter 10: Patterns That Leverage the Type System. Type system Rust bisa mengunci invariant dan memisahkan state valid/invalid pada level tipe, bukan boolean runtime check.</li>
+<li>Chapter 11: Patterns from Functional Programming. Ini bisa melibatkan function, closure, iterator, combinator, <code>Option</code>, <code>Result</code>, immutability, dan composition.</li>
+<li>Chapter 12: Patterns Emerging from Rust’s Core Features. Pattern native dari Rust seperti ownership, borrowing, lifetimes, RAII, <code>Drop</code>, smart pointers, pattern matching, typestate, dan zero-cost abstractions.</li>
+<li>Chapter 13: Leaning into Rust. Jangan melawan Rust; gunakan constraint Rust sebagai alat desain.</li>
+<li>Ide penting: setelah mental model dan terjemahan pattern lama, Part 3 memperkenalkan pola yang memang lahir dari Rust.</li>
+</ul>
+<h2 id="logic-path-buku-ini">Logic path buku ini<a aria-hidden="true" class="anchor-heading icon-link" href="#logic-path-buku-ini"></a></h2>
+<ol>
+<li>Rust berbeda
+↓</li>
+<li>Karena berbeda, kebiasaan OOP bisa jadi anti-pattern
+↓</li>
+<li>Jalan pintas seperti <code>Clone</code>/<code>Rc</code> sering menutupi desain ownership yang kabur
+↓</li>
+<li>Borrow checker harus dibaca sebagai feedback desain
+↓</li>
+<li>Setelah mental model benar, pattern klasik bisa diterjemahkan ulang
+↓</li>
+<li>Pattern creational/structural/behavioral punya bentuk Rust-native
+↓</li>
+<li>Setelah itu baru masuk ke pattern yang lahir dari Rust sendiri
+↓</li>
+<li>Type system, FP style, ownership, dan core features menjadi fondasi desain
+↓</li>
+<li>Akhirnya lo “lean into Rust”, bukan memaksa Rust jadi bahasa lain</li>
+</ol>
+<h2 id="cara-baca-buku-ini">Cara baca buku ini<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-baca-buku-ini"></a></h2>
+<ul>
+<li>Cara baca buku pattern yang benar adalah mulai dari problem, bukan nama pattern.</li>
+<li>Nama pattern itu label belakangan. Intinya adalah gaya menyelesaikan tension desain.</li>
+<li>Di Rust, tension paling utama biasanya: ownership, mutability, lifetime, abstraction boundary, dan error handling.</li>
+<li>Kalau lo cuma hafal “Factory, Adapter, Strategy”, lo akan mengulang pola lama.</li>
+<li>Kalau lo paham “kenapa pattern itu ada”, lo bisa menemukan bentuk Rust-native-nya.</li>
+</ul>
+<h2 id="roadmap-belajar">Roadmap belajar<a aria-hidden="true" class="anchor-heading icon-link" href="#roadmap-belajar"></a></h2>
+<ol>
+<li>Baca Part 1 pelan-pelan terlebih dahulu. Ini paling penting karena menentukan cara baca bab berikutnya.</li>
+<li>Cari atomic idea dari tiap chapter, seperti “ownership as design boundary”, “borrow checker as design feedback”, “clone as hidden cost”, dan “Rc as shared ownership trade-off”.</li>
+<li>Saat masuk Part 2, jangan cuma rangkum pattern. Buat mapping:</li>
+</ol>
+<p>Traditional Pattern → Problem yang diselesaikan → Rust-native alternative → Trade-off</p>
+<p>Contoh:</p>
+<ul>
+<li>
+<p>Factory
+→ problem: membuat object tanpa expose detail konstruksi
+→ Rust alternative: associated function, builder, trait-based constructor
+→ trade-off: simple constructor vs flexible builder</p>
+</li>
+<li>
+<p>Strategy
+→ problem: mengganti behavior
+→ Rust alternative: trait, generic parameter, closure, enum dispatch
+→ trade-off: runtime flexibility vs compile-time optimization</p>
+</li>
+<li>
+<p>State
+→ problem: object berubah behavior berdasarkan state
+→ Rust alternative: enum state machine atau typestate pattern
+→ trade-off: mudah dibaca vs lebih strict secara type-level</p>
+</li>
+</ul>
+<ol start="4">
+<li>Di Part 3, ambil ide yang bisa dipakai ke proyek nyata. Contoh: produk SaaS internal atau agent architecture, refleksikan apakah pattern ini relevan untuk agent runtime, scheduler, parser, atau CLI.</li>
+</ol>
+<h2 id="mapping-tradisional--rust-native">Mapping tradisional → Rust-native<a aria-hidden="true" class="anchor-heading icon-link" href="#mapping-tradisional--rust-native"></a></h2>
+<ul>
+<li>
+<p>Factory</p>
+<ul>
+<li>Problem: membuat objek tanpa expose detail konstruksi.</li>
+<li>Rust: associated function, <code>new</code>, builder.</li>
+<li>Trade-off: simple constructor vs konfigurasi eksplisit.</li>
+</ul>
+</li>
+<li>
+<p>Singleton</p>
+<ul>
+<li>Problem: global shared instance.</li>
+<li>Rust: hindari global mutable state, gunakan dependency injection dan scope ownership.</li>
+<li>Trade-off: global mudah tapi menutup batasan ownership.</li>
+</ul>
+</li>
+<li>
+<p>Adapter / Facade</p>
+<ul>
+<li>Problem: menyamakan interface atau menyederhanakan subsistem.</li>
+<li>Rust: wrapper type, newtype, atau trait implementation.</li>
+<li>Trade-off: fleksibilitas runtime vs compile-time clarity.</li>
+</ul>
+</li>
+<li>
+<p>Strategy</p>
+<ul>
+<li>Problem: mengganti behavior.</li>
+<li>Rust: trait/generic parameter, closure, enum dispatch.</li>
+<li>Trade-off: runtime fleksibel vs compile-time optimasi.</li>
+</ul>
+</li>
+<li>
+<p>State</p>
+<ul>
+<li>Problem: objek berubah perilaku berdasarkan state.</li>
+<li>Rust: enum state machine, typestate.</li>
+<li>Trade-off: kode lebih ketat tapi lebih aman dibanding flag mutable.</li>
+</ul>
+</li>
+</ul>
+<h2 id="trade-off-penting">Trade-off penting<a aria-hidden="true" class="anchor-heading icon-link" href="#trade-off-penting"></a></h2>
+<ul>
+<li>Trait object (<code>dyn Trait</code>) memberi runtime polymorphism, tapi kehilangan beberapa cek compile-time.</li>
+<li>Generic lebih kuat di compile-time dan sering lebih efisien, tapi bisa bikin API lebih kompleks dan compile time lebih lama.</li>
+<li><code>Rc</code>/<code>Arc</code> cocok untuk shared ownership, tapi bisa memblur ownership boundary.</li>
+<li><code>Clone</code> cocok untuk value yang murah disalin, namun bisa menyimpan biaya tersembunyi ketika dipakai sebagai shortcut.</li>
+</ul>
+<h2 id="design-tool-di-rust">Design tool di Rust<a aria-hidden="true" class="anchor-heading icon-link" href="#design-tool-di-rust"></a></h2>
+<ul>
+<li><code>cargo fmt</code> / <code>rustfmt</code>: menjaga format konsisten sehingga desain API dan boundary lebih mudah dibaca.</li>
+<li><code>cargo clippy</code>: cek idiomatik Rust dan biasanya memberi rekomendasi desain yang lebih "Rusty".</li>
+<li><code>cargo check</code>: validasi ownership/lifetime tanpa build penuh, berguna untuk iterasi desain tipe.</li>
+<li><code>cargo audit</code> / <code>cargo deny</code>: deteksi dependency insecure atau license issue sebelum desain dilepas.</li>
+<li><code>rust-analyzer</code>: bantu refactor trait, enum, dan lifetime; bagus kalau lo lagi ubah desain ownership.</li>
+<li><code>cargo tree</code>: visualisasi dependency graph untuk lihat boundary dan coupling.</li>
+<li><code>cargo expand</code>: lihat macro-expanded code, berguna untuk memastikan abstraction tidak menyembunyikan terlalu banyak complexity.</li>
+<li><code>miri</code>: debug undefined behavior dan interpreter-level ownership bug di desain unsafe.</li>
+</ul>
+<h2 id="ide-yang-mau-gue-susun-lagi-nanti">Ide yang mau gue susun lagi nanti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-yang-mau-gue-susun-lagi-nanti"></a></h2>
+<ul>
+<li>Apa artinya "lean into Rust" dalam kode nyata? Bukan hanya mematok fitur Rust, tapi memformalisasi invariant dan ownership boundary.</li>
+<li>Bagaimana pattern arsitektural di Rust berbeda ketika konteksnya sistem backend, CLI, atau runtime agent?</li>
+<li>Kapan type system lebih baik dibanding runtime check di codebase Rust intensif performa?</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">design-patterns (Private)</a></li>
+</ol>

@@ -1,0 +1,157 @@
+<h1 id="rust-ecosystem-tool-mapping-apa-dan-seberapa-umum">Rust ecosystem tool mapping: apa dan seberapa umum<a aria-hidden="true" class="anchor-heading icon-link" href="#rust-ecosystem-tool-mapping-apa-dan-seberapa-umum"></a></h1>
+<h2 id="arti-catatan-ini">Arti catatan ini<a aria-hidden="true" class="anchor-heading icon-link" href="#arti-catatan-ini"></a></h2>
+<p>Ini bukan daftar "tool default semua developer".
+Ini bedah satu-satu item Rust dari post yang sedang dibahas, dan jawab dua hal:</p>
+<ol>
+<li>Ini sebenarnya tool apa?</li>
+<li>Apakah ini termasuk yang paling sering dipakai di domainnya, atau cuma ada di ekosistem Rust?</li>
+</ol>
+<p>Kesimpulan singkat: <strong>tidak semua item di post itu paling sering dipakai</strong>. Ada yang fondasi penting, ada yang populer di komunitas Rust, dan ada juga yang lebih niche atau domain-specific.</p>
+<hr>
+<h2 id="web-backend--microservice--api--network-service">Web backend / microservice / API / network service<a aria-hidden="true" class="anchor-heading icon-link" href="#web-backend--microservice--api--network-service"></a></h2>
+<h3 id="tokio-tokiors">Tokio (<a href="https://tokio.rs/">tokio.rs</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#tokio-tokiors"></a></h3>
+<ul>
+<li>Apa: async runtime Rust untuk I/O, networking, scheduling, timer, dan concurrency.</li>
+<li>Seberapa umum: <strong>sangat umum</strong> di domain Rust backend. Ini fondasi hampir semua aplikasi async/networked Rust.</li>
+</ul>
+<h3 id="axum-cratesiocratesaxum">Axum (<a href="https://crates.io/crates/axum">crates.io/crates/axum</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#axum-cratesiocratesaxum"></a></h3>
+<ul>
+<li>Apa: HTTP request routing / service framework yang fokus ergonomics dan modularity.</li>
+<li>Seberapa umum: <strong>sangat populer</strong> sekarang. Termasuk arus utama modern di komunitas Rust backend.</li>
+</ul>
+<h3 id="actix-web-actixrs">Actix Web (<a href="https://actix.rs/">actix.rs</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#actix-web-actixrs"></a></h3>
+<ul>
+<li>Apa: web framework yang sangat cepat dengan model actor/async.</li>
+<li>Seberapa umum: <strong>masih relevan dan populer</strong>, meski posisi momentum-nya sedikit di bawah Axum saat ini.</li>
+</ul>
+<h3 id="sqlx-cratesiocratessqlx">SQLx (<a href="https://crates.io/crates/sqlx">crates.io/crates/sqlx</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#sqlx-cratesiocratessqlx"></a></h3>
+<ul>
+<li>Apa: async SQL crate dengan compile-time checked queries tanpa DSL berat.</li>
+<li>Seberapa umum: <strong>sangat umum</strong> di Rust async backend. Ini sering muncul di microservice async modern.</li>
+</ul>
+<h3 id="diesel-dieselrs">Diesel (<a href="https://diesel.rs/">diesel.rs</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#diesel-dieselrs"></a></h3>
+<ul>
+<li>Apa: ORM/query builder tipe-safe dan composable.</li>
+<li>Seberapa umum: <strong>penting</strong>, tapi bukan satu-satunya default. Lebih cocok untuk tim yang ingin query builder/ORM kuat.</li>
+</ul>
+<blockquote>
+<p>Ringkas: untuk backend Rust modern, stack yang paling sering diasosiasikan adalah <strong>Tokio + Axum + SQLx</strong>. Actix tetap besar; Diesel masih penting di niche ORM/query builder.</p>
+</blockquote>
+<hr>
+<h2 id="frontend-web--browser-apps">Frontend web / browser apps<a aria-hidden="true" class="anchor-heading icon-link" href="#frontend-web--browser-apps"></a></h2>
+<h3 id="webassembly-webassemblyorg">WebAssembly (<a href="https://webassembly.org/">webassembly.org</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#webassembly-webassemblyorg"></a></h3>
+<ul>
+<li>Apa: target/teknologi runtime untuk menjalankan kode non-JS di browser.</li>
+<li>Seberapa umum: <strong>bukan tool pengembang frontend umum</strong>. Ini adalah jalur teknis untuk Rust di browser, tapi bukan mainstream frontend industry.</li>
+</ul>
+<h3 id="yew-yewrs">Yew (<a href="https://yew.rs/">yew.rs</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#yew-yewrs"></a></h3>
+<ul>
+<li>Apa: framework frontend komponen untuk aplikasi Rust via WebAssembly.</li>
+<li>Seberapa umum: <strong>valid dan dicintai komunitas Rust/WASM</strong>, tapi <strong>niche</strong> dibanding JS/TS framework.</li>
+</ul>
+<blockquote>
+<p>Ringkas: Yew adalah opsi Rust/WASM yang sah untuk web frontend, tetapi bukan tool paling umum di dunia frontend luas.</p>
+</blockquote>
+<hr>
+<h2 id="desktop-apps">Desktop apps<a aria-hidden="true" class="anchor-heading icon-link" href="#desktop-apps"></a></h2>
+<h3 id="tauri-v2tauriapp">Tauri (<a href="https://v2.tauri.app/">v2.tauri.app</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#tauri-v2tauriapp"></a></h3>
+<ul>
+<li>Apa: toolkit cross-platform untuk desktop app dengan frontend webview dan backend Rust.</li>
+<li>Seberapa umum: <strong>sangat penting di komunitas desktop Rust</strong>. Namun secara industri luas, bukan pesaing langsung Electron/Qt/native SDK dominan.</li>
+</ul>
+<h3 id="egui-eguirs">egui (<a href="https://egui.rs/">egui.rs</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#egui-eguirs"></a></h3>
+<ul>
+<li>Apa: immediate-mode GUI murni Rust, cocok untuk tools dan internal UI.</li>
+<li>Seberapa umum: <strong>cukup populer di komunitas Rust</strong>, terutama untuk tooling, internal app, dan visualisasi. Tapi masih <strong>niche</strong> dibanding framework desktop global.</li>
+</ul>
+<blockquote>
+<p>Ringkas: Tauri dan egui adalah jalur desktop yang masuk akal untuk Rust, tapi kategori mereka lebih ke Rust-native desktop daripada mainstream desktop development.</p>
+</blockquote>
+<hr>
+<h2 id="game-development--graphics--gpu">Game development / graphics / GPU<a aria-hidden="true" class="anchor-heading icon-link" href="#game-development--graphics--gpu"></a></h2>
+<h3 id="bevy-bevyorg">Bevy (<a href="https://bevy.org/">bevy.org</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#bevy-bevyorg"></a></h3>
+<ul>
+<li>Apa: game engine Rust data-driven.</li>
+<li>Seberapa umum: <strong>sangat menonjol di dunia Rust gamedev</strong>. Namun dalam industri game global, masih jauh dari Unity/Unreal/Godot.</li>
+</ul>
+<h3 id="wgpu-githubcomgfx-rswgpu">wgpu (<a href="https://github.com/gfx-rs/wgpu">github.com/gfx-rs/wgpu</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#wgpu-githubcomgfx-rswgpu"></a></h3>
+<ul>
+<li>Apa: graphics API/library portable Rust berbasis WebGPU untuk rendering dan compute.</li>
+<li>Seberapa umum: <strong>penting di ekosistem Rust graphics</strong> dan digunakan sebagai fondasi oleh banyak proyek. Tapi ini lebih domain-specific.</li>
+</ul>
+<blockquote>
+<p>Ringkas: Bevy dan wgpu kuat di gamedev Rust/graphics Rust, tapi bukan dominasi industri game umum.</p>
+</blockquote>
+<hr>
+<h2 id="embedded--firmware--kernel--systems">Embedded / firmware / kernel / systems<a aria-hidden="true" class="anchor-heading icon-link" href="#embedded--firmware--kernel--systems"></a></h2>
+<h3 id="embedded-rust-docsrust-embeddedorgbook">Embedded Rust (<a href="https://docs.rust-embedded.org/book/">docs.rust-embedded.org/book</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#embedded-rust-docsrust-embeddedorgbook"></a></h3>
+<ul>
+<li>Apa: domain/tooling komunitas untuk Rust di bare-metal, microcontroller, dan IoT.</li>
+<li>Seberapa umum: <strong>sangat penting di embedded Rust</strong>, tapi jelas <strong>domain khusus</strong> dibanding developer umum.</li>
+</ul>
+<h3 id="rust-for-linux-rust-for-linuxcom">Rust for Linux (<a href="https://rust-for-linux.com/">rust-for-linux.com</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#rust-for-linux-rust-for-linuxcom"></a></h3>
+<ul>
+<li>Apa: proyek resmi untuk mendukung penulisan modul kernel Linux dengan Rust.</li>
+<li>Seberapa umum: <strong>strategis penting</strong>, tapi bukan tool harian kebanyakan developer. Ini lebih ke bukti penetrasi Rust di systems programming.</li>
+</ul>
+<blockquote>
+<p>Ringkas: keduanya penting secara strategis, tetapi kategori ini adalah domain spesialis, bukan opsi default bagi mayoritas developer.</p>
+</blockquote>
+<hr>
+<h2 id="data-processing--analytics">Data processing / analytics<a aria-hidden="true" class="anchor-heading icon-link" href="#data-processing--analytics"></a></h2>
+<h3 id="polars-polars">Polars (<a href="https://pola.rs/">pola.rs</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#polars-polars"></a></h3>
+<ul>
+<li>Apa: DataFrame/query engine Rust modern yang memakai Apache Arrow memory format.</li>
+<li>Seberapa umum: <strong>cukup menonjol di data/analytics Rust modern</strong>. Bukan tool harian semua engineer, tapi penting di domainnya.</li>
+</ul>
+<h3 id="apache-arrow-arrowapacheorg">Apache Arrow (<a href="https://arrow.apache.org/">arrow.apache.org</a>)<a aria-hidden="true" class="anchor-heading icon-link" href="#apache-arrow-arrowapacheorg"></a></h3>
+<ul>
+<li>Apa: format columnar memory lintas bahasa untuk analitik cepat dan interoperabilitas.</li>
+<li>Seberapa umum: <strong>sangat penting sebagai fondasi</strong>. Sering dipakai secara tidak langsung oleh tool lain.</li>
+</ul>
+<blockquote>
+<p>Ringkas: Polars sangat bernilai untuk data engineering di Rust. Arrow adalah substrate yang penting, tetapi lebih sering tersembunyi di bawah tool lain.</p>
+</blockquote>
+<hr>
+<h2 id="bagaimana-membaca-post-ini">Bagaimana membaca post ini<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-membaca-post-ini"></a></h2>
+<p>Post itu lebih tepat dibaca sebagai <strong>peta jangkauan ekosistem Rust</strong>, bukan daftar "tool default semua developer".</p>
+<ul>
+<li>Ada jalur yang memang banyak dipakai di domain Rust tertentu.</li>
+<li>Ada juga item yang lebih populer di komunitas Rust, tapi tidak mainstream di industri luas.</li>
+<li>Item-item domain-specific valid, tapi jangan disamakan dengan dominance global.</li>
+</ul>
+<hr>
+<h2 id="level-yang-perlu-dibedakan">Level yang perlu dibedakan<a aria-hidden="true" class="anchor-heading icon-link" href="#level-yang-perlu-dibedakan"></a></h2>
+<ol>
+<li><strong>Ada jalurnya</strong></li>
+<li><strong>Populer di komunitas Rust</strong></li>
+<li><strong>Mainstream di industri luas</strong></li>
+</ol>
+<p>Contoh:</p>
+<ul>
+<li>Tokio: mendekati level 2-3 di Rust backend.</li>
+<li>Axum: kuat di level 2, sedang tumbuh.</li>
+<li>Yew / egui / Bevy: level 1-2.</li>
+<li>Embedded Rust / Rust for Linux: level 1 (strategis, domain-specific).</li>
+</ul>
+<hr>
+<h2 id="jika-ingin-lebih-lanjut">Jika ingin lebih lanjut<a aria-hidden="true" class="anchor-heading icon-link" href="#jika-ingin-lebih-lanjut"></a></h2>
+<p>Kalau ingin, saya bisa buat peta rekomendasi stack Rust per domain:</p>
+<ul>
+<li>web/API: apa yang dipilih sekarang,</li>
+<li>desktop: pilihan Tauri vs egui,</li>
+<li>data: pilihan Polars vs stack lain,</li>
+<li>embedded/system: apa yang layak dipakai.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ecosystem (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">tools (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">backend (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">frontend (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">desktop (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">gamedev (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">analytics (Private)</a></li>
+</ol>

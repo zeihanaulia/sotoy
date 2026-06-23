@@ -1,0 +1,50 @@
+<h1 id="building-multi-tenant-saas-architectures">Building Multi-Tenant SaaS Architectures<a aria-hidden="true" class="anchor-heading icon-link" href="#building-multi-tenant-saas-architectures"></a></h1>
+<p>Yang paling kena dari halaman O’Reilly dan daftar isi buku ini adalah: ini bukan buku tentang "bikin web app lalu kasih login". Ini buku yang mencoba ngajarin cara pikir arsitek SaaS yang perlu melayani banyak customer dalam satu produk, lengkap dengan trade-off isolation, operasi, dan bisnis.</p>
+<p>Menurut gue, struktur buku ini dibangun sebagai perjalanan desain sistem SaaS:</p>
+<ol>
+<li>mindset dan fondasi,</li>
+<li>pilihan arsitektur,</li>
+<li>mekanik implementasi,</li>
+<li>dampak operasional,</li>
+<li>ekstensi strategis.</li>
+</ol>
+<p>Jadi bukan sekadar kumpulan topik acak. Logika besarnya adalah: keputusan awal soal data, identity, dan deployment akan ngunci cara kamu operasi, monetize, dan scale platform.</p>
+<p>Dari daftar isi, buku ini terbaca sebagai enam blok besar.</p>
+<p>Pertama, blok pembuka diisi oleh mindset SaaS, fundamental multi-tenant, dan deployment model. Itu penting karena kalau lo belum paham apa unit problem-nya — siapa tenant, apa artinya sharing, bagaimana model ekonomi SaaS bekerja — maka pembahasan deployment cuma akan jadi soal topologi infra tanpa pemahaman konteks.</p>
+<p>Kedua, blok lifecycle tenant. Di sini buku menempatkan onboarding, tenant management, auth, dan routing sebagai layer kontrol awal. Ini bukan soal logika bisnis core, tapi soal bagaimana platform tahu request ini milik tenant siapa, apa entitlement-nya, dan pengalaman apa yang harus dipakai. Menurut gue, ini bagian yang sering kelewat. Banyak tim cuma mikir "nanti taruh tenant_id di request", padahal real problem-nya lebih besar: subdomain, IdP, entitlements, mapping policy, region, dan context resolution.</p>
+<p>Ketiga, blok mechanics multi-tenancy: service design, data partitioning, dan tenant isolation. Urutannya logis: pertama bangun layanan yang tenant-aware, lalu tentukan bagaimana data disimpan, lalu pikirkan level isolasi yang dibutuhkan. Itu membuat tiga hal ini terasa seperti tiga wajah dari satu masalah yang sama: bagaimana lo menjaga tenant tetap dipisah tapi masih efisien.</p>
+<p>Keempat, buku baru turun ke dua gaya implementasi besar: Kubernetes SaaS dan Serverless SaaS. Menurut gue ini keputusan editorial yang bagus. Karena artinya penulis nggak mulai dari tooling. Dia mulai dari prinsip, lalu nunjukin dua kendaraan yang berbeda. Sehingga pembaca bisa lihat bahwa multi-tenancy itu problem arsitektur, bukan problem Kubernetes.</p>
+<p>Kelima, ada blok operasi dan evolusi bisnis: tenant-aware operations, migration strategy, tiering, dan SaaS anywhere. Ini adalah bagian yang bikin buku terasa nyata. Banyak sistem bisa dibangun, tapi banyak juga yang patah ketika harus dipelihara, diukur, dimigrasi, atau disegmentasi menjadi tier. Tiering khususnya menarik karena itu titik temu antara arsitektur dan monetisasi — plan customer bisa menentukan isolation model, feature gating, dan model deployment.</p>
+<p>Terakhir, penutup dengan GenAI dan guiding principles. Ini memberi tahu gue bahwa buku ini cenderung lengkap, karena dia nggak berhenti di arsitektur klasik. Dia mau ngaitkan multi-tenancy dengan konteks modern seperti AI, governance, dan prinsip pengambilan keputusan.</p>
+<p>Takeaway utama yang gue ambil dari overview ini:</p>
+<ul>
+<li>Multi-tenant SaaS adalah soal "single product, many customers, controlled variation."</li>
+<li>Problem paling awal adalah context resolution: platform harus tahu tenant siapa sebelum bisa melakukan auth, routing, billing, atau observability.</li>
+<li>Keputusan data partitioning ngaruh ke isolation, operasi, dan cost.</li>
+<li>Deployment model adalah konsekuensi, bukan permulaan; prinsip yang sama bisa diterapkan di Kubernetes atau serverless.</li>
+<li>Operasional tenant-aware adalah bagian yang paling sering bikin sistem SaaS gagal, bukan hanya desain awal.</li>
+<li>Menggabungkan arsitektur dan bisnis itu wajib dalam SaaS; tiering adalah contoh nyata dari hubungan itu.</li>
+</ul>
+<p>Kalau mau lihat kontrak intelektual buku ini, gue juga sudah ringkas Preface di file tersendiri: <a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.preface">Preface</a>.</p>
+<p>Kalau mau langsung ke Chapter 1, ada juga ringkasannya di: <a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.chapter-1">Chapter 1 — The SaaS Mindset</a>.</p>
+<p>Untuk bedah close reading Chapter 1, baca: <a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.chapter-1.close-reading">Chapter 1 Close Reading — The SaaS Mindset</a>.</p>
+<p>Catatan kecil buat lanjut baca: cara paling enak adalah masuk dulu ke Chapter 1 "The SaaS Mindset" karena itu fondasi dari semua keputusan berikutnya.</p>
+<p>Kalau mau baca buku lanjutan sesuai fungsi chapter, gue juga sudah mencatat roadmap baca yang mengaitkan Golding dengan buku-buku pendamping per komponen: <a href="/sotoy/notes/notes.saas.multi-tenant-saas-reading-roadmap">Roadmap Baca Multi-Tenant SaaS</a>.</p>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.chapter-1">Chapter 1 — The SaaS Mindset</a></li>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.preface">Preface</a></li>
+</ol>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">saas (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">multi-tenancy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.multi-tenant-saas">MOC: Multi-Tenant SaaS Architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.10">2026-05-10</a></li>
+</ul>

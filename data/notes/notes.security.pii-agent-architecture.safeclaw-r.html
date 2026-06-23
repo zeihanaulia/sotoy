@@ -1,0 +1,24 @@
+<h1 id="safeclaw-r-safe-multi-agent-personal-assistants">SafeClaw-R: Safe Multi-Agent Personal Assistants<a aria-hidden="true" class="anchor-heading icon-link" href="#safeclaw-r-safe-multi-agent-personal-assistants"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>SafeClaw-R menyasar masalah multi-agent personal assistants yang harus berbagi data sensitif antar komponen. Ketika beberapa agen saling bertukar informasi untuk menyelesaikan task personal, ada risiko bocornya PII lewat delegation, shared state, atau inter-agent tool calls.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>Solusinya adalah arsitektur multi-agent yang aman dengan boundary yang jelas di antara agen-agen tersebut, access control granular, dan governance. Pendekatan ini menempatkan pengawasan pada aliran data internal, bukan hanya pada input pengguna atau output model.</p>
+<h2 id="real-case-implementation">Real case implementation<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-implementation"></a></h2>
+<p>Implementasinya bisa berupa orchestrator yang mengatur agen-agen berbeda: satu agen untuk autentikasi dan data pribadi, satu agen untuk reasoning/plan generation, dan satu agen untuk eksekusi tindakan. Setiap aliran data antar agen harus melalui policy enforcement dan auditing, sehingga raw PII tidak berpindah bebas.</p>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>SafeClaw-R relevan untuk arsitektur personal AI agent yang kompleks. Ia mengingatkan bahwa desain keamanan harus memperhitungkan data flow antar unit, bukan hanya proteksi pada boundaries model vs user.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2603.28807">https://arxiv.org/abs/2603.28807</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">personal-ai (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

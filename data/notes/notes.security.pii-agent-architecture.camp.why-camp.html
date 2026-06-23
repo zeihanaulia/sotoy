@@ -1,0 +1,91 @@
+<h1 id="camp-apa-yang-baru-dari-solusi-session-aware-pii-middleware">CAMP: apa yang baru dari solusi session-aware PII middleware<a aria-hidden="true" class="anchor-heading icon-link" href="#camp-apa-yang-baru-dari-solusi-session-aware-pii-middleware"></a></h1>
+<h2 id="inti-jawaban">Inti jawaban<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-jawaban"></a></h2>
+<p>Pertanyaan terakhir adalah: apa yang baru dari CAMP?</p>
+<p>Jawaban pendeknya: CAMP baru karena ia membuat PII protection menjadi stateful, session-aware, dan retroactive.</p>
+<p>Masking biasa berhenti pada satu pesan. CAMP hidup sepanjang percakapan.</p>
+<h2 id="alur-mekanisme-camp">Alur mekanisme CAMP<a aria-hidden="true" class="anchor-heading icon-link" href="#alur-mekanisme-camp"></a></h2>
+<p>CAMP menggabungkan urutan mekanisme berikut:</p>
+<ol>
+<li><strong>detect</strong> – per-turn PII extraction dengan Presidio + custom recognizer.</li>
+<li><strong>remember</strong> – simpan semua hasil deteksi di session registry.</li>
+<li><strong>score</strong> – hitung CPE agar sistem tahu kapan akumulasi PII sudah berbahaya.</li>
+<li><strong>rewrite history</strong> – saat threshold tercapai, tulis ulang seluruh conversation history yang akan dikirim ke model.</li>
+<li><strong>send synthetic context</strong> – kirim context synthetic, bukan asli, ke external LLM.</li>
+<li><strong>de-mask response</strong> – kembalikan jawaban ke nilai asli sebelum user melihatnya.</li>
+</ol>
+<p>Ini yang membuat CAMP lebih dari sekadar mask-redact pipeline.</p>
+<h2 id="komponen-utama-yang-membedakan-camp">Komponen utama yang membedakan CAMP<a aria-hidden="true" class="anchor-heading icon-link" href="#komponen-utama-yang-membedakan-camp"></a></h2>
+<h3 id="1-stateful-session-registry">1. Stateful session registry<a aria-hidden="true" class="anchor-heading icon-link" href="#1-stateful-session-registry"></a></h3>
+<p>Registry menyimpan Person, Location, Organization, Salary, Medical Condition, dan PII lain sepanjang sesi.
+Tanpa registry, sistem kembali ke per-turn masking biasa.</p>
+<h3 id="2-cpe-scorer-sebagai-trigger">2. CPE scorer sebagai trigger<a aria-hidden="true" class="anchor-heading icon-link" href="#2-cpe-scorer-sebagai-trigger"></a></h3>
+<p>CAMP tidak selalu agresif. Ia memonitor cumulative risk dan hanya intervensi setelah skor melewati threshold, kecuali hard-blocked identifiers.</p>
+<h3 id="3-retroactive-pseudonymization">3. Retroactive pseudonymization<a aria-hidden="true" class="anchor-heading icon-link" href="#3-retroactive-pseudonymization"></a></h3>
+<p>Saat threshold terlampaui, data lama juga ditulis ulang. Ini krusial untuk agentic LLM yang mengirim ulang history.
+Tanpa langkah ini, history lama tetap bisa bocor.</p>
+<h3 id="4-synthetic-context--de-masking">4. Synthetic context + de-masking<a aria-hidden="true" class="anchor-heading icon-link" href="#4-synthetic-context--de-masking"></a></h3>
+<p>External model melihat data palsu yang konsisten. User tetap menerima jawaban personal setelah de-masking.</p>
+<h3 id="5-hard-block-rules">5. Hard block rules<a aria-hidden="true" class="anchor-heading icon-link" href="#5-hard-block-rules"></a></h3>
+<p>Beberapa PII sangat sensitif untuk dikirim dalam bentuk apa pun: SSN, credit card, bank account. Ini langsung diblok, tidak menunggu threshold.</p>
+<h2 id="kenapa-ini-bukan-sekadar-masking-baru">Kenapa ini bukan sekadar "masking baru"<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-bukan-sekadar-masking-baru"></a></h2>
+<p>Masking biasa menjawab: "apakah pesan ini mengandung PII?"
+CAMP menjawab: "apakah percakapan ini, setelah semua pesan digabung, sudah berbahaya?"</p>
+<p>Itu adalah pergeseran dari filter stateless ke middleware stateful.</p>
+<h2 id="kritik-yang-perlu-dinilai">Kritik yang perlu dinilai<a aria-hidden="true" class="anchor-heading icon-link" href="#kritik-yang-perlu-dinilai"></a></h2>
+<h3 id="a-apakah-pseudonymization-menjaga-privacy-tanpa-merusak-task">A. Apakah pseudonymization menjaga privacy tanpa merusak task?<a aria-hidden="true" class="anchor-heading icon-link" href="#a-apakah-pseudonymization-menjaga-privacy-tanpa-merusak-task"></a></h3>
+<ul>
+<li>Nama dan email relatif aman diganti.</li>
+<li>Salary, location, dan medical condition bisa merusak makna jika diganti sembarang.</li>
+<li>Pseudonymization harus preserve task-relevant semantics, bukan hanya string substitution.</li>
+</ul>
+<h3 id="b-apakah-de-masking-reliable">B. Apakah de-masking reliable?<a aria-hidden="true" class="anchor-heading icon-link" href="#b-apakah-de-masking-reliable"></a></h3>
+<ul>
+<li>LLM bisa memparafrase synthetic values.</li>
+<li>De-masking literal saja tidak cukup jika output variatif.</li>
+<li>Ini menuntut mekanisme post-processing lebih robust.</li>
+</ul>
+<h3 id="c-apakah-pre-threshold-exposure-tetap-jadi-masalah">C. Apakah pre-threshold exposure tetap jadi masalah?<a aria-hidden="true" class="anchor-heading icon-link" href="#c-apakah-pre-threshold-exposure-tetap-jadi-masalah"></a></h3>
+<ul>
+<li>CAMP melindungi future context setelah trigger.</li>
+<li>Data asli yang sudah pernah dikirim sebelum trigger mungkin tetap tercatat oleh adversary.</li>
+<li>Jadikan klaim privacy CAMP lebih presisi: ia mengurangi cumulative exposure ke model, bukan selalu mencegah semua PII asli keluar.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.1777881085671">Threshold-based session privacy still leaves pre-trigger exposure</a> untuk insight tentang pre-trigger exposure sebagai gap privacy.</li>
+</ul>
+<h3 id="d-apakah-camp-mencakup-agent-leakage-yang-lebih-luas">D. Apakah CAMP mencakup agent leakage yang lebih luas?<a aria-hidden="true" class="anchor-heading icon-link" href="#d-apakah-camp-mencakup-agent-leakage-yang-lebih-luas"></a></h3>
+<ul>
+<li>CAMP fokus pada prompt/history ke external LLM.</li>
+<li>Agent nyata punya leakage channel lain: tools, memory store, logs, sub-agent messages.</li>
+<li>CAMP bagus sebagai privacy firewall context, tapi bukan full-stack privacy solution.</li>
+</ul>
+<h2 id="positioning">Positioning<a aria-hidden="true" class="anchor-heading icon-link" href="#positioning"></a></h2>
+<p>CAMP adalah arsitektur pipeline, bukan algoritma baru. Kontribusinya adalah desain middleware untuk conversation context di agentic LLM.</p>
+<p>Bila dilihat sebagai pattern, CAMP itu:</p>
+<ul>
+<li>detector + state tracker + risk scorer + rewriter + synthetic context + de-mask.</li>
+</ul>
+<p>Bila dilihat sebagai level proteksi, CAMP setara dengan "session-aware context firewall".</p>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">camp (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777881085671">Threshold-based session privacy still leaves pre-trigger exposure</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+</ul>

@@ -1,0 +1,23 @@
+<h1 id="deepsec-docs-menegaskan-ai-security-review-sebagai-workspace-orchestrator">Deepsec docs menegaskan AI security review sebagai workspace orchestrator<a aria-hidden="true" class="anchor-heading icon-link" href="#deepsec-docs-menegaskan-ai-security-review-sebagai-workspace-orchestrator"></a></h1>
+<p>Insight utama dari docs deepsec adalah bahwa AI security review yang matang tidak cukup cuma mengandalkan model. Sistem ini harus menjadi workspace orchestration dengan beberapa layer:</p>
+<ul>
+<li>radar awal lewat regex matcher untuk menemukan candidate site.</li>
+<li>konteks repo pendek dan relevan lewat <code>INFO.md</code>.</li>
+<li>investigasi agentic pada file candidate.</li>
+<li>revalidation terpisah untuk mengurangi false positive.</li>
+<li>state append-only di <code>data/</code> agar audit trail tetap ada.</li>
+<li>plugin ownership/notifier agar finding bisa masuk ke workflow manusia.</li>
+</ul>
+<p>Jadi deepsec tidak ideal jika dipandang sebagai "AI bug scanner". Lebih tepat dipandang sebagai "security review workspace" yang mengelola dan menyalurkan output AI ke proses engineering nyata.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security-workflow (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.deepsec-challenges">Deepsec challenge: orchestration, false positives, cost, dan workflow</a></li>
+</ul>

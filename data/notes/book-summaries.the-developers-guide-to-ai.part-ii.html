@@ -1,0 +1,334 @@
+<h1 id="the-developers-guide-to-ai--part-ii-prompt-engineering">The Developer’s Guide to AI — Part II: Prompt Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#the-developers-guide-to-ai--part-ii-prompt-engineering"></a></h1>
+<h2 id="part-ii-prompt-engineering">Part II: Prompt Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#part-ii-prompt-engineering"></a></h2>
+<h3 id="problem-statement">Problem statement<a aria-hidden="true" class="anchor-heading icon-link" href="#problem-statement"></a></h3>
+<p>Part II menjawab masalah yang muncul setelah kita bisa memanggil model: output kadang ngawur, konsistensi hilang, dan model merespons seperti orang asing. Di bagian ini, tugasnya adalah membuat AI bekerja dengan cara yang lebih bisa dikendalikan: lewat instruksi, contoh, format, dan struktur prompt.</p>
+<p>Fontnya bukan lagi teks acak, tapi antarmuka yang bisa dikoreksi, diuji, dan dipelihara.</p>
+<h2 id="chapter-4-fundamentals-of-prompt-engineering">Chapter 4: Fundamentals of Prompt Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-4-fundamentals-of-prompt-engineering"></a></h2>
+<p>Bagian ini salah satu yang krusial. Setelah Part I membangun jalur integrasi dan Part II mulai membangun kontrol sistem, Part IV langsung menegaskan bahwa prompt engineering adalah lapisan kontrol pertama yang harus dikuasai.</p>
+<h3 id="1-prompt-adalah-alat-kontrol-bukan-mantra-ajaib">1. Prompt adalah alat kontrol, bukan mantra ajaib<a aria-hidden="true" class="anchor-heading icon-link" href="#1-prompt-adalah-alat-kontrol-bukan-mantra-ajaib"></a></h3>
+<p>Dua kalimat pembuka yang paling penting:</p>
+<blockquote>
+<p>“LLMs are not magic. They simply predict a sequence of tokens based on your prompt.”</p>
+</blockquote>
+<blockquote>
+<p>“Prompt engineering is all about trying to steer an LLM toward the right predictions.”</p>
+</blockquote>
+<p>Itu intinya. Prompt bukan sekadar cara ngomong ke AI. Prompt adalah mekanisme untuk mengarahkan distribusi kemungkinan output model.</p>
+<p>Dari sini kita harus berpindah mindset:</p>
+<ul>
+<li>dari “AI harusnya ngerti maksud gue”</li>
+<li>ke “gue harus mengekspresikan maksud gue dalam bentuk token yang model lihat.”</li>
+</ul>
+<h3 id="2-model-tidak-mengerti-model-hanya-melihat-token">2. Model tidak mengerti; model hanya melihat token<a aria-hidden="true" class="anchor-heading icon-link" href="#2-model-tidak-mengerti-model-hanya-melihat-token"></a></h3>
+<p>Kutipan penting:</p>
+<blockquote>
+<p>“At the end of the day, an LLM does not understand you. It doesn’t know what you mean. It knows only what you type.”</p>
+</blockquote>
+<p>Ini adalah koreksi mental model yang paling sehat. Banyak kekecewaan muncul karena orang menganggap model punya maksud tersembunyi. Padahal tidak.</p>
+<p>Prompt engineering adalah usaha menjembatani dua domain:</p>
+<ul>
+<li>niat manusia</li>
+<li>apa yang model benar-benar lihat</li>
+</ul>
+<div class="mermaid">
+  flowchart LR
+    A[Your intent] --> B[Design explicit prompt]
+    B --> C[Token sequence seen by LLM]
+    C --> D[Predicted output distribution]
+</div>
+<h3 id="3-software-deterministic-vs-prompt-probabilistic">3. Software deterministic vs prompt probabilistic<a aria-hidden="true" class="anchor-heading icon-link" href="#3-software-deterministic-vs-prompt-probabilistic"></a></h3>
+<p>Perbedaan mendasar antara function biasa dan prompt:</p>
+<div class="mermaid">
+  flowchart LR
+    subgraph Traditional Programming
+        A1[Typed input] --> B1[Explicit rules]
+        B1 --> C1[Deterministic output]
+    end
+
+    subgraph Prompting an LLM
+        A2[Free-form prompt] --> B2[Probabilistic model]
+        B2 --> C2[Flexible but variable output]
+    end
+</div>
+<p>Function tradisional sempit dan tegas. LLM lebih fleksibel tapi juga lebih variabel.</p>
+<p>Bukan berarti salah pakai LLM. Tapi ini mengajarkan kita memilih tool yang cocok untuk task: deterministic task untuk code, fuzzy language task untuk LLM.</p>
+<h3 id="4-prompt-bagus-bukan-panjang-tapi-jelas">4. Prompt bagus bukan panjang, tapi jelas<a aria-hidden="true" class="anchor-heading icon-link" href="#4-prompt-bagus-bukan-panjang-tapi-jelas"></a></h3>
+<p>Prompt yang terlalu vague memberi model ruang interpretasi terlalu lebar. Prompt yang terlalu panjang bisa menambah noise, biaya, dan konteks yang tidak fokus.</p>
+<p>Inti prompt engineering adalah memperkecil ruang kemungkinan output ke arah yang kita inginkan.</p>
+<div class="mermaid">
+  flowchart TD
+    A[Vague prompt] --> B[Wide set of likely continuations]
+    B --> C[High variability]
+
+    D[Specific prompt] --> E[Narrower response space]
+    E --> F[Better alignment]
+</div>
+<p>Jadi panjang prompt bukan tujuan. Tujuannya adalah kejelasan, detail yang relevan, dan keseimbangan.</p>
+<h3 id="5-kerangka-lima-elemen-prompt">5. Kerangka lima elemen prompt<a aria-hidden="true" class="anchor-heading icon-link" href="#5-kerangka-lima-elemen-prompt"></a></h3>
+<p>Salah satu framework paling berguna di bab ini adalah melihat prompt sebagai komposisi:</p>
+<ul>
+<li>Instruction</li>
+<li>Context</li>
+<li>Examples</li>
+<li>Query</li>
+<li>Output format</li>
+</ul>
+<div class="mermaid">
+  flowchart TD
+    P[Prompt] --> I[Instruction]
+    P --> C[Context]
+    P --> E[Examples]
+    P --> Q[Query]
+    P --> O[Output format]
+</div>
+<p>Ini bukan cuma teori. Ini membuat prompt bisa didiagnosis. Kalau output jelek, kita bisa cek: apakah instruksinya kabur? context-nya kurang? contoh tidak relevan? query ambigu? format belum jelas?</p>
+<h3 id="6-prompt-engineering-dan-knowledge-creation">6. Prompt engineering dan knowledge creation<a aria-hidden="true" class="anchor-heading icon-link" href="#6-prompt-engineering-dan-knowledge-creation"></a></h3>
+<p>Bagian ini juga menunjukkan bahwa LLM bisa dipakai bukan hanya untuk menjawab, tapi juga untuk membersihkan knowledge. Contoh: menulis ulang email support jadi artikel how-to.</p>
+<div class="mermaid">
+  flowchart LR
+    E[Support email chains] --> L[LLM]
+    L --> A[Draft how-to article]
+    A --> H[Human review]
+    H --> KB[Knowledge base]
+</div>
+<p>Ini menunjukkan bahwa prompt engineering juga masuk ke workflow internal, bukan hanya ke UI akhir.</p>
+<h3 id="7-context-window-dan-prompt-capacity">7. Context window dan prompt capacity<a aria-hidden="true" class="anchor-heading icon-link" href="#7-context-window-dan-prompt-capacity"></a></h3>
+<p>Prompt tidak hidup di udara. Ia terbatas oleh context window dan token.</p>
+<pre><code>flowchart LR
+    A[All available knowledge] --> B{Dump all into prompt?}
+    B -- Yes --> C[Hit limits / high cost / slower / less reliable]
+    B -- No --> D[Curate relevant context]
+    D --> E[Smaller, clearer, cheaper prompt]
+</code></pre>
+<p>Karena itu prompt engineering juga harus memikirkan pemilihan informasi, bukan sekadar menambahkan informasi.</p>
+<h3 id="8-tokenization--budget">8. Tokenization = budget<a aria-hidden="true" class="anchor-heading icon-link" href="#8-tokenization--budget"></a></h3>
+<p>Bagian ini menjelaskan bahwa kata bukan selalu token. Prompt adalah sejumlah token; token adalah biaya dan kapasitas.</p>
+<p>Prompt engineering menjadi bagian biaya sistem:</p>
+<div class="mermaid">
+  flowchart TD
+    A[input tokens] --> C[request cost]
+    B[output tokens] --> C
+    C --> D[monthly bill]
+</div>
+<p>Input panjang dan output verbose sama-sama menaikkan biaya. Ini membuat prompt bukan hanya masalah bahasa, tapi juga masalah ekonomis.</p>
+<h3 id="9-lost-in-the-middle-effect">9. Lost-in-the-middle effect<a aria-hidden="true" class="anchor-heading icon-link" href="#9-lost-in-the-middle-effect"></a></h3>
+<p>Ada warning penting: informasi di tengah prompt bisa kurang dipakai dibanding informasi di depan atau belakang.</p>
+<div class="mermaid">
+  flowchart LR
+    A[Long prompt start] --> M[LLM]
+    B[Long prompt middle] --> M
+    C[Long prompt end] --> M
+    M --> R[Model uses start/end better than middle]
+</div>
+<p>Jadi hanya karena prompt muat dalam window tidak berarti prompt itu optimal.</p>
+<h3 id="10-model-choice-tetap-relevan">10. Model choice tetap relevan<a aria-hidden="true" class="anchor-heading icon-link" href="#10-model-choice-tetap-relevan"></a></h3>
+<p>Prompt engineering bukan pengganti model choice. Bab ini tetap menekankan bahwa kualitas hasil juga tergantung pada model, training data, dan konfigurasi.</p>
+<p>Uji prompt di beberapa model adalah praktik yang sehat.</p>
+<h3 id="11-prompt-adalah-artefak-desain-sistem">11. Prompt adalah artefak desain sistem<a aria-hidden="true" class="anchor-heading icon-link" href="#11-prompt-adalah-artefak-desain-sistem"></a></h3>
+<p>Kalau disederhanakan, bab ini sedang mengatakan:</p>
+<p><strong>prompt adalah artefak desain yang menghubungkan kebutuhan bisnis dan mesin probabilistik.</strong></p>
+<p>Bukan seni merayu, bukan mantra rahasia. Ini proses engineering.</p>
+<h3 id="12-diagram-besar-chapter-4">12. Diagram besar Chapter 4<a aria-hidden="true" class="anchor-heading icon-link" href="#12-diagram-besar-chapter-4"></a></h3>
+<div class="mermaid">
+  flowchart TD
+    A[Business task] --> B{Traditional code or LLM}
+    B -- Deterministic --> C[Use code]
+    B -- Language task --> D[Use LLM]
+    D --> E[Design prompt]
+    E --> I[Instruction]
+    E --> Cxt[Context]
+    E --> Ex[Examples]
+    E --> Q[Query]
+    E --> O[Output format]
+    E --> T[Tokenized prompt]
+    T --> W[Context window / cost constraints]
+    W --> R[Need clarity + relevance + brevity]
+    R --> S[Better alignment]
+</div>
+<h3 id="13-quotes-beban-berat">13. Quotes beban berat<a aria-hidden="true" class="anchor-heading icon-link" href="#13-quotes-beban-berat"></a></h3>
+<p>Beberapa kutipan paling penting:</p>
+<blockquote>
+<p>“Prompt engineering is all about trying to steer an LLM toward the right predictions.”</p>
+</blockquote>
+<blockquote>
+<p>“It doesn’t know what you mean. It knows only what you type.”</p>
+</blockquote>
+<blockquote>
+<p>“The more open-ended the prompt ... the more the LLM will ‘guess’ what information you want.”</p>
+</blockquote>
+<blockquote>
+<p>“Detailed, clear, and concise instructions are the most important considerations...”</p>
+</blockquote>
+<blockquote>
+<p>“Instead of dumping everything into the prompt, we have to deliberately curate and shape the input...”</p>
+</blockquote>
+<blockquote>
+<p>“All the words you send are converted to tokens, which costs both time and money.”</p>
+</blockquote>
+<h3 id="14-sintesis-besar">14. Sintesis besar<a aria-hidden="true" class="anchor-heading icon-link" href="#14-sintesis-besar"></a></h3>
+<p>Chapter 4 mengajarkan bahwa prompt engineering adalah disiplin desain input untuk sistem probabilistik. Prompt yang baik menjelaskan tugas, struktur konteks, contoh, query, dan format output. Ia juga harus mempertimbangkan batas token, context window, biaya, dan relevansi.</p>
+<h3 id="insight">Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#insight"></a></h3>
+<ol>
+<li>Prompt engineering bukan soal finding magic words; ini soal mengontrol probabilistic output.</li>
+<li>Lima elemen prompt memberi framework diagnosis yang lebih tajam.</li>
+<li>Tokenisasi memberi prompt dimensi ekonomi.</li>
+<li>Lost-in-the-middle effect memperlihatkan bahwa ”cukup muat” belum berarti ”cukup baik.”</li>
+<li>Prompt engineering adalah lapisan kontrol pertama dan termurah yang punya porsi besar dalam sistem AI.</li>
+</ol>
+<h2 id="chapter-5-prompt-engineering-techniques">Chapter 5: Prompt Engineering Techniques<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-5-prompt-engineering-techniques"></a></h2>
+<p>Chapter 5 mengangkat prompt engineering dari fondasi mental ke toolbox teknik. Bab ini menegaskan sejak awal bahwa ini masih area riset terbuka, jadi bab ini bukan daftar hukum tetap, melainkan kumpulan pattern kerja yang harus diuji di setiap model dan use case.</p>
+<h3 id="1-instruction-prompting">1. Instruction prompting<a aria-hidden="true" class="anchor-heading icon-link" href="#1-instruction-prompting"></a></h3>
+<p>Ini bentuk paling dasar, tapi tetap krusial. Kalimat inti bab ini adalah:</p>
+<blockquote>
+<p>“LLMs are only as good as the instructions we give them.”</p>
+</blockquote>
+<p>Prompt yang jelas saja sudah bisa membuat model melakukan tugas berbeda: data extraction, PII redaction, dan synthetic data generation. Untuk extraction, prompt terbaik kadang bukan hanya “ambil field ini,” tetapi juga menambahkan rule seperti "jika tidak ada, tulis null" dan "jangan infer." Untuk redaction, LLM tidak menggantikan regex, tetapi bisa melengkapi semantik edge case. Untuk synthetic data, penting menjelaskan kontrak output: jumlah baris, header, kolom, dan format.</p>
+<h3 id="2-persona-prompting">2. Persona prompting<a aria-hidden="true" class="anchor-heading icon-link" href="#2-persona-prompting"></a></h3>
+<p>Persona bukan sekadar tone. Ini teknik untuk memberi model identitas fiksi yang mengunci framing dan asumsi konteks.</p>
+<p>Contoh yang kuat:</p>
+<ul>
+<li>“You are a software developer”</li>
+<li>“You are a Google help desk representative”</li>
+</ul>
+<p>Kedua persona bisa menanggapi pertanyaan yang sama secara berbeda karena mereka mengubah konteks, depth, dan sudut pandang. Persona berfungsi sebagai compression mechanism: beberapa constraint implisit dibungkus dalam satu role. Kelebihannya adalah prompt bisa lebih pendek dan konsisten; risikonya adalah jika role terlalu umum, model bisa menebak detail yang tidak diinginkan.</p>
+<h3 id="3-zero-shot-one-shot-few-shot">3. Zero-shot, one-shot, few-shot<a aria-hidden="true" class="anchor-heading icon-link" href="#3-zero-shot-one-shot-few-shot"></a></h3>
+<p>Ini inti in-context learning. Perbedaan dasarnya:</p>
+<ul>
+<li>zero-shot = instruksi saja,</li>
+<li>one-shot = instruksi + satu contoh,</li>
+<li>few-shot = instruksi + beberapa contoh.</li>
+</ul>
+<p>Banyak task domain-specific tidak perlu fine-tune. Dengan contoh-contoh yang tepat, model bisa mulai mempelajari pola internal tanpa pelatihan ulang. Trade-offnya jelas: zero-shot murah tapi rawan variasi; one-shot lebih terarah tetapi bisa overfit ke pola sempit; few-shot lebih stabil tetapi mengonsumsi token dan context window.</p>
+<h3 id="4-delimiters">4. Delimiters<a aria-hidden="true" class="anchor-heading icon-link" href="#4-delimiters"></a></h3>
+<p>Delimiters membantu struktur prompt yang jelas. Bagian seperti <code>&#x3C;instructions></code>, <code>&#x3C;examples></code>, <code>&#x3C;context></code>, dan <code>&#x3C;query></code> membuat model lebih mudah membedakan peran setiap bagian. Ini sebenarnya information architecture untuk prompt.</p>
+<h3 id="5-chain-of-thought">5. Chain-of-thought<a aria-hidden="true" class="anchor-heading icon-link" href="#5-chain-of-thought"></a></h3>
+<p>CoT mendorong model untuk tidak langsung melompat ke jawaban ketika task butuh banyak langkah. Dengan meminta reasoning step-by-step, model bisa menghasilkan jalur internal yang kemudian membantu jawaban akhirnya.</p>
+<p>Tapi trade-off-nya nyata: response jadi lebih panjang, biaya naik, latency naik, dan ada risiko leaking reasoning yang tidak cocok untuk UX production. CoT cocok untuk task reasoning multi-step, bukan untuk semua prompt.</p>
+<h3 id="6-prompt-chaining">6. Prompt chaining<a aria-hidden="true" class="anchor-heading icon-link" href="#6-prompt-chaining"></a></h3>
+<p>Prompt chaining memecah masalah kompleks menjadi pipeline prompt kecil, misalnya:</p>
+<ol>
+<li>extract key facts,</li>
+<li>classify / reason,</li>
+<li>format / finalize.</li>
+</ol>
+<p>Ini memberi scoped subtasks, explicit I/O contracts, debugging lebih mudah, reuse komponen, dan token load yang biasanya lebih rendah. Prompt chaining adalah bentuk komposisi prompting yang paling dekat dengan software engineering.</p>
+<h3 id="7-best-practices">7. Best practices<a aria-hidden="true" class="anchor-heading icon-link" href="#7-best-practices"></a></h3>
+<p>Bagian penutupnya berisi beberapa prinsip developer:</p>
+<ul>
+<li>gunakan instruksi positif, bukan larangan negatif,</li>
+<li>treat prompts like code: versioning, testing, iterasi,</li>
+<li>collaboration with the model boleh dilakukan, tapi hasil tetap harus diuji,</li>
+<li>experiment dengan variasi prompt dan gunakan evaluasi A/B, review manual, cross-model, dan regression baseline.</li>
+</ul>
+<h3 id="sintesis-chapter-5">Sintesis Chapter 5<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-chapter-5"></a></h3>
+<p>Chapter 5 memberitahu kita bahwa prompt engineering yang matang bukan mencari satu prompt sakti, tapi menyusun kombinasi teknik yang tepat untuk task, model, dan trade-off. Ia memperkenalkan prompting sebagai pattern language: instruction prompting, persona, in-context examples, delimiters, reasoning aid, dan chaining. Satu hal penting adalah bahwa teknik-teknik ini saling melengkapi, bukan saling menggantikan.</p>
+<h2 id="chapter-6-prompt-engineering-in-code">Chapter 6: Prompt Engineering in Code<a aria-hidden="true" class="anchor-heading icon-link" href="#chapter-6-prompt-engineering-in-code"></a></h2>
+<p>Chapter 6 adalah titik di mana prompt berhenti jadi eksperimen manual dan mulai diperlakukan sebagai bagian nyata dari sistem software. Pembukaannya sudah jelas:</p>
+<blockquote>
+<p>“Writing a great prompt is only half the battle.”</p>
+</blockquote>
+<blockquote>
+<p>“The moment you drop that prompt into real code, where latency matters, tokens cost money, and users never read the docs, you enter a different arena.”</p>
+</blockquote>
+<p>Itu inti bab ini. Selama ini kita ngomong prompt seolah-olah hanya hidup di playground atau chat box. Di production, prompt hidup di dunia yang jauh lebih keras: latency, token cost, state, user input aneh, downstream code butuh format stabil, dan maintenance jangka panjang.</p>
+<h3 id="1-memilih-library-sebagai-keputusan-arsitektural">1. Memilih library sebagai keputusan arsitektural<a aria-hidden="true" class="anchor-heading icon-link" href="#1-memilih-library-sebagai-keputusan-arsitektural"></a></h3>
+<p>Bab ini membuka dengan pilihan integrasi yang jelas: direct REST API, low-level SDK, lightweight wrapper, atau high-level framework. Bukan sekadar “pakai X”, tetapi mengajak kita mikir:</p>
+<ul>
+<li>apakah bottleneck utama kita kontrol dan debuggability?</li>
+<li>apakah kita butuh delivery cepat dan shared conventions?</li>
+<li>apakah kita siap menukar fleksibilitas dengan abstraksi?</li>
+</ul>
+<p>Kutipan kuncinya:</p>
+<blockquote>
+<p>“Higher abstraction buys speed of delivery and shared conventions. Lower abstraction buys performance, debuggability, and long-term freedom.”</p>
+</blockquote>
+<p>Ini bukan filosofi kosong. Ini mengubah library choice jadi keputusan situasional yang boleh berubah seiring tim dan kebutuhan.</p>
+<h3 id="2-hosted-api--gampang-tapi-security-tetap-harus-disiplin">2. Hosted API = gampang, tapi security tetap harus disiplin<a aria-hidden="true" class="anchor-heading icon-link" href="#2-hosted-api--gampang-tapi-security-tetap-harus-disiplin"></a></h3>
+<p>Selanjutnya bab ini masuk ke hosted API. Di sini kita masuk ke software engineering reality: API key, environment variables, secret hygiene, billing, dan config management.</p>
+<p>Warning-nya sederhana tapi penting:</p>
+<blockquote>
+<p>“Keep your API keys private!”</p>
+</blockquote>
+<p>Banyak demo AI gagal di produksi karena kebocoran credential, commit key, atau logs yang menampung secret. Bab ini mengingatkan bahwa AI integration tetap tunduk pada prinsip keamanan ops biasa.</p>
+<h3 id="3-output-configuration-sekarang-kita-pegang-tombol-model">3. Output configuration: sekarang kita pegang tombol model<a aria-hidden="true" class="anchor-heading icon-link" href="#3-output-configuration-sekarang-kita-pegang-tombol-model"></a></h3>
+<p>Di sinilah prompt mulai kehilangan ilusi bahwa semua kontrol ada di prompt. Kualitas output juga ditentukan oleh knob konfigurasi.</p>
+<p>Dua keluarga besar yang dibahas:</p>
+<ul>
+<li>output length (<code>max tokens</code>, <code>num_predict</code>, <code>stop sequences</code>)</li>
+<li>sampling controls (<code>temperature</code>, <code>top_p</code>, <code>top_k</code>)</li>
+</ul>
+<h4 id="3a-output-length">3a. Output length<a aria-hidden="true" class="anchor-heading icon-link" href="#3a-output-length"></a></h4>
+<p>Kalau task-nya sempit—misalnya classification—lo tidak butuh paragraf. Lo butuh label. Maka <code>num_predict: 1</code> dan stop sequences bukan optimasi kecil; itu pola pikir production yang memaksa model tidak babbling.</p>
+<h4 id="3b-sampling-controls">3b. Sampling controls<a aria-hidden="true" class="anchor-heading icon-link" href="#3b-sampling-controls"></a></h4>
+<p>Temperature rendah berarti jalur output lebih stabil. Temperature tinggi berarti output lebih kreatif. Top P dan Top K menambah batas atas kandidat token.</p>
+<p>Yang penting: <code>temperature=0</code> tidak berarti deterministik absolut. Ini hanya membuat output lebih predictable, bukan menghilangkan semua variasi.</p>
+<h3 id="4-prompt-templates-dari-string-liar-ke-artefak-yang-bisa-dipelihara">4. Prompt templates: dari string liar ke artefak yang bisa dipelihara<a aria-hidden="true" class="anchor-heading icon-link" href="#4-prompt-templates-dari-string-liar-ke-artefak-yang-bisa-dipelihara"></a></h3>
+<p>Bab ini kuat ketika memperkenalkan prompt templates. Prompt bukan lagi string concat ad-hoc di code. Ia harus dipisah menjadi template yang berisi bagian tetap dan slot dinamis.</p>
+<p>Jinja dipakai sebagai contoh yang pas karena ia:</p>
+<ul>
+<li>oriented ke plain text,</li>
+<li>mendukung placeholder,</li>
+<li>bisa loop dan condition,</li>
+<li>netral untuk prompt.</li>
+</ul>
+<p>Template memberi reusability, maintainability, safer interpolation, dan tempat untuk menaruh guardrail default seperti fallback response.</p>
+<h3 id="5-memisahkan-prompt-dari-code">5. Memisahkan prompt dari code<a aria-hidden="true" class="anchor-heading icon-link" href="#5-memisahkan-prompt-dari-code"></a></h3>
+<p>Episode ini melanjutkan ke rekomendasi penting: simpan template di file eksternal. Itu membuat prompt menjadi aset yang bisa dibandingkan, direview, dan diubah tanpa merombak logic bisnis.</p>
+<p>Kalau prompt bercampur dengan code, repo cepat jadi berantakan. Kalau prompt disimpan terpisah, kode jadi bersih, prompt review jadi mungkin, dan non-dev bisa kontribusi lebih mudah.</p>
+<h3 id="6-dynamic-templates-and-context-assembly">6. Dynamic templates and context assembly<a aria-hidden="true" class="anchor-heading icon-link" href="#6-dynamic-templates-and-context-assembly"></a></h3>
+<p>Bab ini juga menunjukkan bahwa template bisa dinamis: loop artikel, delimiters per sumber, dan assembly context dari banyak teks.</p>
+<p>Ini adalah jembatan ke RAG. Prompt bukan lagi satu string saja; ia adalah hasil render dari beberapa sumber data yang diambil, dibatasi, dan dipisah rapi.</p>
+<h3 id="7-messages-dan-roles-prompt-berubah-jadi-percakapan-terstruktur">7. Messages dan roles: prompt berubah jadi percakapan terstruktur<a aria-hidden="true" class="anchor-heading icon-link" href="#7-messages-dan-roles-prompt-berubah-jadi-percakapan-terstruktur"></a></h3>
+<p>Bagian berikutnya menurut gue besar: LLM chat-style bukan lagi satu blob teks; ia adalah ordered list of messages dengan roles:</p>
+<ul>
+<li>system</li>
+<li>user</li>
+<li>assistant</li>
+<li>tool</li>
+</ul>
+<p>System message dipandang sebagai kernel prompt: global instructions, persona, policy, guardrail. User message adalah request yang berubah-ubah. Assistant message adalah history. Tool message adalah hasil eksternal.</p>
+<p>Ini adalah transisi mental model: prompt = not just text, but conversation protocol.</p>
+<h3 id="8-conversation-history-memori-itu-ilusi-aplikasi">8. Conversation history: memori itu ilusi aplikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#8-conversation-history-memori-itu-ilusi-aplikasi"></a></h3>
+<p>Di sini ada koreksi penting: LLM itu stateless. Aplikasi yang mengirim ulang history menciptakan ilusi memory.</p>
+<p>Bab ini memberi pattern class <code>ConversationHistory</code> untuk mengelola system message, messages list, dan rendering request. Ini mengajarkan bahwa yang “inget” bukan model, tapi aplikasi.</p>
+<h3 id="9-trimming-history-memori-selalu-bertarung-dengan-token-budget">9. Trimming history: memori selalu bertarung dengan token budget<a aria-hidden="true" class="anchor-heading icon-link" href="#9-trimming-history-memori-selalu-bertarung-dengan-token-budget"></a></h3>
+<p>Seiring percakapan bertambah panjang, token budget cepat habis. Solusi sederhana yang dijelaskan adalah remove oldest user/assistant pair ketika limit terlampaui.</p>
+<p>Ini menunjukkan prinsip penting:</p>
+<ul>
+<li>memori tidak gratis,</li>
+<li>setiap turn yang disimpan ada biaya token,</li>
+<li>relevansi harus dibayar.</li>
+</ul>
+<h3 id="10-summarizing-history-kompres-konteks-sebelum-dibuang">10. Summarizing history: kompres konteks sebelum dibuang<a aria-hidden="true" class="anchor-heading icon-link" href="#10-summarizing-history-kompres-konteks-sebelum-dibuang"></a></h3>
+<p>Bagian paling menarik adalah penggunaan LLM untuk membantu mengelola dirinya sendiri. Daripada membuang seluruh history, kita bisa membuat ringkasan dan menggantikan history lama dengan summary singkat.</p>
+<p>Ini bukan hanya fitur internal. Ini pattern orchestration:</p>
+<ul>
+<li>prompt utama untuk chat,</li>
+<li>helper prompt untuk summarization,</li>
+<li>maintenance prompt untuk memory compression.</li>
+</ul>
+<p>Dan itu sudah menempatkan prompt engineering sebagai bagian arsitektur sistem.</p>
+<h3 id="sintesis-chapter-6">Sintesis Chapter 6<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-chapter-6"></a></h3>
+<p>Chapter 6 mengangkat prompt dari level “isi request” ke level “infrastruktur perilaku” dalam aplikasi. Di sini kita belajar:</p>
+<ul>
+<li>pilih abstraction layer yang cocok,</li>
+<li>atur output dengan config knobs,</li>
+<li>susun prompt dengan templates,</li>
+<li>pisahkan prompt dari code,</li>
+<li>rangkai context dinamis,</li>
+<li>gunakan roles untuk chat,</li>
+<li>kelola history aplikasi,</li>
+<li>trim atau summarize agar token budget tetap masuk akal.</li>
+</ul>
+<p>Di production, prompt bukan lagi sekadar teks untuk model. Dia adalah kontrak, state, resource, dan artefak yang harus dikelola seperti komponen software lainnya.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">book-summary (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>

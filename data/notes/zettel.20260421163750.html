@@ -1,0 +1,156 @@
+<h1 id="thoughtworks-ai-native-engineering-adalah-operating-model-untuk-mengorkestrasikan-ai-bukan-sekadar-ai-coding">Thoughtworks: AI-native engineering adalah operating model untuk mengorkestrasikan AI, bukan sekadar AI coding<a aria-hidden="true" class="anchor-heading icon-link" href="#thoughtworks-ai-native-engineering-adalah-operating-model-untuk-mengorkestrasikan-ai-bukan-sekadar-ai-coding"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Sebenarnya artikel ini sedang ngomongin apa?</li>
+<li>Kenapa “vibe coding” dianggap tidak cukup?</li>
+<li>Apa saja lima building block yang dimaksud?</li>
+<li>Gimana kelima block itu saling nyambung jadi workflow nyata?</li>
+<li>Di mana titik gagal paling umum saat tim coba pakai AI buat engineering?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Artikel Thoughtworks ini bukan membahas AI yang bisa menulis kode. Ia membahas bagaimana membangun <strong>operating model engineering</strong> yang menjadikan AI sebagai bagian terstruktur dari proses software delivery.</p>
+<blockquote>
+<p>“AI should be treated as an engineering stack, bukan chatbot yang diajak ngobrol santai.”</p>
+</blockquote>
+<h2 id="apa-yang-dibahas">Apa yang dibahas?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-dibahas"></a></h2>
+<p>Project yang dibahas adalah kerangka pemikiran untuk AI-native engineering. Bukan repositori spesifik, bukan software tertentu, melainkan:</p>
+<ul>
+<li>memilih agent yang bisa mengeksekusi kerja,</li>
+<li>memilih model yang bisa berpikir,</li>
+<li>memilih methodology yang membatasi chaos,</li>
+<li>menulis spec yang jelas,</li>
+<li>memberikan context yang membuat output AI relevan dengan tim dan arsitektur.</li>
+</ul>
+<p>Jadi fokusnya adalah: <strong>AI bukan sekadar tool, tapi bagian dari workflow engineering yang harus diorkestrasikan.</strong></p>
+<h2 id="mengapa-vibe-coding-tidak-cukup">Mengapa "vibe coding" tidak cukup?<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-vibe-coding-tidak-cukup"></a></h2>
+<p>“Vibe coding” dianggap kegagalan untuk software serius karena ia:</p>
+<ul>
+<li>terlalu mengandalkan prompt mentah,</li>
+<li>berharap hasil benar tanpa struktur,</li>
+<li>memperbaiki kesalahan secara manual berulang,</li>
+<li>tidak memberikan audit trail,</li>
+<li>tidak memastikan konsistensi arsitektur,</li>
+<li>tidak mendukung maintainability di sistem nyata.</li>
+</ul>
+<p>Atomic insight:</p>
+<blockquote>
+<p>Kode yang jalan tidak sama dengan kode yang bisa dipelihara. Vibe coding memberi ilusi produktivitas, tetapi untuk enterprise engineering nilai terbesarnya adalah repeatability, safety, dan alignment.</p>
+</blockquote>
+<h2 id="lima-building-block">Lima building block<a aria-hidden="true" class="anchor-heading icon-link" href="#lima-building-block"></a></h2>
+<ol>
+<li>
+<p><strong>Agent</strong></p>
+<ul>
+<li>Lapisan eksekusi otonom.</li>
+<li>Bisa baca project, run command, install dependency, edit file, jalankan test, dan refactor multi-file.</li>
+<li>Ini lebih dari chatbot; ini “tangan” yang bisa pakai alat.</li>
+</ul>
+</li>
+<li>
+<p><strong>Model</strong></p>
+<ul>
+<li>Mesin reasoning.</li>
+<li>Berbeda dengan agent: model adalah otak, agent adalah aktornya.</li>
+<li>Pasar sudah terfragmentasi menjadi model spesialis untuk code gen, architectural reasoning, QA, dokumentasi, dan security.</li>
+</ul>
+</li>
+<li>
+<p><strong>Methodology</strong></p>
+<ul>
+<li>Aturan main untuk mencegah agent thrashing.</li>
+<li>Menegakkan struktur: prompt yang terarah, CI/CD integration, test-driven AI, versioning, audit, human review.</li>
+<li>Contoh yang relevan: BMAD Method sebagai framework workflow AI-native engineering.</li>
+<li>Tanpa ini, AI cepat tapi liar.</li>
+</ul>
+</li>
+<li>
+<p><strong>Spec</strong></p>
+<ul>
+<li>Jembatan dari niat manusia ke eksekusi AI.</li>
+<li>Menjadikan requirement yang buram menjadi acceptance criteria, batasan, dan tujuan yang bisa diinterpretasi AI.</li>
+<li>AI-native engineering memindahkan bottleneck biaya mental ke kualitas spesifikasi.</li>
+</ul>
+</li>
+<li>
+<p><strong>Context</strong></p>
+<ul>
+<li>Pengetahuan institusional dan guardrail yang menetapkan cara kerja di lingkungan khusus tim.</li>
+<li>Berisi aturan coding, arsitektur, security, design system, dependency policy, dan persistent instruction.</li>
+<li>Tanpa context, AI cenderung menghasilkan solusi generik yang tidak fit dengan codebase.</li>
+</ul>
+</li>
+</ol>
+<h2 id="bagaimana-kelima-block-menyatu">Bagaimana kelima block menyatu?<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-kelima-block-menyatu"></a></h2>
+<p>Serangkaian ini saling tergantung:</p>
+<ul>
+<li>Tanpa <strong>agent</strong>, model cuma bisa menjawab teks.</li>
+<li>Tanpa <strong>model</strong> yang tepat, agent bergerak tanpa reasoning yang sesuai.</li>
+<li>Tanpa <strong>methodology</strong>, agent akan muter-muter dan sulit diaudit.</li>
+<li>Tanpa <strong>spec</strong>, agent bergerak ke tujuan yang salah.</li>
+<li>Tanpa <strong>context</strong>, output agent bisa tidak sesuai standar tim dan arsitektur.</li>
+</ul>
+<p>Jadi rangkaian yang benar adalah:</p>
+<ul>
+<li>agent = siapa yang mengeksekusi</li>
+<li>model = mesin yang berpikir</li>
+<li>methodology = aturan main proses</li>
+<li>spec = apa yang harus dilakukan</li>
+<li>context = bagaimana melakukannya dengan benar</li>
+</ul>
+<h2 id="titik-gagal-paling-umum">Titik gagal paling umum<a aria-hidden="true" class="anchor-heading icon-link" href="#titik-gagal-paling-umum"></a></h2>
+<p>Kegagalan paling berbahaya menurut artikel ini bukan sekadar bug syntax. Melainkan:</p>
+<ul>
+<li>AI menghasilkan solusi yang nampak rapi tapi salah domain.</li>
+<li>Spec kabur atau bertentangan.</li>
+<li>Context tidak cukup.</li>
+<li>Agent diberi kebebasan tanpa metodologi.</li>
+<li>Review manusia melemah karena AI terlihat produktif.</li>
+</ul>
+<p>Inti penting:</p>
+<blockquote>
+<p>Masalah AI-native engineering bukan model terbaik. Masalahnya adalah membangun workflow AI yang bisa dipercaya.</p>
+</blockquote>
+<h2 id="relevansi-untuk-engineer">Relevansi untuk engineer<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi-untuk-engineer"></a></h2>
+<p>Peran engineer bergeser dari:</p>
+<ul>
+<li>penulis kode langsung</li>
+</ul>
+<p>ke:</p>
+<ul>
+<li>penyusun intent,</li>
+<li>pengarah constraint,</li>
+<li>reviewer AI,</li>
+<li>architect of flow,</li>
+<li>penjaga kualitas sistem.</li>
+</ul>
+<p>Skill yang naik nilainya bukan lagi sekadar menulis kode cepat, tapi juga:</p>
+<ul>
+<li>membuat spec yang tajam,</li>
+<li>memahami boundary arsitektural,</li>
+<li>mendesain guardrail,</li>
+<li>memverifikasi output AI.</li>
+</ul>
+<h2 id="hubungan-ke-catatan-lain">Hubungan ke catatan lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-catatan-lain"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421161001">AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</a> — AI-native adalah jargon strategi yang menandai asumsi desain AI sebagai fondasi, bukan sekadar fitur tambahan</li>
+<li><a href="/sotoy/notes/zettel.20260421162253">Classic, Modern, dan AI-native Software Engineering adalah tiga mode kerja, bukan disiplin formal</a> — Classic, Modern, dan AI-native Software Engineering adalah tiga mode kerja, bukan disiplin formal</li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">thoughtworks (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">operating-model (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-workflow (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260421170516">BMAD adalah framework workflow AI-native engineering yang mengganti prompt chaos dengan peran dan fase terstruktur</a></li>
+<li><a href="/sotoy/notes/zettel.20260421170812">BMAD Getting Started mengajarkan workflow awal AI-native engineering, bukan sekadar installasi</a></li>
+<li><a href="/sotoy/notes/zettel.literature.thoughtworks-ai-native-engineering">Thoughtworks AI-native engineering sebagai literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

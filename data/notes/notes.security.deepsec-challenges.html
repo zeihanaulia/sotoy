@@ -1,0 +1,116 @@
+<h1 id="deepsec-challenge-orchestration-false-positives-cost-dan-workflow">Deepsec challenge: orchestration, false positives, cost, dan workflow<a aria-hidden="true" class="anchor-heading icon-link" href="#deepsec-challenge-orchestration-false-positives-cost-dan-workflow"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue baca thread <code>rauchg/status/2051386798899888539</code> dan yang paling menarik buat gue bukan sekadar "AI bisa nemu bug". Yang paling penting adalah apakah hasilnya bisa dipercaya dan masuk ke workflow tanpa nambah chaos.</p>
+<h2 id="1-orchestration-bukan-hanya-spawn-banyak-agent">1. Orchestration bukan hanya "spawn banyak agent"<a aria-hidden="true" class="anchor-heading icon-link" href="#1-orchestration-bukan-hanya-spawn-banyak-agent"></a></h2>
+<ul>
+<li>ribuan agent paralel keren di teori; sulitnya adalah bikin outputnya konsisten.</li>
+<li>pertanyaan yang gue lihat penting: siapa yang ngatur, bagaimana state-nya konsisten, dan gimana hasil satu agent dipakai sama agent lain?</li>
+<li>Deepsec punya <code>data/</code>, <code>FileRecord</code>, <code>runs/</code>, <code>analysisHistory</code>, dan <code>revalidate</code>. Ini jawaban awal yang cukup bagus.</li>
+<li>tapi kritiknya valid: kalau cuma banyak prompt loop, itu belum orchestration nyata.</li>
+</ul>
+<h2 id="2-prompt-loop-vs-actual-orchestration">2. Prompt loop vs actual orchestration<a aria-hidden="true" class="anchor-heading icon-link" href="#2-prompt-loop-vs-actual-orchestration"></a></h2>
+<ul>
+<li>Leo Tavares menekankan bahwa banyak demo agent cuma stateless loop.</li>
+<li>real orchestration butuh state yang persisted, recoverable, dan auditable.</li>
+<li>kalau Deepsec mau disebut orchestrator, dia harus buktikan run bisa diulang tanpa hilang konteks.</li>
+</ul>
+<h2 id="3-false-positive-dan-alert-fatigue">3. False positive dan alert fatigue<a aria-hidden="true" class="anchor-heading icon-link" href="#3-false-positive-dan-alert-fatigue"></a></h2>
+<ul>
+<li>diskusi buat gue jelas: lebih banyak finding belum tentu membantu.</li>
+<li>security team nggak butuh alarm lagi; mereka butuh signal yang valid.</li>
+<li>Glitch Truth minta benchmark nyata, bukan klaim internal.</li>
+<li>pertanyaan penting: deepsec nemuin apa yang scanner lain nggak? berapa false positive setelah revalidate? apakah hasilnya actionable?</li>
+</ul>
+<h2 id="4-batas-scope-bukan-pentest-penuh">4. Batas scope: bukan pentest penuh<a aria-hidden="true" class="anchor-heading icon-link" href="#4-batas-scope-bukan-pentest-penuh"></a></h2>
+<ul>
+<li>Jono mengingatkan: "lebih murah dari pentest" nggak sama dengan pengganti pentest.</li>
+<li>Deepsec fokus ke codebase review, bukan runtime cloud atau bisnis logic full.</li>
+<li>pentest manusia masih lebih kuat di: runtime behavior, prod misconfig, chain attack, browser/auth flow, rate limit, IAM.</li>
+<li>menurut gue, ini perlu dinyatakan jelas supaya ekspektasi nggak meleset.</li>
+</ul>
+<h2 id="5-cost-untuk-solo-dev-dan-tim-kecil">5. Cost untuk solo dev dan tim kecil<a aria-hidden="true" class="anchor-heading icon-link" href="#5-cost-untuk-solo-dev-dan-tim-kecil"></a></h2>
+<ul>
+<li>beberapa reply nanya apakah this cocok buat solo dev.</li>
+<li>jawabannya: bisa, tapi harus pakai lokal, <code>--limit 50</code>, dan target area yang jelas.</li>
+<li>kalau dipakai full monorepo tanpa kalibrasi, bisa jadi mahal dan noisy.</li>
+</ul>
+<h2 id="6-model-choice-dan-backend-replaceable">6. Model choice dan backend replaceable<a aria-hidden="true" class="anchor-heading icon-link" href="#6-model-choice-dan-backend-replaceable"></a></h2>
+<ul>
+<li>reply lain fokus ke model: apakah bisa ganti backend, apakah Codex/GPT-5.5 atau Opus lebih baik.</li>
+<li>ini bukan cuma konfigurasi. ini tantangan buat klaim kualitas.</li>
+<li>menurut gue, value Deepsec harus ada di harness dan workflow, bukan di model X hari ini.</li>
+</ul>
+<h2 id="7-apakah-ini-cuma-sast-lagi">7. Apakah ini cuma SAST lagi?<a aria-hidden="true" class="anchor-heading icon-link" href="#7-apakah-ini-cuma-sast-lagi"></a></h2>
+<ul>
+<li>kritik Snyk/Semgrep menunjukkan bahwa Deepsec harus beda secara nyata.</li>
+<li>kalau hanya nemu injection dan pattern obvious, nilai tambahnya nggak besar.</li>
+<li>Deepsec harus bisa nunjukin kelebihan di auth edge case, tenant isolation, multi-file flow, dan business logic misuse.</li>
+</ul>
+<h2 id="8-handoff-dan-dashboard-fatigue">8. Handoff dan dashboard fatigue<a aria-hidden="true" class="anchor-heading icon-link" href="#8-handoff-dan-dashboard-fatigue"></a></h2>
+<ul>
+<li>Bob Corbin bilang: tool cuma berguna kalau ngurangin handoff.</li>
+<li>finding harus punya owner, evidence, dan status yang jelas.</li>
+<li>tanpa itu, Deepsec cuma jadi satu tempat lagi yang mesti dicek.</li>
+</ul>
+<h2 id="9-strategi-default-security-layer">9. Strategi default security layer<a aria-hidden="true" class="anchor-heading icon-link" href="#9-strategi-default-security-layer"></a></h2>
+<ul>
+<li>kalau Deepsec benar bisa nemu bug cepat, kapan ini jadi layer default?</li>
+<li>menurut gue, butuh governance: incremental PR scan, cron full audit, revalidate HIGH+, ticket export, metrics, budget, policy.</li>
+<li>sekarang Deepsec lebih cocok jadi audit tool, bukan security default layer langsung.</li>
+</ul>
+<h2 id="core-pattern-dari-counter-argument">Core pattern dari counter-argument<a aria-hidden="true" class="anchor-heading icon-link" href="#core-pattern-dari-counter-argument"></a></h2>
+<p>Gue lihat semuanya nyambung ke pola ini:</p>
+<ol>
+<li>volume naik karena parallel agents,</li>
+<li>volume butuh state dan deduplikasi,</li>
+<li>agent findings butuh false positive control,</li>
+<li>false positive butuh triage,</li>
+<li>triage butuh workflow dan ownership,</li>
+<li>workflow butuh integrasi dan evidence,</li>
+<li>semua ini dibatasi biaya dan quality model.</li>
+</ol>
+<h2 id="practical-takeaway">Practical takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-takeaway"></a></h2>
+<ul>
+<li>challenge terbesar bukan "AI bisa nemu bug".</li>
+<li>challenge terbesar adalah bikin outputnya masuk proses engineering tanpa nambah kekacauan.</li>
+<li>Deepsec baru berguna kalau orchestration nyata: state, revalidation, ownership, export, dan plugin workflow.</li>
+<li>kalau tooling cuma ngasih 1.000 opini tanpa coherence, itu bukan security benefit.</li>
+</ul>
+<h2 id="referensi-internal">Referensi internal<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-internal"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.deepsec-harness">Deepsec: security harness untuk codebase besar</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-docs">Deepsec docs: workflow harness, bukan scanner sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179918">Deepsec docs menegaskan AI security review sebagai workspace orchestrator</a></li>
+</ul>
+<h2 id="related-zettels">Related Zettels<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettels"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179969">Security harness lebih penting daripada single AI agent</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179970">Revalidation dan ownership adalah kunci agar output agent tidak menjadi noise</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179973">Parallel agents hanya berguna jika hasilnya didedup dan dikonsolidasikan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179974">Tooling keamanan gagal jika hanya menambah dashboard dan handoff</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179976">Context AI harus ringkas dan spesifik untuk menjaga signal</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179978">CI security gate butuh threshold dan baseline, bukan fail-on-any-finding</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179982">Ownership adalah bagian dari penyelesaian security finding</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179981">Finding keamanan butuh bukti yang actionable kapan pun bisa</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">deepsec (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-security (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179967">Agentic coding tools adalah process dengan permission, bukan autocomplete</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179969">Security harness lebih penting daripada single AI agent</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179970">Revalidation dan ownership adalah kunci agar output agent tidak menjadi noise</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179973">Parallel agents hanya berguna jika hasilnya didedup dan dikonsolidasikan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179974">Tooling keamanan gagal jika hanya menambah dashboard dan handoff</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179981">Finding keamanan butuh bukti yang actionable kapan pun bisa</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179982">Ownership adalah bagian dari penyelesaian security finding</a></li>
+</ul>

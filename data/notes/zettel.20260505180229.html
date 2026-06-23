@@ -1,0 +1,22 @@
+<h1 id="swap-adalah-pembunuh-kinerja-utama-untuk-llm-lokal-di-mac-m1-16gb">Swap adalah pembunuh kinerja utama untuk LLM lokal di Mac M1 16GB<a aria-hidden="true" class="anchor-heading icon-link" href="#swap-adalah-pembunuh-kinerja-utama-untuk-llm-lokal-di-mac-m1-16gb"></a></h1>
+<p>Untuk local LLM pada Mac M1 16GB, bukan ukuran model saja yang menentukan kinerja. Kalau memory pressure sudah memaksa swap, inference bisa melambat drastis.</p>
+<p>Gejala yang gue lihat:</p>
+<ul>
+<li>RAM di angka 14.7GB dan swap 6.8GB,</li>
+<li>latency lokal naik dari detik ke menit,</li>
+<li>model kecil seperti <code>qwen2.5-coder:7b</code> bisa terasa stuck.</li>
+</ul>
+<p>Simpulannya: optimalkan penggunaan RAM dan hindari swap sebelum menukar model atau meningkatkan GPU.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">performance (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">mac (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.local-llm">MOC Local LLM dan Copilot agent</a></li>
+</ul>

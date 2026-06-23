@@ -1,0 +1,71 @@
+<h1 id="beres-beres-disk">Beres Beres Disk<a aria-hidden="true" class="anchor-heading icon-link" href="#beres-beres-disk"></a></h1>
+<p>Oke, gue ubah ya—lebih naratif, lebih ngalir, dan gak ada bullet point yang kaku.</p>
+<hr>
+<h3 id="-til--bersihin-sampah-digital-biar-c-drive-gak-nanggung">📌 TIL – Bersihin Sampah Digital Biar C Drive Gak Nanggung<a aria-hidden="true" class="anchor-heading icon-link" href="#-til--bersihin-sampah-digital-biar-c-drive-gak-nanggung"></a></h3>
+<p>Hari ini gue iseng ngecek isi <code>C:\</code> karena udah mulai mepet space-nya. Pas liat di file explorer sih keliatannya bersih-bersih aja, tapi pas gue breakdown lebih dalam, ternyata banyak banget file sampah kayak <code>.log</code>, <code>.tmp</code>, <code>.bak</code>, sama <code>.dmp</code> yang ukurannya bisa sampe ratusan MB. Beberapa dari file itu diem-diem makan space tapi gak keliatan jelas dari UI biasa.</p>
+<p>Akhirnya gue nulis skrip PowerShell buat bersihin itu semua. Gue set filter biar cuma ngambil file yang size-nya di atas 1MB, karena yang kecil-kecil mah gak ngaruh. Gue juga exclude folder-foler sensitif kayak <code>System32</code>, <code>WinSxS</code>, <code>Program Files</code>, dan lain-lain—takutnya malah bikin sistem jadi berantakan. Supaya prosesnya gak macet kalau ada file yang nge-lock atau lama dihapus, gue bungkus proses penghapusan pakai <code>Start-Job</code> dan kasih timeout 5 detik. Jadi kalau file itu ngeyel, ya gue skip dan taruh di list <code>$skipped</code> buat dicek nanti.</p>
+<p>Skrip ini gue jalanin dari PowerShell biasa, gak butuh admin mode kecuali lo mau bersihin file di folder yang protected. Overall, ini cara bersih-bersih yang aman, bisa dipantau, dan bisa lo jalankan berkala kayak nyapu kamar setiap minggu.</p>
+<p>Berikut skripnya:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="token variable">$deletedCount</span> = 0
+<span class="token variable">$checkedCount</span> = 0
+<span class="token variable">$skipped</span> = @<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token variable">$excludedRoots</span> = @<span class="token punctuation">(</span>
+    <span class="token string">"C:\Windows\System32"</span><span class="token punctuation">,</span>
+    <span class="token string">"C:\Windows\WinSxS"</span><span class="token punctuation">,</span>
+    <span class="token string">"C:\Windows\Installer"</span><span class="token punctuation">,</span>
+    <span class="token string">"C:\Program Files"</span><span class="token punctuation">,</span>
+    <span class="token string">"C:\Program Files (x86)"</span><span class="token punctuation">,</span>
+    <span class="token string">"C:\<span class="token variable">$Recycle</span>.Bin"</span>
+<span class="token punctuation">)</span>
+
+<span class="token function">Write-Host</span> <span class="token string">""</span>
+<span class="token function">Write-Host</span> <span class="token string">"🧹 Starting cleanup at <span class="token function">$<span class="token punctuation">(</span><span class="token function">Get-Date</span> <span class="token operator">-</span>Format <span class="token string">'HH:mm:ss'</span><span class="token punctuation">)</span></span>..."</span> <span class="token operator">-</span>ForegroundColor Cyan
+
+<span class="token variable">$files</span> = <span class="token function">Get-ChildItem</span> <span class="token operator">-</span>Path C:\ <span class="token operator">-</span>Recurse <span class="token operator">-</span>Force <span class="token operator">-</span>ErrorAction SilentlyContinue <span class="token punctuation">|</span> 
+    <span class="token function">Where-Object</span> <span class="token punctuation">{</span> <span class="token variable">$_</span><span class="token punctuation">.</span>Extension <span class="token operator">-in</span> <span class="token string">'.log'</span><span class="token punctuation">,</span> <span class="token string">'.tmp'</span><span class="token punctuation">,</span> <span class="token string">'.bak'</span><span class="token punctuation">,</span> <span class="token string">'.dmp'</span> <span class="token punctuation">}</span>
+
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$file</span> in <span class="token variable">$files</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token variable">$checkedCount</span><span class="token operator">++</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$checkedCount</span> <span class="token operator">%</span> 100 <span class="token operator">-eq</span> 0<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">Write-Host</span> <span class="token string">"Checked <span class="token variable">$checkedCount</span> files..."</span> <span class="token operator">-</span>ForegroundColor Yellow
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$file</span><span class="token punctuation">.</span>Length <span class="token operator">-lt</span> 1MB<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">continue</span> <span class="token punctuation">}</span>
+
+    <span class="token variable">$fileRoot</span> = <span class="token variable">$file</span><span class="token punctuation">.</span>DirectoryName
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$excludedRoots</span> <span class="token operator">-contains</span> <span class="token variable">$fileRoot</span> <span class="token operator">-or</span> <span class="token variable">$excludedRoots</span> <span class="token punctuation">|</span> <span class="token function">Where-Object</span> <span class="token punctuation">{</span> <span class="token variable">$file</span><span class="token punctuation">.</span>FullName<span class="token punctuation">.</span>StartsWith<span class="token punctuation">(</span><span class="token variable">$_</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">continue</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token variable">$timestamp</span> = <span class="token function">Get-Date</span> <span class="token operator">-</span>Format <span class="token string">"HH:mm:ss"</span>
+    <span class="token function">Write-Host</span> <span class="token string">"[<span class="token variable">$timestamp</span>] 🗑 Attempting: <span class="token function">$<span class="token punctuation">(</span><span class="token variable">$file</span><span class="token punctuation">.</span>FullName<span class="token punctuation">)</span></span> (<span class="token function">$<span class="token punctuation">(</span><span class="token namespace">[math]</span>::Round<span class="token punctuation">(</span><span class="token variable">$file</span><span class="token punctuation">.</span>Length <span class="token operator">/</span> 1MB<span class="token punctuation">,</span> 2<span class="token punctuation">)</span></span>) MB)"</span> <span class="token operator">-</span>ForegroundColor Gray
+
+    <span class="token variable">$job</span> = <span class="token function">Start-Job</span> <span class="token punctuation">{</span> <span class="token keyword">param</span><span class="token punctuation">(</span><span class="token variable">$f</span><span class="token punctuation">)</span> <span class="token function">Remove-Item</span> <span class="token variable">$f</span> <span class="token operator">-</span>Force <span class="token operator">-</span>ErrorAction SilentlyContinue <span class="token punctuation">}</span> <span class="token operator">-</span>ArgumentList <span class="token variable">$file</span><span class="token punctuation">.</span>FullName
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">Wait-Job</span> <span class="token variable">$job</span> <span class="token operator">-</span>Timeout 5<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">Receive-Job</span> <span class="token variable">$job</span> <span class="token punctuation">|</span> <span class="token function">Out-Null</span>
+        <span class="token function">Write-Host</span> <span class="token string">"[<span class="token variable">$timestamp</span>] ✅ Deleted: <span class="token function">$<span class="token punctuation">(</span><span class="token variable">$file</span><span class="token punctuation">.</span>FullName<span class="token punctuation">)</span></span>"</span> <span class="token operator">-</span>ForegroundColor Green
+        <span class="token variable">$deletedCount</span><span class="token operator">++</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token function">Stop-Job</span> <span class="token variable">$job</span> <span class="token punctuation">|</span> <span class="token function">Out-Null</span>
+        <span class="token function">Write-Host</span> <span class="token string">"[<span class="token variable">$timestamp</span>] ⚠️ Timeout: <span class="token function">$<span class="token punctuation">(</span><span class="token variable">$file</span><span class="token punctuation">.</span>FullName<span class="token punctuation">)</span></span>"</span> <span class="token operator">-</span>ForegroundColor DarkYellow
+        <span class="token variable">$skipped</span> <span class="token operator">+=</span> <span class="token variable">$file</span><span class="token punctuation">.</span>FullName
+    <span class="token punctuation">}</span>
+    <span class="token function">Remove-Job</span> <span class="token variable">$job</span> <span class="token punctuation">|</span> <span class="token function">Out-Null</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">Write-Host</span> <span class="token string">""</span>
+<span class="token function">Write-Host</span> <span class="token string">"✅ Done. Deleted <span class="token variable">$deletedCount</span> files over 1MB."</span> <span class="token operator">-</span>ForegroundColor Green
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$skipped</span><span class="token punctuation">.</span>Count <span class="token operator">-gt</span> 0<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">Write-Host</span> <span class="token string">"⚠️ Skipped <span class="token function">$<span class="token punctuation">(</span><span class="token variable">$skipped</span><span class="token punctuation">.</span>Count<span class="token punctuation">)</span></span> files due to timeout:"</span> <span class="token operator">-</span>ForegroundColor Yellow
+    <span class="token variable">$skipped</span> <span class="token punctuation">|</span> <span class="token function">ForEach-Object</span> <span class="token punctuation">{</span> <span class="token function">Write-Host</span> <span class="token string">"- <span class="token variable">$_</span>"</span> <span class="token operator">-</span>ForegroundColor DarkGray <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token function">Write-Host</span> <span class="token string">"🎉 No skipped files!"</span> <span class="token operator">-</span>ForegroundColor Cyan
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Sekarang setiap kali lo ngerasa "kok C makin sempit ya padahal gak install apa-apa", tinggal run ini aja. Gak usah repot cari aplikasi cleaner pihak ketiga yang kadang malah naruh bloat baru. Mau gue buatin versi task scheduler biar auto jalan tiap Senin pagi juga bisa.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">windows (Private)</a></li>
+</ol>

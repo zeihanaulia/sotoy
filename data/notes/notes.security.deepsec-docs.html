@@ -1,0 +1,125 @@
+<h1 id="deepsec-docs-workflow-harness-bukan-scanner-sekali-jalan">Deepsec docs: workflow harness, bukan scanner sekali jalan<a aria-hidden="true" class="anchor-heading icon-link" href="#deepsec-docs-workflow-harness-bukan-scanner-sekali-jalan"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue baca docs <code>vercel-labs/deepsec</code> dan yang paling nyangkut buat gue adalah: Deepsec itu bukan lagi tool yang cuma jalan sekali lalu selesai. Dia dibuat sebagai workspace security review yang ngatur seluruh proses.</p>
+<h2 id="1-instalasi-dan-workspace-terpisah">1. Instalasi dan workspace terpisah<a aria-hidden="true" class="anchor-heading icon-link" href="#1-instalasi-dan-workspace-terpisah"></a></h2>
+<ul>
+<li><code>npx deepsec init</code> bikin folder <code>.deepsec/</code> di repo.</li>
+<li>ini penting karena konfigurasi dan data scan disimpen terpisah dari kode aplikasi.</li>
+<li>output scan dan state (<code>data/&#x3C;id>/files/</code>, <code>runs/</code>, <code>project.json</code>) digitignore.</li>
+<li>menurut gue ini langkah yang bener: workspace terpisah bikin lingkungan scan lebih jelas.</li>
+<li>idempotency juga penting: kalau job gagal, bisa dilanjutkan bukan mulai dari nol.</li>
+</ul>
+<h2 id="2-bagaimana-deepsec-memilih-file-untuk-agent">2. Bagaimana deepsec memilih file untuk agent<a aria-hidden="true" class="anchor-heading icon-link" href="#2-bagaimana-deepsec-memilih-file-untuk-agent"></a></h2>
+<ul>
+<li><code>pnpm deepsec scan</code> jalan duluan, tanpa AI.</li>
+<li>scan ngejalanin ~110 regex matcher dan bikin JSON file per source file yang match.</li>
+<li>ini mirip radar murah untuk nemuin candidate site.</li>
+<li>menurut gue, ini desain yang realistis: jangan suruh AI baca semua file.</li>
+</ul>
+<h2 id="3-context-project-lewat-infomd">3. Context project lewat INFO.md<a aria-hidden="true" class="anchor-heading icon-link" href="#3-context-project-lewat-infomd"></a></h2>
+<ul>
+<li><code>INFO.md</code> diwacanakan sebagai konteks yang disuntik ke agent.</li>
+<li>idealnya singkat: 50–100 baris, fokus ke threat model, auth shape, false-positive, konvensi internal.</li>
+<li>kalau konteks terlalu panjang, agent malah bisa kabur.</li>
+<li>menurut gue, ini pelajaran penting: konteks bukan berarti lebih banyak, tapi lebih relevan.</li>
+</ul>
+<h2 id="4-bagaimana-hasil-disimpan-dan-divalidasi">4. Bagaimana hasil disimpan dan divalidasi<a aria-hidden="true" class="anchor-heading icon-link" href="#4-bagaimana-hasil-disimpan-dan-divalidasi"></a></h2>
+<ul>
+<li><code>data/</code> itu state Deepsec: project.json, config.json, INFO.md, files/, runs/, reports/.</li>
+<li>tiap <code>FileRecord</code> nyimpen candidate, hash, git info, findings, history, dan status.</li>
+<li><code>pnpm deepsec process</code> ngejalanin agent. defaultnya Claude Opus dengan 25 file in flight.</li>
+<li>biaya diperkirakan: 100 file ≈ $25–60, 500 file ≈ $130–300, 2.000 file ≈ $500–1.200.</li>
+<li><code>pnpm deepsec triage</code> murah, <code>revalidate</code> lebih mahal tapi ngurangin false positive.</li>
+<li>menurut gue, itu step yang saya suka: ada mekanisme audit dan verification.</li>
+</ul>
+<h2 id="5-workflow-nyata">5. Workflow nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#5-workflow-nyata"></a></h2>
+<ul>
+<li>lokal dulu: init, isi INFO.md, scan, process --limit 50, revalidate --min-severity HIGH, export.</li>
+<li>jangan langsung full monorepo.</li>
+<li>area target terbaik: auth/session, RBAC, tenant isolation, billing, webhook, file upload, server-side fetch.</li>
+<li>plugin ownership dan notifier bikin hasil bisa masuk workflow tim.</li>
+<li>sandbox relevan kalau repo besar atau kalau butuh isolasi.</li>
+<li>kalau cuma mau coba, lokal dulu. sandbox nggak wajib.</li>
+</ul>
+<h2 id="apa-yang-gue-pelajari-dari-docs">Apa yang gue pelajari dari docs<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-gue-pelajari-dari-docs"></a></h2>
+<ul>
+<li>Deepsec bukan cuma agent. dia adalah workflow platform kecil.</li>
+<li>AI hanya salah satu bagian. Ada scan awal, context injection, revalidate, state, dan export.</li>
+<li><code>INFO.md</code> bikin agent lebih tajam.</li>
+<li><code>revalidate</code> jelas menunjukkan bahwa developer harus curiga sama output awal.</li>
+<li>ownership/notifier bikin temuan lebih mungkin ditindaklanjuti.</li>
+</ul>
+<h2 id="batasan-operasional">Batasan operasional<a aria-hidden="true" class="anchor-heading icon-link" href="#batasan-operasional"></a></h2>
+<ul>
+<li>Deepsec cocok untuk audit burst, bukan scan setiap PR terus-menerus.</li>
+<li>biaya bisa nyata, jadi butuh budget dan pengaturan area.</li>
+<li>default matcher nggak menangkap semua pola org-specific.</li>
+<li>jika pakai remote sandbox/gateway, perlu atur security source code sendiri.</li>
+<li>output banyak belum cukup; harus ditriage dan diekspor.</li>
+</ul>
+<h2 id="insight-utama">Insight utama<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-utama"></a></h2>
+<p>Docs ini bikin gue sadar bahwa keamanan AI-native bukan cuma soal model. Ini soal cara kerja.</p>
+<p>Pola yang gue tangkep:</p>
+<ul>
+<li>scan murah dulu,</li>
+<li>context spesifik lewat INFO.md,</li>
+<li>agent proses candidate,</li>
+<li>triage dan revalidate sebelum percaya,</li>
+<li>simpan state di data/,</li>
+<li>hubungkan hasil ke workflow.</li>
+</ul>
+<p>Kalau elo ngerti docs-nya, pertanyaannya bukan "model apa?" lagi, tapi "bagaimana ini diintegrasikan ke workflow kita?"</p>
+<h2 id="referensi-utama">Referensi utama<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-utama"></a></h2>
+<ul>
+<li><code>README.md</code></li>
+<li><code>docs/getting-started.md</code></li>
+<li><code>docs/writing-matchers.md</code></li>
+<li><code>docs/configuration.md</code></li>
+<li><code>docs/plugins.md</code></li>
+<li><code>docs/models.md</code></li>
+<li><code>docs/vercel-setup.md</code></li>
+<li><code>docs/architecture.md</code></li>
+<li><code>docs/data-layout.md</code></li>
+<li><code>docs/faq.md</code></li>
+<li><code>samples/webapp/deepsec.config.ts</code></li>
+</ul>
+<h2 id="related-zettels">Related Zettels<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettels"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179969">Security harness lebih penting daripada single AI agent</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179970">Revalidation dan ownership adalah kunci agar output agent tidak menjadi noise</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179975">Rule-based checks tetap penting di era AI-native security</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179976">Context AI harus ringkas dan spesifik untuk menjaga signal</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179977">Custom matcher mengubah temuan menjadi aturan yang bisa dipakai ulang</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179978">CI security gate butuh threshold dan baseline, bukan fail-on-any-finding</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179979">Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">deepsec (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-security (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777995556481">Audit trust boundary lokal sebagai ide keamanan developer</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179969">Security harness lebih penting daripada single AI agent</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179970">Revalidation dan ownership adalah kunci agar output agent tidak menjadi noise</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179971">Deterministic local scanners melengkapi AI scanners dalam keamanan developer workflow</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179974">Tooling keamanan gagal jika hanya menambah dashboard dan handoff</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179975">Rule-based checks tetap penting di era AI-native security</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179976">Context AI harus ringkas dan spesifik untuk menjaga signal</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179977">Custom matcher mengubah temuan menjadi aturan yang bisa dipakai ulang</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179978">CI security gate butuh threshold dan baseline, bukan fail-on-any-finding</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179979">Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+<li><a href="/sotoy/notes/notes.security.deepsec-challenges">Deepsec challenge: orchestration, false positives, cost, dan workflow</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust-evaluation">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+</ul>

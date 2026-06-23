@@ -1,0 +1,24 @@
+<h1 id="bottleneck-agen-coding-sering-ada-pada-pemilihan-konteks-bukan-kapasitas-model">Bottleneck agen coding sering ada pada pemilihan konteks, bukan kapasitas model<a aria-hidden="true" class="anchor-heading icon-link" href="#bottleneck-agen-coding-sering-ada-pada-pemilihan-konteks-bukan-kapasitas-model"></a></h1>
+<p>Dalam workflow coding agent, yang sering jadi masalah bukan seberapa pintar modelnya, tapi seberapa tepat konteks yang diberikan padanya.</p>
+<p>Kalau agen diberi terlalu banyak file, token terbuang buat membaca hal-hal yang tidak relevan. Kalau agen diberi terlalu sedikit konteks penting, ia bisa membuat asumsi keliru.</p>
+<p>Jadi cara yang lebih bijak adalah punya "petugas arsip" atau layer seleksi konteks sebelum model mulai berpikir. Layer ini mengurus:</p>
+<ul>
+<li>mencari file dan struktur dependensi yang relevan,</li>
+<li>mempersempit ruang problem ke blast radius perubahan,</li>
+<li>mengeluarkan only the files needed untuk task tertentu.</li>
+</ul>
+<p>Dengan begitu, model bisa bekerja pada informasi yang paling mungkin mempengaruhi solusi, dan bukan pada semua data yang ada di repo.</p>
+<p>Principle-nya: efisiensi reasoning datang dari kualitas konteks, bukan dari ukuran model semata.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-selection (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/daily.journal.2026.05.04">2026-05-04</a></li>
+</ul>

@@ -1,0 +1,39 @@
+<h1 id="code-menyimpan-outcome-reasoning-dan-rejected-history-tidak-tampak-di-sana">Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana<a aria-hidden="true" class="anchor-heading icon-link" href="#code-menyimpan-outcome-reasoning-dan-rejected-history-tidak-tampak-di-sana"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Code itu jejak hasil, bukan riwayat pertimbangan.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Kalau hanya andal pada kode, kita kehilangan konteks penting untuk keputusan berikutnya.</p>
+<p>Kode menunjukkan apa yang dibuat, bukan mengapa keputusan itu diambil. Dalam artikel "Context Anchoring" disebutkan bahwa AI bisa mengingat "kita pakai PostgreSQL", tapi lupa kenapa PostgreSQL dipilih ketimbang MongoDB—misalnya karena butuh JSONB, pengalaman tim, atau kebutuhan multi-tenant.</p>
+<p>Artinya: AI mungkin masih menghasilkan kode yang secara teknis konsisten dengan keputusan eksplisit, tapi melanggar niat awal. Contoh nyata adalah AI yang membuat struktur yang cocok untuk document store, padahal proyek sebenarnya harus memaksimalkan relasional PostgreSQL.</p>
+<h2 id="contoh">Contoh<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh"></a></h2>
+<ul>
+<li>Kode hasil: <code>BullMQ</code> direct retry handler.</li>
+<li>Yang hilang di kode: <code>RetryQueue</code> pernah dipertimbangkan, tapi ditolak karena menambah kompleksitas tanpa keuntungan nyata.</li>
+<li>Yang hilang di kode: constraint v1 hanya email, jadi tidak boleh usul SMS/push.</li>
+</ul>
+<h2 id="kenapa-feature-document-penting-di-sini">Kenapa Feature Document Penting di Sini<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-feature-document-penting-di-sini"></a></h2>
+<p>Feature document bertindak seperti external memory yang mencatat konteks ini. Ia menutup gap yang kode tidak bisa tutupi: alasan, alternatif yang ditolak, batasan, dan status keputusan. Ini membuat sesi AI baru bisa melanjutkan keputusan tanpa menebak-nebak sejarah yang hilang.</p>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 18.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 18</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

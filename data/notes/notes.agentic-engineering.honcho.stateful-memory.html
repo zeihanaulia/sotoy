@@ -1,0 +1,423 @@
+<h1 id="stateful-memory">Stateful Memory<a aria-hidden="true" class="anchor-heading icon-link" href="#stateful-memory"></a></h1>
+<p>Yang gue pegang dari dokumentasi Honcho adalah satu hal sederhana: ini bukan cuma "database chat". Honcho adalah usaha membuat agent bisa punya state panjang dengan model yang mengerti entitas berubah dari waktu ke waktu.</p>
+<h2 id="masalah-yang-honcho-pecahkan">Masalah yang Honcho pecahkan<a aria-hidden="true" class="anchor-heading icon-link" href="#masalah-yang-honcho-pecahkan"></a></h2>
+<p>Masalah dasarnya: AI agent sering tidak punya kontinuitas. Agent bisa pintar dalam satu sesi, tapi begitu sesi berubah, dia sering kehilangan konteks. User harus mengulang preferensi, histori keputusan, gaya kerja, batasan, relasi project, dan perubahan dari waktu ke waktu.</p>
+<p>Page-nya bilang:</p>
+<blockquote>
+<p>“Honcho is an open source memory library with a managed service for building stateful agents.”</p>
+</blockquote>
+<p>Kata pentingnya adalah stateful agents. Agent stateless itu seperti kasir yang tiap hari lupa elo siapa. Agent stateful itu seperti partner kerja yang ingat konteks, tapi juga tahu bahwa konteks bisa berubah.</p>
+<p>Honcho ingin agent bisa mempertahankan state tentang:</p>
+<ul>
+<li>user</li>
+<li>agent lain</li>
+<li>grup</li>
+<li>ide</li>
+<li>objek</li>
+<li>entitas apa pun yang berubah dari waktu ke waktu</li>
+</ul>
+<p>Page-nya eksplisit:</p>
+<blockquote>
+<p>“It enables agents to build and maintain state about any entity—users, agents, groups, ideas, and more.”</p>
+</blockquote>
+<p>Jadi unit utamanya bukan “dokumen”, tapi entitas.</p>
+<h2 id="kenapa-rag-biasa-dianggap-kurang-cukup">Kenapa RAG biasa dianggap kurang cukup?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-rag-biasa-dianggap-kurang-cukup"></a></h2>
+<p>Honcho mengkritik siklus umum ketika orang membangun agent. Awalnya agent oke. Lalu user mulai komplain: agent lupa, kontradiktif, kehilangan konteks. Developer lalu bikin RAG. Masalah membaik sedikit, tapi muncul masalah baru: chunking, embedding, retrieval strategy, eval, rerank, dan seterusnya.</p>
+<p>Page-nya menyimpulkan:</p>
+<blockquote>
+<p>“Eventually you realize the issue isn’t engineering—it’s that you’re not extracting all the latent information from your data.”</p>
+</blockquote>
+<p>Itu inti argumen Honcho.</p>
+<p>Mereka bilang problemnya bukan cuma retrieval pipeline kurang rapi. Problemnya adalah data mengandung latent information: informasi tersembunyi yang tidak tertulis eksplisit, tapi bisa disimpulkan.</p>
+<p>Contoh sederhana:</p>
+<ul>
+<li>“Gue lebih suka solusi yang langsung bisa dicoba.”</li>
+<li>“Jangan terlalu banyak teori dulu.”</li>
+<li>“Bikin step-by-step aja.”</li>
+<li>“Kalau bisa pakai contoh real.”</li>
+</ul>
+<p>RAG biasa mungkin mengambil kalimat-kalimat itu kalau query-nya cocok. Tapi Honcho ingin menyimpulkan:</p>
+<p>“User prefers practical, stepwise explanations with concrete examples over abstract theory.”</p>
+<p>Itu bukan kutipan langsung. Itu representasi hasil reasoning.</p>
+<p>Atomic idea-nya:</p>
+<p>RAG mencari yang pernah dikatakan.</p>
+<p>Honcho mencoba membangun apa artinya dari waktu ke waktu.</p>
+<p>Kalau ada dua cara melihatnya:</p>
+<ul>
+<li>RAG tradisional fokus ke dokumen dan retrieval.</li>
+<li>Honcho fokus ke entitas dan reasoning.</li>
+</ul>
+<p>Itu perbedaan yang bikin gue sadar Honcho bukan alternatif RAG biasa. Honcho mau jadi mesin model sosial/historis, bukan sekadar lemari arsip.</p>
+<h2 id="model-data-honcho">Model data Honcho<a aria-hidden="true" class="anchor-heading icon-link" href="#model-data-honcho"></a></h2>
+<p>Page menjelaskan empat storage primitives: <code>workspace</code>, <code>peer</code>, <code>session</code>, dan <code>message</code>.</p>
+<h3 id="workspace">Workspace<a aria-hidden="true" class="anchor-heading icon-link" href="#workspace"></a></h3>
+<p>Workspace adalah container paling atas.</p>
+<p>Page menyebut:</p>
+<blockquote>
+<p>“Workspaces - Top-level containers that isolate different applications or environments”</p>
+</blockquote>
+<p>Artinya workspace memisahkan environment. Misalnya:</p>
+<ul>
+<li>workspace untuk app customer support</li>
+<li>workspace untuk personal assistant</li>
+<li>workspace untuk coding agent</li>
+<li>workspace untuk organisasi tertentu</li>
+</ul>
+<p>Analogi: workspace itu gedung. Di dalamnya ada orang, ruangan, percakapan, dan arsip.</p>
+<p>Kenapa penting? Karena memory harus punya boundary. Tanpa boundary, konteks bisa bocor. Agent untuk project A bisa mengambil memory project B. Workspace mencegah campur-aduk level tertinggi.</p>
+<h3 id="peer">Peer<a aria-hidden="true" class="anchor-heading icon-link" href="#peer"></a></h3>
+<p>Peer adalah entitas yang punya kontinuitas tapi bisa berubah.</p>
+<p>Page menyebut:</p>
+<blockquote>
+<p>“Peers - Any entity that persists but changes over time (users, agents, objects, and more)”</p>
+</blockquote>
+<p>Ini konsep paling penting di Honcho.</p>
+<p>Peer bisa:</p>
+<ul>
+<li>user</li>
+<li>AI agent</li>
+<li>tim</li>
+<li>organisasi</li>
+<li>konsep</li>
+<li>produk</li>
+<li>project</li>
+<li>bahkan ide</li>
+</ul>
+<p>Kenapa namanya peer, bukan user? Karena Honcho tidak menganggap hanya manusia yang perlu dimodelkan. Agent juga bisa punya identitas. Grup juga bisa punya state. Ide juga bisa berubah.</p>
+<p>Contoh:</p>
+<ul>
+<li>User peer: “Raka”</li>
+<li>Agent peer: “Hermes coder”</li>
+<li>Project peer: “payment migration”</li>
+<li>Team peer: “backend team”</li>
+</ul>
+<p>Masing-masing bisa punya representation sendiri.</p>
+<p>Ini desain yang kuat untuk multi-agent system. Karena dalam multi-agent, memory bukan cuma “apa yang user suka”, tapi juga:</p>
+<ul>
+<li>agent A tahu apa tentang user</li>
+<li>agent B punya konteks berbeda</li>
+<li>project X punya histori keputusan sendiri</li>
+<li>grup Y punya pola kerja sendiri</li>
+</ul>
+<h2 id="kenapa-konsep-peer-kuat">Kenapa konsep peer kuat?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-konsep-peer-kuat"></a></h2>
+<p>Konsep peer membuat memory lebih simetris.</p>
+<p>Banyak sistem memory memperlakukan user sebagai satu-satunya objek yang dimodelkan. Honcho lebih luas: semua entitas bisa dimodelkan sebagai peer.</p>
+<p>Ini penting untuk multi-agent.</p>
+<p>Misalnya elo punya tiga agent:</p>
+<ul>
+<li>coder agent</li>
+<li>writer agent</li>
+<li>research agent</li>
+</ul>
+<p>User-nya sama, tapi tiap agent punya hubungan berbeda dengan user.</p>
+<p>Coder agent mungkin tahu:</p>
+<ul>
+<li>“User sering minta security boundary dan sandboxing.”</li>
+</ul>
+<p>Writer agent mungkin tahu:</p>
+<ul>
+<li>“User suka gaya gue-elo, tajam, dan Zettelkasten.”</li>
+</ul>
+<p>Research agent mungkin tahu:</p>
+<ul>
+<li>“User suka verifikasi sumber dan curiga terhadap klaim tanpa sitasi.”</li>
+</ul>
+<p>Kalau semua agent memakai satu memory datar, konteks bisa tercampur. Dengan peer, masing-masing agent bisa punya representation sendiri terhadap user, sambil tetap berbagi workspace.</p>
+<p>Ini yang di page Hermes disebut sebagai multi-peer setup: satu user peer, satu AI peer per profile, semua dalam workspace yang sama.</p>
+<h3 id="session">Session<a aria-hidden="true" class="anchor-heading icon-link" href="#session"></a></h3>
+<p>Session adalah thread interaksi dengan batas temporal.</p>
+<p>Page menyebut:</p>
+<blockquote>
+<p>“Sessions - Interaction threads between peers with temporal boundaries”</p>
+</blockquote>
+<p>Session itu percakapan atau episode.</p>
+<p>Misalnya:</p>
+<ul>
+<li>sesi diskusi bug hari Senin</li>
+<li>sesi planning sprint</li>
+<li>sesi debugging production incident</li>
+<li>sesi review dokumen</li>
+</ul>
+<p>Session penting karena memory butuh waktu dan konteks. Kalimat yang sama bisa punya arti berbeda tergantung sesi.</p>
+<p>Contoh:</p>
+<p>“Ini jangan dipakai dulu.”</p>
+<p>Kalau di sesi debugging, artinya fitur tertentu berisiko. Kalau di sesi design, artinya ide belum matang. Session membantu Honcho menempatkan pesan ke konteks waktunya.</p>
+<h3 id="message">Message<a aria-hidden="true" class="anchor-heading icon-link" href="#message"></a></h3>
+<p>Message adalah unit data yang memicu reasoning.</p>
+<p>Page menyebut:</p>
+<blockquote>
+<p>“Messages - Units of data that trigger reasoning (conversations, events, activity, documents, and more)”</p>
+</blockquote>
+<p>Ini juga penting: message tidak harus chat.</p>
+<p>Message bisa berupa:</p>
+<ul>
+<li>percakapan</li>
+<li>event</li>
+<li>activity log</li>
+<li>dokumen</li>
+<li>update project</li>
+<li>catatan meeting</li>
+<li>perubahan status</li>
+</ul>
+<p>Jadi Honcho bisa menerima data lebih luas dari chat log.</p>
+<p>Atomic idea-nya:</p>
+<p>Workspace memberi batas.</p>
+<p>Peer memberi identitas.</p>
+<p>Session memberi konteks waktu.</p>
+<p>Message memberi bahan mentah.</p>
+<p>Representation adalah hasil olahannya.</p>
+<h2 id="peer-sebagai-kunci">Peer sebagai kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#peer-sebagai-kunci"></a></h2>
+<p>Honcho menyebut semua entitas itu "peer" karena mereka diperlakukan setara: semua bisa dimodelkan, semua bisa berubah, semua bisa punya representation sendiri.</p>
+<p>Gue suka konsep ini karena dia pas untuk multi-agent. Dalam sistem dengan banyak agent, user bukan satu-satunya pihak yang butuh state. Agent juga perlu model terhadap user, terhadap agent lain, terhadap project, bahkan terhadap ide.</p>
+<p>Jadi memory-nya jadi lebih simetris dan bukan cuma "user-centric".</p>
+<h2 id="dari-messages-ke-representations">Dari messages ke representations<a aria-hidden="true" class="anchor-heading icon-link" href="#dari-messages-ke-representations"></a></h2>
+<p>Flow dasarnya begini:</p>
+<ol>
+<li>Agent menulis messages ke Honcho.</li>
+<li>Honcho menyimpan messages.</li>
+<li>Background process memproses messages itu.</li>
+<li>Reasoning model menghasilkan conclusions tentang peer.</li>
+<li>Conclusions disimpan sebagai representations.</li>
+<li>Developer atau agent bisa query representation itu untuk memberi konteks ke respons berikutnya.</li>
+</ol>
+<p>Page-nya bilang:</p>
+<blockquote>
+<p>“When you write messages to Honcho, they’re stored and processed in the background.”</p>
+</blockquote>
+<p>Lalu:</p>
+<blockquote>
+<p>“Custom reasoning models perform formal logical reasoning to generate conclusions about each peer.”</p>
+</blockquote>
+<p>Dan:</p>
+<blockquote>
+<p>“These conclusions are stored as representations that you can query to provide rich context for your agents.”</p>
+</blockquote>
+<p>Ini berarti Honcho memisahkan data mentah dan hasil interpretasi.</p>
+<ul>
+<li>Message = bukti mentah.</li>
+<li>Conclusion = hasil penalaran.</li>
+<li>Representation = model yang bisa dipakai ulang.</li>
+</ul>
+<p>Analogi:</p>
+<p>Kalau elo punya transcript meeting, itu message.</p>
+<p>Kalau dari transcript itu disimpulkan “client tidak nyaman dengan deadline Q2”, itu conclusion.</p>
+<p>Kalau semua conclusion tentang client digabung jadi profil “client ini sensitif terhadap risiko deadline dan butuh komunikasi proaktif”, itu representation.</p>
+<p>Ini lebih maju daripada cuma menyimpan transcript dan melakukan semantic search.</p>
+<h2 id="memory-system-that-reasons">Memory system that reasons<a aria-hidden="true" class="anchor-heading icon-link" href="#memory-system-that-reasons"></a></h2>
+<p>Klaim Honcho adalah: "Honcho is a memory system that reasons."</p>
+<p>Maksudnya: Honcho tidak hanya menyimpan dan mengambil. Ia juga memproses data untuk menemukan:</p>
+<ul>
+<li>pola</li>
+<li>kontradiksi</li>
+<li>perubahan preferensi</li>
+<li>relasi antar entitas</li>
+<li>kesimpulan implisit</li>
+<li>prediksi di bawah ketidakpastian</li>
+</ul>
+<p>Di bagian "Why Reasoning?", page bilang:</p>
+<blockquote>
+<p>"Traditional RAG systems retrieve what was explicitly said, but they miss what matters most—the insights only accessible by rigorously thinking about your data."</p>
+</blockquote>
+<p>Ini penting. Honcho mengasumsikan bahwa banyak memory penting tidak pernah muncul sebagai satu kalimat eksplisit. Ia tersebar di banyak interaksi.</p>
+<p>Contoh yang bikin gue klik:</p>
+<ul>
+<li>Sesi 1: user minta jawaban ringkas.</li>
+<li>Sesi 2: user mengeluh "ini terlalu textbook."</li>
+<li>Sesi 3: user menyukai analogi konkret.</li>
+<li>Sesi 4: user meminta struktur step-by-step.</li>
+</ul>
+<p>Dari situ, sistem bisa menyimpulkan gaya komunikasi user.</p>
+<p>RAG bisa retrieve potongan-potongan itu. Tapi reasoning mencoba membuat satu model preferensi yang ringkas.</p>
+<p>Jadi "reasoning" di sini adalah upaya mengubah banyak event kecil menjadi state yang lebih bermakna.</p>
+<h2 id="apa-bedanya-honcho-dengan-memory-biasa">Apa bedanya Honcho dengan memory biasa?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-bedanya-honcho-dengan-memory-biasa"></a></h2>
+<p>Memory biasa sering berbentuk:</p>
+<ul>
+<li>“User likes dark mode.”</li>
+<li>“User uses Python.”</li>
+<li>“User works on project X.”</li>
+</ul>
+<p>Itu fact memory.</p>
+<p>Honcho tampaknya ingin naik satu level:</p>
+<ul>
+<li>“User tends to prefer practical explanations, tolerates technical depth, but rejects vague middle-ground answers.”</li>
+</ul>
+<p>Ini bukan satu fakta. Ini pola.</p>
+<p>Memory biasa menjawab: “Apa yang pernah disimpan?”</p>
+<p>Honcho menjawab: “Apa model terbaik tentang entitas ini berdasarkan semua bukti?”</p>
+<p>Itulah kenapa di Hermes page sebelumnya Honcho disebut punya:</p>
+<ul>
+<li>user representation</li>
+<li>peer cards</li>
+<li>session-scoped context</li>
+<li>dialectic reasoning</li>
+<li>conclusions</li>
+</ul>
+<p>Dalam integrasi Hermes, Honcho bukan cuma provider pencarian memory. Ia menjadi sistem modelling user-agent.</p>
+<h2 id="apa-kelebihan-honcho-dibanding-provider-lain">Apa kelebihan Honcho dibanding provider lain?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-kelebihan-honcho-dibanding-provider-lain"></a></h2>
+<p>Dari page Hermes dan page Honcho, Honcho paling kuat di tiga hal:</p>
+<p>Pertama, entity-centric memory.</p>
+<p>Fokusnya bukan dokumen, tapi entitas yang berubah.</p>
+<p>Kedua, reasoned representation.</p>
+<p>Bukan cuma retrieve memory, tapi membangun kesimpulan.</p>
+<p>Ketiga, cross-session continuity.</p>
+<p>Ia memang didesain untuk agent yang perlu ingat lintas sesi dan tetap coherent.</p>
+<p>Jadi Honcho cocok kalau masalah elo adalah:</p>
+<ul>
+<li>“Agent gue sering lupa gue siapa.”</li>
+<li>“Agent gue tidak paham perubahan konteks dari waktu ke waktu.”</li>
+<li>“Agent gue punya banyak sesi dan banyak profile.”</li>
+<li>“Gue butuh agent yang bukan cuma cari fakta, tapi membangun pemahaman tentang user/project.”</li>
+</ul>
+<h2 id="trade-off-dan-risiko-honcho">Trade-off dan risiko Honcho<a aria-hidden="true" class="anchor-heading icon-link" href="#trade-off-dan-risiko-honcho"></a></h2>
+<p>Ini bagian penting. Sistem seperti Honcho powerful, tapi tidak gratis secara desain.</p>
+<h3 id="risiko-1-salah-menyimpulkan">Risiko 1: Salah menyimpulkan<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-1-salah-menyimpulkan"></a></h3>
+<p>Kalau reasoning model menyimpulkan hal yang keliru, agent bisa membawa asumsi salah ke banyak sesi berikutnya.</p>
+<p>Contoh:</p>
+<p>User sekali bilang “gue males teori panjang.”</p>
+<p>Honcho bisa salah menyimpulkan “user tidak suka teori.”</p>
+<p>Padahal konteksnya mungkin cuma saat itu user sedang buru-buru.</p>
+<p>Ini masalah utama memory berbasis reasoning: ia bisa membuat generalisasi terlalu cepat.</p>
+<h3 id="risiko-2-memory-jadi-terlalu-otoritatif">Risiko 2: Memory jadi terlalu otoritatif<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-2-memory-jadi-terlalu-otoritatif"></a></h3>
+<p>Kalau representation disuntikkan ke context, model bisa terlalu percaya pada memory.</p>
+<p>Misalnya representation bilang:</p>
+<p>“User prefers concise answers.”</p>
+<p>Lalu saat user minta dive deep, agent tetap menjawab pendek karena memory lama terlalu dominan.</p>
+<p>Memory harus membantu, bukan mengunci user dalam profil lama.</p>
+<h3 id="risiko-3-privacy-dan-data-moat">Risiko 3: Privacy dan data moat<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-3-privacy-dan-data-moat"></a></h3>
+<p>Page Honcho menyebut:</p>
+<blockquote>
+<p>“help you build data moats”</p>
+</blockquote>
+<p>Secara bisnis ini menarik. Tapi dari sisi user, ini berarti memory menjadi aset data yang sangat berharga dan sensitif.</p>
+<p>Kalau Honcho dipakai cloud, data user dan interaction history bisa menjadi bagian dari infrastruktur eksternal. Jadi perlu jelas:</p>
+<ul>
+<li>data apa yang dikirim</li>
+<li>bagaimana disimpan</li>
+<li>bisa dihapus atau tidak</li>
+<li>bagaimana isolasi workspace</li>
+<li>siapa yang punya akses</li>
+</ul>
+<h3 id="risiko-4-latency-dan-cost">Risiko 4: Latency dan cost<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-4-latency-dan-cost"></a></h3>
+<p>Reasoning lebih mahal daripada retrieval biasa. Honcho page memang menyebut developer diberi kontrol atas:</p>
+<blockquote>
+<p>“token usage, latency, and reasoning depth.”</p>
+</blockquote>
+<p>Artinya sistem ini sadar bahwa reasoning punya biaya.</p>
+<p>Di Hermes, ini muncul sebagai knob seperti:</p>
+<ul>
+<li><code>contextCadence</code></li>
+<li><code>dialecticCadence</code></li>
+<li><code>dialecticDepth</code></li>
+</ul>
+<p>Semakin sering dan dalam reasoning, semakin kaya konteksnya, tapi semakin mahal/lambat.</p>
+<p>Ini juga alasan kenapa Honcho terasa lebih mahal dan lebih berisiko daripada sekadar pipeline retrieval. Jika model reasoning salah, kesimpulan yang disimpan bisa jadi bias dan ditarik ulang ke banyak sesi berikutnya.</p>
+<h2 id="kapan-honcho-cocok">Kapan Honcho cocok<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-honcho-cocok"></a></h2>
+<p>Honcho cocok kalau elo membangun:</p>
+<ol>
+<li>Personal assistant jangka panjang.</li>
+<li>Multi-agent system.</li>
+<li>Agent dengan banyak profile.</li>
+<li>Customer support agent yang perlu memahami user history.</li>
+<li>Coaching/tutoring agent yang perlu melacak perkembangan learner.</li>
+<li>Coding agent yang perlu ingat keputusan project lintas sesi.</li>
+<li>Research assistant yang perlu membangun model tentang ide, bukan cuma dokumen.</li>
+</ol>
+<p>Contoh konkret:</p>
+<p>Elo punya Hermes profile:</p>
+<ul>
+<li><code>hermes.coder</code></li>
+<li><code>hermes.writer</code></li>
+<li><code>hermes.researcher</code></li>
+</ul>
+<p>Dengan Honcho, tiap profile bisa punya AI peer berbeda. Mereka melihat user yang sama, tapi membangun representation berbeda.</p>
+<p>Ini masuk akal karena konteks “gue sebagai programmer” beda dari “gue sebagai penulis” atau “gue sebagai researcher.”</p>
+<p>Menurut gue, Honcho paling pas kalau masalahnya adalah:</p>
+<ul>
+<li>agent yang harus mengingat lintas sesi,</li>
+<li>user atau entitas yang berubah seiring waktu,</li>
+<li>multi-agent dengan berbagai profile,</li>
+<li>kebutuhan untuk membangun model preferensi, nilai, atau relasi,</li>
+<li>konteks yang tidak bisa diselesaikan hanya dengan dokumen dan search.</li>
+</ul>
+<p>Kalau lo cuma perlu satu fakta sederhana, atau hanya ingin search dokumen, Honcho terasa terlalu besar.</p>
+<h2 id="kapan-honcho-mungkin-overkill">Kapan Honcho mungkin overkill?<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-honcho-mungkin-overkill"></a></h2>
+<p>Honcho bisa terlalu berat kalau kebutuhan elo cuma:</p>
+<ul>
+<li>menyimpan beberapa fakta sederhana</li>
+<li>mencari dokumen</li>
+<li>local-only memory sederhana</li>
+<li>tidak butuh user modeling</li>
+<li>tidak butuh multi-agent</li>
+<li>tidak mau data ke cloud</li>
+<li>tidak mau konfigurasi reasoning/cadence/depth</li>
+</ul>
+<p>Kalau cuma mau memory lokal sederhana, Holographic atau ByteRover bisa lebih masuk.</p>
+<p>Kalau cuma mau semantic recall cloud yang otomatis, Mem0 atau Supermemory bisa lebih simpel.</p>
+<p>Kalau mau knowledge base structured, OpenViking atau Hindsight mungkin lebih natural.</p>
+<p>Honcho paling masuk kalau masalah elo adalah statefulness + evolving entities + reasoning over time.</p>
+<h2 id="linking-hubungan-antar-ide">Linking: hubungan antar ide<a aria-hidden="true" class="anchor-heading icon-link" href="#linking-hubungan-antar-ide"></a></h2>
+<p>Sekarang kita sambungkan.</p>
+<p>Honcho mulai dari masalah agent stateless.</p>
+<p>Untuk membuat agent stateful, ia butuh model data. Model data itu adalah Workspace → Peer → Session → Message.</p>
+<p>Message adalah input. Tapi Honcho tidak berhenti di penyimpanan message. Ia melakukan reasoning untuk menghasilkan conclusions. Conclusions itu menjadi representations. Representations lalu dipakai untuk memberi konteks ke agent.</p>
+<p>Jadi chain-nya:</p>
+<p><strong>interaksi → message → reasoning → conclusion → representation → context injection → respons agent lebih stateful</strong></p>
+<p>Di sinilah Honcho berbeda dari RAG.</p>
+<p>RAG chain-nya biasanya:</p>
+<p><strong>dokumen → chunk → embedding → retrieve → context injection</strong></p>
+<p>RAG kuat untuk menemukan teks relevan. Honcho mencoba membangun state yang lebih abstrak.</p>
+<p>Maka pola besarnya:</p>
+<p>RAG = memory sebagai pencarian.</p>
+<p>Honcho = memory sebagai penalaran berkelanjutan.</p>
+<h2 id="insight-yang-penting-buat-gue">Insight yang penting buat gue<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-yang-penting-buat-gue"></a></h2>
+<p>★ Insight ─────────────────────────
+Kesalahan umum memahami Honcho adalah mengira ia “RAG yang lebih bagus”.</p>
+<p>Lebih tepat: Honcho adalah usaha mengubah memory dari <strong>arsip pasif</strong> menjadi <strong>model aktif tentang entitas</strong>.</p>
+<p>Orang sudah mulai paham Honcho kalau ia bisa membedakan tiga lapis ini:</p>
+<ol>
+<li>Message: apa yang terjadi.</li>
+<li>Conclusion: apa yang bisa disimpulkan.</li>
+<li>Representation: model stabil yang dipakai agent ke depan.</li>
+</ol>
+<p>Kalau tiga lapis ini belum kebedakan, Honcho akan terlihat seperti database memory biasa.
+───────────────────────────────────</p>
+<p>Honcho bukan "RAG yang lebih canggih." Honcho adalah sistem yang mencoba mengubah memory dari arsip pasif menjadi model aktif tentang entitas.</p>
+<p>Kalau gue belum bisa membedakan tiga lapis ini, maka Honcho akan terasa sama seperti memory biasa:</p>
+<ul>
+<li>message = apa yang terjadi,</li>
+<li>conclusion = apa yang bisa disimpulkan,</li>
+<li>representation = apa yang agent ingat dan pakai.</li>
+</ul>
+<p>Itu yang bikin Honcho relevan untuk agent yang harus hidup lebih dari satu sesi.</p>
+<h2 id="korelasi-dengan-konsep-lain">Korelasi dengan konsep lain<a aria-hidden="true" class="anchor-heading icon-link" href="#korelasi-dengan-konsep-lain"></a></h2>
+<p>Konsep paling dekat pertama: CRM.</p>
+<p>Kenapa? CRM menyimpan interaksi customer, history, preferensi, status, dan peluang. Honcho mirip CRM untuk agent, tapi lebih fleksibel karena entitasnya bukan cuma customer. Bisa user, agent, ide, project, grup.</p>
+<p>Bedanya: CRM biasanya manusia yang membaca dan menyimpulkan. Honcho mencoba membuat reasoning backend menyimpulkan otomatis.</p>
+<p>Konsep kedua: Zettelkasten.</p>
+<p>Zettelkasten bukan cuma catatan, tapi jaringan ide. Honcho mirip dalam hal ia tidak puas dengan raw note. Ia ingin hubungan, pola, dan representasi.</p>
+<p>Bedanya: Zettelkasten biasanya ide-centric. Honcho entity-centric. Pusatnya bukan cuma “ide apa terhubung ke ide apa”, tapi “entitas ini berkembang menjadi apa dari waktu ke waktu.”</p>
+<p>Konsep ketiga: event sourcing.</p>
+<p>Dalam event sourcing, state aplikasi dibangun dari rangkaian event. Honcho juga mirip: representation adalah state yang dibangun dari messages/events.</p>
+<p>Bedanya: event sourcing deterministik. Kalau event-nya sama, state-nya sama. Honcho memakai reasoning model, jadi hasilnya probabilistik dan interpretatif.</p>
+<p>Kesimpulan pendeknya: Honcho adalah memory layer untuk agent yang ingin punya kontinuitas, bukan cuma retrieval. Ia cocok ketika “mengingat” berarti memahami perubahan entitas dari waktu ke waktu.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.hermes-agent.memory-providers">Memory Providers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.reasoning">Reasoning</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.peer-representations">Peer Representations</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.hermes-agent.memory-providers">Memory Providers</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

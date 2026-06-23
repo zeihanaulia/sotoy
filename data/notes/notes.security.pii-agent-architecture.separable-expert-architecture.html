@@ -1,0 +1,24 @@
+<h1 id="separable-expert-architecture-privacy-preserving-personalization">Separable Expert Architecture: Privacy-Preserving Personalization<a aria-hidden="true" class="anchor-heading icon-link" href="#separable-expert-architecture-privacy-preserving-personalization"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>Paper ini mengangkat masalah personalization LLM yang menulis data pengguna ke dalam bobot model. Ketika personalisasi disimpan secara langsung di shared weights, menghapus data individu menjadi sulit atau bahkan tidak mungkin tanpa retraining.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>Separable Expert Architecture memperkenalkan adapter komposabel yang dapat dihapus dan user proxies yang dapat dihilangkan. Alih-alih memodifikasi bobot utama model secara permanen, personalisasi dialokasikan ke komponen terpisah yang dapat di-pull-in atau dihapus.</p>
+<h2 id="real-case-implementation">Real case implementation<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-implementation"></a></h2>
+<p>Dalam arsitektur agent, ini berarti personalisasi user-specific harus terjadi di adapter atau proxy yang terpisah dari base model. Ketika data personal tidak lagi diperlukan atau user meminta penghapusan, adapter ini dapat dicabut tanpa retraining seluruh model.</p>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>Pendekatan ini penting untuk user-supplied PII di agent personal AI. Ia menawarkan cara untuk memberikan personalisasi tanpa mengunci data sensitif ke dalam model utama, sehingga mitigasi privacy dan unlearning menjadi lebih praktis.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2604.21571">https://arxiv.org/abs/2604.21571</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

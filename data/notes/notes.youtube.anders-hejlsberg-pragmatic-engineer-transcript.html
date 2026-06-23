@@ -1,0 +1,106 @@
+<h1 id="anders-hejlsberg-interview-transcript-notes">Anders Hejlsberg interview transcript notes<a aria-hidden="true" class="anchor-heading icon-link" href="#anders-hejlsberg-interview-transcript-notes"></a></h1>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<p>Video: <a href="https://www.youtube.com/watch?v=K-Xv8D8NjTk">https://www.youtube.com/watch?v=K-Xv8D8NjTk</a></p>
+<p>Catatan ini berdasarkan transcript yang tersedia hingga sekitar menit 54:03. Setelah itu hanya ada timestamp dan ringkasan di halaman.</p>
+<h2 id="pertanyaan-eksplisit-gergely-dan-jawaban-anders">Pertanyaan eksplisit Gergely dan jawaban Anders<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-eksplisit-gergely-dan-jawaban-anders"></a></h2>
+<h3 id="1-how-did-you-get-into-programming--menit-156248">1. “How did you get into programming?” — menit 1:56–2:48<a aria-hidden="true" class="anchor-heading icon-link" href="#1-how-did-you-get-into-programming--menit-156248"></a></h3>
+<p>Anders mulai programming di Copenhagen akhir 1970-an lewat akses ke komputer HP 2100 dengan 32K ferrite core memory, paper tape reader, dan hard drive 1MB. Dari awal dia tertarik karena bisa "membuat mesin melakukan sesuatu".</p>
+<p>Atomic idea: pengalaman awal Anders adalah transparansi mesin. Dia bisa melihat sampai dasar hardware. Kariernya nanti justru membangun layer agar orang lain tidak perlu melihat hardware sedalam itu.</p>
+<h3 id="2-as-a-kid-what-did-you-start-to-program-on-it--menit-313420">2. “As a kid, what did you start to program on it?” — menit 3:13–4:20<a aria-hidden="true" class="anchor-heading icon-link" href="#2-as-a-kid-what-did-you-start-to-program-on-it--menit-313420"></a></h3>
+<p>Anders menjelaskan bahwa mesin itu punya Fortran, interpreter BASIC yang lambat, dan Algol versi HP. Mereka membuat game seperti lunar lander. Dia juga belajar bahwa bahasa dipengaruhi oleh constraint mesin; Algol pada mesin itu tidak mendukung recursion karena cara call instruction menyimpan return address.</p>
+<p>Atomic idea: programming language selalu dibentuk oleh constraint mesin dan tooling di bawahnya.</p>
+<h3 id="3-how-did-you-go-from-building-games-to-building-your-first-compiler--menit-443650">3. “How did you go from building games to building your first compiler?” — menit 4:43–6:50<a aria-hidden="true" class="anchor-heading icon-link" href="#3-how-did-you-go-from-building-games-to-building-your-first-compiler--menit-443650"></a></h3>
+<p>Transisi Anders dari game ke compiler terjadi di Danish Technical University sekitar 1979. Dia beli kit komputer Z80 NASCOM, belajar assembly, dan ingin bahasa serius seperti Algol atau Pascal karena ROM BASIC lambat. Dia menulis compiler kecil yang muat di 12K ROM untuk subset Pascal.</p>
+<p>Atomic idea: Turbo Pascal berakar pada friksi praktis terhadap BASIC yang lambat dan terbatas, bukan ambisi akademik semata.</p>
+<h3 id="4-at-borland-you-created-turbo-pascal-the-language-and-ide-right--menit-650745">4. “At Borland you created Turbo Pascal, the language and IDE, right?” — menit 6:50–7:45<a aria-hidden="true" class="anchor-heading icon-link" href="#4-at-borland-you-created-turbo-pascal-the-language-and-ide-right--menit-650745"></a></h3>
+<p>Anders menegaskan bahwa Turbo Pascal bukan tiba-tiba muncul di Borland. Sebelum itu dia sudah membuat implementasi Pascal penuh untuk CP/M-80. Turbo Pascal 1983 adalah evolusi dari compiler kecil tersebut, dikemas beserta distribusi komersial yang tepat.</p>
+<p>Atomic idea: produk besar sering lahir dari tool kecil yang sudah dipakai dan dipoles.</p>
+<h3 id="5-why-was-it-called-turbo-pascal--menit-745808">5. “Why was it called Turbo Pascal?” — menit 7:45–8:08<a aria-hidden="true" class="anchor-heading icon-link" href="#5-why-was-it-called-turbo-pascal--menit-745808"></a></h3>
+<p>Nama "Turbo" menekankan kecepatan. Di era itu "Turbo" berarti cepat. Turbo Pascal memang cepat dan interaktif.</p>
+<p>Atomic idea: positioning developer tool harus menyentuh pain point utama dengan langsung.</p>
+<h3 id="6-was-turbo-pascal-popular-because-of-compiler-or-also-because-of-ide--menit-808857">6. “Was Turbo Pascal popular because of compiler, or also because of IDE?” — menit 8:08–8:57<a aria-hidden="true" class="anchor-heading icon-link" href="#6-was-turbo-pascal-popular-because-of-compiler-or-also-because-of-ide--menit-808857"></a></h3>
+<p>Anders: dari awal ini bukan cuma compiler. Ini adalah experience. Developer melakukan edit, run, debug, dan memakai runtime library. Semua komponen harus terhubung.</p>
+<p>Atomic idea: produktivitas developer datang dari memperpendek feedback loop.</p>
+<h3 id="7-saat-bikin-compiler-apakah-sudah-mikir-ide-features-seperti-editingdebugging--menit-9041014">7. “Saat bikin compiler, apakah sudah mikir IDE features seperti editing/debugging?” — menit 9:04–10:14<a aria-hidden="true" class="anchor-heading icon-link" href="#7-saat-bikin-compiler-apakah-sudah-mikir-ide-features-seperti-editingdebugging--menit-9041014"></a></h3>
+<p>Anders menjawab bahwa compiler dan IDE dipikirkan bersamaan. Versi awal Turbo Pascal menggunakan trik runtime error dengan mencetak program counter dan compiler punya mode khusus untuk menebak source line error.</p>
+<p>Atomic idea: constraint membuat tooling kreatif. Compiler dapat dipakai ulang sebagai bagian debugging experience.</p>
+<h3 id="8-why-do-you-think-turbo-pascal-was-so-popular--menit-10141123">8. “Why do you think Turbo Pascal was so popular?” — menit 10:14–11:23<a aria-hidden="true" class="anchor-heading icon-link" href="#8-why-do-you-think-turbo-pascal-was-so-popular--menit-10141123"></a></h3>
+<p>Karena kombinasi: lebih cepat, lebih kecil, lebih interaktif, dan lebih murah. Harga $49.95 versus compiler lain sekitar $500. Pengalaman dan economics turun bersama.</p>
+<p>Atomic idea: developer tool menang ketika friction ekonomi dan friction teknis turun bersamaan.</p>
+<h3 id="9-how-did-ideas-evolve-from-turbo-pascal-to-delphi--menit-11231356">9. “How did ideas evolve from Turbo Pascal to Delphi?” — menit 11:23–13:56<a aria-hidden="true" class="anchor-heading icon-link" href="#9-how-did-ideas-evolve-from-turbo-pascal-to-delphi--menit-11231356"></a></h3>
+<p>Perubahan besar adalah GUI dan enterprise client-server. Delphi mengambil konsep Turbo Pascal dan mengadaptasinya untuk Windows rapid application development: interaktif visual, compiler, classes, object orientation, dan target enterprise apps.</p>
+<p>Atomic idea: Delphi adalah Turbo Pascal yang diadaptasi untuk era GUI dan enterprise.</p>
+<h3 id="10-you-joined-microsoft-in-1996-what-was-the-programming-environment-like--menit-13561603">10. “You joined Microsoft in 1996… what was the programming environment like?” — menit 13:56–16:03<a aria-hidden="true" class="anchor-heading icon-link" href="#10-you-joined-microsoft-in-1996-what-was-the-programming-environment-like--menit-13561603"></a></h3>
+<p>Saat Anders masuk Microsoft, browser, JavaScript, dan Java sedang naik. Java tampak seperti masa depan universal, JavaScript masih dipandang scripting kecil di browser.</p>
+<p>Atomic idea: pada pertengahan 1990-an, platform reach adalah faktor kunci, bukan desain bahasa semata.</p>
+<h3 id="11-how-did-j-development-go-and-how-did-it-lead-to-doing-something-else--menit-16031847">11. “How did J++ development go, and how did it lead to doing something else?” — menit 16:03–18:47<a aria-hidden="true" class="anchor-heading icon-link" href="#11-how-did-j-development-go-and-how-did-it-lead-to-doing-something-else--menit-16031847"></a></h3>
+<p>J++ berjalan, tetapi lawsuit Sun vs Microsoft membuat Microsoft tidak bisa bertaruh pada teknologi milik kompetitor. Dari konvergensi antara Visual Basic dan C++ muncul kebutuhan akan bahasa sendiri: C#.</p>
+<p>Atomic idea: bahasa bisa lahir dari tekanan legal dan platform strategy, bukan hanya keputusan teknis.</p>
+<h3 id="12-which-came-first-net-or-c--menit-17551847">12. “Which came first: .NET or C#?” — menit 17:55–18:47<a aria-hidden="true" class="anchor-heading icon-link" href="#12-which-came-first-net-or-c--menit-17551847"></a></h3>
+<p>Anders: keduanya co-design. Mereka butuh runtime language-independent dan bahasa baru yang menarik bagi user VB dan C++.</p>
+<p>Atomic idea: C# dan .NET dirancang sebagai satu paket platform.</p>
+<h3 id="13-what-were-your-design-goals-for-c--menit-18472022">13. “What were your design goals for C#?” — menit 18:47–20:22<a aria-hidden="true" class="anchor-heading icon-link" href="#13-what-were-your-design-goals-for-c--menit-18472022"></a></h3>
+<p>Tujuannya adalah power C++ plus ease of use Visual Basic. Managed code, garbage collection, exception handling, unified object model, reflection, properties, events sebagai first-class, dan standar terbuka.</p>
+<p>Atomic idea: C# mencari titik tengah antara produktivitas VB, power C++, dan managed runtime modern.</p>
+<h3 id="14-what-did-it-take-to-build-a-language-like-c--menit-20382345">14. “What did it take to build a language like C#?” — menit 20:38–23:45<a aria-hidden="true" class="anchor-heading icon-link" href="#14-what-did-it-take-to-build-a-language-like-c--menit-20382345"></a></h3>
+<p>Tim C# kecil sekitar 6–7 orang berpengalaman. Mereka meeting tiga kali seminggu, melakukan kritik tajam atas ide, dan menulis language spec paralel dengan design. Ide harus tahan serangan.</p>
+<p>Atomic idea: language design memerlukan small expert group dengan shared context dan adversarial review.</p>
+<h3 id="15-roslyn-meaning-the-compiler-is-in-c-right--menit-23382446">15. “Roslyn meaning the compiler is in C#, right?” — menit 23:38–24:46<a aria-hidden="true" class="anchor-heading icon-link" href="#15-roslyn-meaning-the-compiler-is-in-c-right--menit-23382446"></a></h3>
+<p>Roslyn adalah self-hosted C# compiler. Lebih pentingnya, ia menyatukan batch compiler dan interactive language service untuk IDE.</p>
+<p>Atomic idea: compiler modern adalah service interaktif, bukan hanya batch compiler.</p>
+<h3 id="16-how-did-you-get-feedback-when-building-a-language--menit-27152817">16. “How did you get feedback when building a language?” — menit 27:15–28:17<a aria-hidden="true" class="anchor-heading icon-link" href="#16-how-did-you-get-feedback-when-building-a-language--menit-27152817"></a></h3>
+<p>Anders menjawab bahwa mereka menggunakan dogfooding internal dan beta copies untuk user nyata. Feedback nyata dari internal client sangat krusial.</p>
+<p>Atomic idea: bahasa perlu dogfooding nyata, bukan hanya whiteboard design.</p>
+<h3 id="17-asyncawait-what-did-you-get-right-and-why-was-it-copied--menit-28173244">17. “Async/await: what did you get right, and why was it copied?” — menit 28:17–32:44<a aria-hidden="true" class="anchor-heading icon-link" href="#17-asyncawait-what-did-you-get-right-and-why-was-it-copied--menit-28173244"></a></h3>
+<p>Async/await menang karena compiler bisa menulis state machine yang manusia tidak mau tulis sendiri. Ini memindahkan mekanisme kompleks dari manusia ke compiler.</p>
+<p>Atomic idea: async/await memindahkan kompleksitas implementasi dari manusia ke tool.</p>
+<h3 id="18-how-did-javascript-explode-in-popularity--menit-32443411">18. “How did JavaScript explode in popularity?” — menit 32:44–34:11<a aria-hidden="true" class="anchor-heading icon-link" href="#18-how-did-javascript-explode-in-popularity--menit-32443411"></a></h3>
+<p>JavaScript menang karena runtime distribution universal: browser di mana-mana, HTML5, V8, dan device mobile.</p>
+<p>Atomic idea: platform reach kadang lebih penting daripada bahasa purity.</p>
+<h3 id="19-outlookcom-asked-for-scriptsharp-how-did-that-become-typescript--menit-34113657">19. “Outlook.com asked for ScriptSharp; how did that become TypeScript?” — menit 34:11–36:57<a aria-hidden="true" class="anchor-heading icon-link" href="#19-outlookcom-asked-for-scriptsharp-how-did-that-become-typescript--menit-34113657"></a></h3>
+<p>Anders menolak membuat "C# to JS". TypeScript lahir untuk memperbaiki JavaScript dari dalam, bukan menggantinya.</p>
+<p>Atomic idea: TypeScript menang karena kompatibel secara budaya dengan ekosistem JavaScript.</p>
+<h3 id="20-why-open-source-typescript--menit-36573924">20. “Why open source TypeScript?” — menit 36:57–39:24<a aria-hidden="true" class="anchor-heading icon-link" href="#20-why-open-source-typescript--menit-36573924"></a></h3>
+<p>TypeScript perlu open source dan open development agar ekosistem JS mau mengadopsinya. Pindah ke GitHub pada 2014 menjadi momen penting.</p>
+<p>Atomic idea: open source tanpa open development belum cukup.</p>
+<h3 id="21-outside-the-type-system-what-made-typescript-this-popular--menit-39244159">21. “Outside the type system, what made TypeScript this popular?” — menit 39:24–41:59<a aria-hidden="true" class="anchor-heading icon-link" href="#21-outside-the-type-system-what-made-typescript-this-popular--menit-39244159"></a></h3>
+<p>Tooling adalah faktor utama. Erasable type system memberi autocomplete, navigation, refactor, diagnostics, dan confidence.</p>
+<p>Atomic idea: type system value paling nyata adalah tooling experience.</p>
+<h3 id="22-how-does-the-typescript-compiler-pipeline-work--menit-41594658">22. “How does the TypeScript compiler pipeline work?” — menit 41:59–46:58<a aria-hidden="true" class="anchor-heading icon-link" href="#22-how-does-the-typescript-compiler-pipeline-work--menit-41594658"></a></h3>
+<p>Pipeline: lexer → parser → binder → type checker → emitter. Compiler juga harus berfungsi sebagai service interaktif untuk IDE, dengan lazy incremental work dan AST cache.</p>
+<p>Atomic idea: compiler modern adalah search engine semantik interaktif atas codebase.</p>
+<h3 id="23-what-would-you-add-to-javascript-if-you-could--menit-47194907">23. “What would you add to JavaScript if you could?” — menit 47:19–49:07<a aria-hidden="true" class="anchor-heading icon-link" href="#23-what-would-you-add-to-javascript-if-you-could--menit-47194907"></a></h3>
+<p>Anders suka functional programming dan ingin JavaScript punya lebih banyak expression-oriented constructs. TypeScript tetap harus hidup di atas JS sebagai superset, tidak sebagai fork.</p>
+<p>Atomic idea: TypeScript terikat oleh JavaScript runtime semantics.</p>
+<h3 id="24-what-are-javascripts-strengths-and-weaknesses--menit-49075114">24. “What are JavaScript’s strengths and weaknesses?” — menit 49:07–51:14<a aria-hidden="true" class="anchor-heading icon-link" href="#24-what-are-javascripts-strengths-and-weaknesses--menit-49075114"></a></h3>
+<p>JS kecil dan cukup bagus, tapi ambiguous tanpa typing. TypeScript menawarkan pragmatic bug filtering dan tooling, bukan proof system sempurna.</p>
+<p>Atomic idea: TypeScript type system adalah pragmatic bug filter dan tooling engine.</p>
+<h3 id="25-what-kinds-of-ai-tools-are-you-using--menit-51145322">25. “What kinds of AI tools are you using?” — menit 51:14–53:22<a aria-hidden="true" class="anchor-heading icon-link" href="#25-what-kinds-of-ai-tools-are-you-using--menit-51145322"></a></h3>
+<p>Tim TypeScript menggunakan AI untuk code review PR, simple issue fixes, dan pekerjaan toil, tetapi AI belum menggantikan pemahaman mendalam.</p>
+<p>Atomic idea: AI bagus untuk toil, tapi manusia masih perlu architectural understanding.</p>
+<h3 id="26-given-you-build-languages-doesnt-someone-need-deep-understanding--menit-53225403">26. “Given you build languages, doesn’t someone need deep understanding?” — menit 53:22–54:03<a aria-hidden="true" class="anchor-heading icon-link" href="#26-given-you-build-languages-doesnt-someone-need-deep-understanding--menit-53225403"></a></h3>
+<p>Anders setuju. Programming language development membutuhkan orang yang memahami fundamental. AI berisiko stochastic dan indeterminate; bahasa tetap diperlukan untuk determinisme.</p>
+<p>Atomic idea: AI memerlukan programming language karena software production tetap butuh determinisme.</p>
+<h2 id="catatan-tambahan">Catatan tambahan<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-tambahan"></a></h2>
+<p>Transcript tersedia hanya sampai sekitar menit 54:03. Sisa episode sampai 1:15:09 hanya tersedia dalam bentuk timestamp dan ringkasan.</p>
+<h2 id="pola-besar-yang-muncul">Pola besar yang muncul<a aria-hidden="true" class="anchor-heading icon-link" href="#pola-besar-yang-muncul"></a></h2>
+<ul>
+<li>Anders melihat bahasa sebagai bagian dari developer experience loop.</li>
+<li>Bahasa yang sukses bukan hanya syntax; ia berhubungan dengan compiler, IDE, runtime, type system, ecosystem, dan sekarang AI.</li>
+<li>Bahasa besar sering menang karena kompromi timing dan kompatibilitas, bukan karena murni teori.</li>
+<li>TypeScript adalah layer guardrail di atas JavaScript, bukan pengganti.</li>
+</ul>
+<h2 id="relevansi-terhadap-tema-lain">Relevansi terhadap tema lain<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi-terhadap-tema-lain"></a></h2>
+<ul>
+<li>Thread Gergely sebelumnya: TypeScript bukan C# untuk JS.</li>
+<li>Unmesh Joshi: code bukan sekadar instruksi, tapi model konseptual yang dibaca manusia dan LLM.</li>
+<li>Workflow AI: TypeScript membantu AI dengan sinyal lebih eksplisit; JS murni lebih ambiguous.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">youtube (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">programming-languages (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">interview (Private)</a></li>
+</ol>

@@ -1,0 +1,70 @@
+<h1 id="struktur-minimal-feature-document-jelas-dan-praktis">Struktur minimal feature document jelas dan praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#struktur-minimal-feature-document-jelas-dan-praktis"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Struktur minimal yang baik membuat catatan fitur gampang dibaca ulang dan di-update.</p>
+<h2 id="struktur-minimal">Struktur Minimal<a aria-hidden="true" class="anchor-heading icon-link" href="#struktur-minimal"></a></h2>
+<p>Struktur minimal berarti hanya menyimpan konteks yang langsung membantu keputusan dan tindakan selanjutnya. Dalam konteks fitur, struktur minimal idealnya mencakup:</p>
+<ul>
+<li><code>Goal / Outcome</code> — apa hasil yang dicari.</li>
+<li><code>Decision / What</code> — apa yang diputuskan untuk dibangun.</li>
+<li><code>Why</code> — alasan utama di balik keputusan.</li>
+<li><code>Constraints</code> — batasan atau asumsi yang harus dijaga.</li>
+<li><code>Rejected alternatives</code> — alternatif penting yang sudah ditolak dan kenapa.</li>
+<li><code>Open questions</code> — pertanyaan belum terjawab yang memengaruhi kelanjutan.</li>
+<li><code>State / Status</code> — apakah catatan ini masih valid, sudah diimplementasi, atau sedang dipertimbangkan.</li>
+</ul>
+<h2 id="contoh-struktur-good">Contoh Struktur Good<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-struktur-good"></a></h2>
+<p>Sebuah catatan fitur yang baik biasanya ringkas dan terstruktur seperti ini:</p>
+<ul>
+<li><code>Goal</code>: memperbaiki onboarding sehingga pengguna baru bisa menyelesaikan setup dalam 3 menit.</li>
+<li><code>Decision</code>: tambahkan wizard setup satu halaman di aplikasi.</li>
+<li><code>Why</code>: data menunjukkan 40% drop-off saat konfigurasi manual, dan wizard mengurangi friction.</li>
+<li><code>Constraints</code>: hanya gunakan data yang sudah tersedia, tidak membuat API baru untuk fase 1.</li>
+<li><code>Rejected alternatives</code>: opsi 1 = tetap form multi-step; ditolak karena terlalu banyak klik. Opsi 2 = training modal; ditolak karena tidak menyelesaikan masalah discovery.</li>
+<li><code>Open questions</code>: apa metrik keberhasilan yang akan kita pakai? Bagaimana fallback bila user melewatkan langkah?</li>
+<li><code>State</code>: konseptual, butuh review tim produk.</li>
+</ul>
+<p>Struktur ini efektif karena semua informasi penting ada dalam 1–2 layar, dan orang tidak perlu membaca seluruh latar belakang untuk tahu apa selanjutnya.</p>
+<h2 id="contoh-struktur-bad">Contoh Struktur Bad<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-struktur-bad"></a></h2>
+<p>Catatan fitur yang buruk biasanya terlihat seperti dokumen panjang, misalnya:</p>
+<ul>
+<li>banyak paragraf cerita latar belakang, riset full-user interview, dan sejarah opsi yang pernah dibahas.</li>
+<li>tidak jelas apa keputusan sekarang; jadi pembaca harus menebak apakah ini masih open atau sudah disetujui.</li>
+<li>tidak ada ringkasan outcome, hanya daftar fitur dan requirement teknis.</li>
+<li>semua opsi dipaparkan tanpa indicate mana yang dipilih dan kenapa.</li>
+</ul>
+<p>Contoh buruk: sebuah doc 5 halaman yang memulai dengan "masalah pengguna" lalu langsung masuk ke detail implementasi, flow alternatif, ukuran tim, roadmap, dan meeting notes. Pembaca akan merasa: "ini dokumen formal, bukan hal yang bisa saya gunakan sekarang."</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Struktur minimal membantu mengurangi friction karena:</p>
+<ul>
+<li>mempermudah session restart; orang baru atau yang kembali ke topik cepat paham status.</li>
+<li>mencegah context drift; hanya konteks relevan yang tersimpan, bukan seluruh sejarah diskusi.</li>
+<li>membuat catatan lebih mudah di-update ketika keputusan berubah.</li>
+</ul>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 28.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 28</li>
+<li>Artikel asli: <a href="https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html">https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html</a></li>
+<li>Architectural Decision Records (ADRs): <a href="https://adr.github.io/">https://adr.github.io/</a></li>
+<li>Martin Fowler — Architecture Decision Records: <a href="https://martinfowler.com/articles/architecture-decision-records.html">https://martinfowler.com/articles/architecture-decision-records.html</a></li>
+<li>Wikipedia — Architecture decision record: <a href="https://en.wikipedia.org/wiki/Architecture_decision_record">https://en.wikipedia.org/wiki/Architecture_decision_record</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

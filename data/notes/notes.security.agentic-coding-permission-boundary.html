@@ -1,0 +1,88 @@
+<h1 id="agentic-coding-permission-boundary-dan-risiko-filesystem-lokal">Agentic coding permission boundary dan risiko filesystem lokal<a aria-hidden="true" class="anchor-heading icon-link" href="#agentic-coding-permission-boundary-dan-risiko-filesystem-lokal"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue baca thread <code>cheese_cakee_9/status/2050938657545310628</code> dan yang keliatan jelas adalah kalau agentic coding sekarang bukan cuma soal prompt. Ini soal izin lokal: file yang bisa dibaca, command yang bisa dijalanin, dan data apa yang bisa keluar.</p>
+<h2 id="1-risiko-utama-dari-agentic-coding-tools">1. Risiko utama dari agentic coding tools<a aria-hidden="true" class="anchor-heading icon-link" href="#1-risiko-utama-dari-agentic-coding-tools"></a></h2>
+<ul>
+<li>agentic coding bukan cuma "AI yang nulis kode".</li>
+<li>tool bisa baca file, cari file, jalankan command, dan akses environment.</li>
+<li>risiko utamanya adalah transformasi dari autocomplete jadi process yang punya permission.</li>
+<li>pertanyaan penting: dia bisa baca apa? dia bisa jalanin apa? dia bisa kirim apa?</li>
+</ul>
+<h2 id="2-kenapa-filesystem-access-sensitif">2. Kenapa filesystem access sensitif<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-filesystem-access-sensitif"></a></h2>
+<ul>
+<li>workstation dev menyimpan lebih dari source code.</li>
+<li>file sensitif umum:
+<ul>
+<li><code>.env</code>,</li>
+<li><code>~/.ssh</code>,</li>
+<li><code>~/.aws/credentials</code>,</li>
+<li><code>~/.kube/config</code>,</li>
+<li>shell history,</li>
+<li><code>~/.docker/config.json</code>,</li>
+<li>npm/pnpm/yarn credential,</li>
+<li>VS Code extension/session state.</li>
+</ul>
+</li>
+<li>kalau agent punya akses folder, bahaya nyata kalau dia bisa naik ke parent atau home directory.</li>
+</ul>
+<h2 id="3-data-apa-saja-yang-bisa-kebaca-atau-ikut-terkirim">3. Data apa saja yang bisa kebaca atau ikut terkirim?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-data-apa-saja-yang-bisa-kebaca-atau-ikut-terkirim"></a></h2>
+<ul>
+<li>langsung: source code, config, secret file.</li>
+<li>tersembunyi: terminal output, git history, environment variables, prompt history, file README/jadi source injection.</li>
+<li>kalau agent punya network egress, data ini gampang beroled keluar.</li>
+<li>penting: data nggak harus dilatih oleh model. Cukup muncul di request, log, atau artifact.</li>
+</ul>
+<h2 id="4-korelasi-dengan-deepsec">4. Korelasi dengan Deepsec<a aria-hidden="true" class="anchor-heading icon-link" href="#4-korelasi-dengan-deepsec"></a></h2>
+<ul>
+<li>Deepsec butuh akses kode buat nemuin vuln.</li>
+<li>thread cheesecake nunjukin bahwa akses itu sendiri bisa jadi risk.</li>
+<li>menurut gue, security harness yang bagus harus ngatur agent dan batas akses agent.</li>
+<li>tanpa boundary, agen pencari bug bisa jadi agen baca secret.</li>
+</ul>
+<h2 id="5-mitigasi-realistis">5. Mitigasi realistis<a aria-hidden="true" class="anchor-heading icon-link" href="#5-mitigasi-realistis"></a></h2>
+<ul>
+<li>pisahkan environment agent dari environment utama: sandbox, devcontainer, VM, atau folder bersih.</li>
+<li>jangan jalankan agent dari <code>$HOME</code> yang penuh credential.</li>
+<li>hindari secret production di laptop.</li>
+<li>audit file sensitif: <code>.env</code>, <code>.npmrc</code>, <code>.pypirc</code>, <code>.docker/config.json</code>, <code>~/.aws/credentials</code>, <code>~/.kube/config</code>, <code>~/.ssh</code>, shell history.</li>
+<li>batasi network egress untuk agent kalau bisa.</li>
+<li>jangan biarkan agent langsung jalanin perintah dari repo asing.</li>
+<li>treat repo eksternal sebagai data, bukan instruksi otomatis.</li>
+<li>pakai allowlist/denylist jika tool mendukung.</li>
+</ul>
+<h2 id="practical-takeaway">Practical takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-takeaway"></a></h2>
+<p>Thread cheesecake jadi counterpoint yang sehat buat hype agentic coding.</p>
+<ul>
+<li>kalau developer nganggep tool ini cuma autocomplete, itu berbahaya.</li>
+<li>agentic coding nggak aman secara default.</li>
+<li>ini harus diperlakukan seperti process lokal dengan potensi exfiltration.</li>
+</ul>
+<h2 id="related-zettels">Related Zettels<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettels"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179967">Agentic coding tools adalah process dengan permission, bukan autocomplete</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179968">Workstation trust boundary adalah attack surface utama di era AI-native engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179972">Secret exposure bisa terjadi tanpa commit Git</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179979">Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">permission-boundary (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777995556481">Audit trust boundary lokal sebagai ide keamanan developer</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179967">Agentic coding tools adalah process dengan permission, bukan autocomplete</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179968">Workstation trust boundary adalah attack surface utama di era AI-native engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179972">Secret exposure bisa terjadi tanpa commit Git</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust-evaluation">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+</ul>

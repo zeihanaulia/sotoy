@@ -1,0 +1,12 @@
+<h1 id="opencodevllm-errors-sering-karena-contextkv-pressure-bukan-model-atau-prompt">OpenCode/vLLM errors sering karena context/KV pressure, bukan model atau prompt<a aria-hidden="true" class="anchor-heading icon-link" href="#opencodevllm-errors-sering-karena-contextkv-pressure-bukan-model-atau-prompt"></a></h1>
+<p>Gue sekarang melihat bahwa ketika OpenCode + LiteLLM + vLLM lempar <code>MidStreamFallbackError</code>, <code>ServiceUnavailableError</code>, atau <code>APIConnectionError</code>, itu jarang hanya karena prompt atau model.</p>
+<p>Signalnya kuat: setelah ESC dan /compact, semuanya normal lagi. Itu menunjukkan issue runtime state atau KV cache pressure, bukan sekadar overflow statis.</p>
+<p>Jadi diagnosis yang lebih berguna adalah: reduce concurrency, lower output, compact lebih agresif, dan treat <code>max_model_len</code> sebagai batas per request, bukan kapasitas concurrent.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vllm (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">debugging (Private)</a></li>
+</ol>

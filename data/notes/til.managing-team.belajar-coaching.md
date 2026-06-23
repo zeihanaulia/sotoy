@@ -1,0 +1,106 @@
+
+- training
+  - transfer ilmu
+  - tugas
+    - membuat yang tadinya gak bisa jadi bisa
+  - type: outside in
+
+- mentoring
+  - upgrade
+  - nasihat
+  - menjadi lebih
+    - cepat
+    - efisien
+    - santai
+    - tenang
+  - type: outside in
+
+- consulting
+  - memberikan saran untuk menemukan solusi
+  - type: outside in
+
+- counseling
+  - mendengarkan dan menyembuhkan issue emosional dan kejiawaan
+  - membahas masalalu, truma
+
+- coaching
+  - membangun kesadaran diri melalui penggalian potensi dalam diri untuk mencapai suatu tujuan
+  - bintangnya ada coachernya
+  - tidak harus jadi expert
+    - tapi harus bisa menggali informasi
+      - kesadaran diri
+      - keyakinan
+      - ide ide
+      - solusi
+      - aksi
+      - komitmen
+  - bertanya dan mencari opini dari employee
+  - tidak memberikan nasihat
+  - employee centric
+  - dorong employee untuk mensolve problem
+  - membahas masa depan
+  - type: inside out
+  - coaching bisa digunakan untuk semua category team
+    - coaching for development
+      - untuk yang low performer
+    - coaching for transactional
+      - untuk bisa cepat beradaptasi
+  - kapan digunakan
+    - 1 on 1
+    - performance management conversation
+    - development conversationn
+  - effective coaching
+    - membangun hubungan dan kepercayaan (percuma kalau punya kemampuan coaching tapi gak ada yang mau wkwkwk)
+      - credibility
+        - terbukti
+        - image
+      - reliability
+        - contoh
+          - project bisa diselesaikan tepat waktu
+      - intimacy
+        - kedekatan emosional
+      - selalu mementikan diri sendiri
+      - credibility , reliability, intimacy (/) selalu mementikan diri sendiri
+        - hasilnya dapat dipercaya
+    - mendengarkan aktif (mendengarkan tanpa judgement)
+      - mendengarkan diri sendiri (lv. 1)
+        - fokus: saya dan asumsi
+      - mendengar untuk memahami (lv. 2)
+        - fokus: cocahee dan  situasi coache
+      - global listeing (lv. 3)
+      - caranya (SEA)
+        - situasi
+        - emosi
+        - ack / pengakuan
+    - bertanya efektif (menggali ide)
+      - do
+        - pertanyaan terbuka
+        - pertanyaan fokus pada solusi
+        - pertayaan yang menjelaskan situasi saat ini dan pertanyaan yang menjelaskan situasi masa depan
+          - apa yang menjadi kesulitan kamu?
+      - don't
+        - pertanyaan tertutup
+        - pertanyaan mengarahkan
+        - pertanyaan berlapis
+        - "mengapa"
+      - coaching FIRA
+        - fokus pada tujuan
+          - apa agenda yang ingin dibahas?
+          - apa fokus pembahasan yang anda inginkan?
+          - apa yang membuat tujuan ini penting untuk anda?
+        - identifikasi GPS (gap, posibility, solution)
+          - apa kesenjangan yang anda ketahui pada situasi saat ini
+          - apa ide anda untuk dapat mengatasi situasi tersebut
+        - rencana aksi
+          - apa langkah langkah
+          - bagaimana strategi anda agar rencana tersebut dapat berjalan sesuai dengan harapan?
+          - apa sumber daya yang anda butuhkan?
+        - akuntabilitias & komitmen
+          - apa kesimpulan dari percakapan kita tadi
+          - bagaimana anda memonitor komitment anda ?
+  - pertanyaan
+    - coaching itu dari employeenya yang minta atau coachnya yang datang karena ada problem?
+      - bisa dari mana saja
+    - tadi kan coach itu tidak harus expert, bagaimana jika memang orang itu memang stuck dan butuh panduan? apa yang akan dilakukan coach? apa masih perlu ke coach? atau langsung aja consulting ke expert?
+      - sebagai coach akan menangkap situasi dan emosi dari coachee (susah euy!!)
+      - sebagai leader coach bisa tukar topi sebagai mentor

@@ -1,0 +1,207 @@
+<h1 id="cara-pakai-zettelkasten-di-project-ini">Cara Pakai Zettelkasten di Project Ini<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-pakai-zettelkasten-di-project-ini"></a></h1>
+<h2 id="tldr">TL;DR<a aria-hidden="true" class="anchor-heading icon-link" href="#tldr"></a></h2>
+<p>Ada dua cara memakai sistem Zettelkasten di project ini:</p>
+<ol>
+<li><strong>Manual</strong> — buat file sendiri mengikuti konvensi di bawah</li>
+<li><strong>Pakai agent</strong> — mention <code>@Zettel Scribe</code> di chat Copilot, ceritakan pikiranmu, agent yang urus sisanya</li>
+</ol>
+<hr>
+<h2 id="cara-1-manual">Cara 1: Manual<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-1-manual"></a></h2>
+<h3 id="langkah-langkah">Langkah-langkah<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-langkah"></a></h3>
+<p><strong>1. Tentukan jenis Zettel yang kamu butuhkan:</strong></p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Situasi</th><th>Jenis</th><th>Contoh nama file</th></tr></thead><tbody><tr><td>Pikiran sendiri, satu klaim jelas</td><td><strong>Permanent Zettel</strong></td><td><code>zettel.202604171430.md</code></td></tr><tr><td>Sedang baca buku/artikel, mau catat</td><td><strong>Literature Note</strong></td><td><code>zettel.literature.nama-buku.md</code></td></tr><tr><td>Ide masih kasar, belum bisa dirumuskan</td><td><strong>Fleeting Note</strong></td><td>di <code>vault2/</code> atau daily journal</td></tr><tr><td>Mau buat peta dari banyak Zettel</td><td><strong>MOC</strong></td><td><code>zettel.moc.topik-saya.md</code></td></tr></tbody></table></div>
+<p><strong>2. Generate ID timestamp:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">date</span> +%Y%m%d%H%M%S
+</code></pre>
+<p>Gunakan hasilnya sebagai nama file. Contoh: <code>zettel.202604171430.md</code></p>
+<p><strong>3. Buat file menggunakan template:</strong></p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Template</th><th>File</th></tr></thead><tbody><tr><td>Permanent Zettel</td><td><code>seeds/dendron.templates/templates/templates.zettel.permanent.md</code></td></tr><tr><td>Literature Note</td><td><code>seeds/dendron.templates/templates/templates.zettel.literature.md</code></td></tr><tr><td>MOC</td><td><code>seeds/dendron.templates/templates/templates.zettel.moc.md</code></td></tr><tr><td>Fleeting Note</td><td><code>seeds/dendron.templates/templates/templates.zettel.fleeting.md</code></td></tr></tbody></table></div>
+<p><strong>4. Isi konten:</strong></p>
+<ul>
+<li>Judul = klaim/pernyataan (bukan topik)</li>
+<li>Body = tulis dengan kata-katamu sendiri</li>
+<li>Selalu cari dan tambahkan link ke Zettel yang sudah ada</li>
+<li>Selalu jelaskan <em>mengapa</em> sebuah link dibuat</li>
+</ul>
+<p><strong>5. Update index:</strong></p>
+<ul>
+<li>Buka <code>vault/zettel.md</code> → tambahkan entry baru</li>
+<li>Jika ada MOC yang relevan → tambahkan link di sana juga</li>
+</ul>
+<hr>
+<h2 id="cara-2-pakai-zettel-scribe-agent">Cara 2: Pakai Zettel Scribe Agent<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-2-pakai-zettel-scribe-agent"></a></h2>
+<h3 id="setup">Setup<a aria-hidden="true" class="anchor-heading icon-link" href="#setup"></a></h3>
+<p>Agent sudah tersedia di <code>.github/agents/zettel-scribe.agent.md</code>. Tidak perlu konfigurasi tambahan.</p>
+<h3 id="cara-menggunakan">Cara Menggunakan<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-menggunakan"></a></h3>
+<ol>
+<li>Buka <strong>Copilot Chat</strong> di VS Code (<code>⌃⌘I</code> / <code>Ctrl+Alt+I</code>)</li>
+<li>Klik dropdown agent di kiri bawah chat input → pilih <strong>"Zettel Scribe"</strong></li>
+<li>Ceritakan pikiranmu — <strong>bebas, tidak perlu rapi</strong></li>
+</ol>
+<p>Contoh input yang valid:</p>
+<pre><code>gue baru baca artikel tentang bagaimana para programmer bisa burn out karena
+terus-terusan belajar hal baru tanpa ada waktu untuk mengintegrasikan pengetahuan.
+kayaknya ini berhubungan sama konsep deliberate practice yang pernah gue baca
+di somewhere, intinya belajar tanpa refleksi itu tidak efektif.
+</code></pre>
+<p>Agent akan:</p>
+<ol>
+<li>Menganalisis ada berapa gagasan di input kamu</li>
+<li>Menentukan jenis Zettel yang tepat</li>
+<li>Mencari Zettel yang sudah ada dan relevan</li>
+<li>Menulis ulang menjadi Zettel yang proper (klaim atomik, bahasa jelas)</li>
+<li>Membuat file dengan ID timestamp yang benar</li>
+<li>Menghubungkan ke Zettel yang sudah ada beserta konteks mengapa</li>
+<li>Update index/MOC yang relevan</li>
+<li>Melaporkan hasilnya ke kamu</li>
+</ol>
+<h3 id="contoh-output-agent">Contoh Output Agent<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-output-agent"></a></h3>
+<pre><code>✅ Dibuat: vault/zettel.202604171430.md
+   Judul: "Belajar tanpa refleksi tidak mengintegrasikan pengetahuan baru ke skema yang ada"
+   Jenis: Permanent Zettel
+
+🔗 Koneksi yang dibuat:
+   → [[zettel.202604170002]] — karena keduanya berargumen bahwa tanpa proses
+     elaborasi aktif (menulis/refleksi), informasi baru tidak berubah menjadi
+     pengetahuan yang bisa digunakan
+   → [[zettel.202604170003]] — gagasan ini memperkuat argumen bahwa koneksi
+     antar ide (bukan koleksi) adalah kunci pembelajaran efektif
+
+📍 Diindeks di:
+   → vault/zettel.md
+   → vault/zettel.moc.personal-knowledge-management.md (klaster "Prinsip Belajar Efektif")
+
+💡 Saran langkah berikutnya:
+   Apakah kamu mau membuat Zettel tentang apa itu "deliberate practice" 
+   dan kenapa ia berbeda dari sekedar latihan berulang?
+</code></pre>
+<hr>
+<h2 id="konvensi-penamaan">Konvensi Penamaan<a aria-hidden="true" class="anchor-heading icon-link" href="#konvensi-penamaan"></a></h2>
+<pre><code>vault/
+├── zettel.md                                    ← root index, update setiap ada Zettel baru
+├── zettel.202604170001.md                       ← permanent Zettel (ID = timestamp)
+├── zettel.202604171430.md                       ← permanent Zettel lain
+├── zettel.literature.building-a-second-brain.md ← literature note
+├── zettel.literature.nama-buku-lain.md
+└── zettel.moc.personal-knowledge-management.md  ← MOC / peta topik
+</code></pre>
+<hr>
+<h2 id="aturan-emas">Aturan Emas<a aria-hidden="true" class="anchor-heading icon-link" href="#aturan-emas"></a></h2>
+<h3 id="1-judul--klaim-bukan-topik">1. Judul = Klaim, Bukan Topik<a aria-hidden="true" class="anchor-heading icon-link" href="#1-judul--klaim-bukan-topik"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>❌ Topik (hindari)</th><th>✅ Klaim (pakai ini)</th></tr></thead><tbody><tr><td>"Pair Programming"</td><td>"Pair programming menemukan bug 15x lebih cepat dibanding code review async"</td></tr><tr><td>"Motivasi"</td><td>"Motivasi eksternal merusak motivasi intrinsik jangka panjang"</td></tr><tr><td>"Tidur"</td><td>"Tidur cukup meningkatkan konsolidasi memori lebih dari latihan tambahan"</td></tr></tbody></table></div>
+<h3 id="2-satu-zettel--satu-gagasan">2. Satu Zettel = Satu Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#2-satu-zettel--satu-gagasan"></a></h3>
+<p>Jika kamu menulis dua paragraf yang membahas dua hal berbeda → dua Zettel.</p>
+<h3 id="3-link--konteks--mengapa">3. Link = Konteks + Mengapa<a aria-hidden="true" class="anchor-heading icon-link" href="#3-link--konteks--mengapa"></a></h3>
+<pre class="language-markdown"><code class="language-markdown">❌ Buruk:
+Lihat juga: [[zettel.202604170001]]
+
+✅ Baik:
+Gagasan ini <span class="token bold"><span class="token punctuation">**</span><span class="token content">menguatkan</span><span class="token punctuation">**</span></span> [[zettel.202604170001]] karena keduanya berargumen
+bahwa sistem eksternal membebaskan working memory untuk tugas yang lebih penting
+daripada sekadar mengingat fakta.
+</code></pre>
+<h3 id="4-tulis-ulang-jangan-copy-paste">4. Tulis Ulang, Jangan Copy-Paste<a aria-hidden="true" class="anchor-heading icon-link" href="#4-tulis-ulang-jangan-copy-paste"></a></h3>
+<p>Selalu tulis dengan kata-katamu sendiri. Boleh ada quote, tapi harus ada interpretasimu setelah itu.</p>
+<hr>
+<h2 id="pertanyaan-yang-sering-muncul">Pertanyaan yang Sering Muncul<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-sering-muncul"></a></h2>
+<p><strong>Q: Zettel saya sudah ada, boleh diedit?</strong>
+Boleh, tapi hindari mengubah klaim utama. Tambahkan koneksi baru atau klarifikasi sesuai perkembangan pemikiran. Jangan hapus konten lama — Zettel adalah rekam jejak berpikir.</p>
+<p><strong>Q: Apa bedanya sama <code>book-summaries.*</code> yang sudah ada?</strong>
+<code>book-summaries.*</code> adalah ringkasan bab per bab — berguna sebagai catatan awal. Tapi untuk Zettelkasten, kamu perlu mengekstrak gagasan-gagasan individual menjadi Zettel terpisah. Anggap <code>book-summaries.*</code> sebagai <em>fleeting note</em> yang perlu diproses.</p>
+<p><strong>Q: Berapa ideal jumlah Zettel?</strong>
+Tidak ada target jumlah. Yang penting: setiap Zettel baru <strong>terhubung</strong> ke yang sudah ada. Mulai terasa berguna setelah 50-100 Zettel saling terhubung.</p>
+<p><strong>Q: Bahasa Indonesia atau Inggris?</strong>
+Bebas — gunakan bahasa sesuai sumber atau pikiranmu. Agent akan mengikuti bahasa inputmu.</p>
+<hr>
+<h2 id="lihat-juga">Lihat Juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.zettelkasten">Zettelkasten di Dendron — Panduan Implementasi</a> — panduan konsep Zettelkasten (mengapa dan apa)</li>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a> — root index semua Zettel di vault ini</li>
+<li><a href="/sotoy/notes/zettel.moc.personal-knowledge-management">MOC: Personal Knowledge Management</a> — contoh MOC</li>
+<li><a href="/sotoy/notes/zettel.literature.building-a-second-brain">Literature Note — Building a Second Brain</a> — contoh literature note</li>
+<li><a href="/sotoy/notes/zettel.202604170001">Second brain memperluas kapasitas berpikir dengan memindahkan beban memori ke sistem eksternal</a> — contoh permanent Zettel</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #de9dac;" href="/sotoy/notes/tags.zettelkasten">zettelkasten</a></li>
+<li><a class="color-tag" style="--tag-color: #c7fdb5;" href="/sotoy/notes/tags.dendron">dendron</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a class="color-tag" style="--tag-color: #cb416b;" href="/sotoy/notes/tags.panduan">panduan</a></li>
+</ol>

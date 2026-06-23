@@ -1,0 +1,28 @@
+<h1 id="comprehension-debt-dalam-ai-driven-development">Comprehension Debt dalam AI-Driven Development<a aria-hidden="true" class="anchor-heading icon-link" href="#comprehension-debt-dalam-ai-driven-development"></a></h1>
+<h2 id="konsep">Konsep<a aria-hidden="true" class="anchor-heading icon-link" href="#konsep"></a></h2>
+<p><strong>Comprehension Debt</strong> adalah kondisi di mana codebase tumbuh dengan cepat berkat AI, tetapi mental model engineer terhadap sistem tersebut tidak tumbuh dengan kecepatan yang sama.</p>
+<h2 id="mekanisme-terjadinya">Mekanisme Terjadinya<a aria-hidden="true" class="anchor-heading icon-link" href="#mekanisme-terjadinya"></a></h2>
+<ol>
+<li><strong>High Volume Output</strong>: AI menghasilkan ratusan baris kode dalam hitungan detik.</li>
+<li><strong>Cognitive Surrender</strong>: Engineer melakukan merge karena test hijau, tanpa benar-benar memahami <em>mengapa</em> solusi tersebut dipilih atau bagaimana itu mempengaruhi bagian lain.</li>
+<li><strong>Loss of Intent</strong>: Alasan arsitektural di balik sebuah implementasi hilang karena tidak ada proses desain manual yang mendahuluinya.</li>
+</ol>
+<h2 id="dampak">Dampak<a aria-hidden="true" class="anchor-heading icon-link" href="#dampak"></a></h2>
+<ul>
+<li><strong>Fragility</strong>: Engineer takut mengubah kode karena tidak paham efek sampingnya.</li>
+<li><strong>Architectural Drift</strong>: Sistem perlahan kehilangan koherensi karena AI membuat keputusan lokal yang tidak align dengan visi global.</li>
+<li><strong>Dependency on AI</strong>: Engineer menjadi tidak mampu memperbaiki bug kompleks tanpa bantuan AI karena sudah kehilangan pemahaman dasar.</li>
+</ul>
+<h2 id="mitigasi">Mitigasi<a aria-hidden="true" class="anchor-heading icon-link" href="#mitigasi"></a></h2>
+<ul>
+<li><strong>Small Batches</strong>: Membatasi jumlah kode yang di-generate dalam satu iterasi.</li>
+<li><strong>Human-Led Design</strong>: Menetapkan arsitektur sebelum implementasi.</li>
+<li><strong>Ritual Review</strong>: Audit architectural diff secara berkala untuk menyinkronkan kembali mental model manusia dengan state codebase.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cognitive-load (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-architecture (Private)</a></li>
+</ol>

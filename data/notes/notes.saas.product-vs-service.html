@@ -1,0 +1,147 @@
+<h1 id="product-vs-service-dalam-saas">Product vs Service dalam SaaS<a aria-hidden="true" class="anchor-heading icon-link" href="#product-vs-service-dalam-saas"></a></h1>
+<p>Gue pakai tiga contoh untuk bikin perbedaan product vs service lebih nyata.</p>
+<h2 id="prinsip-utama">Prinsip utama<a aria-hidden="true" class="anchor-heading icon-link" href="#prinsip-utama"></a></h2>
+<p>Di SaaS B2B ada dua lapisan yang harus dipisah:</p>
+<ul>
+<li><strong>Core capability</strong> — hal utama yang software lakukan. Ini bagian product.</li>
+<li><strong>Delivery and experience system</strong> — cara capability itu sampai, dipakai, dipelihara, dan terus memberi value. Ini bagian service.</li>
+</ul>
+<p>Customer biasanya beli karena lapisan product. Mereka bertahan karena lapisan service.</p>
+<h2 id="hris">HRIS<a aria-hidden="true" class="anchor-heading icon-link" href="#hris"></a></h2>
+<h3 id="product">Product<a aria-hidden="true" class="anchor-heading icon-link" href="#product"></a></h3>
+<p>Fokusnya pada fitur HR inti:</p>
+<ul>
+<li>employee data</li>
+<li>payroll</li>
+<li>leave management</li>
+<li>attendance</li>
+<li>performance review</li>
+<li>org chart</li>
+<li>approval workflow</li>
+</ul>
+<p>Pertanyaan product:</p>
+<ul>
+<li>apakah fitur payroll ada?</li>
+<li>apakah cuti otomatis bisa?</li>
+<li>apakah approval berlapis tersedia?</li>
+</ul>
+<h3 id="service">Service<a aria-hidden="true" class="anchor-heading icon-link" href="#service"></a></h3>
+<p>Fokusnya pada pengalaman menjalankan HR lewat sistem itu:</p>
+<ul>
+<li>onboarding perusahaan baru secepat apa?</li>
+<li>import data karyawan dari Excel atau sistem lama mulus gak?</li>
+<li>setup role HR/manager/employee gampang atau membingungkan?</li>
+<li>apakah payroll rule bisa dipahami tanpa bantuan support panjang?</li>
+<li>sistem stabil saat tanggal gajian ramai?</li>
+<li>support dan incident handling cepat?</li>
+</ul>
+<h3 id="failure-mode">Failure mode<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-mode"></a></h3>
+<p>HRIS bisa kaya fitur, tapi kalau onboarding lama, mapping payroll sering salah, dan role permission membingungkan, maka customer akan bilang:</p>
+<blockquote>
+<p>produknya bagus, tapi capek dipakainya.</p>
+</blockquote>
+<p>Itu artinya product-nya oke, service-nya buruk.</p>
+<h2 id="crm">CRM<a aria-hidden="true" class="anchor-heading icon-link" href="#crm"></a></h2>
+<h3 id="product-1">Product<a aria-hidden="true" class="anchor-heading icon-link" href="#product-1"></a></h3>
+<p>Fokusnya pada fitur sales &#x26; pipeline:</p>
+<ul>
+<li>lead management</li>
+<li>pipeline sales</li>
+<li>contact database</li>
+<li>email integration</li>
+<li>sales activity log</li>
+<li>forecast dashboard</li>
+<li>automation workflow</li>
+</ul>
+<p>Pertanyaan product:</p>
+<ul>
+<li>apakah pipeline tracking lengkap?</li>
+<li>apakah auto follow-up bisa dijalankan?</li>
+<li>apakah dashboard forecast tersedia?</li>
+</ul>
+<h3 id="service-1">Service<a aria-hidden="true" class="anchor-heading icon-link" href="#service-1"></a></h3>
+<p>Fokusnya pada pengalaman tim sales pakai CRM:</p>
+<ul>
+<li>tim sales baru bisa aktif dalam 1 hari atau harus training 2 minggu?</li>
+<li>import kontak dari spreadsheet/CRM lama gampang gak?</li>
+<li>setting pipeline bisa self-service gak?</li>
+<li>mobile experience nyaman buat sales lapangan?</li>
+<li>sync email/calendar stabil?</li>
+<li>dashboard cepat saat meeting penting?</li>
+<li>adaptasi struktur tim atau region mudah?</li>
+</ul>
+<h3 id="failure-mode-1">Failure mode<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-mode-1"></a></h3>
+<p>CRM dengan feature mendalam bisa kalah dari layanan yang fiturnya lebih tipis tapi onboardingnya cepat, penggunaan ringan, dan supportnya responsif.</p>
+<p>Itu yang sering terjadi di SaaS: service experience yang simpel dan andal bisa mengalahkan product depth yang rumit.</p>
+<h2 id="contoh-saas-platform-engineering-internal">Contoh SaaS platform engineering internal<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-saas-platform-engineering-internal"></a></h2>
+<p>Bayangkan platform internal yang bikin developer dan tim engineering bisa memanfaatkan self-service resource, deployment pipeline, observability, dan governance.</p>
+<h3 id="product-2">Product<a aria-hidden="true" class="anchor-heading icon-link" href="#product-2"></a></h3>
+<p>Capability utama:</p>
+<ul>
+<li>self-service provisioning untuk environment dan pipeline</li>
+<li>integrasi dengan source control, issue tracker, dan cloud provider</li>
+<li>dashboard status build/deploy dan audit log</li>
+<li>policy guardrail dan permission model untuk tim</li>
+<li>reusable template untuk deployment, observability, dan compliance</li>
+</ul>
+<p>Pertanyaan product:</p>
+<ul>
+<li>apakah tim bisa buat environment dan pipeline sendiri tanpa menunggu platform team?</li>
+<li>apakah integrasi devtools dan cloud provider sudah tersedia?</li>
+<li>apakah status build/deploy mudah dipahami?</li>
+<li>apakah setiap artifact punya audit trail dan ownership?</li>
+<li>apakah platform ini bisa dipakai sebagai basis untuk banyak tim berbeda?</li>
+</ul>
+<h3 id="service-2">Service<a aria-hidden="true" class="anchor-heading icon-link" href="#service-2"></a></h3>
+<p>Pertanyaan service yang lebih luas:</p>
+<ul>
+<li>seberapa cepat tim baru bisa onboard ke platform?</li>
+<li>apakah policy dan permission bisa dipahami tanpa konsultasi panjang?</li>
+<li>apakah troubleshooting dan support response jelas?</li>
+<li>apakah backup/gateway ketika integrasi eksternal gagal tersedia?</li>
+<li>apakah platform bisa menjaga pengalaman stabil meski volume permintaan naik?</li>
+<li>apakah observability dan alert bisa dipakai oleh tim aplikasi dengan gampang?</li>
+<li>apakah biaya penggunaan dan resource visibility tersedia?</li>
+<li>apakah feedback pengguna masuk ke iterasi platform?</li>
+<li>apakah tim tambahan bisa mulai pakai platform tanpa manual besar?</li>
+</ul>
+<h3 id="insight-penting">Insight penting<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-penting"></a></h3>
+<p>Dalam contoh platform engineering, produk yang bagus hanyalah awal.
+Service experience yang menentukan keberhasilan adalah:</p>
+<ul>
+<li>onboarding tim,</li>
+<li>governance dan permission clarity,</li>
+<li>transparency dan traceability,</li>
+<li>reliability integrasi,</li>
+<li>observability dan recovery,</li>
+<li>feedback loop.</li>
+</ul>
+<p>Kalau ini semua nggak terkelola, developer mungkin akan balik lagi ke cara manual meski platformnya punya fitur lengkap.</p>
+<h2 id="synthesis">Synthesis<a aria-hidden="true" class="anchor-heading icon-link" href="#synthesis"></a></h2>
+<p>Di ketiga contoh ini pola yang sama muncul:</p>
+<ul>
+<li><strong>Product</strong> = apa yang sistem bisa lakukan.</li>
+<li><strong>Service</strong> = bagaimana customer terus menerima manfaat dari itu secara konsisten.</li>
+</ul>
+<p>Di SaaS B2B, capability menarik customer masuk. Experience yang bagus membuat mereka bertahan.</p>
+<p>Jadi, buat desain SaaS, jangan terlalu cepat berhenti di fitur. Lihat juga bagaimana fitur itu disampaikan, dioperasikan, dan terus dijaga sebagai bagian dari layanan.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">saas (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">service (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">product (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">b2b (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/book-summaries.escaping-the-build-trap">Escaping the Build Trap</a></li>
+<li><a href="/sotoy/notes/handbook.product-thinking.from-feature-to-service-design"><input type="checkbox" disabled class="task-before task-status"><span class="task-status-text">(published)</span>Learning Path: Dari Feature Checklist ke Service Design Thinking</a></li>
+<li><a href="/sotoy/notes/handbook.product-thinking.service-sense-and-journey-thinking"><input type="checkbox" disabled class="task-before task-status"><span class="task-status-text">(published)</span>Service Sense dan Journey Thinking: Dari Fitur Tempel ke Pengalaman yang Mengalir</a></li>
+<li><a href="/sotoy/notes/zettel.literature.escaping-the-build-trap">Escaping the Build Trap</a></li>
+<li><a href="/sotoy/notes/zettel.moc.multi-tenant-saas">MOC: Multi-Tenant SaaS Architecture</a></li>
+<li><a href="/sotoy/notes/zettel.moc.product-thinking">MOC: Product Thinking</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.15">2026-05-15</a></li>
+</ul>

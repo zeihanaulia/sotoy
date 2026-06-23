@@ -1,0 +1,57 @@
+<h1 id="llm-kuat-bahasa-tapi-lemah-truth-domain-privat">LLM kuat bahasa tapi lemah truth domain privat<a aria-hidden="true" class="anchor-heading icon-link" href="#llm-kuat-bahasa-tapi-lemah-truth-domain-privat"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Yang gue tangkap dari quote “It obviously knew nothing about the team’s product” adalah bahwa LLM bisa fasih banget secara bahasa, tapi itu tidak berarti dia tahu apa pun tentang domain privat kita. Model generik mungkin tahu support tone dan troubleshooting umum, tapi itu bukan sama dengan tahu flow, fitur, dan istilah produk kita.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>It obviously knew nothing about the team’s product.</p>
+</blockquote>
+<h2 id="kenapa-ini-core">Kenapa ini core<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-core"></a></h2>
+<p>Quote ini adalah diagnosis pertama yang menunjukkan batas nyata dari eksperimen awal. Setelah integrasi API dan percobaan pertama, tim menyadari bahwa masalah utama bukan lagi "bagaimana memanggil model", tapi "model ini tidak terikat ke pengetahuan produk kami." Itu adalah origin point bagi kebutuhan grounding.</p>
+<h2 id="apa-yang-dimaksud-knew-nothing">Apa yang dimaksud “knew nothing”<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-dimaksud-knew-nothing"></a></h2>
+<p>Kalau dibaca hati-hati, ini bukan mengatakan model bodoh secara absolut. Yang dimaksud adalah:</p>
+<ul>
+<li>model tidak tahu produk tim itu,</li>
+<li>model tidak tahu alur login atau help flow produk itu,</li>
+<li>model tidak tahu nama menu, fitur, atau istilah internal mereka,</li>
+<li>model tidak tahu batasan dan kebijakan support mereka.</li>
+</ul>
+<p>Jadi "nothing" di sini berarti "nothing relevant to this domain." Itu perbedaan penting.</p>
+<h2 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h2>
+<p>Quote ini memotong ilusi bahwa fluency otomatis sama dengan usefulness. Di dunia nyata, model support yang berguna harus bisa melakukan lebih dari sekadar bicara dengan baik. Dia harus:</p>
+<ul>
+<li>tahu produk yang didukung,</li>
+<li>tahu prosedur yang benar,</li>
+<li>tahu kapan dirinya tidak tahu,</li>
+<li>dan tahu kapan perlu fallback ke manusia.</li>
+</ul>
+<p>Itu adalah standar domain usefulness, bukan hanya standar bahasa alami.</p>
+<h2 id="impikasi-untuk-arsitektur">Impikasi untuk arsitektur<a aria-hidden="true" class="anchor-heading icon-link" href="#impikasi-untuk-arsitektur"></a></h2>
+<p>Quote ini membantu kita mengidentifikasi kapan masalah tidak selesai dengan prompt yang lebih baik saja. Jika model benar-benar tidak punya pengetahuan domain dasar, maka solusi pertama bukan fine-tuning; solusi pertama adalah grounding: memberi model akses ke sumber pengetahuan yang relevan.</p>
+<p>Dengan kata lain, ini adalah transisi dari:</p>
+<ul>
+<li>"mencari model lebih pintar"</li>
+</ul>
+<p>ke:</p>
+<ul>
+<li>"membangun sistem yang menghubungkan model ke product knowledge."</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Part I</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">grounding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">part-i (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.the-developers-guide-to-ai">MOC The Developer's Guide to AI</a></li>
+</ul>

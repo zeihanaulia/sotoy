@@ -1,0 +1,219 @@
+<h1 id="hands-on-serialized-memory-cache-untuk-heavyskill-workflow">Hands-on Serialized Memory Cache untuk HeavySkill Workflow<a aria-hidden="true" class="anchor-heading icon-link" href="#hands-on-serialized-memory-cache-untuk-heavyskill-workflow"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue bikin note ini sebagai hands-on untuk nge-reproduce ide <code>serialized memory cache</code> di paper HeavySkill tanpa harus bikin model atau framework baru.</p>
+<p>Targetnya jelas:</p>
+<ul>
+<li>punya satu pertanyaan,</li>
+<li>jalankan beberapa thinker secara terpisah,</li>
+<li>simpan output-nya di cache,</li>
+<li>serialize cache jadi prompt,</li>
+<li>reviewer membaca cache dan bikin jawaban final.</li>
+</ul>
+<p>Intinya: ini bukan soal melatih model. Ini soal merasakan bentuk mekanisme agent/workflow.</p>
+<h2 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h2>
+<p>Di paper, <code>serialized memory cache</code> sering dimaknai salah. Ini bukan memori internal model (KV-cache). Ini adalah artefak eksternal yang dibuat oleh orchestrator.</p>
+<p>Kalau lo bisa bikin script kecil yang:</p>
+<ol>
+<li>memanggil model beberapa kali,</li>
+<li>menyimpan output tiap panggilan,</li>
+<li>mengubah output itu jadi string prompt,</li>
+<li>lalu memanggil model lagi sebagai reviewer,
+maka lo sudah reproduce konsep utamanya.</li>
+</ol>
+<h2 id="setup-minimal">Setup minimal<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-minimal"></a></h2>
+<p>Yang lo butuhkan:</p>
+<ul>
+<li>Python 3.11+</li>
+<li><code>pip install openai</code></li>
+<li>Ollama lokal atau endpoint OpenAI-compatible lain</li>
+<li>model lokal atau remote yang bisa dipanggil via OpenAI API</li>
+</ul>
+<p>Kalau pake Ollama lokal, jalankan:</p>
+<pre class="language-bash"><code class="language-bash">ollama run qwen3:8b
+</code></pre>
+<p>Kalau pake OpenAI remote, tinggal ganti endpoint/nama model sesuai provider.</p>
+<h2 id="contoh-script-reproduksi">Contoh script reproduksi<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-script-reproduksi"></a></h2>
+<p>Script ini sengaja sederhana. Lo bisa copy-paste dan jalanin.</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">import</span> json
+<span class="token keyword">import</span> random
+<span class="token keyword">from</span> openai <span class="token keyword">import</span> OpenAI
+
+client <span class="token operator">=</span> OpenAI<span class="token punctuation">(</span>
+    base_url<span class="token operator">=</span><span class="token string">"http://localhost:11434/v1"</span><span class="token punctuation">,</span>
+    api_key<span class="token operator">=</span><span class="token string">"ollama"</span>
+<span class="token punctuation">)</span>
+
+MODEL <span class="token operator">=</span> <span class="token string">"qwen3:8b"</span>
+QUESTION <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+API checkout kadang double charge ketika user refresh halaman setelah pembayaran.
+Apa root cause paling mungkin dan fix paling tepat?
+"""</span>
+
+THINKER_PROMPTS <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">"Analisis masalah ini dari sudut backend/API design. Fokus pada idempotency, retry, dan boundary transaksi."</span><span class="token punctuation">,</span>
+    <span class="token string">"Analisis masalah ini dari sudut frontend/user interaction. Fokus pada refresh, double submit, dan race condition UI."</span><span class="token punctuation">,</span>
+    <span class="token string">"Analisis masalah ini dari sudut payment integration/webhook. Fokus pada duplicate webhook, retry provider, dan reconciliation."</span><span class="token punctuation">,</span>
+    <span class="token string">"Analisis masalah ini dari sudut reliability engineering. Fokus pada failure mode, observability, dan cara verifikasi root cause."</span>
+<span class="token punctuation">]</span>
+
+
+<span class="token keyword">def</span> <span class="token function">call_model</span><span class="token punctuation">(</span>system_prompt<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> user_prompt<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+    resp <span class="token operator">=</span> client<span class="token punctuation">.</span>chat<span class="token punctuation">.</span>completions<span class="token punctuation">.</span>create<span class="token punctuation">(</span>
+        model<span class="token operator">=</span>MODEL<span class="token punctuation">,</span>
+        temperature<span class="token operator">=</span><span class="token number">1.0</span><span class="token punctuation">,</span>
+        messages<span class="token operator">=</span><span class="token punctuation">[</span>
+            <span class="token punctuation">{</span><span class="token string">"role"</span><span class="token punctuation">:</span> <span class="token string">"system"</span><span class="token punctuation">,</span> <span class="token string">"content"</span><span class="token punctuation">:</span> system_prompt<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span><span class="token string">"role"</span><span class="token punctuation">:</span> <span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"content"</span><span class="token punctuation">:</span> user_prompt<span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> resp<span class="token punctuation">.</span>choices<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>message<span class="token punctuation">.</span>content<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">run_thinker</span><span class="token punctuation">(</span>thinker_id<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">,</span> thinker_prompt<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> question<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">dict</span><span class="token punctuation">:</span>
+    system_prompt <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"""
+Kamu adalah Thinker </span><span class="token interpolation"><span class="token punctuation">{</span>thinker_id<span class="token punctuation">}</span></span><span class="token string">.
+Jawab secara independen.
+Jangan membayangkan ada thinker lain.
+Output HARUS format JSON valid dengan field:
+- hypothesis
+- evidence
+- weakness
+- suggested_verification
+- confidence
+"""</span></span>
+    user_prompt <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"Problem:\n</span><span class="token interpolation"><span class="token punctuation">{</span>question<span class="token punctuation">}</span></span><span class="token string">\n\n</span><span class="token interpolation"><span class="token punctuation">{</span>thinker_prompt<span class="token punctuation">}</span></span><span class="token string">"</span></span>
+    raw <span class="token operator">=</span> call_model<span class="token punctuation">(</span>system_prompt<span class="token punctuation">,</span> user_prompt<span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        parsed <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>raw<span class="token punctuation">)</span>
+    <span class="token keyword">except</span> Exception<span class="token punctuation">:</span>
+        parsed <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">"hypothesis"</span><span class="token punctuation">:</span> raw<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">300</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token string">"evidence"</span><span class="token punctuation">:</span> <span class="token string">"Model tidak mengikuti format JSON sepenuhnya."</span><span class="token punctuation">,</span>
+            <span class="token string">"weakness"</span><span class="token punctuation">:</span> <span class="token string">"Perlu parsing/manual review."</span><span class="token punctuation">,</span>
+            <span class="token string">"suggested_verification"</span><span class="token punctuation">:</span> <span class="token string">"Baca output mentah thinker."</span><span class="token punctuation">,</span>
+            <span class="token string">"confidence"</span><span class="token punctuation">:</span> <span class="token number">0.3</span><span class="token punctuation">,</span>
+            <span class="token string">"_raw"</span><span class="token punctuation">:</span> raw<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+
+    parsed<span class="token punctuation">[</span><span class="token string">"thinker_id"</span><span class="token punctuation">]</span> <span class="token operator">=</span> thinker_id
+    <span class="token keyword">return</span> parsed
+
+
+<span class="token keyword">def</span> <span class="token function">prune_cache_item</span><span class="token punctuation">(</span>item<span class="token punctuation">:</span> <span class="token builtin">dict</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">dict</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        <span class="token string">"thinker_id"</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"thinker_id"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"hypothesis"</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"hypothesis"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"evidence"</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"evidence"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"weakness"</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"weakness"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"suggested_verification"</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"suggested_verification"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"confidence"</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"confidence"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+
+
+<span class="token keyword">def</span> <span class="token function">serialize_memory_cache</span><span class="token punctuation">(</span>question<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> cache_items<span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token builtin">dict</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+    items <span class="token operator">=</span> cache_items<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+    random<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span>items<span class="token punctuation">)</span>
+
+    sections <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string-interpolation"><span class="token string">f"Original Question:\n</span><span class="token interpolation"><span class="token punctuation">{</span>question<span class="token punctuation">}</span></span><span class="token string">\n"</span></span><span class="token punctuation">,</span> <span class="token string">"Serialized Memory Cache:\n"</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> item <span class="token keyword">in</span> items<span class="token punctuation">:</span>
+        sections<span class="token punctuation">.</span>append<span class="token punctuation">(</span>
+            <span class="token string-interpolation"><span class="token string">f"""[Thinker T</span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">[</span><span class="token string">'thinker_id'</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">]
+Hypothesis:
+</span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">[</span><span class="token string">'hypothesis'</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">
+
+Evidence:
+</span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">[</span><span class="token string">'evidence'</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">
+
+Weakness:
+</span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">[</span><span class="token string">'weakness'</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">
+
+Suggested Verification:
+</span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">[</span><span class="token string">'suggested_verification'</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">
+
+Confidence:
+</span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">[</span><span class="token string">'confidence'</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">
+
+"""</span></span>
+        <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token string">"\n"</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>sections<span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">deliberate</span><span class="token punctuation">(</span>question<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> serialized_cache<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+    system_prompt <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+Kamu adalah reviewer/deliberator.
+Tugasmu:
+1. Evaluasi setiap hypothesis berdasarkan evidence.
+2. Jangan memilih hanya karena mayoritas.
+3. Cari root cause paling fundamental, bukan trigger populer.
+4. Jika beberapa hypothesis saling melengkapi, sintesislah.
+5. Output final harus singkat dengan format:
+   - Final diagnosis
+   - Why this is most likely
+   - What to verify next
+   - Best fix
+"""</span>
+    user_prompt <span class="token operator">=</span> serialized_cache
+    <span class="token keyword">return</span> call_model<span class="token punctuation">(</span>system_prompt<span class="token punctuation">,</span> user_prompt<span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    thinkers <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> thinker_prompt <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>THINKER_PROMPTS<span class="token punctuation">,</span> start<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        result <span class="token operator">=</span> run_thinker<span class="token punctuation">(</span>i<span class="token punctuation">,</span> thinker_prompt<span class="token punctuation">,</span> QUESTION<span class="token punctuation">)</span>
+        thinkers<span class="token punctuation">.</span>append<span class="token punctuation">(</span>result<span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n=== RAW THINKER OUTPUT ===\n"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>thinkers<span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> ensure_ascii<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    pruned_cache <span class="token operator">=</span> <span class="token punctuation">[</span>prune_cache_item<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> thinkers<span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n=== PRUNED CACHE OBJECT ===\n"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>pruned_cache<span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> ensure_ascii<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    serialized_cache <span class="token operator">=</span> serialize_memory_cache<span class="token punctuation">(</span>QUESTION<span class="token punctuation">,</span> pruned_cache<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n=== SERIALIZED MEMORY CACHE ===\n"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>serialized_cache<span class="token punctuation">)</span>
+
+    final_answer <span class="token operator">=</span> deliberate<span class="token punctuation">(</span>QUESTION<span class="token punctuation">,</span> serialized_cache<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n=== FINAL DELIBERATION ===\n"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>final_answer<span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h2 id="apa-yang-harus-lo-rasakan">Apa yang harus lo rasakan<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-harus-lo-rasakan"></a></h2>
+<p>Kalau script ini jalan:</p>
+<ol>
+<li>lo memanggil model beberapa kali untuk tiap thinker,</li>
+<li>lo menyimpan output-nya sebagai object eksternal,</li>
+<li>lo membuat serialized cache dari output itu,</li>
+<li>lo memanggil model lagi sebagai reviewer.</li>
+</ol>
+<p>Itu sudah membuktikan <code>serialized memory cache</code> berjalan di level workflow, bukan di parameter model.</p>
+<h2 id="tips-agar-lebih-nyata">Tips agar lebih nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#tips-agar-lebih-nyata"></a></h2>
+<p>Kalo lo mau ngerasain bias dan batasan, coba ubah ini:</p>
+<ol>
+<li>Matikan <code>random.shuffle(items)</code> dan lihat apakah reviewer lebih condong ke thinker posisi awal.</li>
+<li>Samakan semua prompt thinker, lalu bandingkan dengan role-based thinker.</li>
+<li>Tambahkan field <code>tool_feedback</code> di cache dan lihat apakah reviewer jadi lebih grounded.</li>
+<li>Bandingkan dengan majority voting sederhana untuk lihat perbedaannya.</li>
+</ol>
+<h2 id="kapan-ini-berguna">Kapan ini berguna<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-ini-berguna"></a></h2>
+<p>Contoh paling nancep buat agen coding:</p>
+<ul>
+<li>debugging bug bug N+1 query,</li>
+<li>security review multi-angle,</li>
+<li>failure mode analysis,</li>
+<li>patch ranking dengan evidence.</li>
+</ul>
+<p>Kalau lo mau, gue bisa lanjut bikin versi kedua yang lebih dekat ke repo/code review: <code>grep</code>, <code>pytest</code>, <code>git diff</code>, dan hasil command masuk ke serialized memory cache.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cloud-agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handson (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">heavy-thinking (Private)</a></li>
+</ol>

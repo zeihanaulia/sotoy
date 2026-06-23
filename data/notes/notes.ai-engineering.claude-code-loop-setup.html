@@ -1,0 +1,77 @@
+<h1 id="practical-loop-setup-in-claude-code-from-messenger-to-reviewer">Practical Loop Setup in Claude Code: From Messenger to Reviewer<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-loop-setup-in-claude-code-from-messenger-to-reviewer"></a></h1>
+<h2 id="inti-pemikiran">Inti Pemikiran<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-pemikiran"></a></h2>
+<p>Masalah utama dalam workflow AI coding adalah developer sering menjadi "kurir" (messenger) yang memindahkan error dari terminal kembali ke AI. Rody (@0x_rody) mengusulkan perubahan paradigma: <strong>"Done" berarti "Verified", bukan "Written".</strong></p>
+<p>Tujuannya adalah mengubah workflow dari garis lurus (Write <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Stop <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Manual Check) menjadi loop (Write <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Run Checks <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Fix <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Repeat <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Stop when Verified).</p>
+<h2 id="setup-3-file-untuk-loop-enforcement">Setup 3 File untuk Loop Enforcement<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-3-file-untuk-loop-enforcement"></a></h2>
+<p>Untuk memaksa AI mengikuti loop ini, diperlukan kombinasi antara kebijakan (policy), penegakan (enforcement), dan jalur eskalasi (escalation).</p>
+<h3 id="1-claudemd-the-protocol">1. <code>CLAUDE.md</code> (The Protocol)<a aria-hidden="true" class="anchor-heading icon-link" href="#1-claudemd-the-protocol"></a></h3>
+<p>Berfungsi sebagai konstitusi kerja agent di root project.</p>
+<ul>
+<li><strong>Protokol</strong>: Write <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Run Checks (tests, linter, typecheck) <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Fix root cause <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Repeat (max 5x).</li>
+<li><strong>Strict Rules</strong>:
+<ul>
+<li>Dilarang melaporkan "done" tanpa output check dari session saat ini.</li>
+<li><strong>Dilarang melemahkan test</strong> (menghapus assertion/skip test) agar terlihat pass. Perbaiki kodenya, bukan test-nya.</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-claudesettingsjson-the-enforcement">2. <code>.claude/settings.json</code> (The Enforcement)<a aria-hidden="true" class="anchor-heading icon-link" href="#2-claudesettingsjson-the-enforcement"></a></h3>
+<p>Mengubah instruksi menjadi mekanisme fisik melalui hooks.</p>
+<ul>
+<li><strong>PostToolUse Hook</strong>: Menjalankan typecheck (misal: <code>tsc --noEmit</code>) setiap kali agent melakukan <code>Write</code> atau <code>Edit</code>. Feedback masuk instan ke session.</li>
+<li><strong>Stop Hook</strong>: Menjalankan test suite saat agent mencoba mengakhiri tugas. Jika gagal, output kegagalan memaksa agent kembali ke loop perbaikan.</li>
+</ul>
+<h3 id="3-claudeagentsfixermd-the-escalation">3. <code>.claude/agents/fixer.md</code> (The Escalation)<a aria-hidden="true" class="anchor-heading icon-link" href="#3-claudeagentsfixermd-the-escalation"></a></h3>
+<p>Sub-agent khusus yang dipanggil ketika loop utama stuck (misal: error yang sama muncul 2x).</p>
+<ul>
+<li><strong>Tugas</strong>: Diagnosis mendalam <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Cari root cause <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Fix hanya root cause tersebut <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Verifikasi.</li>
+<li><strong>Guardrails</strong>: Dilarang melakukan drive-by refactor, menghapus test, atau menyembunyikan error dengan try/catch.</li>
+</ul>
+<h2 id="analisis-loop-yang-sehat">Analisis Loop yang Sehat<a aria-hidden="true" class="anchor-heading icon-link" href="#analisis-loop-yang-sehat"></a></h2>
+<p>Loop yang efektif bukan loop yang berjalan selamanya, melainkan loop yang memiliki <strong>Stop Condition</strong> yang jelas:</p>
+<ol>
+<li><strong>Success</strong>: Semua check pass <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Done.</li>
+<li><strong>Limit</strong>: Mencapai max attempts (misal: 5x) <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Stop &#x26; report progress.</li>
+<li><strong>Stagnation</strong>: Error yang sama muncul berulang kali <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Eskalasi ke <code>@fixer</code> atau manusia.</li>
+</ol>
+<h2 id="sintesis-dengan-paradigma-lain">Sintesis dengan Paradigma Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-dengan-paradigma-lain"></a></h2>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Konsep</th><th>Hubungan dengan Setup Rody</th></tr></thead><tbody><tr><td><strong>Loop Engineering (Addy/Matt)</strong></td><td>Implementasi mikro dari sistem orkestrasi (Protocol <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Feedback <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Retry <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Escalation).</td></tr><tr><td><strong>Engineering Discipline (Allen)</strong></td><td>Penegakan aturan "jangan ubah test" untuk menjaga integritas guardrail.</td></tr><tr><td><strong>LDD (Nuno)</strong></td><td>Menggunakan test/linter sebagai oracle sederhana untuk memandu loop.</td></tr></tbody></table></div>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li>Thread X: <a href="https://x.com/0x_rody/status/2064728139314389073">https://x.com/0x_rody/status/2064728139314389073</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">claude-code (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">loop-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">automation (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">verification (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.ai.loop-enforcement-mechanisms">Mekanisme Penegakan Loop (Loop Enforcement)</a></li>
+<li><a href="/sotoy/notes/zettel.ai.verified-done">Definisi 'Done' sebagai 'Verified'</a></li>
+</ul>

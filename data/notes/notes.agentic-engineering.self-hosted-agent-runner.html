@@ -1,0 +1,311 @@
+<h1 id="self-hosted-cloud-agent-runner">Self-Hosted Cloud Agent Runner<a aria-hidden="true" class="anchor-heading icon-link" href="#self-hosted-cloud-agent-runner"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Yang bakalan dibuat bukan OpenClaw lengkap. Yang realistis adalah agent worker di VM sendiri yang:</p>
+<ul>
+<li>menerima task dari GitHub issue/PR/manual command,</li>
+<li>checkout repo ke workspace terisolasi,</li>
+<li>jalankan coding agent CLI,</li>
+<li>jalankan verification command,</li>
+<li>buat branch + PR atau report,</li>
+<li>punya akses minimal.</li>
+</ul>
+<h2 id="perbedaan-penting">Perbedaan penting<a aria-hidden="true" class="anchor-heading icon-link" href="#perbedaan-penting"></a></h2>
+<ul>
+<li><strong>Self-hosted agent runner</strong>: agent coding berjalan di VM/container sendiri, task dijemput dari source, workspace terisolasi, verifikasi lokal.</li>
+<li><strong>Codex cloud resmi</strong>: agent berjalan di environment OpenAI, job bisa background/paralel, repo tetap di cloud environment mereka.</li>
+</ul>
+<p>Inti: kamu ingin versi sederhana sendiri di VM, bukan langsung platform agent total.</p>
+<h2 id="target-praktis-besok">Target praktis besok<a aria-hidden="true" class="anchor-heading icon-link" href="#target-praktis-besok"></a></h2>
+<p>Bukan cloud agent sempurna.
+Targetnya:</p>
+<pre class="language-text"><code class="language-text">GitHub Issue / manual task
+        ↓
+VM agent runner
+        ↓
+clone repo ke workspace sementara
+        ↓
+agent CLI mengerjakan task
+        ↓
+verify.sh jalan
+        ↓
+branch + PR / report
+</code></pre>
+<p>Dan mulainya harus manual trigger dulu.</p>
+<h2 id="minimal-architecture">Minimal architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#minimal-architecture"></a></h2>
+<p>Komponen paling kecil:</p>
+<pre class="language-text"><code class="language-text">VM
+├── Docker
+├── GitHub CLI
+├── Node.js / pnpm / stack repo lo
+├── Codex CLI atau Claude Code CLI
+├── agent-runner.sh
+├── workspaces/
+│   └── task-&#x3C;id>/
+└── repo dengan:
+    ├── AGENTS.md
+    └── .ai/commands/verify.sh
+</code></pre>
+<p>Atomic idea: cloud agent bukan cuma model; dia butuh workspace, permission, verification, dan output channel.</p>
+<h2 id="langkah-hands-on">Langkah hands-on<a aria-hidden="true" class="anchor-heading icon-link" href="#langkah-hands-on"></a></h2>
+<h3 id="1-siapkan-vm">1. Siapkan VM<a aria-hidden="true" class="anchor-heading icon-link" href="#1-siapkan-vm"></a></h3>
+<p>Rekomendasi minimal:</p>
+<ul>
+<li>2–4 vCPU</li>
+<li>8–16 GB RAM</li>
+<li>40–80 GB disk</li>
+<li>Docker</li>
+<li>Node.js LTS</li>
+<li>Git</li>
+<li>GitHub CLI</li>
+</ul>
+<p>Install dasar:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">git</span> <span class="token function">curl</span> jq ca-certificates build-essential
+</code></pre>
+<h3 id="2-buat-user-agent-khusus">2. Buat user agent khusus<a aria-hidden="true" class="anchor-heading icon-link" href="#2-buat-user-agent-khusus"></a></h3>
+<p>Jangan jalankan agent sebagai root.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> adduser agent
+<span class="token function">sudo</span> <span class="token function">usermod</span> -aG <span class="token function">docker</span> agent
+<span class="token function">su</span> - agent
+<span class="token function">mkdir</span> -p ~/agent-runner/workspaces
+<span class="token function">mkdir</span> -p ~/agent-runner/logs
+</code></pre>
+<p>Penting: blast radius kecil.</p>
+<h3 id="3-install-agent-cli">3. Install agent CLI<a aria-hidden="true" class="anchor-heading icon-link" href="#3-install-agent-cli"></a></h3>
+<p>Pilih satu dulu:</p>
+<ul>
+<li><code>npm i -g @openai/codex</code> untuk Codex CLI lokal,</li>
+<li>atau Claude Code CLI.</li>
+</ul>
+<p>Jangan campur dulu. Fokus ke satu worker.</p>
+<h3 id="4-siapkan-repo-dengan-agentsmd">4. Siapkan repo dengan <code>AGENTS.md</code><a aria-hidden="true" class="anchor-heading icon-link" href="#4-siapkan-repo-dengan-agentsmd"></a></h3>
+<p>Contoh sederhana di root repo:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Agent Instructions</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Project commands</span>
+
+Install dependencies:
+```bash
+pnpm install --frozen-lockfile
+</code></pre>
+<p>Run verification:</p>
+<pre class="language-bash"><code class="language-bash">./.ai/commands/verify.sh
+</code></pre>
+<h2 id="rules">Rules<a aria-hidden="true" class="anchor-heading icon-link" href="#rules"></a></h2>
+<ul>
+<li>Keep changes small.</li>
+<li>Do not modify public APIs unless the task explicitly asks for it.</li>
+<li>Do not add new runtime dependencies without justification.</li>
+<li>Do not perform database or repository calls inside loops over collections.</li>
+<li>Add or update tests for behavior changes.</li>
+<li>Before declaring the task complete, run <code>./.ai/commands/verify.sh</code>.</li>
+<li>Report commands run, test results, changed files, and remaining risks.</li>
+</ul>
+<pre><code>
+### 5. Buat `verify.sh`
+
+Ini bukan nama tool standar yang wajib ada. Ini konvensi internal: satu executable entrypoint untuk semua verifikasi minimal.
+
+Dengan `./.ai/commands/verify.sh`, agent nggak perlu menebak apakah repo harus menjalankan `npm test`, `pnpm test`, `pytest`, `cargo test`, `semgrep`, atau scanner lain. Dia tinggal menjalankan satu command yang tim setujui sebagai definition of done.
+
+Buat file standar di repo:
+
+```bash
+mkdir -p .ai/commands
+cat > .ai/commands/verify.sh &#x3C;&#x3C;'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm lint
+pnpm typecheck
+pnpm test
+EOF
+chmod +x .ai/commands/verify.sh
+</code></pre>
+<p>Kalau project belum ready lint/typecheck/test, sesuaikan command dengan kondisi nyata.</p>
+<p>Ini juga bukan keharusan bahwa pathnya harus <code>./.ai/commands/verify.sh</code>. Yang penting adalah satu stable verification entrypoint, misalnya <code>./scripts/verify.sh</code>, <code>make verify</code>, atau <code>npm run verify</code>.</p>
+<h3 id="6-buat-runner-manual">6. Buat runner manual<a aria-hidden="true" class="anchor-heading icon-link" href="#6-buat-runner-manual"></a></h3>
+<p>Contoh script di VM:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">cat</span> <span class="token operator">></span> ~/agent-runner/run-task.sh <span class="token operator">&#x3C;&#x3C;</span><span class="token string">'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_URL="${1:?Usage: run-task.sh &#x3C;repo-url> &#x3C;branch-name> &#x3C;task-file>}"
+BRANCH_NAME="${2:?Usage: run-task.sh &#x3C;repo-url> &#x3C;branch-name> &#x3C;task-file>}"
+TASK_FILE="${3:?Usage: run-task.sh &#x3C;repo-url> &#x3C;branch-name> &#x3C;task-file>}"
+
+BASE_DIR="$HOME/agent-runner"
+WORK_DIR="$BASE_DIR/workspaces/$BRANCH_NAME"
+
+rm -rf "$WORK_DIR"
+mkdir -p "$WORK_DIR"
+
+git clone "$REPO_URL" "$WORK_DIR/repo"
+cd "$WORK_DIR/repo"
+
+git checkout -b "$BRANCH_NAME"
+
+echo "=== TASK ==="
+cat "$TASK_FILE"
+echo "============"
+
+codex "$(cat "$TASK_FILE")"
+
+echo "=== VERIFY ==="
+./.ai/commands/verify.sh
+
+echo "=== GIT DIFF ==="
+git status
+git diff --stat
+
+echo "Task finished. Review changes in:"
+echo "$WORK_DIR/repo"
+EOF</span>
+<span class="token function">chmod</span> +x ~/agent-runner/run-task.sh
+</code></pre>
+<p>Task file example:</p>
+<pre class="language-text"><code class="language-text">Fix the failing user service tests.
+
+Constraints:
+- Keep the change minimal.
+- Do not change public APIs.
+- Add a regression test if you find a bug.
+- Run ./.ai/commands/verify.sh before finishing.
+
+Done when:
+- lint passes
+- typecheck passes
+- tests pass
+- summary explains root cause and changed files
+</code></pre>
+<p>Run:</p>
+<pre class="language-bash"><code class="language-bash">~/agent-runner/run-task.sh git@github.com:ORG/REPO.git agent/task-001 ~/agent-runner/task-001.txt
+</code></pre>
+<h3 id="7-tambahkan-pr-creation">7. Tambahkan PR creation<a aria-hidden="true" class="anchor-heading icon-link" href="#7-tambahkan-pr-creation"></a></h3>
+<p>Setelah manual flow stabil, tambah commit/push/PR creation.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit -m <span class="token string">"Fix user service tests"</span>
+<span class="token function">git</span> push origin agent/task-001
+gh <span class="token function">pr</span> create <span class="token punctuation">\</span>
+  --title <span class="token string">"Fix user service tests"</span> <span class="token punctuation">\</span>
+  --body <span class="token string">"Agent-generated PR. Verification command passed on VM runner."</span>
+</code></pre>
+<p>Di awal, PR creation bisa tetap manual.</p>
+<h3 id="8-tambahkan-docker-sandbox">8. Tambahkan Docker sandbox<a aria-hidden="true" class="anchor-heading icon-link" href="#8-tambahkan-docker-sandbox"></a></h3>
+<p>Untuk safety, jalankan task di container bukan langsung di host.</p>
+<p>Dockerfile minimal:</p>
+<pre class="language-dockerfile"><code class="language-Dockerfile"><span class="token instruction"><span class="token keyword">FROM</span> node:22-bookworm</span>
+<span class="token instruction"><span class="token keyword">RUN</span> apt-get update &#x26;&#x26; apt-get install -y git curl jq build-essential ca-certificates &#x26;&#x26; rm -rf /var/lib/apt/lists/*</span>
+<span class="token instruction"><span class="token keyword">WORKDIR</span> /workspace</span>
+<span class="token instruction"><span class="token keyword">RUN</span> npm i -g @openai/codex</span>
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"/bin/bash"</span>]</span>
+</code></pre>
+<p>Build dan run:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> build -t coding-agent-runner <span class="token builtin class-name">.</span>
+
+<span class="token function">docker</span> run --rm -it <span class="token punctuation">\</span>
+  -v <span class="token string">"<span class="token variable">$WORK_DIR</span>/repo:/workspace/repo"</span> <span class="token punctuation">\</span>
+  -v <span class="token string">"<span class="token variable">$TASK_FILE</span>:/workspace/task.txt:ro"</span> <span class="token punctuation">\</span>
+  -w /workspace/repo <span class="token punctuation">\</span>
+  --network none <span class="token punctuation">\</span>
+  coding-agent-runner <span class="token punctuation">\</span>
+  <span class="token function">bash</span> -lc <span class="token string">'codex "$(cat /workspace/task.txt)" &#x26;&#x26; ./.ai/commands/verify.sh'</span>
+</code></pre>
+<p>Targetnya adalah permission explicit.</p>
+<h3 id="9-opsional-versi-coolify">9. Opsional: versi Coolify<a aria-hidden="true" class="anchor-heading icon-link" href="#9-opsional-versi-coolify"></a></h3>
+<p>Kalau kamu ingin menjalankan runner ini sebagai service yang lebih mudah di-deploy dan dikelola, Coolify bisa jadi next step. Intinya, alih-alih memanggil <code>run-task.sh</code> di VM langsung, kamu bisa:</p>
+<ul>
+<li>buat repository deploy Coolify di VM atau VPS,</li>
+<li>bungkus <code>agent-runner.sh</code> dan workspace dengan Docker Compose atau Dockerfile,</li>
+<li>set environment untuk GitHub token dan optional model key,</li>
+<li>expose endpoint manual / webhook untuk trigger task,</li>
+<li>tetap jalankan task di container terisolasi, dengan <code>verify.sh</code> sebagai gate.</li>
+</ul>
+<p>Contoh konsep:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.8'</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">agent-runner</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ./workspaces<span class="token punctuation">:</span>/workspaces
+      <span class="token punctuation">-</span> ./repo<span class="token punctuation">:</span>/repo
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> GITHUB_TOKEN=$<span class="token punctuation">{</span>GITHUB_TOKEN<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> AI_CLI_KEY=$<span class="token punctuation">{</span>AI_CLI_KEY<span class="token punctuation">}</span>
+    <span class="token key atrule">entrypoint</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"/bin/bash"</span><span class="token punctuation">,</span> <span class="token string">"/usr/local/bin/agent-runner.sh"</span><span class="token punctuation">]</span>
+</code></pre>
+<p>Secara ringkas, Coolify di sini bukan menggantikan ide self-hosted runner. Dia cuma mempermudah deployment dan lifecycle service while tetap menjaga workflow:</p>
+<ul>
+<li>trigger task manual atau via webhook,</li>
+<li>agent bekerja di container Coolify,</li>
+<li><code>verify.sh</code> jalan di dalam container,</li>
+<li>hasil disimpan di workspace terisolasi,</li>
+<li>PR creation bisa tetap manual atau otomatis setelah verifikasi.</li>
+</ul>
+<p>Kalau kamu sudah siap, bisa lanjut bikin satu <code>notes.agentic-engineering.cloud-agent.handson.coolify-agent-runner.md</code> untuk langkah deploy Coolify yang lebih spesifik.</p>
+<h3 id="10-tambahkan-agent-report">10. Tambahkan agent report<a aria-hidden="true" class="anchor-heading icon-link" href="#10-tambahkan-agent-report"></a></h3>
+<p>Minta agent bikin summary akhir, bukan cuma diff.</p>
+<p>Contoh format:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Agent Task Report</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Summary</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Files changed</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Verification</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Risks</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Human review needed</span>
+
+<span class="token title important"><span class="token punctuation">##</span> Follow-up</span>
+</code></pre>
+<h3 id="10-tambahkan-security-sensor">10. Tambahkan security sensor<a aria-hidden="true" class="anchor-heading icon-link" href="#10-tambahkan-security-sensor"></a></h3>
+<p>Kalau mau lebih serius, tambahkan scans ke <code>verify.sh</code>:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token keyword">if</span> <span class="token builtin class-name">command</span> -v gitleaks <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&#x26;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  gitleaks detect --source <span class="token builtin class-name">.</span> --no-git
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> <span class="token builtin class-name">command</span> -v osv-scanner <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&#x26;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  osv-scanner --recursive <span class="token builtin class-name">.</span>
+<span class="token keyword">fi</span>
+</code></pre>
+<h2 id="jalur-belajar-besok">Jalur belajar besok<a aria-hidden="true" class="anchor-heading icon-link" href="#jalur-belajar-besok"></a></h2>
+<ol>
+<li>Baca mental model Codex cloud dan Claude Code GitHub Actions.</li>
+<li>Setup VM + install CLI + clone repo kecil.</li>
+<li>Buat <code>AGENTS.md</code> dan <code>verify.sh</code>.</li>
+<li>Buat <code>run-task.sh</code> dan jalankan task manual.</li>
+<li>Review diff manual + PR.</li>
+<li>Upgrade ke Docker sandbox / report template.</li>
+</ol>
+<h2 id="insight">Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#insight"></a></h2>
+<p>Versi pertama self-hosted agent runner tidak perlu UI, OpenClaw-style orchestration, atau multi-agent planner.</p>
+<p>Versi pertama cukup menjawab:</p>
+<p>"Bisa nggak VM gue menerima satu task kecil, mengerjakannya di workspace terisolasi, menjalankan verification, lalu menghasilkan PR/report yang bisa gue review?"</p>
+<p>Kalau iya: lanjut ke trigger GitHub, sandbox ketat, security scan, PR reviewer agent, dan orchestration.</p>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.gitlab-mr-comment-formatting">Cloud Agent Hands-on: MR Comment Formatting</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cloud-agents (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">self-hosted (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1778003596758">Review comments should be encoded as guardrails, not left in PR threads</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101300">Future agentic systems may be AI-hosted with classical tools as co-processors</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.single-verification-entrypoint">Single verification entrypoint</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>

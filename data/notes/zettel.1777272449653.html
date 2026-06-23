@@ -1,0 +1,59 @@
+<h1 id="readablestream-membuat-browser-ikut-memproses-respons-llm-secara-progresif">ReadableStream membuat browser ikut memproses respons LLM secara progresif<a aria-hidden="true" class="anchor-heading icon-link" href="#readablestream-membuat-browser-ikut-memproses-respons-llm-secara-progresif"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Dengan membaca respons server sebagai <code>ReadableStream</code>, frontend bisa menerima dan merender output LLM sedikit demi sedikit saat server masih menghasilkannya. Ini mengubah respons HTTP dari "payload final" menjadi "alur data progresif".</p>
+<h2 id="penjelasan">Penjelasan<a aria-hidden="true" class="anchor-heading icon-link" href="#penjelasan"></a></h2>
+<p>Quote ini penting karena dia menunjukkan momen ketika tiga hal akhirnya ketemu:</p>
+<ul>
+<li>model menghasilkan output secara bertahap,</li>
+<li>server meneruskan output itu sebagai stream,</li>
+<li>browser membaca respons secara progresif.</li>
+</ul>
+<p>Dalam cara lama, developer sering menganggap request web seperti:</p>
+<ol>
+<li>kirim request,</li>
+<li>tunggu sampai selesai,</li>
+<li>terima seluruh respons,</li>
+<li>baru proses dan render.</li>
+</ol>
+<p>Untuk LLM, pola itu terasa jelek karena model sendiri bekerja token/chunk by chunk. Di sinilah <code>ReadableStream</code> jadi jembatan teknis: browser tidak lagi pasif menunggu paket akhir, melainkan aktif mengonsumsi data sepotong demi sepotong.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>The fetch function allows you to call your server and read its response as a ReadableStream.</p>
+</blockquote>
+<h2 id="catatan-teknis">Catatan teknis<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-teknis"></a></h2>
+<p>Dalam praktiknya, alur kliennya kira-kira seperti ini:</p>
+<ul>
+<li><code>fetch(url)</code> ke server aplikasi,</li>
+<li>ambil <code>response.body</code>,</li>
+<li>gunakan <code>getReader()</code> atau <code>TextDecoderStream</code>,</li>
+<li>baca chunk secara berulang,</li>
+<li>append teks ke UI setiap kali chunk tersedia.</li>
+</ul>
+<p>Itu juga mempertegas titik penting quote: bukan "call the model directly" tapi "call your server." Artinya pola arsitektur yang sehat biasanya tetap:</p>
+<p>browser → your server → provider/model</p>
+<p>Server tetap bertugas menyimpan API key, merakit prompt, filtering, logging, dan mengirim response stream kembali ke client.</p>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<p><code>ReadableStream</code> mengubah mental model HTTP untuk AI app dari batch-thinking ke stream-thinking. Ini cocok banget untuk text generation karena setiap chunk teks masih punya nilai parsial dan bisa langsung tampil.</p>
+<p>UI yang terasa hidup di AI app bukan sekadar efek kosmetik; ia berdiri di atas primitive platform browser, kontrak server, dan strategi rendering progresif.</p>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Chapter 2</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">browser (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">streaming (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ux (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">chapter-2 (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.the-developers-guide-to-ai">MOC The Developer's Guide to AI</a></li>
+</ul>

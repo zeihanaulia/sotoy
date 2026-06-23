@@ -1,0 +1,202 @@
+<h1 id="2026-04-29">2026-04-29<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-04-29"></a></h1>
+<ul>
+<li>
+<p><a href="https://github.blog/security/securing-the-git-push-pipeline-responding-to-a-critical-remote-code-execution-vulnerability/">GitHub RCE di pipeline <code>git push</code></a></p>
+<ul>
+<li>Yang gue tangkap: ini bukan RCE di repo lo, ini RCE di pipeline internal GitHub yang memproses <code>git push</code>.</li>
+<li><code>git push</code> di sini adalah kendaraan. Yang bocor adalah cara GitHub menerjemahkan <code>push option</code> user ke header internal dan service backend mereka.
+<ul>
+<li>Bugnya bukan pada konsep <code>git push</code> umum.</li>
+<li>Bugnya pada implementasi GitHub yang meneruskan user-supplied push option ke internal header tanpa sanitasi benar.</li>
+</ul>
+</li>
+<li>Ini jadi contoh klasik: interface shared (Git) nggak berarti vulnerability shared ke semua Git hosting.
+<ul>
+<li>GitHub.com/GHES kena karena cara mereka memproses metadata internalnya.</li>
+<li>Bitbucket/GitLab tidak otomatis kena hanya karena mereka juga menerima <code>git push</code>.</li>
+<li>Yang serupa bisa muncul di platform lain jika mereka punya jalur parsing metadata/push option yang rentan.</li>
+</ul>
+</li>
+<li>Titik bahaya utama: push option user masuk ke internal service header <code>X-Stat</code> dan bisa mem-bypass boundary jika karakter spesial tidak dineutralisasi.</li>
+</ul>
+</li>
+<li>
+<p>[Skala impact dan siapa yang harus gerak]</p>
+<ul>
+<li>GitHub sendiri bilang mitigasi sudah dipasang di GitHub.com dan tidak menemukan eksploitasi aktif.</li>
+<li>GHES self-hosted lebih berisiko: admin harus patch ke versi yang sudah diperbaiki.</li>
+<li>Jadi panic level-nya bukan sama buat semua pengguna.
+<ul>
+<li>Pengguna GitHub.com biasa: pantau, tapi server-side sudah diperbaiki.</li>
+<li>GHES admin: patch now.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>[Insight security mindset]</p>
+<ul>
+<li>Yang penting bukan cuma label "RCE". Yang penting adalah boundary mana yang jebol.</li>
+<li>Di kasus ini, attacker perlu akses push dan bisa menyelipkan push option berbahaya.</li>
+<li>Kalau lo cuma dengar "git push" banyak orang salah paham: <code>git push</code> itu normal, yang bahaya adalah cara backend platform menambal metadata itu.</li>
+</ul>
+</li>
+<li>
+<p>[Analogi yang pas]</p>
+<ul>
+<li>Ini mirip bug di parser HTTP: semua server nerima HTTP, tapi bug di Nginx nggak otomatis berarti bug serupa ada di Apache.</li>
+<li>Semua Git hosting menerima <code>git push</code>, tapi exploit ini menarget implementasi spesifik GitHub.</li>
+</ul>
+</li>
+<li>
+<p>[Follow-up jika mau lanjut]</p>
+<ul>
+<li>Bisa lanjut dengan breakdown mekanisme exploit detail.</li>
+<li>Bisa juga bikin checklist audit platform lain: bagaimana mereka memetakan push metadata ke internal service.</li>
+<li>Untuk saat ini, kesimpulan utamanya: ini RCE di pipeline <code>git push</code> GitHub, bukan remote code execution di setiap repo Git.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://www.warp.dev/blog/warp-is-now-open-source">Warp open source: fokus bukan cuma client, tapi orchestration &#x26; agent platform</a></p>
+<ul>
+<li>Arti yang gue pilih: mereka buka client codebase, tapi nilai bisnis utama mereka sekarang lebih ke Oz/orchestration, cloud agents, credits/usage, dan enterprise controls.</li>
+<li>Ini bukan sinyal “ADE gampang, jadi kami menyerah”. Ini lebih ke reposisi: client open source untuk distribusi, sedangkan proprietary value ada di platform agentic dan enterprise layer.</li>
+<li>Yang eksplisit dari artikel:
+<ul>
+<li>Warp client open-source.</li>
+<li>workflow dikelola oleh Oz, cloud agent orchestration platform.</li>
+<li>orchestration, memory, handoff adalah core to our business.</li>
+<li>open-sourcing coming from desire to build a successful business.</li>
+</ul>
+</li>
+<li>Yang inferensi dari pricing/product layer:
+<ul>
+<li>billing / usage-based credits.</li>
+<li>enterprise controls dan team/admin features.</li>
+<li>multi-model / multi-harness hub sebagai value layer.</li>
+</ul>
+</li>
+<li>Mereka paham lapisan client UI makin mudah dikejar, jadi mereka memindahkan moat ke hal yang lebih susah disalin.
+<ul>
+<li>open source client = distribusi + komunitas + feedback.</li>
+<li>paid layer = orchestration, compute, model access, team/admin controls.</li>
+</ul>
+</li>
+<li>Struktur bisnisnya sekarang terasa seperti open-core modern:
+<ul>
+<li>open-source client untuk adoption.</li>
+<li>paid cloud agent / model usage untuk monetisasi.</li>
+<li>seat/team/enterprise untuk upsell.</li>
+<li>BYOK / governance untuk enterprise trust.</li>
+</ul>
+</li>
+<li>Yang menarik: open source dilihat sebagai “mesin produksi software” agentic.
+<ul>
+<li>bukan hanya buka kode, tapi buka workflow: issue → readiness → implementasi → presubmit.</li>
+<li>ini juga terlihat dari <code>.agents/</code>, <code>.mcp.json</code>, dan workflow yang mereka pamerkan.</li>
+</ul>
+</li>
+<li>Insight: yang memahami langkah ini nggak lagi bertanya “lalu uangnya dari mana?”, tapi “lapisan mana yang tetap proprietary setelah client dibuka?”.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/warpdotdev/warp">Warp client open source jadi model bisnis agentic</a></p>
+<ul>
+<li>Arti yang gue pilih: ini bukan berarti semua Warp dibuka. yang dibuka adalah client codebase, sedangkan cloud/orchestration masih bagian dari model bisnis mereka.</li>
+<li>Yang paling menarik: mereka pake open source sebagai mesin pengembangan produk, bukan sekadar gesture open source.
+<ul>
+<li>komunitas bantu arahkan, agent ngerjain heavy lifting, maintainer verifikasi dan orkestrasi.</li>
+<li>repo bilang jelas: “Warp's client codebase is open source”, bukan semua komponen.</li>
+</ul>
+</li>
+<li>Alasan bisnisnya: mereka butuh melawan pemain closed-source dengan cara memperbesar kapasitas product development lewat kontribusi publik.
+<ul>
+<li>open source di sini dipandang sebagai leverage, bukan idealisme semata.</li>
+</ul>
+</li>
+<li>Yang bikin beda: mereka lagi coba model open source yang agent-first.
+<ul>
+<li>ada <code>.agents/</code>, <code>.mcp.json</code>, workflow issue → readiness → implementasi → presubmit.</li>
+<li>ini lebih mirip sistem koordinasi manusia + agent daripada repo open source biasa.</li>
+</ul>
+</li>
+<li>Lisensinya campuran: beberapa crate MIT, sebagian besar AGPL v3.
+<ul>
+<li>artinya ini bukan open source serba permisif, tetapi tetap ingin menjaga reciprocity di bagian inti.</li>
+</ul>
+</li>
+<li>Intinya: open source bukan cuma soal visibility code, melainkan soal “mekanisme produksi software” yang terbuka.</li>
+<li>Insight: yang paham bukan cuma dengar “open source”, tapi langsung tanya “apa yang dibuka, dan gimana workflownya diarahkan?”.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://trufflesecurity.com/blog/google-api-keys-werent-secrets-but-then-gemini-changed-the-rules">Google API key publik dan Gemini: bocornya credential + privilege expansion</a></p>
+<ul>
+<li>TIL: Parthi case adalah billing abuse Gemini yang dipicu oleh key Google lama/public-ish yang tiba-tiba effective access ke Gemini setelah API di-enable di project yang sama.</li>
+<li>Truffle di sini bertindak sebagai peneliti yang audit banyak key publik, bukan pihak yang “memilih satu key untuk semua” di project mereka sendiri.</li>
+<li>Yang berubah bukan string <code>AIza...</code>, tapi hak akses efektifnya di backend Google setelah Gemini API diaktifkan.</li>
+<li>Kronologi singkat:
+<ul>
+<li>fase 1: docs Firebase lama memposisikan beberapa API key sebagai public-ish, bukan secret keras.</li>
+<li>fase 2: Gemini/Generative Language API diaktifkan di project yang sama.</li>
+<li>fase 3: existing keys bisa silently gain access ke Gemini endpoints.</li>
+<li>fase 4: attacker scrape key publik dan mengeksekusi request billing-heavy.</li>
+<li>fase 5: Parthi jadi contoh kasus billing abuse yang mencuat.</li>
+</ul>
+</li>
+<li>Akar masalah:
+<ul>
+<li>desain Google: satu keluarga key dipakai lintas trust boundary, default restriction lemah, dan privilege expansion terjadi retroactively.</li>
+<li>hygiene user: key lama tidak diaudit, tidak dipisah project, dan tidak direstrict cukup ketat.</li>
+</ul>
+</li>
+<li>Takeaways penting:
+<ul>
+<li>jangan campur key frontend/public dengan project Gemini.</li>
+<li>anggap semua key lama suspect setelah Gemini aktif.</li>
+<li>unrestricted key itu insecure.</li>
+<li>Gemini key bukan Firebase browser key; jangan expose ke client.</li>
+<li>billing guardrails adalah kontrol security.</li>
+</ul>
+</li>
+<li>Checklist cepat:
+<ul>
+<li>cek project mana yang aktifkan Generative Language API.</li>
+<li>audit semua API key di project tersebut.</li>
+<li>scan exposure pada JS bundle/repo/web.</li>
+<li>pisahkan project frontend/public dan AI/backend.</li>
+<li>pasang API/application restrictions.</li>
+<li>rotate key lama dan hapus yang suspect.</li>
+<li>sudahkah ada budget/alert untuk anomaly usage?</li>
+</ul>
+</li>
+<li>Insight: ini bukan hanya “frontend key ceroboh,” tapi “credential publik berubah makna ketika layanan baru diaktifkan di project yang sama.”</li>
+<li>Support posture: Google bisa bilang “customer responsible,” tapi itu tidak otomatis membuktikan akar masalahnya 100% ada di tim customer.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://x.com/derekmeegan/status/2049218109807198331">Browser trace: agent observability, bukan sekadar klik-klik</a></p>
+<ul>
+<li>Arti yang gue pilih: <code>browser-trace</code> memberi agent observability ke browser runtime — network, DOM, screenshots, dan CDP logs — bukan cuma kemampuan klik otomatis.</li>
+<li>Jadi kalau lo nanya “bisa dipake untuk download content?” jawabnya: iya, tapi sifatnya lebih ke <strong>content extraction</strong> dan <strong>scraping berjejak</strong>, bukan automatic download manager.</li>
+<li>Untuk file nyata (PDF/CSV/image/ZIP), trace bisa bantu dengan menemukan request yang menghasilkan file, URL final, header response, dan urutan klik yang memicu unduhan.</li>
+<li>Untuk isi halaman, ini sangat natural: agent bisa ambil DOM, response API, render text, dan perubahan state setelah JS jalan.</li>
+<li>Untuk scraping/archiving otomatis, ini malah kuat: agent bisa menyimpan DOM + screenshot + network payload sebagai evidence, lalu bandingkan perubahan konten.</li>
+<li>Batasannya:
+<ul>
+<li>tidak otomatis jadi downloader rapi.</li>
+<li>observability banyak data, perlu filter agar agent tidak tenggelam.</li>
+<li>raw trace bisa memuat data sensitif, jadi perlu sanitization dan access control.</li>
+</ul>
+</li>
+<li>Insight: nilai utamanya adalah membuat agent tahu <strong>dari mana konten muncul dan kenapa proses browser-nya gagal</strong>, bukan sekadar menekan tombol download.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>

@@ -1,0 +1,106 @@
+<h1 id="the-evolution-of-agentic-loops-from-react-to-orchestration">The Evolution of Agentic Loops: From ReAct to Orchestration<a aria-hidden="true" class="anchor-heading icon-link" href="#the-evolution-of-agentic-loops-from-react-to-orchestration"></a></h1>
+<h2 id="paradigma-evolusi-agent">Paradigma Evolusi Agent<a aria-hidden="true" class="anchor-heading icon-link" href="#paradigma-evolusi-agent"></a></h2>
+<p>Evolusi AI agent bukan sekadar peningkatan parameter model, melainkan pergeseran pada <strong>kontrol siklus kerja</strong>. Fokus utamanya adalah bagaimana memindahkan kendali dari interaksi manual manusia ke sistem otomatis yang terukur.</p>
+<h3 id="peta-evolusi-siklus-kerja">Peta Evolusi Siklus Kerja<a aria-hidden="true" class="anchor-heading icon-link" href="#peta-evolusi-siklus-kerja"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Tahap</th><th align="left">Nama Pola</th><th align="left">Karakteristik Utama</th><th align="left">Failure Mode yang Diatasi</th><th align="left">Masalah Baru yang Muncul</th></tr></thead><tbody><tr><td align="left">0</td><td align="left"><strong>Chat</strong></td><td align="left">Tanya <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Jawab</td><td align="left">-</td><td align="left">Halusinasi, tidak ada aksi</td></tr><tr><td align="left">1</td><td align="left"><strong>ReAct</strong></td><td align="left">Thought <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Action <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Obs</td><td align="left">Halusinasi tanpa observasi</td><td align="left">Human-watched, single session</td></tr><tr><td align="left">2</td><td align="left"><strong>AutoGPT</strong></td><td align="left">Goal <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Subtasks <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Loop</td><td align="left">Human micromanagement</td><td align="left">Chaos autonomy, token burn</td></tr><tr><td align="left">3</td><td align="left"><strong>Ralph Loop</strong></td><td align="left">Fixed Prompt <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Repo State</td><td align="left">Context drift, chaos autonomy</td><td align="left">Stopping condition rapuh</td></tr><tr><td align="left">4</td><td align="left"><strong><code>/goal</code></strong></td><td align="left">Iteration <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Validator <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Exit</td><td align="left">Loop yang tidak tahu kapan berhenti</td><td align="left">Validator bias/terlalu longgar</td></tr><tr><td align="left">5</td><td align="left"><strong>Orchestration</strong></td><td align="left">Orchestrator <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Worker <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Verifier</td><td align="left">Keterbatasan satu agent/task</td><td align="left">Cost, security, review bottleneck</td></tr></tbody></table></div>
+<hr>
+<h2 id="bedah-detail-tiap-tahap">Bedah Detail Tiap Tahap<a aria-hidden="true" class="anchor-heading icon-link" href="#bedah-detail-tiap-tahap"></a></h2>
+<h3 id="1-react-reasoning--acting">1. ReAct (Reasoning + Acting)<a aria-hidden="true" class="anchor-heading icon-link" href="#1-react-reasoning--acting"></a></h3>
+<p>Pola yang menggabungkan <em>reasoning trace</em> dan <em>action</em>. Model tidak hanya menghasilkan teks, tetapi berinteraksi dengan environment (misal: Wikipedia API, Shell).</p>
+<ul>
+<li><strong>Atomic Idea</strong>: Model jangan hanya berpikir di internal; ia harus mengobservasi dunia luar untuk memperbarui pemahamannya.</li>
+</ul>
+<h3 id="2-autogpt-autonomous-goal-seeking">2. AutoGPT (Autonomous Goal-Seeking)<a aria-hidden="true" class="anchor-heading icon-link" href="#2-autogpt-autonomous-goal-seeking"></a></h3>
+<p>Upaya untuk memindahkan agent dari <em>task-level</em> ke <em>goal-level</em>. Agent mencoba memecah goal besar menjadi subtask secara mandiri.</p>
+<ul>
+<li><strong>Atomic Idea</strong>: Transisi dari assistant yang menggunakan tool menjadi pencari tujuan otonom.</li>
+<li><strong>Kritik</strong>: Autonomy tanpa disiplin menghasilkan agent yang "terlihat sibuk" namun tidak produktif.</li>
+</ul>
+<h3 id="3-ralph-loop-disciplined-iteration">3. Ralph Loop (Disciplined Iteration)<a aria-hidden="true" class="anchor-heading icon-link" href="#3-ralph-loop-disciplined-iteration"></a></h3>
+<p>Pola yang menekankan pada <em>context reset</em> dan penggunaan filesystem sebagai memory utama, bukan chat history.</p>
+<ul>
+<li><strong>Atomic Idea</strong>: Gunakan repo sebagai memory; jangan biarkan chat history menjadi otak utama.</li>
+<li><strong>Karakteristik</strong>: Menggunakan anchor file (misal: <code>LOOP.md</code>) untuk menjaga konsistensi antar iterasi.</li>
+</ul>
+<h3 id="4-goal-verified-stopping">4. <code>/goal</code> (Verified Stopping)<a aria-hidden="true" class="anchor-heading icon-link" href="#4-goal-verified-stopping"></a></h3>
+<p>Versi produk dari loop yang memiliki <em>stopping condition</em> eksplisit. Loop berjalan hingga validator (deterministic atau model-based) mengonfirmasi penyelesaian.</p>
+<ul>
+<li><strong>Atomic Idea</strong>: Loop harus memiliki definisi "selesai" yang bisa diverifikasi secara eksternal.</li>
+</ul>
+<h3 id="5-multi-agent-orchestration-systemic-coordination">5. Multi-agent Orchestration (Systemic Coordination)<a aria-hidden="true" class="anchor-heading icon-link" href="#5-multi-agent-orchestration-systemic-coordination"></a></h3>
+<p>Layer tertinggi di mana sebuah <em>orchestrator</em> mengelola banyak worker loop dengan peran spesifik (Implementer, Reviewer, Security Checker).</p>
+<ul>
+<li><strong>Atomic Idea</strong>: Agent bukan sekadar worker; ada manager loop yang mengatur distribusi kerja dan quality gate.</li>
+</ul>
+<h2 id="kesimpulan-tiap-solusi-adalah-respons-terhadap-failure-mode">Kesimpulan: Tiap Solusi adalah Respons terhadap Failure Mode<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan-tiap-solusi-adalah-respons-terhadap-failure-mode"></a></h2>
+<p>Evolusi ini menunjukkan bahwa tidak ada tahap "final". Setiap kemajuan dalam otonomi menciptakan masalah baru di layer yang lebih tinggi (misal: dari masalah halusinasi <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> masalah koordinasi <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> masalah biaya &#x26; security). </p>
+<p>Kunci dari implementasi yang sukses bukan pada pemilihan model tercanggih, melainkan pada desain <strong>stopping condition, feedback loop, state management, dan human-in-the-loop verification</strong>.</p>
+<p>Referensi: Artikel Matt Van Horn &#x26; Diskusi Loop Engineering.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-agents (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-workflow (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">evolution (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260611140001">Autonomy without Discipline is Noise</a></li>
+<li><a href="/sotoy/notes/zettel.20260611140002">The Evolution of Agentic Control</a></li>
+</ul>

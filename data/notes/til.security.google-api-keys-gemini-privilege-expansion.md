@@ -1,0 +1,17 @@
+
+- TIL: string API key `AIza...` tidak berubah; yang berubah adalah hak akses efektifnya setelah **Gemini / Generative Language API** diaktifkan di project Google Cloud yang sama.
+- Ini bukan sekadar secret bocor, melainkan **credential publik lama yang mengalami retroactive privilege expansion**.
+- Faktor utama:
+  - beberapa Google/Firebase API key lama diposisikan sebagai public-ish identifiers/billing tokens.
+  - Google API keys bisa berlaku ke semua API yang di-enable pada project itu, kecuali direstrict.
+  - ketika Gemini diaktifkan di project yang sama, existing keys bisa ikut valid untuk endpoint Gemini.
+- Risiko nyata:
+  - attacker bisa scrape key publik dari frontend/app/repo 
+  - lalu memanggil endpoint Gemini sensitif seperti `/files` atau `/cachedContents`
+  - dampaknya bisa berupa data exposure, quota exhaustion, dan billing abuse.
+- Pencegahan paling kuat:
+  - pisahkan project frontend/public dari project Gemini.
+  - restrict API key by API dan by application.
+  - jangan pakai key frontend untuk Gemini; gunakan backend.
+  - audit dan rotate key lama yang public/unrestricted setelah Gemini diaktifkan.
+- Insight: masalah ini menunjukkan bahwa **desain credential boundary dan default key behavior** bisa sama berbahayanya dengan kesalahan operasional pengguna.

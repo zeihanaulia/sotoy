@@ -1,0 +1,60 @@
+<h1 id="per-turn-masking-gagal-untuk-agentic-multi-turn-chat">Per-turn masking gagal untuk agentic multi-turn chat<a aria-hidden="true" class="anchor-heading icon-link" href="#per-turn-masking-gagal-untuk-agentic-multi-turn-chat"></a></h1>
+<h2 id="inti-masalah">Inti masalah<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-masalah"></a></h2>
+<p>Per-turn masking hanya menilai privacy risk pada satu pesan di satu waktu. Kalau agent mengirim ulang seluruh conversation history ke model setiap turn, solusi ini melewatkan risiko yang terbentuk dari akumulasi fragmen PII.</p>
+<p>Dalam agentic multi-turn chat, data lama bukan benar-benar "lalu". Itu bagian dari prompt yang dikirim ulang dan menjadi bahan inferensi model.</p>
+<h2 id="contoh-klasikal">Contoh klasikal<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-klasikal"></a></h2>
+<ul>
+<li>Turn 1: "Gue lagi cari saran financial planning."</li>
+<li>Turn 2: "Nama gue Raka."</li>
+<li>Turn 3: "Gue tinggal di BSD."</li>
+<li>Turn 4: "Gue kerja di Gojek."</li>
+<li>Turn 5: "Gaji gue 35 juta."</li>
+</ul>
+<p>Per-turn masking bisa saja membersihkan setiap pesan secara individu.
+Namun jika history ini dipakai lagi pada turn 6, kombinasi Raka + BSD + Gojek + salary membuat profil yang lebih sensitif daripada setiap pesan tunggal.</p>
+<h2 id="kenapa-ini-salah-unit-analisis">Kenapa ini salah unit analisis<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-salah-unit-analisis"></a></h2>
+<p>Per-turn masking memodelkan privacy risk sebagai properti dari message.</p>
+<p>Tapi dalam agentic conversation, privacy risk adalah properti dari session yang mengandung banyak message.</p>
+<p>Perbedaannya:</p>
+<ul>
+<li>Message-level: "Apakah pesan ini mengandung entitas sensitif?"</li>
+<li>Session-level: "Apakah kombinasi informasi yang terkumpul sampai sekarang sudah cukup untuk mengidentifikasi pengguna?"</li>
+</ul>
+<h2 id="dampak-praktis">Dampak praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#dampak-praktis"></a></h2>
+<ul>
+<li>Agent memory atau retrieval history membuat per-turn masking semakin berbahaya.</li>
+<li>Tool use dan handoff antar sub-agent memperbesar exposure karena history lama bisa tersebar ke lebih banyak channel.</li>
+<li>Stateless filter bisa saja benar untuk satu pesan, tetapi tetap salah secara keseluruhan jika history terus diteruskan.</li>
+</ul>
+<h2 id="relevansi-ke-desain-security-agent">Relevansi ke desain security agent<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi-ke-desain-security-agent"></a></h2>
+<p>Desain agent privacy harus memikirkan state session dan cumulative exposure.</p>
+<p>Ini berarti:</p>
+<ul>
+<li>menyimpan registry PII lintas turn,</li>
+<li>menghitung risiko dari kombinasi entitas,</li>
+<li>memutuskan apakah history lama perlu ditulis ulang atau dipseudonymize.</li>
+</ul>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">memory (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-boundary-pii-filtering">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+</ul>

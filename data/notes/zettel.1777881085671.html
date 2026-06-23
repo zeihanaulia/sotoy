@@ -1,0 +1,37 @@
+<h1 id="threshold-based-session-privacy-still-leaves-pre-trigger-exposure">Threshold-based session privacy still leaves pre-trigger exposure<a aria-hidden="true" class="anchor-heading icon-link" href="#threshold-based-session-privacy-still-leaves-pre-trigger-exposure"></a></h1>
+<blockquote>
+<p>Threshold-triggered privacy intervention tidak bisa menghapus apa yang sudah dikirim ke external LLM sebelum trigger.</p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li>Sistem seperti CAMP melakukan pseudonymization retroactive saat cumulative risk melewati threshold.</li>
+<li>Namun jika history asli sudah pernah dikirim sebelum threshold tercapai, request log eksternal masih bisa menyimpan data asli.</li>
+<li>Artinya proteksi ini hanya mencegah eksposur berulang di masa depan, bukan membatalkan eksposur masa lalu.</li>
+</ul>
+<p>Implikasi:</p>
+<ul>
+<li>alignment klaim privacy harus jelas: ini mitigasi cumulative future exposure, bukan jaminan zero exposure.</li>
+<li>untuk threat model yang menganggap adversary punya access ke request logs, pre-trigger data harus dihitung sebagai bocor.</li>
+<li>desain sistem yang kuat perlu kombinasi: threshold-based action + early masking/minimization untuk entitas yang jelas sensitif.</li>
+</ul>
+<p>Hubungan:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">threshold (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+</ul>

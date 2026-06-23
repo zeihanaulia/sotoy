@@ -1,0 +1,35 @@
+<h1 id="alex-ellis-ai-code-review-bot">Alex Ellis AI Code Review Bot<a aria-hidden="true" class="anchor-heading icon-link" href="#alex-ellis-ai-code-review-bot"></a></h1>
+<h2 id="why-this-reference-matters">Why this reference matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-reference-matters"></a></h2>
+<p>Alex Ellis menjelaskan safety architecture untuk bot review yang menjalankan kode dari PR dan MR, termasuk bahaya prompt injection.</p>
+<h2 id="what-it-teaches">What it teaches<a aria-hidden="true" class="anchor-heading icon-link" href="#what-it-teaches"></a></h2>
+<ul>
+<li>validasi webhook HMAC / secret token,</li>
+<li>short-lived token dan sandbox execution,</li>
+<li>jangan percayai PR/MR description sebagai instruksi.</li>
+</ul>
+<h2 id="what-to-copy-for-our-design">What to copy for our design<a aria-hidden="true" class="anchor-heading icon-link" href="#what-to-copy-for-our-design"></a></h2>
+<ul>
+<li>treat MR content as untrusted input,</li>
+<li>jangan biarkan review agent membaca PR description sebagai prompt override,</li>
+<li>harden webhook endpoint dan service boundary.</li>
+</ul>
+<h2 id="gap-vs-our-design">Gap vs our design<a aria-hidden="true" class="anchor-heading icon-link" href="#gap-vs-our-design"></a></h2>
+<p>Ini lebih fokus ke safety daripada pedagogi, tapi safety adalah layer non-negotiable sebelum kita publish bot.</p>
+<h2 id="practical-takeaway">Practical takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-takeaway"></a></h2>
+<p>Prioritaskan web security dan prompt hygiene di MVP, sebelum menambahkan teaching output.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cloud-agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handson (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">reference (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.references">Cloud Agent Hands-on References</a></li>
+</ul>

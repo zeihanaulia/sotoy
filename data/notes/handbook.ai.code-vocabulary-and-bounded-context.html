@@ -1,0 +1,124 @@
+<h1 id="design-code-vocabulary-dan-bounded-context-untuk-ai-assisted-engineering">Design Code Vocabulary dan Bounded Context untuk AI-assisted Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#design-code-vocabulary-dan-bounded-context-untuk-ai-assisted-engineering"></a></h1>
+<h2 id="kenapa-ini-penting-di-era-llm">Kenapa ini penting di era LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting-di-era-llm"></a></h2>
+<p>Kalau elo cuma lihat output AI coding dari sisi "cepatnya bikin kode", lo ketinggalan satu dimensi lebih penting.</p>
+<p>Code bukan cuma instruksi mesin. Code juga adalah bahasa bersama untuk tim, domain expert, dan LLM. Kalau vocabulary codebase tidak jelas, AI bisa menghasilkan kode yang compile tapi membuat tim bingung.</p>
+<p>Artikel Unmesh Joshi di Martin Fowler menjelaskan ini dengan bagus: <a href="https://martinfowler.com/articles/what-is-code.html">https://martinfowler.com/articles/what-is-code.html</a>.</p>
+<h2 id="fokus-utama-handbook-ini">Fokus utama handbook ini<a aria-hidden="true" class="anchor-heading icon-link" href="#fokus-utama-handbook-ini"></a></h2>
+<ol>
+<li>pastikan codebase punya vocabulary domain yang stabil,</li>
+<li>tetapkan bounded context dengan jelas,</li>
+<li>gunakan programming language sebagai alat discovery,</li>
+<li>kurangi cognitive debt, bukan cuma technical debt,</li>
+<li>jadikan codebase sendiri sebagai context dan harness untuk LLM.</li>
+</ol>
+<h2 id="1-bangun-vocabulary-domain-sebelum-permintaan-kode-besar">1. Bangun vocabulary domain sebelum permintaan kode besar<a aria-hidden="true" class="anchor-heading icon-link" href="#1-bangun-vocabulary-domain-sebelum-permintaan-kode-besar"></a></h2>
+<p>Sebelum minta LLM membuat feature, tanyakan dulu:</p>
+<ul>
+<li>apa istilah utama domain ini?</li>
+<li>apa bedanya <code>Order</code> vs <code>Cart</code> vs <code>Shipment</code>?</li>
+<li>apa yang dimaksud <code>Payment</code> di sini: authorized, captured, settled?</li>
+<li>apakah <code>Customer</code> berarti individu, account, atau entitas legal?</li>
+</ul>
+<p>Kalau vocabulary belum jelas, jangan langsung minta LLM coding. Mulai dari definisi domain, bukan dari endpoint.</p>
+<h3 id="praktik-yang-masuk-akal">Praktik yang masuk akal<a aria-hidden="true" class="anchor-heading icon-link" href="#praktik-yang-masuk-akal"></a></h3>
+<ul>
+<li>buat glossary singkat <code>&#x3C;domain>/vocabulary.md</code></li>
+<li>definisikan noun penting dan batas konteksnya</li>
+<li>jangan biarkan istilah serupa dipakai bergantian tanpa alasan</li>
+<li>gunakan nama yang membawa konsekuensi desain</li>
+</ul>
+<h2 id="2-tetapkan-bounded-context-secara-eksplisit">2. Tetapkan bounded context secara eksplisit<a aria-hidden="true" class="anchor-heading icon-link" href="#2-tetapkan-bounded-context-secara-eksplisit"></a></h2>
+<p>Satu kata bisa punya banyak arti di organisasi besar. Itulah odd word disease.</p>
+<ul>
+<li>di e-commerce, <code>Customer</code> bisa berarti pembeli.</li>
+<li>di CRM, <code>Customer</code> bisa berarti account bisnis.</li>
+<li>di support, <code>Customer</code> bisa berarti user yang kontak helpdesk.</li>
+<li>di billing, <code>Customer</code> bisa berarti entitas yang ditagih.</li>
+</ul>
+<p>Sebelum menambahkan abstraction baru, tanyakan: apakah vocabulary ini valid di bounded context ini?</p>
+<h3 id="teknik-praktis">Teknik praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#teknik-praktis"></a></h3>
+<ul>
+<li>dokumentasikan context contract untuk modul besar,</li>
+<li>catat di mana model <code>Customer</code> itu berlaku,</li>
+<li>pisahkan model jika artinya berbeda,</li>
+<li>gunakan boundary names seperti <code>orders</code>, <code>billing</code>, <code>support</code>, <code>catalog</code>.</li>
+</ul>
+<h2 id="3-gunakan-code-sebagai-alat-discovery-bukan-cuma-hasil-prompt">3. Gunakan code sebagai alat discovery, bukan cuma hasil prompt<a aria-hidden="true" class="anchor-heading icon-link" href="#3-gunakan-code-sebagai-alat-discovery-bukan-cuma-hasil-prompt"></a></h2>
+<p>Programming language membantu kita menemukan desain.</p>
+<ul>
+<li>Go memaksa kita pikir tentang concurrency.</li>
+<li>Java memaksa kita pikir tentang objek dan interface.</li>
+<li>Rust memaksa kita pikir tentang ownership.</li>
+<li>FP memaksa kita pikir tentang transformasi data.</li>
+</ul>
+<p>Jadi jangan pasif. Bahkan jika LLM generate code, manusia harus aktif memilih language constructs dan memakainya sebagai medium berpikir.</p>
+<h3 id="aman-dipakai">Aman dipakai<a aria-hidden="true" class="anchor-heading icon-link" href="#aman-dipakai"></a></h3>
+<ul>
+<li>gunakan pola bahasa untuk menegaskan batas: type, enum, interface, module,</li>
+<li>gunakan types dan invariants untuk membuat vocabulary konkret,</li>
+<li>jangan biarkan LLM menumpuk abstraction tanpa alasan nyata.</li>
+</ul>
+<h2 id="4-kurangi-cognitive-debt-dengan-shared-understanding">4. Kurangi cognitive debt dengan shared understanding<a aria-hidden="true" class="anchor-heading icon-link" href="#4-kurangi-cognitive-debt-dengan-shared-understanding"></a></h2>
+<p>Cognitive debt terjadi ketika codebase punya vocabulary namun tim tidak paham maknanya.</p>
+<p>LLM bisa mempercepat vocabulary masuk ke codebase. Itu berbahaya kalau vocabulary itu tidak disepakati.</p>
+<h3 id="checklist-untuk-menghindari-cognitive-debt">Checklist untuk menghindari cognitive debt<a aria-hidden="true" class="anchor-heading icon-link" href="#checklist-untuk-menghindari-cognitive-debt"></a></h3>
+<ul>
+<li>pastikan setiap abstraction punya alasan domain yang jelas,</li>
+<li>jangan pakai pattern enterprise hanya karena terdengar profesional,</li>
+<li>tulis tests yang bukan cuma validate behavior, tapi juga dokumentasikan intent,</li>
+<li>review code bukan hanya untuk bug, tapi juga untuk model konseptual,</li>
+<li>tanyakan: apakah nama-nama ini sesuai dengan domain lokal?</li>
+</ul>
+<h2 id="5-jadikan-codebase-sendiri-context-untuk-llm">5. Jadikan codebase sendiri context untuk LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#5-jadikan-codebase-sendiri-context-untuk-llm"></a></h2>
+<p>Codebase yang baik adalah context permanen.</p>
+<p>Kalau LLM bekerja di repo yang punya:</p>
+<ul>
+<li>nama-nama konsisten,</li>
+<li>abstraction yang jelas,</li>
+<li>tests yang mewakili behavior,</li>
+<li>types yang mengekspresikan kontrak,</li>
+<li>boundary yang bersih,</li>
+</ul>
+<p>maka output LLM akan lebih mudah diprediksi.</p>
+<p>Ini penting: prompt bagus saja tidak cukup jika repo itu sendiri tidak punya bahasa yang jelas.</p>
+<h3 id="praktik-harness">Praktik harness<a aria-hidden="true" class="anchor-heading icon-link" href="#praktik-harness"></a></h3>
+<ul>
+<li>jaga agar module naming dan domain naming selaras,</li>
+<li>pertahankan file struktur yang mencerminkan bounded context,</li>
+<li>levelkan antarmuka publik dari internal detail,</li>
+<li>buat test suite yang memverifikasi intent, bukan hanya implementation,</li>
+<li>gunakan commit message dan PR description untuk menjelaskan vocabulary yang baru.</li>
+</ul>
+<h2 id="6-workflow-rekomendasi-untuk-ai-assisted-coding">6. Workflow rekomendasi untuk AI-assisted coding<a aria-hidden="true" class="anchor-heading icon-link" href="#6-workflow-rekomendasi-untuk-ai-assisted-coding"></a></h2>
+<ol>
+<li>desain vocabulary dan bounded context.</li>
+<li>tulis spec singkat yang mencakup domain language.</li>
+<li>buat plan kecil-kecil yang tetap memegang vocabulary.</li>
+<li>suruh LLM generate kode di langkah-langkah terbatas.</li>
+<li>tes dan review tidak sekadar correctness, tapi juga vocabulary.</li>
+<li>iterasi sampai codebase makin jelas, bukan makin kompleks.</li>
+</ol>
+<h2 id="7-hubungan-ke-artikel-lain">7. Hubungan ke artikel lain<a aria-hidden="true" class="anchor-heading icon-link" href="#7-hubungan-ke-artikel-lain"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.prompt-engineering.interrogatory-llm">Interrogatory LLM: LLM sebagai pewawancara konteks</a> — konteks digali dari manusia.</li>
+<li><a href="/sotoy/notes/notes.prompt-engineering.harper-llm-codegen-workflow">Harper Reed: LLM codegen workflow</a> — konteks itu dijadikan spec, plan, execution.</li>
+<li><a href="/sotoy/notes/notes.agentic-coding.what-is-code">What Is Code? — code sebagai vocabulary dan model konsep</a> — code harus menjaga vocabulary supaya LLM tidak menambah cognitive debt.</li>
+</ul>
+<h2 id="ringkasannya">Ringkasannya<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasannya"></a></h2>
+<p>LLM mungkin membuat instruksi mesin jadi murah. Nilai engineer tetap ada di:</p>
+<ul>
+<li>memilih vocabulary yang tepat,</li>
+<li>menegaskan bounded context,</li>
+<li>membangun shared understanding,</li>
+<li>menjaga codebase tetap jadi context yang bisa digunakan lagi.</li>
+</ul>
+<p>Jangan hanya tanya "bikin kode ini". Tanya juga "bahasa apa yang kita pakai di sini?" dan "siapa yang akan paham model ini nanti?".</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handbook (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">code (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vocabulary (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">domain-driven-design (Private)</a></li>
+</ol>

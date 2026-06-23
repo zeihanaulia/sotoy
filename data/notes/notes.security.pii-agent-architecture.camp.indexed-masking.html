@@ -1,0 +1,260 @@
+<h1 id="indexed-masking-untuk-agentic-pii-protection">Indexed masking untuk agentic PII protection<a aria-hidden="true" class="anchor-heading icon-link" href="#indexed-masking-untuk-agentic-pii-protection"></a></h1>
+<h2 id="inti-ide">Inti ide<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-ide"></a></h2>
+<p>Untuk agentic multi-turn, pseudonymization palsu bisa memancing model membuat asumsi atas dunia yang salah. Indexed masking atau tokenized pseudonymization lebih aman karena menjaga struktur dan referensi tanpa memasukkan fakta baru.</p>
+<h2 id="apa-bedanya-dengan-fake-pseudonymization">Apa bedanya dengan fake pseudonymization<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-bedanya-dengan-fake-pseudonymization"></a></h2>
+<p>Fake pseudonymization mengganti data asli dengan nilai yang tampak natural:</p>
+<ul>
+<li>"Raka" → "Daniel"</li>
+<li>"Tokopedia" → "Acme Corp"</li>
+<li>"Bandung" → "Surabaya"</li>
+</ul>
+<p>Indexed masking mengganti dengan placeholder terindeks:</p>
+<ul>
+<li>"Raka" → <code>[PERSON_001]</code></li>
+<li>"Tokopedia" → <code>[ORG_001]</code></li>
+<li>"Bandung" → <code>[LOCATION_001]</code></li>
+</ul>
+<p>Mapping asli disimpan lokal, tidak pernah dikirim ke external LLM.</p>
+<h2 id="kelebihan-indexed-masking">Kelebihan indexed masking<a aria-hidden="true" class="anchor-heading icon-link" href="#kelebihan-indexed-masking"></a></h2>
+<ul>
+<li>tidak menambahkan fakta palsu yang bisa mengubah konteks,</li>
+<li>lebih transparan terhadap model,</li>
+<li>konsistensi referensi antar turn terjaga,</li>
+<li>de-masking lebih deterministik,</li>
+<li>lebih mudah di-audit.</li>
+</ul>
+<h2 id="kekurangan-indexed-masking">Kekurangan indexed masking<a aria-hidden="true" class="anchor-heading icon-link" href="#kekurangan-indexed-masking"></a></h2>
+<ul>
+<li>teks menjadi lebih kaku,</li>
+<li>model kehilangan beberapa sinyal semantik,</li>
+<li>context-dependent entity seperti lokasi dan salary bisa jadi terlalu abstrak jika placeholder terlalu polos.</li>
+</ul>
+<h2 id="hybrid-yang-lebih-kuat">Hybrid yang lebih kuat<a aria-hidden="true" class="anchor-heading icon-link" href="#hybrid-yang-lebih-kuat"></a></h2>
+<p>Untuk menjaga utility, indexed masking bisa ditambahkan metadata semantic ringkas:</p>
+<ul>
+<li><code>[LOCATION_001: city in West Java, Indonesia]</code></li>
+<li><code>[ORG_001: Indonesian e-commerce company]</code></li>
+<li><code>[SALARY_001: monthly income 30–40M IDR]</code></li>
+</ul>
+<p>Dengan cara ini model tetap mendapat konteks yang relevan tanpa mengetahui value asli.</p>
+<h2 id="apa-yang-perlu-ditulis-lebih-lengkap">Apa yang perlu ditulis lebih lengkap<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-perlu-ditulis-lebih-lengkap"></a></h2>
+<p>Note sebelumnya terlalu ringkas dan belum menangkap ruang lingkup desain ini.
+Sekarang gue perlu menjelaskan:</p>
+<ul>
+<li>apa itu indexed masking secara teknis,</li>
+<li>bagaimana dia berbeda dari fake pseudonymization dan redaction,</li>
+<li>struktur mapping/local registry,</li>
+<li>kapan pake placeholder polos vs placeholder berlabel semantics,</li>
+<li>risiko semantic drift, utility loss, dan false sense of privacy,</li>
+<li>contoh implementasi arsitektur,</li>
+<li>literatur yang benar-benar relevan.</li>
+</ul>
+<h2 id="indexed-masking--tokenized-pseudonymization">Indexed masking / tokenized pseudonymization<a aria-hidden="true" class="anchor-heading icon-link" href="#indexed-masking--tokenized-pseudonymization"></a></h2>
+<p>Indexed masking adalah strategi anonymization di mana entity sensitif diganti dengan token terindeks yang konsisten di seluruh session.</p>
+<p>Contoh:</p>
+<ul>
+<li><code>Raka</code> → <code>[PERSON_001]</code></li>
+<li><code>Tokopedia</code> → <code>[ORG_001]</code></li>
+<li><code>Bandung</code> → <code>[LOCATION_001]</code></li>
+<li><code>35 juta</code> → <code>[SALARY_001]</code></li>
+</ul>
+<p>Token ini hanyalah placeholder. Mapping asli disimpan secara lokal di middleware, tidak dikirim ke external LLM.</p>
+<h3 id="perbedaan-utama">Perbedaan utama<a aria-hidden="true" class="anchor-heading icon-link" href="#perbedaan-utama"></a></h3>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Teknik</th><th>Model lihat</th><th>Risiko masuknya fakta palsu</th><th>Coherence</th><th>De-masking</th></tr></thead><tbody><tr><td>redaction kasar</td><td><code>[PERSON]</code>, <code>[ORG]</code></td><td>rendah</td><td>rendah</td><td>mudah</td></tr><tr><td>fake pseudonymization</td><td><code>Daniel</code>, <code>Acme Corp</code></td><td>tinggi</td><td>tinggi</td><td>rentan paraphrase</td></tr><tr><td>indexed masking</td><td><code>[PERSON_001]</code></td><td>rendah</td><td>sedang</td><td>mudah dan deterministic</td></tr></tbody></table></div>
+<h2 id="kenapa-ini-lebih-aman-daripada-fake-pseudonymization">Kenapa ini lebih aman daripada fake pseudonymization<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-lebih-aman-daripada-fake-pseudonymization"></a></h2>
+<p>Fake pseudonymization memasukkan detail palsu yang model bisa gunakan untuk reasoning.
+Itu berbahaya karena konteks palsu bisa mengubah asumsi domain, hukum, budaya, dan task.</p>
+<p>Contoh:</p>
+<ul>
+<li><code>Tokopedia</code> → <code>Acme Corp</code> membuat model berpikir konteks US/tech company</li>
+<li><code>Bandung</code> → <code>Surabaya</code> bisa mengubah inferensi transportasi, regulasi, dan biaya hidup</li>
+</ul>
+<p>Indexed masking menghindari hal ini dengan tidak memberi model nilai dunia nyata yang salah.</p>
+<h2 id="kapan-placeholder-polos-cukup">Kapan placeholder polos cukup<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-placeholder-polos-cukup"></a></h2>
+<p>Placeholder polos seperti <code>[LOCATION_001]</code> cocok ketika:</p>
+<ul>
+<li>entity hanya berperan sebagai identifier,</li>
+<li>task tidak membutuhkan informasi jenis, letak, atau nilai,</li>
+<li>kita ingin maximal privacy.</li>
+</ul>
+<p>Tapi kalau task membutuhkan semantik, placeholder polos bisa terlalu abstrak.</p>
+<h2 id="kapan-perlu-semantic-placeholders">Kapan perlu semantic placeholders<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-perlu-semantic-placeholders"></a></h2>
+<p>Kalau entity punya makna task, tambahkan label ringkas.
+Contoh:</p>
+<ul>
+<li><code>[LOCATION_001: West Java city]</code></li>
+<li><code>[ORG_001: Indonesian e-commerce company]</code></li>
+<li><code>[SALARY_001: monthly income 30–40M IDR]</code></li>
+</ul>
+<p>Ini masuk ke kategori semantic-preserving anonymization: data asli tidak terlihat, tetapi model masih punya sinyal penting.</p>
+<h2 id="arsitektur-implementasi">Arsitektur implementasi<a aria-hidden="true" class="anchor-heading icon-link" href="#arsitektur-implementasi"></a></h2>
+<p>Bagian utama yang harus ada:</p>
+<ol>
+<li><strong>PII extractor</strong> — deteksi entity di setiap pesan.</li>
+<li><strong>Mapping generator</strong> — buat token stabil untuk setiap entitas baru.</li>
+<li><strong>Local registry</strong> — simpan mapping asli ↔ token, metadata, jenis entity, dan timestamp.</li>
+<li><strong>Context rewriter</strong> — ganti entity di prompt dengan token.</li>
+<li><strong>LLM inference</strong> — kirim masked prompt ke external model.</li>
+<li><strong>Response de-masking</strong> — ganti token kembali ke nilai asli bila aman.</li>
+<li><strong>Policy enforcer</strong> — putuskan apakah placeholder boleh dide-mask atau disimpan.</li>
+</ol>
+<h2 id="contoh-end-to-end">Contoh end-to-end<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-end-to-end"></a></h2>
+<p>Original history:</p>
+<pre><code>Nama gue Raka.
+Gue kerja di Tokopedia.
+Gue tinggal di Bandung.
+Gaji gue 35 juta.
+</code></pre>
+<p>Masked history:</p>
+<pre><code>Nama gue [PERSON_001].
+Gue kerja di [ORG_001].
+Gue tinggal di [LOCATION_001].
+Gaji gue [SALARY_001].
+</code></pre>
+<p>Local registry:</p>
+<pre><code>[PERSON_001] -> Raka
+[ORG_001] -> Tokopedia
+[LOCATION_001] -> Bandung
+[SALARY_001] -> 35 juta
+</code></pre>
+<p>Kalau model menjawab:
+"[PERSON_001] should consider saving more from [SALARY_001]..."
+De-masking:
+"Raka should consider saving more from 35 juta..."</p>
+<h2 id="risiko-yang-harus-dicatat">Risiko yang harus dicatat<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-yang-harus-dicatat"></a></h2>
+<ul>
+<li><strong>Utility loss</strong>: placeholder polos menghilangkan nilai task-relevant.</li>
+<li><strong>Semantic drift</strong>: fake pseudonym bisa memasukkan konteks palsu.</li>
+<li><strong>Pre-trigger exposure</strong>: kalau history asli sudah pernah dikirim, masternya tetap bocor.</li>
+<li><strong>Mapping security</strong>: registry lokal harus aman dan dihapus sesudah session.</li>
+<li><strong>Partial de-masking</strong>: jika model membuat variasi nama token, backmapping harus robust.</li>
+</ul>
+<h2 id="literatur-yang-lebih-lengkap">Literatur yang lebih lengkap<a aria-hidden="true" class="anchor-heading icon-link" href="#literatur-yang-lebih-lengkap"></a></h2>
+<p>Ini bukan istilah khusus, tapi ide ini cocok dengan beberapa konsep literatur:</p>
+<ul>
+<li><strong>reversible pseudonymization</strong> atau <strong>surrogate identifiers</strong>,</li>
+<li><strong>entity masking with backmapping</strong>,</li>
+<li><strong>contextualized anonymization</strong>,</li>
+<li><strong>privacy gateway / prompt gateway</strong>.</li>
+</ul>
+<p>Papers serta sumber relevan:</p>
+<ul>
+<li>NISTIR 8053 — de-identification/pseudonymization sebagai fondasi.
+<ul>
+<li><a href="https://nvlpubs.nist.gov/nistpubs/ir/2015/NIST.IR.8053.pdf">https://nvlpubs.nist.gov/nistpubs/ir/2015/NIST.IR.8053.pdf</a></li>
+</ul>
+</li>
+<li>Portcullis — privacy gateway untuk LLM inference dengan input rewriting dan response reconstruction.
+<ul>
+<li><a href="https://ojs.aaai.org/index.php/AAAI/article/view/32088/34243">https://ojs.aaai.org/index.php/AAAI/article/view/32088/34243</a></li>
+</ul>
+</li>
+<li>Balancing Privacy and Utility in Personal LLM Writing Tasks — evaluasi masking vs pseudonymization.
+<ul>
+<li><a href="https://arxiv.org/abs/2408.12345">https://arxiv.org/abs/2408.12345</a></li>
+</ul>
+</li>
+<li>Operationalizing Data Minimization for Privacy-Preserving LLM Prompting — prinsip minimum data yang cukup.
+<ul>
+<li><a href="https://openreview.net/forum?id=rpcnvW33EG">https://openreview.net/forum?id=rpcnvW33EG</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="contoh">Contoh<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh"></a></h2>
+<p>Original:</p>
+<ul>
+<li>"Nama gue Raka."</li>
+<li>"Gue kerja di Tokopedia."</li>
+<li>"Gue tinggal di Bandung."</li>
+<li>"Gaji gue 35 juta."</li>
+</ul>
+<p>Indexed masking:</p>
+<ul>
+<li>"Nama gue [PERSON_001]."</li>
+<li>"Gue kerja di [ORG_001]."</li>
+<li>"Gue tinggal di [LOCATION_001]."</li>
+<li>"Gaji gue [SALARY_001]."</li>
+</ul>
+<p>Hybrid indexed masking:</p>
+<ul>
+<li>"Nama gue [PERSON_001]."</li>
+<li>"Gue kerja di [ORG_001: Indonesian e-commerce company]."</li>
+<li>"Gue tinggal di [LOCATION_001: West Java city]."</li>
+<li>"Gaji gue [SALARY_001: monthly income 30–40M IDR]."</li>
+</ul>
+<h2 id="implementasi">Implementasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implementasi"></a></h2>
+<p>Arsitektur ideal:</p>
+<ol>
+<li>extractor PII menemukan entity,</li>
+<li>mapper membuat token stabil dan typed,</li>
+<li>local registry menyimpan mapping asli,</li>
+<li>writer mengganti entity di context,</li>
+<li>model menerima masked context,</li>
+<li>output de-mask ke user jika aman.</li>
+</ol>
+<h2 id="kapan-gunakan">Kapan gunakan<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-gunakan"></a></h2>
+<ul>
+<li>ketika identity asli harus disembunyikan sepenuhnya,</li>
+<li>ketika fake pseudonym berisiko membuat dunia palsu,</li>
+<li>ketika kita butuh determinisme dan auditability,</li>
+<li>ketika task masih bisa dijalankan dengan metadata abstraction.</li>
+</ul>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">camp (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">masking (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777878417390">Agentic privacy lebih baik dengan typed indexed placeholders daripada fake identities</a></li>
+<li><a href="/sotoy/notes/zettel.1777881085671">Threshold-based session privacy still leaves pre-trigger exposure</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.agent-boundary-pii-filtering">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+</ul>

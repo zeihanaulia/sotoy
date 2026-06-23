@@ -1,0 +1,40 @@
+<h1 id="overtrust-sebagai-literature-note-audit-local-trust-boundary">Overtrust sebagai literature note: audit local trust boundary<a aria-hidden="true" class="anchor-heading icon-link" href="#overtrust-sebagai-literature-note-audit-local-trust-boundary"></a></h1>
+<h2 id="klaim">Klaim<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim"></a></h2>
+<p>Overtrust bukan sekadar secret scanner; dia lebih menyerupai local audit untuk trust boundary developer workstation.</p>
+<h2 id="catatan">Catatan<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan"></a></h2>
+<ul>
+<li>Repo Overtrust fokus pada scan offline yang menggabungkan file, manifest, dan process.</li>
+<li>Source code utama menunjukkan workflow deterministik: filesystem walk, file classifier, manifest parser, secret detector, process scanner, lalu build report.</li>
+<li>Deteksi secret memakai kombinasi keyword, regex, entropy, dan false-positive guard.</li>
+<li>Deteksi risk process mencakup privilege tinggi, sensitive file descriptors, dan AI tool process identification.</li>
+<li>Overtrust mempertimbangkan ekstensi editor, NPM/Docker manifest, shell history, kredensial lokal, dan run-time process sebagai bagian dari trust boundary.</li>
+</ul>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>Audit security agentic coding harus memperhitungkan environment lokal, bukan hanya repository atau pipeline.</li>
+<li>Local trust boundary check paling efektif sebagai preflight signal, bukan sebagai verdict final.</li>
+<li>Rule-based local scanner dapat berguna untuk deteksi awal tetapi perlu maintenance jika threat landscape berubah.</li>
+<li>Tool yang memeriksa workstation harus diintegrasikan dengan workflow triage, bukan hanya sebagai alert pada CI.</li>
+</ul>
+<h2 id="hubungan">Hubungan<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust-evaluation">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179971">Deterministic local scanners melengkapi AI scanners dalam keamanan developer workflow</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179972">Secret exposure bisa terjadi tanpa commit Git</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #154406;" href="/sotoy/notes/tags.literature-note">literature-note</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">trust-boundary (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

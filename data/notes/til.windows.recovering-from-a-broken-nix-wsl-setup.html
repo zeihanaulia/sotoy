@@ -1,0 +1,70 @@
+<h1 id="recovering-from-a-broken-nix-wsl-setup">Recovering from a Broken Nix Wsl Setup<a aria-hidden="true" class="anchor-heading icon-link" href="#recovering-from-a-broken-nix-wsl-setup"></a></h1>
+<p>Beberapa bulan lalu, gue lagi nonton sesi <a href="https://www.youtube.com/watch?v=LA8KF9Fs2sk">Dev Tool Time</a>, narasumbernya <strong>Mitchell Hashimoto</strong> (founder Vagrant, Terraform, Vault).</p>
+<p>Di situ Mitchell nunjukin setup developernya yang keren banget: pakai <strong>NixOS di dalam VM</strong>, semua konfigurasinya deklaratif, dan kalau mau rebuild environment cukup jalanin satu perintah. </p>
+<p>Gue mikir, "Wah gila, keren banget. Kalau Mitchell bisa, masa gue nggak?". Akhirnya gue mulai eksperimen sendiri: pasang Nix langsung di WSL Ubuntu, tanpa VM. Gue pikir bakal lebih praktis. Ternyata... malah jadi awal bencana kecil.</p>
+<h2 id="masalah">Masalah<a aria-hidden="true" class="anchor-heading icon-link" href="#masalah"></a></h2>
+<p>Awalnya semua keliatan baik-baik aja. Tapi hari ini 2025-04-29 , tiba-tiba semua command dasar kayak <code>ls</code>, <code>mkdir</code>, <code>rm</code> mulai error. Pesannya aneh banget:</p>
+<pre class="language-bash"><code class="language-bash">mkdir: symbol lookup error: /nix/store/<span class="token punctuation">..</span>./libc.so.6: undefined symbol: __tunable_is_initialized, version GLIBC_PRIVATE
+</code></pre>
+<p>Semua binary standar mati total, bahkan <code>bash</code> sendiri error. Sistem WSL gue kayak zombified.</p>
+<p>Setelah gue selidiki, ketauan masalahnya: glibc versi baru dari Nix terlalu bleeding edge. Ada perubahan internal symbol yang bikin semua binary yang udah ada langsung crash. Dan karena gue make Nix sebagai base shell, ya udah, kena semua.</p>
+<p>Parahnya lagi, file <code>.vhdx</code> WSL jadi ke-lock. Mau akses lewat Windows pun nggak bisa. Total disaster.</p>
+<h2 id="usaha-recovery">Usaha Recovery<a aria-hidden="true" class="anchor-heading icon-link" href="#usaha-recovery"></a></h2>
+<p>Karena dari dalam WSL udah nggak mungkin recovery sih wkwkwk,  satu-satunya jalan dengan melakukan operasi penyelamatan dari luar.</p>
+<p>Gue mulai dengan cari file <code>.vhdx</code> di:</p>
+<pre><code>C:\Users\&#x3C;username>\AppData\Local\Packages\&#x3C;distro>\LocalState\ext4.vhdx
+</code></pre>
+<p>Abis itu gue copy <code>.vhdx</code> ke lokasi aman. Butuh waktu lama, karena ukurannya 75GB lebih.</p>
+<p>Setelah itu, gue import lagi file itu ke WSL baru:</p>
+<pre class="language-bash"><code class="language-bash">wsl --import --vhd recovery-distro D:<span class="token punctuation">\</span>wsl-recovery<span class="token punctuation">\</span> D:<span class="token punctuation">\</span>ext4-copy.vhdx --version <span class="token number">2</span>
+</code></pre>
+<p>Lanjut, gue jalanin:</p>
+<pre class="language-bash"><code class="language-bash">wsl -d recovery-distro
+</code></pre>
+<p>Akhirnya bisa masuk ke recovery mode. Tapi jangan buru-buru copy semua <code>/home</code>, itu malah buang-buang space. Gue cuma backup folder-folder penting buat development aja kayak project directory sama <code>.ssh</code>.</p>
+<p>Pakai <code>tar</code> gini:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token assign-left variable">BACKUP_NAME</span><span class="token operator">=</span><span class="token string">"home-important-<span class="token variable"><span class="token variable">$(</span><span class="token function">date</span> +%Y%m%d%H%M%S<span class="token variable">)</span></span>.tar.gz"</span>
+<span class="token assign-left variable">BACKUP_PATH</span><span class="token operator">=</span><span class="token string">"/mnt/c/Users/&#x3C;username>/Desktop/<span class="token variable">$BACKUP_NAME</span>"</span>
+
+<span class="token builtin class-name">echo</span> <span class="token string">"<span class="token entity" title="\ud83d">\ud83d</span><span class="token entity" title="\udce6">\udce6</span> Creating selective backup..."</span>
+
+<span class="token function">tar</span> -czvf <span class="token string">"<span class="token variable">$BACKUP_PATH</span>"</span> <span class="token punctuation">\</span>
+  /home/<span class="token operator">&#x3C;</span>username<span class="token operator">></span>/folder1 <span class="token punctuation">\</span>
+  /home/<span class="token operator">&#x3C;</span>username<span class="token operator">></span>/folder2 <span class="token punctuation">\</span>
+  /home/<span class="token operator">&#x3C;</span>username<span class="token operator">></span>/folder3 <span class="token punctuation">\</span>
+  /home/<span class="token operator">&#x3C;</span>username<span class="token operator">></span>/.ssh
+
+<span class="token builtin class-name">echo</span> <span class="token string">"<span class="token entity" title="\u2705">\u2705</span> Backup completed: <span class="token variable">$BACKUP_PATH</span>"</span>
+</code></pre>
+<p>Setelah semua data penting aman, gue unregister distro yang rusak:</p>
+<pre class="language-bash"><code class="language-bash">wsl --list --verbose
+wsl --unregister Ubuntu
+wsl --unregister recovery-distro
+</code></pre>
+<h2 id="refleksi">Refleksi<a aria-hidden="true" class="anchor-heading icon-link" href="#refleksi"></a></h2>
+<p>Kalau dipikir-pikir, gue salah kaprah dari awal.</p>
+<p>Mitchell itu pakai Nix di dalam <strong>VM</strong>. Environment dia isolated. Kalau rusak? Ya VM tinggal rebuild.</p>
+<p>Gue malah pasang Nix langsung di WSL, ngegantiin tool dasar OS. Begitu <code>glibc</code> crash, semua ikut ambruk. Gue juga terlalu optimis sama janji "reproducibility"-nya Nix, padahal kenyataannya. wkwkwkw</p>
+<blockquote>
+<p>"Nix <strong>aims</strong> for reproducibility, but it does <strong>not guarantee</strong> it."</p>
+</blockquote>
+<p>Kalau mau baca lebih dalem, ini artikelnya:<br>
+<a href="https://cs-syd.eu/posts/2025-03-14-nix-does-not-guarantee-reproducibility">Nix does not guarantee reproducibility</a></p>
+<h2 id="yang-gue-pelajarin">Yang Gue Pelajarin<a aria-hidden="true" class="anchor-heading icon-link" href="#yang-gue-pelajarin"></a></h2>
+<p>Mulai sekarang, gue bakal pakai Nix cuma buat bikin <code>devShell</code>, bukan gantiin shell dasar. Semua environment harus dipisah, entah itu di VM atau container. Nggak bakal lagi install Nix langsung buat ngeganti sistem operasi.</p>
+<p>Flake bakal gue setup lebih hati-hati, pin <code>nixpkgs</code> ke branch stabil kayak <code>nixos-23.11</code>, dan semua yang berhubungan sama core OS bakal gue pisahin.</p>
+<p>Backup rutin juga jadi wajib. Kalau perlu gue taro snapshot <code>.vhdx</code> mingguan ke external drive.</p>
+<p>Dan yang paling penting: jangan percaya bleeding edge glibc.</p>
+<h2 id="penutup">Penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#penutup"></a></h2>
+<p>Belajar dari pengalaman ini, gue sadar: Nix itu powerful gila, tapi kayak reaktor nuklir.</p>
+<p>Kalau lo salah pake...  Bisa meledak, untung ya beberapa project itu udah di github sih.</p>
+<p>Makanya sekarang, gue tetep pakai Nix, tapi dengan lebih hati-hati.
+Biar keren kayak Mitchell... tanpa harus jungkir balik recovery lagi. wkwkwk</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">nix (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">wsl (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">developer-tools (Private)</a></li>
+</ol>

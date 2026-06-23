@@ -1,0 +1,14 @@
+<h1 id="deterministic-verification--model-judge">Deterministic Verification > Model Judge<a aria-hidden="true" class="anchor-heading icon-link" href="#deterministic-verification--model-judge"></a></h1>
+<p>Verifikasi dalam loop AI tidak boleh hanya mengandalkan <em>model judge</em> (AI yang mengecek AI). Model judge adalah layer termahal dan paling rentan terhadap bias.</p>
+<p>Strategi verifikasi yang sehat adalah bertingkat:</p>
+<ol>
+<li><strong>Deterministic Checks</strong>: Menggunakan JSON schema, menjalankan unit test, atau validasi contract. Jika ini gagal, tidak perlu memanggil model judge.</li>
+<li><strong>Model Judge</strong>: Digunakan hanya untuk aspek semantik atau kualitas yang tidak bisa diukur secara biner.</li>
+</ol>
+<p>Relasi: <a href="/sotoy/notes/notes.ai-agents.loop-engineering">Loop Engineering: From Prompting to System Design</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-verification (Private)</a></li>
+</ol>

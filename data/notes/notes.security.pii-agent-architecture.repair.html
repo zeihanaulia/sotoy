@@ -1,0 +1,24 @@
+<h1 id="repair-redacting-personal-information-in-response">RePAIR: Redacting Personal Information in Response<a aria-hidden="true" class="anchor-heading icon-link" href="#repair-redacting-personal-information-in-response"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>RePAIR melihat bahwa PII kadang sudah sampai ke model sebelum akhirnya muncul di output. Di banyak pipeline, sanitization input tidak lengkap dan model masih bisa mengeluarkan informasi sensitif saat menjawab.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>Solusinya adalah model-aware redaction pada output. RePAIR melatih sistem untuk mendeteksi personal information dalam respons dan meredaksinya sebelum ditampilkan kepada pengguna. Ini memberi lapisan mitigasi terakhir ketika PII sudah sampai ke tahap generation.</p>
+<h2 id="real-case-implementation">Real case implementation<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-implementation"></a></h2>
+<p>Implementasi nyata adalah menambahkan output filter di akhir pipeline LLM. Setelah model menghasilkan respons, sistem memeriksa PII dan menggantinya atau menghapusnya sesuai policy. Ini terutama berguna ketika input sanitization sudah ada, tetapi masih ada kemungkinan leak di keluaran model.</p>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>RePAIR cocok sebagai safety net untuk PII leakage, bukan sebagai solusi utama. Untuk user-supplied PII, desain arsitektur terbaik tetap mencegah eksposur awal, dengan RePAIR sebagai cadangan jika kebocoran terjadi.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2604.12820">https://arxiv.org/abs/2604.12820</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

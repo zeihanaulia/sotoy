@@ -1,0 +1,202 @@
+<h1 id="llm-redactor-privacy-preserving-llm-requests">LLM-Redactor: Privacy-Preserving LLM Requests<a aria-hidden="true" class="anchor-heading icon-link" href="#llm-redactor-privacy-preserving-llm-requests"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>LLM-Redactor mengangkat problem yang sangat praktis: ketika aplikasi, coding agent, atau workflow LLM-powered mengirim prompt ke cloud API, isi prompt itu bisa mengandung PII, secret, kode proprietary, nama organisasi, konteks internal, atau informasi sensitif lain.</p>
+<p>Paper ini menegaskan bahwa TLS tidak cukup. TLS hanya melindungi dari network observer, bukan dari vendor LLM, log vendor, telemetry pihak ketiga, subpoena, atau kemungkinan data dipakai ulang untuk training dan debugging.</p>
+<h2 id="threat-model">Threat model<a aria-hidden="true" class="anchor-heading icon-link" href="#threat-model"></a></h2>
+<p>Yang mereka fokuskan bukan sekadar hacker di jaringan. Ancaman utama yang mereka modelkan adalah:</p>
+<ul>
+<li>vendor log exfiltration;</li>
+<li>training contamination;</li>
+<li>third-party telemetry;</li>
+<li>timing side channel;</li>
+<li>placeholder leakage;</li>
+<li>adversarial input yang sengaja mem-bypass detector.</li>
+</ul>
+<p>Untuk gue, bagian paling penting adalah training contamination.</p>
+<p>Itu bukan hanya soal data dipakai buat training model utama. Itu soal kehilangan kontrol penuh setelah prompt keluar dari boundary kita dan masuk ke sistem vendor.</p>
+<p>Training contamination artinya:</p>
+<ul>
+<li>prompt bisa tersimpan di log vendor atau database debugging (retention contamination);</li>
+<li>prompt bisa dibuka di dashboard internal, annotation tool, atau bug review (review contamination);</li>
+<li>prompt bisa dipakai sebagai contoh untuk menguji model di masa depan (evaluation contamination);</li>
+<li>prompt bisa masuk ke dataset untuk fine-tuning, reward model, classifier, atau policy model (fine-tuning contamination);</li>
+<li>prompt bisa membuat model menghafal pola unik dan regurgitate data mirip nanti (memorization/regurgitation risk).</li>
+</ul>
+<p>Di threat model paper ini, vendor dianggap curious tapi tidak jahat: data bisa disimpan, dianalisis, atau diproses untuk improvement tanpa ada niat nyerang. Kalau data sensitif kita masuk ke jalur itu, organisasi kita kehilangan kontrol atas nasib data tersebut.</p>
+<p>Dari sini jelas: privacy request LLM bukan fitur tunggal. Itu kombinasi threat model, workload, cost, latency, dan utility.</p>
+<h2 id="delapan-teknik-yang-dievaluasi">Delapan teknik yang dievaluasi<a aria-hidden="true" class="anchor-heading icon-link" href="#delapan-teknik-yang-dievaluasi"></a></h2>
+<p>Paper ini membandingkan delapan pendekatan privacy untuk request LLM.</p>
+<h3 id="a--local-only-inference">A — Local-only inference<a aria-hidden="true" class="anchor-heading icon-link" href="#a--local-only-inference"></a></h3>
+<p>Ini pendekatan paling aman: jangan kirim request ke cloud kalau bisa dijawab lokal.</p>
+<p>Menariknya, paper ini tidak memaknai Option A sebagai "semua request harus diproses lokal." Mereka menempatkannya sebagai gatekeeper atau classifier yang memutuskan:</p>
+<pre class="language-text"><code class="language-text">Incoming prompt
+      ↓
+Local classifier / triage model
+      ↓
+Apakah request cukup sederhana?
+      ↓
+Ya → jawab pakai local model
+Tidak → lanjut ke cloud pipeline
+</code></pre>
+<p>Kelebihan: untuk request yang di-handle lokal, leak rate = 0 secara konstruksi karena tidak ada data outbound ke vendor.
+Kekurangan: kualitas model lokal terbatas; kalau classifier salah memilih lokal, user bisa dapat jawaban jelek.</p>
+<p>Angka 94.4% muncul dari Table 6 di paper untuk WL1 PII-heavy prose: 472 prompt local dari 500 total, yaitu 94.4%. Itu bukan klaim umum untuk semua sistem. Itu adalah hasil paper pada dataset sintetis WL1, yang berisi prompt bahasa natural bertemplate dan PII eksplisit.</p>
+<p>Jadi insight yang lebih aman adalah: untuk dataset PII-heavy prose sederhana, local routing dapat menghindari sebagian besar cloud calls. Untuk workload lain, angka itu turun drastis.</p>
+<h3 id="b--redaction-dengan-placeholder-restoration">B — Redaction dengan placeholder restoration<a aria-hidden="true" class="anchor-heading icon-link" href="#b--redaction-dengan-placeholder-restoration"></a></h3>
+<p>Sensitive span dideteksi lalu diganti placeholder, misalnya <code>⟨PERSON_1⟩</code> atau <code>⟨EMAIL_1⟩</code>. Mapping disimpan lokal sehingga response bisa direstore.</p>
+<p>Kelebihannya jelas: efektif untuk data dengan pola eksplisit seperti email, phone, IP, SSN, AWS key, dan bearer token.
+Kelemahannya: sangat bergantung pada recall detector. Jika detector gagal menangkap nama organisasi, proprietary code, atau implicit identity, data masih bocor.</p>
+<h3 id="c--semantic-rephrasing">C — Semantic rephrasing<a aria-hidden="true" class="anchor-heading icon-link" href="#c--semantic-rephrasing"></a></h3>
+<p>Di sini prompt direwrite oleh model lokal supaya detail identitas dihilangkan.</p>
+<p>Contoh: <code>The CFO of Acme Corp whose wife works at a competitor...</code> jadi <code>A senior executive with a potential conflict of interest...</code></p>
+<p>Masalahnya: identitas kadang memang bagian dari makna prompt. Kalau konteks yang dihapus terlalu banyak, prompt jadi tidak berguna.</p>
+<p>Paper ini menunjukkan bahwa semantic rephrasing membantu di beberapa workload, terutama proprietary code, tetapi gagal di implicit identity. Untuk WL3, leak rate semantiknya tetap 95-100%.</p>
+<h3 id="d--tee-hosted-inference">D — TEE-hosted inference<a aria-hidden="true" class="anchor-heading icon-link" href="#d--tee-hosted-inference"></a></h3>
+<p>Prompt masih dikirim plaintext, tetapi diproses di enclave terpadu yang diverifikasi.</p>
+<p>Privacy datang dari hardware isolation, bukan dari encrypting prompt. Ini cocok untuk konteks sensitif di mana mask tidak cukup.</p>
+<p>Trade-off: infra kompleks, need attestation, dan masih butuh trust pada hardware vendor.</p>
+<h3 id="e--split-inference">E — Split inference<a aria-hidden="true" class="anchor-heading icon-link" href="#e--split-inference"></a></h3>
+<p>Model dibagi dua: layer awal jalan lokal, lalu activation dikirim ke remote.</p>
+<p>Ide bagus: token asli tidak dikirim. Namun activation itself bisa bocor lewat attack inversion, jadi ini bukan santapan privasi instan.</p>
+<h3 id="f--fully-homomorphic-encryption">F — Fully Homomorphic Encryption<a aria-hidden="true" class="anchor-heading icon-link" href="#f--fully-homomorphic-encryption"></a></h3>
+<p>Secara teori kuat: data tetap terenkripsi. Tapi untuk LLM penuh, belum praktis. Paper hanya mendemonstrasikan classifier kecil, bukan full chat model.</p>
+<h3 id="g--secure-multi-party-computation">G — Secure Multi-Party Computation<a aria-hidden="true" class="anchor-heading icon-link" href="#g--secure-multi-party-computation"></a></h3>
+<p>Input dipecah menjadi secret shares dan diproses oleh server non-colluding.</p>
+<p>Privacy-nya kuat jika asumsi non-collusion benar, tetapi overhead dan setup-nya tinggi. Untuk full LLM inference, masih lebih research proof-of-concept.</p>
+<h3 id="h--differential-privacy-noise">H — Differential Privacy noise<a aria-hidden="true" class="anchor-heading icon-link" href="#h--differential-privacy-noise"></a></h3>
+<p>Menambahkan noise pada kata tertentu. Paper pakai ε=4 dan 1.8% kata eligible diganti.</p>
+<p>Intinya: DP noise bisa membantu sebagai lapisan tambahan, tapi tidak efektif sebagai solusi utama untuk request LLM. Kalau yang bocor adalah API key atau identifier khusus, random substitution belum tentu tepat sasaran.</p>
+<h2 id="benchmark-mereka">Benchmark mereka<a aria-hidden="true" class="anchor-heading icon-link" href="#benchmark-mereka"></a></h2>
+<p>Benchmark sintetis berisi 1.300 prompt dengan 4.014 annotation sensitive spans.</p>
+<p>Empat workload:</p>
+<ul>
+<li>WL1 — PII-heavy prose (500 sample, 1.946 annotation)</li>
+<li>WL2 — Secret-heavy configuration (300 sample, 730 annotation)</li>
+<li>WL3 — Implicit identity (200 sample, 220 annotation)</li>
+<li>WL4 — Proprietary code (300 sample, 1.118 annotation)</li>
+</ul>
+<p>Di Table 6, paper juga menunjukkan local routing rate Option A:</p>
+<ul>
+<li>WL1 PII: 472 local / 500 total = 94.4%</li>
+<li>WL2 Secrets: 224 local / 300 total = 74.7%</li>
+<li>WL3 Implicit: 108 local / 200 total = 54.0%</li>
+<li>WL4 Code: 114 local / 300 total = 38.0%</li>
+</ul>
+<p>Itu memperjelas bahwa 94.4% hanya berlaku untuk WL1 yang relatif ringan, dan kemampuan local routing turun saat task jadi lebih semantik atau kode-heavy.</p>
+<p>Kelemahan benchmark: sintetis dan lebih rapi daripada prompt dunia nyata. Real prompt jauh lebih messy, dengan bahasa campur, typos, screenshot OCR, log production, dan kode panjang.</p>
+<h2 id="hasil-utama">Hasil utama<a aria-hidden="true" class="anchor-heading icon-link" href="#hasil-utama"></a></h2>
+<p>Yang paling penting: tidak ada teknik tunggal yang menang di semua kondisi.</p>
+<p>Paper ini menyimpulkan kombinasi praktis terbaik adalah:</p>
+<pre class="language-text"><code class="language-text">A + B + C
+</code></pre>
+<p>Artinya:</p>
+<ol>
+<li>route lokal kalau bisa,</li>
+<li>kalau harus ke cloud, lakukan redaction,</li>
+<li>lalu semantic rephrasing.</li>
+</ol>
+<p>Hasilnya:</p>
+<ul>
+<li>WL1 PII: combined leak ~0.6%, zero exact leak across 500 samples.</li>
+<li>WL2 secret: combined leak ~6.4%.</li>
+<li>WL4 proprietary code: combined leak ~31.3%.</li>
+<li>WL3 implicit identity: combined leak ~43.6%, dengan semantic leak masih 95-100% failure untuk redaction/rephrasing.</li>
+</ul>
+<p>Intinya: untuk PII eksplisit, local+redaction+rephrase efektif. Untuk implicit identity dan proprietary code, masking saja tidak cukup.</p>
+<h2 id="insight-paling-kuat">Insight paling kuat<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-paling-kuat"></a></h2>
+<p>Paper ini tidak terjebak klaim simplistik seperti “pakai redaction, privacy solved.”</p>
+<p>Redaction kuat untuk level 1 kebocoran: email, phone, IP, SSN, hostname, employee ID setelah custom recognizer.</p>
+<p>Tapi lemah untuk:</p>
+<ul>
+<li>person name,</li>
+<li>organization name,</li>
+<li>address,</li>
+<li>implicit identity,</li>
+<li>proprietary context.</li>
+</ul>
+<p>Kalau disederhanakan:</p>
+<ul>
+<li>Level 1: direct identifiers — redaction efektif.</li>
+<li>Level 2: quasi-identifiers — perlu detector dan contextual rules.</li>
+<li>Level 3: semantic identity — rephrase bisa membantu, tapi tidak cukup.</li>
+<li>Level 4: proprietary context — mungkin perlu local model, TEE, atau refusal.</li>
+</ul>
+<h2 id="relevansi-ke-agent-system">Relevansi ke agent system<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi-ke-agent-system"></a></h2>
+<p>Untuk sistem agent, relevance-nya besar karena agent punya surface area lebih luas daripada chatbot biasa.</p>
+<p>Agent tidak cuma mengirim prompt awal. Agent bisa:</p>
+<ul>
+<li>retrieve konteks dari repo atau doc,</li>
+<li>memanggil tool,</li>
+<li>menyusun prompt intermediate,</li>
+<li>menyimpan memory,</li>
+<li>melakukan subagent handoff,</li>
+<li>menulis artifact.</li>
+</ul>
+<p>Jadi kebocoran bisa terjadi di prompt request, tool args, scratchpad, trace, memory store, atau generated artifact.</p>
+<p>Paper ini fokus pada outbound LLM request pipeline. Tapi idenya bisa diperluas jadi privacy gateway di depan semua LLM call dan agent boundary.</p>
+<h2 id="praktik-arsitektur-yang-gue-ambil">Praktik arsitektur yang gue ambil<a aria-hidden="true" class="anchor-heading icon-link" href="#praktik-arsitektur-yang-gue-ambil"></a></h2>
+<p>Pipeline praktis yang gue tarik adalah:</p>
+<pre class="language-text"><code class="language-text">User request / Agent context
+        ↓
+Sensitivity classifier
+        ↓
+Policy decision
+        ↓
+Local route / Redact / Rephrase / TEE / Refuse
+        ↓
+Cloud LLM or Local LLM
+        ↓
+Post-processing + Placeholder restoration
+        ↓
+Response
+</code></pre>
+<p>Untuk agent system, gue tambahkan layer:</p>
+<pre class="language-text"><code class="language-text">Input
+  ↓
+Document/context scanner
+  ↓
+PII + secret + proprietary detector
+  ↓
+Risk scoring
+  ↓
+Policy router
+  ├── local model
+  ├── cloud redaction
+  ├── cloud redaction + rephrase
+  ├── TEE
+  └── refuse / approval
+  ↓
+Trace sanitizer
+  ↓
+Output sanitizer
+</code></pre>
+<p>Trace sanitizer penting, karena banyak sistem agent sekarang pakai Langfuse, LangSmith, atau observability custom. Kalau raw prompt masuk trace, mask saja tidak cukup.</p>
+<h2 id="kritik-paper">Kritik paper<a aria-hidden="true" class="anchor-heading icon-link" href="#kritik-paper"></a></h2>
+<ul>
+<li>benchmark sintetis, tidak mewakili messy prompt dunia nyata.</li>
+<li>utility evaluation terbatas pada local Qwen 3.5 4B dan Llama 3.2 3B.</li>
+<li>Option D–G lebih berupa demonstrasi proofof-concept daripada deployment production.</li>
+<li>beberapa klaim tampak ambigu, terutama pada angka implicit identity.</li>
+<li>semantic leak analysis hanya pada subset kecil WL3.</li>
+</ul>
+<h2 id="takeaway">Takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway"></a></h2>
+<p>LLM-Redactor menguatkan satu prinsip yang gue pegang:</p>
+<blockquote>
+<p>privacy-preserving LLM request bukan hanya soal masking, itu soal routing, detection, transformation, trust boundary, dan policy.</p>
+</blockquote>
+<p>Praktis hari ini: kombinasi local routing + redaction + semantic rephrasing adalah baseline yang layak. Untuk implicit identity dan proprietary context, solusi paling aman adalah jangan kirim ke cloud biasa.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2604.12064">https://arxiv.org/abs/2604.12064</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

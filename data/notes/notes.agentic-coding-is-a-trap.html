@@ -1,0 +1,128 @@
+<h1 id="agentic-coding-is-a-trap">Agentic Coding Is a Trap<a aria-hidden="true" class="anchor-heading icon-link" href="#agentic-coding-is-a-trap"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue baca artikel Lars Faye sebagai peringatan, bukan penolakan terhadap AI. Yang gue tangkep adalah bahwa dia sedang menyerang model kerja tertentu: <strong>agentic coding</strong>, di mana AI mengambil alih inti problem solving sementara manusia cuma ngarahin, ngawasin, dan merevisi.</p>
+<p>Inti argumennya buat gue jelas: menulis code bukan cuma produksi syntax; itu medium berpikir. Kalau manusia melepas loop implementasi, yang hilang bukan cuma output, tapi juga proses membangun mental model.</p>
+<hr>
+<h2 id="6-pertanyaan-kunci">6 Pertanyaan Kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#6-pertanyaan-kunci"></a></h2>
+<h3 id="1-target-kritik">1. Target kritik<a aria-hidden="true" class="anchor-heading icon-link" href="#1-target-kritik"></a></h3>
+<p>Buat gue, targetnya bukan AI-assisted coding secara umum. Dia melawan hype yang bilang manusia cukup menulis plan/spec lalu mundur dari code-writing.</p>
+<h3 id="2-kenapa-agentic-coding-trap">2. Kenapa agentic coding "trap"?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-agentic-coding-trap"></a></h3>
+<p>Untuk gue, trap-nya ada di tiga lapis:</p>
+<ul>
+<li>psikologis: terasa seperti jadi "director", padahal pemahaman makin kabur.</li>
+<li>teknis: non-determinism AI memaksa ekosistem tambahan untuk spesifikasi, review, guardrail, retry.</li>
+<li>ekonomi: vendor dependency dan biaya token jadi sulit diprediksi.</li>
+</ul>
+<h3 id="3-agentic-workflow-vs-cognitive-debt">3. Agentic workflow vs cognitive debt<a aria-hidden="true" class="anchor-heading icon-link" href="#3-agentic-workflow-vs-cognitive-debt"></a></h3>
+<p>Agentic workflow memotong friction produktif yang biasa memaksa developer untuk:</p>
+<ul>
+<li>memecah masalah,</li>
+<li>bikin hipotesis,</li>
+<li>mengetes,</li>
+<li>debugging,</li>
+<li>ngerasain konsekuensi desain.</li>
+</ul>
+<p>Tanpa friction itu, output bisa muncul. Tapi pemahaman yang biasanya ikut tumbuh jadi lemah.</p>
+<h3 id="4-kenapa-ini-bukan-abstraction-layer-baru">4. Kenapa ini bukan abstraction layer baru?<a aria-hidden="true" class="anchor-heading icon-link" href="#4-kenapa-ini-bukan-abstraction-layer-baru"></a></h3>
+<p>Menurut gue, analogi klasik compiler/framework salah tempat.</p>
+<p>Abstraction sehat itu mengurangi detail sambil tetap menjaga kontrol.
+LLM agentic malah mengurangi kontak langsung sekaligus nambah ambiguitas.</p>
+<p>Kata kunci yang gue suka: <strong>"a higher level of ambiguity is not a higher level of abstraction."</strong></p>
+<h3 id="5-kontradiksi-human-orchestrator">5. Kontradiksi human orchestrator<a aria-hidden="true" class="anchor-heading icon-link" href="#5-kontradiksi-human-orchestrator"></a></h3>
+<p>Kalau seseorang cuma jadi “human orchestrator”, itu terdengar elite. Tapi praktiknya, posisi itu butuh kompetensi yang cuma tumbuh dari implementasi langsung.</p>
+<p>Review code saja gak cukup untuk membentuk kemampuan itu.</p>
+<h3 id="6-posisi-sehat-ai">6. Posisi sehat AI<a aria-hidden="true" class="anchor-heading icon-link" href="#6-posisi-sehat-ai"></a></h3>
+<p>Buat gue, AI paling sehat kalau jadi bantuan sekunder:</p>
+<ul>
+<li>bantu bikin spec dan plan,</li>
+<li>tetap pegang implementasi sendiri sampai paham,</li>
+<li>pakai pseudocode supaya jarak niat-ke-code tetap dekat,</li>
+<li>review output hanya dalam batas yang bisa diawasi dalam satu sitting,</li>
+<li>jangan minta AI kerjakan sesuatu yang lo sendiri nggak bisa lakukan.</li>
+</ul>
+<hr>
+<h2 id="struktur-argumen">Struktur Argumen<a aria-hidden="true" class="anchor-heading icon-link" href="#struktur-argumen"></a></h2>
+<p>Gue menangkap struktur argumennya seperti ini:</p>
+<ol>
+<li>Agentic coding menjauhkan manusia dari implementasi.</li>
+<li>Jarak itu mengurangi friction produktif.</li>
+<li>Hilangnya friction melemahkan mental model dan critical thinking.</li>
+<li>Critical thinking diperlukan untuk mengawasi output AI.</li>
+<li>Makin sering coding diserahkan ke AI, makin lemah kemampuan supervisi.</li>
+<li>Skill internal turun, ketergantungan vendor naik.</li>
+<li>Permukaan terlihat cepat, tapi sistem jadi rapuh.</li>
+</ol>
+<p>Formula ini bikin artikelnya terasa bukan sekadar keluhan. Dia membangun pola:</p>
+<blockquote>
+<p>speed without intimacy → weaker understanding → weaker supervision → more dependence → more fragility</p>
+</blockquote>
+<hr>
+<h2 id="prinsip-kunci">Prinsip Kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#prinsip-kunci"></a></h2>
+<ul>
+<li><strong>Coding adalah medium berpikir.</strong> Bukan sekadar langkah terakhir setelah planning.</li>
+<li><strong>Higher ambiguity ≠ higher abstraction.</strong> LLM bisa bikin kamu ngomong lebih tinggi level tapi justru nambah ambiguitas.</li>
+<li><strong>Friction produktif itu aset.</strong> Debugging dan kegagalan langsung melatih mental model.</li>
+<li><strong>Review tanpa produksi tidak cukup.</strong> Jadi editor tanpa pernah nulis panjang sendiri membuat kemampuan design jadi dangkal.</li>
+<li><strong>AI harus diturunkan statusnya.</strong> Jadi tool bantu, bukan aktor utama.</li>
+<li><strong>Vendor lock-in lebih dari dependency.</strong> Ini soal erosi kapasitas independen dan habitus kerja.</li>
+</ul>
+<hr>
+<h2 id="contoh-praktis">Contoh Praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-praktis"></a></h2>
+<p>Kalau lo pakai pola <em>"biarkan AI generate code, dan manusia cukup review"</em>, indikatornya biasanya:</p>
+<ul>
+<li>banyak prompt tuning,</li>
+<li>banyak retry,</li>
+<li>banyak guardrail,</li>
+<li>output yang tampak benar tapi nggak dipahami,</li>
+<li>review yang jadi beban.</li>
+</ul>
+<p>Alternatif yang gue anggap lebih sehat:</p>
+<ul>
+<li>AI bantu bikin outline, pembagian tugas, atau pseudocode.</li>
+<li>developer tetap implementasi sebagian sendiri.</li>
+<li>AI jadi asisten interaktif untuk eksplorasi, bukan agen eksekusi.</li>
+</ul>
+<hr>
+<h2 id="alert-junior-dan-supervision-paradox">Alert: Junior dan Supervision Paradox<a aria-hidden="true" class="anchor-heading icon-link" href="#alert-junior-dan-supervision-paradox"></a></h2>
+<p>Menurut gue, junior paling rentan karena belum punya stok friction historis. Mereka bisa langsung terseret ke workflow "spec writer + agent reviewer" tanpa pernah bangun pengalaman teknis dari nol.</p>
+<p>Review code gak bisa menggantikan pengalaman membangun, debugging, dan discovery failure mode.</p>
+<hr>
+<h2 id="relevansi">Relevansi<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi"></a></h2>
+<p>Gue melihat artikel ini paling dekat dengan konsep <strong>automation complacency</strong> di penerbangan dan operasi sistem:</p>
+<ul>
+<li>automation meningkatkan throughput,</li>
+<li>manusia jadi operator pengawas,</li>
+<li>skill manual menurun,</li>
+<li>saat edge case datang, pilot/operator kurang siap.</li>
+</ul>
+<p>Dalam konteks coding, degradasi skill sering lebih samar. AI output bisa tampak berjalan sementara, sampai sistem makin besar dan sulit di-debug.</p>
+<hr>
+<h2 id="takeaway">Takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway"></a></h2>
+<p>Jangan biarkan AI mengambil alih bagian kerja yang justru menjaga ketajaman berpikir teknismu.</p>
+<p>Kalimat yang gue pegang:</p>
+<ul>
+<li>Kalau lo masih bisa jawab konkret dalam 10 menit pertama: <em>"user dari kondisi buruk apa berubah ke kondisi lebih baik apa?"</em> — berarti service atau workflow itu mungkin sehat.</li>
+</ul>
+<p>Di coding, kalau lo gak bisa menjawab: <em>"apa yang lo perlu pahami setelah nulis baris ini?"</em>, berarti lo mungkin lagi melewatkan medium berpikir.</p>
+<hr>
+<h2 id="lihat-juga">Lihat Juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-coding-is-a-trap"><input type="checkbox" disabled class="task-before task-status"><span class="task-status-text">(published)</span>Agentic Coding Is a Trap</a> — note analisis ini.</li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault2/daily.journal.2026.05.12 (Private)</a> — refleksi harian atas artikel Lars Faye.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">automation (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">skill (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-coding-is-a-trap"><input type="checkbox" disabled class="task-before task-status"><span class="task-status-text">(published)</span>Agentic Coding Is a Trap</a></li>
+<li><a href="/sotoy/notes/notes.agentic-coding.thread-mario-zechner"><input type="checkbox" disabled class="task-before task-status"><span class="task-status-text">(published)</span>Thread Mario Zechner: Agentic Coding sebagai Compression Test</a></li>
+<li><a href="/sotoy/notes/notes.agentic-coding.thread-mario-zechner.mapping"><input type="checkbox" disabled class="task-before task-status"><span class="task-status-text">(published)</span>Mapping per komentar di thread Mario Zechner tentang agentic coding</a></li>
+</ul>

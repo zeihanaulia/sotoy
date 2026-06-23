@@ -1,0 +1,90 @@
+<h1 id="percakapan-ai-adalah-medium-berpikir-bukan-tempat-penyimpanan-keputusan">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan<a aria-hidden="true" class="anchor-heading icon-link" href="#percakapan-ai-adalah-medium-berpikir-bukan-tempat-penyimpanan-keputusan"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Chat AI itu cuma ruang berpikir sementara. Keputusan penting yang cuma hidup di chat cepat memudar begitu sesi memanjang, dan tidak ada yang bertahan setelah sesi berakhir.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>AI-assisted development bukan cuma soal ngoding. Ini soal gimana desain, asumsi, dan alasan keputusan bisa dilanjutkan ke sesi-sesi berikutnya tanpa bolak-balik nanya lagi.</p>
+<h2 id="penjelasan">Penjelasan<a aria-hidden="true" class="anchor-heading icon-link" href="#penjelasan"></a></h2>
+<p>Percakapan dengan model besar itu efektif buat nyetak ide: cepat, iteratif, dan fleksibel. Masalahnya, banyak keputusan dan alasan (the why) yang muncul cuma hidup di alur chat — dan itu rentan hilang:</p>
+<ul>
+<li>Context window yang terbatas dan pergantian topik bikin informasi penting sulit direkonstruksi.</li>
+<li>Chat jarang menyimpan metadata: siapa bilang apa, asumsi apa yang dipakai, atau referensi ke file/issue.</li>
+<li>Tanpa ringkasan persisten, keputusan bisa terabaikan atau ter-revert karena alasan aslinya nggak terdokumentasi.</li>
+</ul>
+<h2 id="contoh-kasus">Contoh Kasus<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-kasus"></a></h2>
+<ul>
+<li>Desainer memutuskan perubahan UX di sesi brainstorming; implementor bingung karena gak ada alasan tertulis, akhirnya revert.</li>
+<li>Arsitek memilih trade-off performa vs maintainability dalam chat; evaluasi berikutnya sulit karena alasan awal tidak terdokumentasi.</li>
+</ul>
+<h2 id="implikasi-praktis">Implikasi Praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi-praktis"></a></h2>
+<ul>
+<li>Terapkan "context-anchoring": sebelum menutup sesi, minta ringkasan 2–3 baris berisi keputusan, alasan singkat, dan referensi (file/issue).</li>
+<li>Standarisasi format ringkasan supaya mudah diotomasi (contoh: satu baris YAML/frontmatter kecil, atau template yang bisa diparsing).</li>
+</ul>
+<h2 id="pertanyaan-untuk-ditindaklanjuti">Pertanyaan Untuk Ditindaklanjuti<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-untuk-ditindaklanjuti"></a></h2>
+<ol>
+<li>Kriteria apa yang membuat keputusan layak dipromosikan ke Zettel permanent? (impact, scope, lifetime)</li>
+<li>Siapa bertanggung jawab memindahkan ringkasan sesi ke penyimpanan persisten?</li>
+<li>Bisakah dibuat tooling kecil (template/shortcut) yang memaksa ringkasan sebelum menutup sesi chat?</li>
+</ol>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 0.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen (relevan karena membahas proses transfer konteks).</li>
+<li>Terkait: <a href="/sotoy/notes/zettel.20260420131312">AI memory tools sekarang kebanyakan project-level, bukan feature-level</a> — praktik membuat ringkasan keputusan otomatis.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 0</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131312">AI memory tools sekarang kebanyakan project-level, bukan feature-level</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131400">Kecemasan menutup chat adalah indikator context leakage</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131401">Erosi konteks AI adalah isu arsitektural, bukan bug acak</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131402">Context window besar tetap cepat habis dalam praktik engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131403">Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131404">Dalam erosi konteks, why hilang sebelum what</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131405">Kalau medium lupa, pindahkan memori ke luar medium itu</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131406">Summarization otomatis menyelamatkan what, bukan why</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131407">Alignment tanpa persistence tetap rapuh</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131408">Context anchoring adalah durability layer untuk alignment manusia-AI</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131409">Decision context harus menjadi external state, bukan jejak chat</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131410">Project context dan feature context punya fungsi berbeda</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131411">Priming document adalah memori stabil level proyek</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131412">Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131413">Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131414">Membaca codebase tidak sama dengan memahami keputusan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131415">Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131416">Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131417">Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131418">Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131419">Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131420">Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131421">Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131422">Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131423">Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131424">Feature document yang efektif itu ringkas dan operasional</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131425">Struktur minimal feature document jelas dan praktis</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131426">Nilai anchoring muncul saat sesi baru bisa warm start</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131427">Maintenance dokumen harus menempel ke ritme kerja alami</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131428">Feature document memaksa reasoning menjadi lebih jelas</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131429">Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131430">Context anchoring adalah alat yang harus dikalibrasi, bukan default universal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131431">Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131432">Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131433">Keinginan mempertahankan chat adalah indikator anchoring belum cukup</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131434">Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131435">Keberhasilan context anchoring diukur dari murahnya restart</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

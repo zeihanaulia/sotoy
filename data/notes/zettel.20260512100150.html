@@ -1,0 +1,12 @@
+<h1 id="closed-loop-agent-workflow-perlu-intake-grooming-verification-dan-audit">Closed-loop agent workflow perlu intake, grooming, verification, dan audit<a aria-hidden="true" class="anchor-heading icon-link" href="#closed-loop-agent-workflow-perlu-intake-grooming-verification-dan-audit"></a></h1>
+<p>Dari studi workflow ini, saya dapat bahwa agent AI seharusnya tidak langsung mengubah kode dari ticket. Workflow yang sehat mirip pabrik: intake → canonical backlog → grooming → fix queue → isolated execution → verifier terpisah → publish → reconcile.</p>
+<p>Yang membuatnya aman adalah rantai evidence. Kalau patch dibuat, hasilnya harus diverifikasi secara independen dan dicatat dengan run ID, diff, test output, dan final status.</p>
+<p>Kalau salah satu rantai ini putus, sistem seharusnya berhenti atau kembali ke manusia. Itu perbedaan antara automation yang tahan dan automation yang rapuh.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">governance (Private)</a></li>
+</ol>

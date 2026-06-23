@@ -1,0 +1,24 @@
+<h1 id="ai-agent-execution-environment-to-safeguard-user-data">AI Agent Execution Environment to Safeguard User Data<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-agent-execution-environment-to-safeguard-user-data"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>Paper ini menyoroti bahwa agent AI sering memegang private data dalam prompt atau model context, yang membuat mereka rentan terhadap exfiltration lewat tool calls, prompt injection, atau model provider yang tidak dipercaya.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>GAAP membangun execution environment yang memisahkan private data dan permission policy dari model dan provider. Paper menyatakan bahwa GAAP "considers the user prompt, model provider, and model context to be fully untrusted." Ia menggunakan private data database, permission database, dan information flow control (IFC) pada code artifact untuk menentukan apakah disclosure data diperbolehkan.</p>
+<h2 id="real-case-implementation">Real case implementation<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-implementation"></a></h2>
+<p>Dalam implementasi nyata, agent menghasilkan code artifact untuk tool execution, lalu IFC mengevaluasi aliran data pribadi dalam artifact tersebut. Hanya disclosure yang policy-approved yang diizinkan, sementara data sensitif tetap dipisahkan dari konteks model.</p>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>GAAP memberi blueprint untuk agentic privacy yang deterministik. Untuk user-supplied PII, ia mengajarkan bahwa boundary eksekusi harus menjadi gatekeeper yang menolak raw private data dari model/provider, bukan hanya berharap model berperilaku baik.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2604.19657">https://arxiv.org/abs/2604.19657</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

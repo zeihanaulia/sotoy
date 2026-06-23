@@ -1,0 +1,560 @@
+<h1 id="before-after-senior-judgement-ke-harness">Before-After: Senior Judgement ke Harness<a aria-hidden="true" class="anchor-heading icon-link" href="#before-after-senior-judgement-ke-harness"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Ini catatan gue tentang satu pola yang selalu gue temui: judgement senior sering berhenti di komentar PR, lalu hilang.</p>
+<p>Bukan cuma soal AI agent. Ini soal workflow engineering: review, test, rule, skill file, CI, dan feedback loop.</p>
+<p>Gue ambil satu skenario utama karena ini paling gampang nge-lock: agent sering bikin N+1 query / query database di dalam loop.</p>
+<h2 id="why-this-matters">Why this matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-matters"></a></h2>
+<p>Buat gue, ini bukan tentang "sebelum AI vs sesudah AI".</p>
+<p>Yang keganjilan adalah: banyak judgement senior selama ini cuma numpang lewat di komentar review.</p>
+<p>Kalimat kecil seperti "ini rawan N+1", "authz-nya kurang", "jangan campur refactor dengan perubahan behavior" itu tampaknya sepele. Padahal itu pengalaman panjang.</p>
+<p>Masalahnya, kalau insight itu cuma berhenti di review, tim bakal mengulang kesalahan yang sama. Senior berubah jadi filter manual. Itu kerja yang nggak scalable.</p>
+<p>Jadi yang gue cari: judgement senior dipindahkan ke guardrail. Bukan supaya senior nggak berpikir. Justru supaya dia mikir di level sistem.</p>
+<p>Before: senior jadi filter manual.
+After: senior jadi desainer guardrail.</p>
+<p>Itu persis yang gue tulis di <a href="/sotoy/notes/notes.agentic-engineering.self-hosted-agent-runner">Self-Hosted Cloud Agent Runner</a> dan <a href="/sotoy/notes/til.ai.semgrep.guardrails">Semgrep sebagai guardrail agentic engineering</a>: jangan biarkan review comment kelar dengan kata-kata saja, jadikan itu rule/verify guardrail yang hidup di <code>.ai/commands/verify.sh</code>.</p>
+<h2 id="skenario-user-activity-dashboard">Skenario: User Activity Dashboard<a aria-hidden="true" class="anchor-heading icon-link" href="#skenario-user-activity-dashboard"></a></h2>
+<p>Product minta fitur baru:</p>
+<p>"Admin bisa melihat daftar user beserta jumlah order, last login, dan status subscription."</p>
+<p>Stack:</p>
+<ul>
+<li>Backend: Node.js / TypeScript</li>
+<li>Database: PostgreSQL</li>
+<li>ORM/repository layer</li>
+<li>CI sudah ada, tapi belum punya performance/query-count test</li>
+<li>Tim mulai pakai agent coding CLI/cloud agent</li>
+</ul>
+<hr>
+<h1 id="before-senior-sebagai-reviewer-manual">BEFORE: Senior sebagai reviewer manual<a aria-hidden="true" class="anchor-heading icon-link" href="#before-senior-sebagai-reviewer-manual"></a></h1>
+<h3 id="1-task-diberikan-ke-agent">1. Task diberikan ke agent<a aria-hidden="true" class="anchor-heading icon-link" href="#1-task-diberikan-ke-agent"></a></h3>
+<p>Developer kasih prompt ke agent:</p>
+<pre class="language-text"><code class="language-text">Build admin user activity dashboard API.
+
+Return:
+- user id
+- email
+- total orders
+- last login
+- subscription status
+</code></pre>
+<p>Agent baca codebase, lalu membuat endpoint baru.</p>
+<h3 id="2-agent-menghasilkan-kode">2. Agent menghasilkan kode<a aria-hidden="true" class="anchor-heading icon-link" href="#2-agent-menghasilkan-kode"></a></h3>
+<p>Kodenya kira-kira seperti ini:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getUserActivityDashboard</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token keyword control-flow">await</span> userRepository<span class="token punctuation">.</span><span class="token method function property-access">findAllActiveUsers</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+  <span class="token keyword control-flow">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> user <span class="token keyword">of</span> users<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> orders <span class="token operator">=</span> <span class="token keyword control-flow">await</span> orderRepository<span class="token punctuation">.</span><span class="token method function property-access">findByUserId</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+    <span class="token keyword">const</span> lastLogin <span class="token operator">=</span> <span class="token keyword control-flow">await</span> loginRepository<span class="token punctuation">.</span><span class="token method function property-access">findLastByUserId</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+    <span class="token keyword">const</span> subscription <span class="token operator">=</span> <span class="token keyword control-flow">await</span> subscriptionRepository<span class="token punctuation">.</span><span class="token method function property-access">findByUserId</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+
+    result<span class="token punctuation">.</span><span class="token method function property-access">push</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      id<span class="token operator">:</span> user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">,</span>
+      email<span class="token operator">:</span> user<span class="token punctuation">.</span><span class="token property-access">email</span><span class="token punctuation">,</span>
+      totalOrders<span class="token operator">:</span> orders<span class="token punctuation">.</span><span class="token property-access">length</span><span class="token punctuation">,</span>
+      lastLoginAt<span class="token operator">:</span> lastLogin<span class="token operator">?.</span>createdAt <span class="token operator">??</span> <span class="token keyword null nil">null</span><span class="token punctuation">,</span>
+      subscriptionStatus<span class="token operator">:</span> subscription<span class="token operator">?.</span>status <span class="token operator">??</span> <span class="token string">"none"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword control-flow">return</span> result
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Di data dev cuma ada 10 user. Endpoint kelihatan jalan. Test basic pass.</p>
+<h3 id="3-pull-request-dibuka">3. Pull request dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#3-pull-request-dibuka"></a></h3>
+<p>PR summary dari agent:</p>
+<pre class="language-text"><code class="language-text">Added admin user activity dashboard endpoint.
+Includes unit tests for response shape.
+All tests pass.
+</code></pre>
+<p>Developer merasa aman karena test hijau.</p>
+<h3 id="4-senior-review">4. Senior review<a aria-hidden="true" class="anchor-heading icon-link" href="#4-senior-review"></a></h3>
+<p>Senior lihat kode dan langsung sadar:</p>
+<p>"Ini N+1 parah."</p>
+<p>Kalau ada 10.000 user, query-nya bisa:</p>
+<ul>
+<li>1 query ambil users</li>
+<li>10.000 query ambil orders</li>
+<li>10.000 query ambil last login</li>
+<li>10.000 query ambil subscription</li>
+</ul>
+<p>Total: 30.001 query.</p>
+<p>Senior komentar:</p>
+<pre class="language-text"><code class="language-text">This introduces N+1 queries. Please bulk load orders, logins, and subscriptions instead of querying inside the loop.
+</code></pre>
+<p>Agent memperbaiki.</p>
+<h3 id="5-agent-memperbaiki-kode">5. Agent memperbaiki kode<a aria-hidden="true" class="anchor-heading icon-link" href="#5-agent-memperbaiki-kode"></a></h3>
+<p>Agent ubah jadi:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getUserActivityDashboard</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token keyword control-flow">await</span> userRepository<span class="token punctuation">.</span><span class="token method function property-access">findAllActiveUsers</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> userIds <span class="token operator">=</span> users<span class="token punctuation">.</span><span class="token method function property-access">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token arrow operator">=></span> user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> orderCounts <span class="token operator">=</span> <span class="token keyword control-flow">await</span> orderRepository<span class="token punctuation">.</span><span class="token method function property-access">countByUserIds</span><span class="token punctuation">(</span>userIds<span class="token punctuation">)</span>
+  <span class="token keyword">const</span> lastLogins <span class="token operator">=</span> <span class="token keyword control-flow">await</span> loginRepository<span class="token punctuation">.</span><span class="token method function property-access">findLastByUserIds</span><span class="token punctuation">(</span>userIds<span class="token punctuation">)</span>
+  <span class="token keyword">const</span> subscriptions <span class="token operator">=</span> <span class="token keyword control-flow">await</span> subscriptionRepository<span class="token punctuation">.</span><span class="token method function property-access">findByUserIds</span><span class="token punctuation">(</span>userIds<span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">return</span> users<span class="token punctuation">.</span><span class="token method function property-access">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+    id<span class="token operator">:</span> user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">,</span>
+    email<span class="token operator">:</span> user<span class="token punctuation">.</span><span class="token property-access">email</span><span class="token punctuation">,</span>
+    totalOrders<span class="token operator">:</span> orderCounts<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    lastLoginAt<span class="token operator">:</span> lastLogins<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span><span class="token operator">?.</span>createdAt <span class="token operator">??</span> <span class="token keyword null nil">null</span><span class="token punctuation">,</span>
+    subscriptionStatus<span class="token operator">:</span> subscriptions<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span><span class="token operator">?.</span>status <span class="token operator">??</span> <span class="token string">"none"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Senior approve.</p>
+<h3 id="6-masalahnya-pengetahuan-tidak-berpindah">6. Masalahnya: pengetahuan tidak berpindah<a aria-hidden="true" class="anchor-heading icon-link" href="#6-masalahnya-pengetahuan-tidak-berpindah"></a></h3>
+<p>PR ini selesai, tapi pelajaran cuma ada di percakapan review.</p>
+<p>Besok agent bikin endpoint lain: "Export customer billing report."
+Agent lagi-lagi bikin query di loop.
+Senior komentar lagi: "Same issue: avoid DB calls inside loops."</p>
+<p>Minggu depan junior bikin serializer baru. Masalah sama muncul lagi.</p>
+<p>Senior jadi bottleneck.
+Agent tidak benar-benar belajar.
+Junior tidak menyerap pattern secara sistemik.
+Review penuh komentar repetitif.
+Tim merasa AI mempercepat coding, tapi memperlambat review.</p>
+<h3 id="before-dalam-satu-kalimat">Before dalam satu kalimat<a aria-hidden="true" class="anchor-heading icon-link" href="#before-dalam-satu-kalimat"></a></h3>
+<p><strong>Kesalahan ditemukan setelah terjadi, oleh manusia, satu PR demi satu PR.</strong></p>
+<hr>
+<h1 id="after-senior-memindahkan-judgement-ke-harness">AFTER: Senior memindahkan judgement ke harness<a aria-hidden="true" class="anchor-heading icon-link" href="#after-senior-memindahkan-judgement-ke-harness"></a></h1>
+<p>Sekarang tim memutuskan: komentar "jangan query DB di loop" tidak boleh cuma jadi komentar review. Ini harus masuk harness.</p>
+<h3 id="1-senior-mengubah-review-insight-menjadi-rule">1. Senior mengubah review insight menjadi rule<a aria-hidden="true" class="anchor-heading icon-link" href="#1-senior-mengubah-review-insight-menjadi-rule"></a></h3>
+<p>Di <code>AGENTS.md</code>, senior menambahkan rule pendek:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Database performance</span>
+
+<span class="token list punctuation">-</span> Do not perform database/repository calls inside loops over collections.
+<span class="token list punctuation">-</span> Prefer bulk queries, joins, batching, eager loading, or precomputed lookup maps.
+<span class="token list punctuation">-</span> If a looped query is unavoidable, explain why in the PR and add a regression test.
+</code></pre>
+<p>Rule ini dibaca agent di awal sesi.</p>
+<h3 id="2-senior-membuat-skill-file">2. Senior membuat skill file<a aria-hidden="true" class="anchor-heading icon-link" href="#2-senior-membuat-skill-file"></a></h3>
+<p>Karena rule pendek belum cukup, senior bikin:</p>
+<pre class="language-text"><code class="language-text">.ai/skills/database-performance.md
+</code></pre>
+<p>Isinya:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Database Performance Skill</span>
+
+Use this skill when changing:
+<span class="token list punctuation">-</span> repositories
+<span class="token list punctuation">-</span> ORM queries
+<span class="token list punctuation">-</span> list endpoints
+<span class="token list punctuation">-</span> serializers
+<span class="token list punctuation">-</span> dashboard/reporting APIs
+<span class="token list punctuation">-</span> GraphQL resolvers
+<span class="token list punctuation">-</span> code that processes collections of entities
+
+<span class="token title important"><span class="token punctuation">##</span> Main risk</span>
+
+Avoid N+1 queries. A code path handling N items should not execute O(N) database queries.
+
+<span class="token title important"><span class="token punctuation">##</span> Bad pattern</span>
+
+Do not call repository/database methods inside:
+<span class="token list punctuation">-</span> for loops
+<span class="token list punctuation">-</span> while loops
+<span class="token list punctuation">-</span> map/forEach callbacks
+<span class="token list punctuation">-</span> serializers
+<span class="token list punctuation">-</span> template rendering loops
+
+<span class="token title important"><span class="token punctuation">##</span> Better patterns</span>
+
+Prefer:
+<span class="token list punctuation">-</span> WHERE IN bulk fetch
+<span class="token list punctuation">-</span> joins
+<span class="token list punctuation">-</span> eager loading
+<span class="token list punctuation">-</span> batching
+<span class="token list punctuation">-</span> DataLoader pattern
+<span class="token list punctuation">-</span> aggregation queries
+<span class="token list punctuation">-</span> lookup maps in memory
+
+<span class="token title important"><span class="token punctuation">##</span> Before completion</span>
+
+<span class="token list punctuation">1.</span> Search changed files for DB calls inside loops.
+<span class="token list punctuation">2.</span> Estimate query count for the main path.
+<span class="token list punctuation">3.</span> Add or update a query-count/performance test when possible.
+<span class="token list punctuation">4.</span> Report the verification result.
+</code></pre>
+<p>Ini bukan cuma "larangan". Ini mengajarkan pattern berpikir.</p>
+<h3 id="3-senior-menambahkan-static-sensor">3. Senior menambahkan static sensor<a aria-hidden="true" class="anchor-heading icon-link" href="#3-senior-menambahkan-static-sensor"></a></h3>
+<p>Tim bikin Semgrep rule sederhana:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">id</span><span class="token punctuation">:</span> db<span class="token punctuation">-</span>call<span class="token punctuation">-</span>inside<span class="token punctuation">-</span>loop
+    <span class="token key atrule">message</span><span class="token punctuation">:</span> <span class="token string">"Avoid database/repository calls inside loops. Use bulk fetch, batching, join, or eager loading."</span>
+    <span class="token key atrule">severity</span><span class="token punctuation">:</span> WARNING
+    <span class="token key atrule">languages</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> typescript
+    <span class="token key atrule">patterns</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">pattern-inside</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+          for (...) {
+            ...
+          }</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">pattern-either</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">pattern</span><span class="token punctuation">:</span> await $REPO.$METHOD(<span class="token punctuation">...</span>)
+          <span class="token punctuation">-</span> <span class="token key atrule">pattern</span><span class="token punctuation">:</span> await $DB.$METHOD(<span class="token punctuation">...</span>)
+</code></pre>
+<p>Rule ini tidak sempurna, tapi cukup jadi alarm.</p>
+<h3 id="4-senior-menambahkan-test-query-count">4. Senior menambahkan test query count<a aria-hidden="true" class="anchor-heading icon-link" href="#4-senior-menambahkan-test-query-count"></a></h3>
+<p>Untuk endpoint dashboard, tim membuat test:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token function">it</span><span class="token punctuation">(</span><span class="token string">"does not use N+1 queries for user activity dashboard"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword control-flow">await</span> <span class="token function">seedUsersWithActivity</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> queryCounter <span class="token operator">=</span> <span class="token function">startQueryCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">await</span> <span class="token function">getUserActivityDashboard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token function">expect</span><span class="token punctuation">(</span>queryCounter<span class="token punctuation">.</span><span class="token method function property-access">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">toBeLessThanOrEqual</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Sekarang behavior penting dilindungi.</p>
+<h3 id="5-senior-menambahkan-verification-command">5. Senior menambahkan verification command<a aria-hidden="true" class="anchor-heading icon-link" href="#5-senior-menambahkan-verification-command"></a></h3>
+<p>Di repo:</p>
+<pre class="language-bash"><code class="language-bash">./.ai/commands/verify.sh
+</code></pre>
+<p>Isinya:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">set</span> -euo pipefail
+
+<span class="token function">pnpm</span> lint
+<span class="token function">pnpm</span> typecheck
+<span class="token function">pnpm</span> <span class="token builtin class-name">test</span>
+semgrep --config .semgrep/database.yml src/
+</code></pre>
+<p>Di <code>AGENTS.md</code>:</p>
+<pre class="language-markdown"><code class="language-markdown">Before declaring work complete, run:
+
+./.ai/commands/verify.sh
+
+If it fails, fix the root cause or explain why the failure is unrelated.
+</code></pre>
+<h3 id="6-task-baru-diberikan-ke-agent">6. Task baru diberikan ke agent<a aria-hidden="true" class="anchor-heading icon-link" href="#6-task-baru-diberikan-ke-agent"></a></h3>
+<p>Sekarang product minta fitur baru: "Export customer billing report."</p>
+<p>Developer kasih prompt:</p>
+<pre class="language-text"><code class="language-text">Build customer billing report export.
+
+Use existing reporting patterns.
+Make sure it works for large customer lists.
+Run verification before finishing.
+</code></pre>
+<p>Agent membaca <code>AGENTS.md</code>. Karena task menyentuh report/list/database, agent juga menarik skill <code>database-performance.md</code>.</p>
+<h3 id="7-agent-membuat-plan-lebih-baik">7. Agent membuat plan lebih baik<a aria-hidden="true" class="anchor-heading icon-link" href="#7-agent-membuat-plan-lebih-baik"></a></h3>
+<p>Sebelum coding, agent menulis plan:</p>
+<pre class="language-text"><code class="language-text">Plan:
+1. Find existing reporting API patterns.
+2. Identify billing/customer repositories.
+3. Avoid per-customer DB calls.
+4. Bulk fetch invoices, payments, and subscriptions by customer IDs.
+5. Build lookup maps in memory.
+6. Add test for report output.
+7. Add query-count test for 100 customers.
+8. Run ./.ai/commands/verify.sh
+</code></pre>
+<p>Perhatikan bedanya: judgement senior sudah muncul di plan agent, sebelum kesalahan terjadi.</p>
+<h3 id="8-agent-menghasilkan-kode-yang-lebih-aman">8. Agent menghasilkan kode yang lebih aman<a aria-hidden="true" class="anchor-heading icon-link" href="#8-agent-menghasilkan-kode-yang-lebih-aman"></a></h3>
+<p>Agent langsung menulis bulk pattern:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">exportCustomerBillingReport</span><span class="token punctuation">(</span>customerIds<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> customers <span class="token operator">=</span> <span class="token keyword control-flow">await</span> customerRepository<span class="token punctuation">.</span><span class="token method function property-access">findByIds</span><span class="token punctuation">(</span>customerIds<span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> invoices <span class="token operator">=</span> <span class="token keyword control-flow">await</span> invoiceRepository<span class="token punctuation">.</span><span class="token method function property-access">findByCustomerIds</span><span class="token punctuation">(</span>customerIds<span class="token punctuation">)</span>
+  <span class="token keyword">const</span> payments <span class="token operator">=</span> <span class="token keyword control-flow">await</span> paymentRepository<span class="token punctuation">.</span><span class="token method function property-access">findByCustomerIds</span><span class="token punctuation">(</span>customerIds<span class="token punctuation">)</span>
+  <span class="token keyword">const</span> subscriptions <span class="token operator">=</span> <span class="token keyword control-flow">await</span> subscriptionRepository<span class="token punctuation">.</span><span class="token method function property-access">findByUserIds</span><span class="token punctuation">(</span>customerIds<span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> invoicesByCustomerId <span class="token operator">=</span> <span class="token function">groupBy</span><span class="token punctuation">(</span>invoices<span class="token punctuation">,</span> <span class="token string">"customerId"</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> paymentsByCustomerId <span class="token operator">=</span> <span class="token function">groupBy</span><span class="token punctuation">(</span>payments<span class="token punctuation">,</span> <span class="token string">"customerId"</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> subscriptionByCustomerId <span class="token operator">=</span> <span class="token function">indexBy</span><span class="token punctuation">(</span>subscriptions<span class="token punctuation">,</span> <span class="token string">"customerId"</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">return</span> customers<span class="token punctuation">.</span><span class="token method function property-access">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>customer<span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+    customerId<span class="token operator">:</span> customer<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">,</span>
+    email<span class="token operator">:</span> customer<span class="token punctuation">.</span><span class="token property-access">email</span><span class="token punctuation">,</span>
+    invoiceCount<span class="token operator">:</span> invoicesByCustomerId<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span><span class="token operator">?.</span>length <span class="token operator">??</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    totalPaid<span class="token operator">:</span> <span class="token function">sumPayments</span><span class="token punctuation">(</span>paymentsByCustomerId<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    subscriptionStatus<span class="token operator">:</span>
+      subscriptionByCustomerId<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span><span class="token operator">?.</span>status <span class="token operator">??</span> <span class="token string">"none"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="9-agent-menjalankan-verification">9. Agent menjalankan verification<a aria-hidden="true" class="anchor-heading icon-link" href="#9-agent-menjalankan-verification"></a></h3>
+<p>Agent menjalankan:</p>
+<pre class="language-bash"><code class="language-bash">./.ai/commands/verify.sh
+</code></pre>
+<p>Hasil:</p>
+<pre class="language-text"><code class="language-text">lint: pass
+typecheck: pass
+test: pass
+semgrep database rules: pass
+</code></pre>
+<p>Agent menulis PR summary:</p>
+<pre class="language-text"><code class="language-text">Implemented customer billing report export.
+
+Database performance:
+- Avoided per-customer queries.
+- Bulk loaded invoices, payments, and subscriptions.
+- Built lookup maps in memory.
+- Added query-count regression test for 100 customers.
+- Verification passed: lint, typecheck, test, Semgrep database rules.
+</code></pre>
+<h3 id="10-senior-review-jadi-lebih-ringan">10. Senior review jadi lebih ringan<a aria-hidden="true" class="anchor-heading icon-link" href="#10-senior-review-jadi-lebih-ringan"></a></h3>
+<p>Senior tidak lagi perlu komentar "jangan query di loop".
+Dia hanya cek hal yang lebih tinggi:</p>
+<ul>
+<li>Apakah aggregation logic benar?</li>
+<li>Apakah report sesuai kebutuhan finance?</li>
+<li>Apakah memory usage aman untuk jumlah customer besar?</li>
+<li>Apakah export perlu streaming?</li>
+<li>Apakah akses admin sudah benar?</li>
+</ul>
+<p>Jadi senior naik level: dari menangkap bug repetitif ke judgement arsitektural/domain.</p>
+<h3 id="after-dalam-satu-kalimat">After dalam satu kalimat<a aria-hidden="true" class="anchor-heading icon-link" href="#after-dalam-satu-kalimat"></a></h3>
+<p><strong>Kesalahan dicegah sebelum terjadi, oleh harness, lalu manusia fokus ke judgement yang lebih tinggi.</strong></p>
+<hr>
+<h2 id="before-vs-after-secara-tajam">Before vs After secara tajam<a aria-hidden="true" class="anchor-heading icon-link" href="#before-vs-after-secara-tajam"></a></h2>
+<p>Before:</p>
+<ul>
+<li>Agent menghasilkan kode.</li>
+<li>Kesalahan masuk PR.</li>
+<li>Senior menemukan kesalahan.</li>
+<li>Senior memberi komentar.</li>
+<li>Agent memperbaiki.</li>
+<li>Pelajaran hilang di thread review.</li>
+<li>Kesalahan muncul lagi di PR berikutnya.</li>
+</ul>
+<p>After:</p>
+<ul>
+<li>Senior menemukan pola kesalahan.</li>
+<li>Pola diubah jadi:
+<ul>
+<li>rule pendek</li>
+<li>skill file detail</li>
+<li>contoh good/bad</li>
+<li>test/linter/sensor</li>
+<li>CI gate jika critical</li>
+</ul>
+</li>
+<li>Agent membaca sebelum kerja.</li>
+<li>Sensor menangkap saat salah.</li>
+<li>Review manusia fokus ke judgement lebih tinggi.</li>
+<li>Pelajaran menetap di harness.</li>
+</ul>
+<p>★ Insight:
+Before adalah sistem berbasis "hero reviewer".
+After adalah sistem berbasis "institutionalized judgement".</p>
+<p>Di before, kualitas bergantung pada apakah senior sempat melihat PR.
+Di after, kualitas mulai melekat pada sistem kerja.</p>
+<hr>
+<h2 id="skenario-kedua-security-bug-authorization">Skenario kedua: security bug authorization<a aria-hidden="true" class="anchor-heading icon-link" href="#skenario-kedua-security-bug-authorization"></a></h2>
+<p>Biar kelihatan bukan cuma database performance.</p>
+<h3 id="before">BEFORE<a aria-hidden="true" class="anchor-heading icon-link" href="#before"></a></h3>
+<p>Product minta:</p>
+<p>"Tambahkan endpoint update project setting."</p>
+<p>Agent menulis:</p>
+<pre class="language-ts"><code class="language-ts">router<span class="token punctuation">.</span><span class="token method function property-access">patch</span><span class="token punctuation">(</span><span class="token string">"/projects/:id/settings"</span><span class="token punctuation">,</span> requireAuth<span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> project <span class="token operator">=</span> <span class="token keyword control-flow">await</span> projectRepository<span class="token punctuation">.</span><span class="token method function property-access">findById</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token property-access">params</span><span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">await</span> projectRepository<span class="token punctuation">.</span><span class="token method function property-access">updateSettings</span><span class="token punctuation">(</span>project<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">,</span> req<span class="token punctuation">.</span><span class="token property-access">body</span><span class="token punctuation">)</span>
+
+  res<span class="token punctuation">.</span><span class="token method function property-access">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> success<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Test pass karena user login bisa update project.</p>
+<p>Senior review:</p>
+<pre class="language-text"><code class="language-text">This checks authentication but not authorization. A logged-in user could update another team's project.
+</code></pre>
+<p>Agent memperbaiki:</p>
+<pre class="language-ts"><code class="language-ts">router<span class="token punctuation">.</span><span class="token method function property-access">patch</span><span class="token punctuation">(</span><span class="token string">"/projects/:id/settings"</span><span class="token punctuation">,</span> requireAuth<span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> project <span class="token operator">=</span> <span class="token keyword control-flow">await</span> projectRepository<span class="token punctuation">.</span><span class="token method function property-access">findById</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token property-access">params</span><span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">await</span> <span class="token function">requireProjectAdmin</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token property-access">user</span><span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">,</span> project<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">await</span> projectRepository<span class="token punctuation">.</span><span class="token method function property-access">updateSettings</span><span class="token punctuation">(</span>project<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">,</span> req<span class="token punctuation">.</span><span class="token property-access">body</span><span class="token punctuation">)</span>
+
+  res<span class="token punctuation">.</span><span class="token method function property-access">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> success<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Selesai. Tapi pelajaran tetap cuma di PR.</p>
+<h3 id="after">AFTER<a aria-hidden="true" class="anchor-heading icon-link" href="#after"></a></h3>
+<p>Senior menambahkan ke <code>AGENTS.md</code>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Authorization</span>
+
+<span class="token list punctuation">-</span> Authentication is not authorization.
+<span class="token list punctuation">-</span> Every write endpoint must verify the caller is allowed to modify the target resource.
+<span class="token list punctuation">-</span> For resource-scoped actions, check ownership, role, or explicit permission.
+<span class="token list punctuation">-</span> Add negative tests for unauthorized users.
+</code></pre>
+<p>Skill file:</p>
+<pre class="language-text"><code class="language-text">.ai/skills/authorization-review.md
+</code></pre>
+<p>Isi ringkas:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Authorization Review Skill</span>
+
+Use this skill when adding or changing:
+<span class="token list punctuation">-</span> API endpoints
+<span class="token list punctuation">-</span> mutations
+<span class="token list punctuation">-</span> write operations
+<span class="token list punctuation">-</span> admin actions
+<span class="token list punctuation">-</span> resource ownership logic
+
+<span class="token title important"><span class="token punctuation">##</span> Required checks</span>
+
+For every write operation:
+<span class="token list punctuation">1.</span> Identify the actor.
+<span class="token list punctuation">2.</span> Identify the target resource.
+<span class="token list punctuation">3.</span> Identify the permission required.
+<span class="token list punctuation">4.</span> Add a negative test where an authenticated but unauthorized user is denied.
+
+<span class="token title important"><span class="token punctuation">##</span> Common mistake</span>
+
+requireAuth only proves the user is logged in.
+It does not prove the user can modify the resource.
+</code></pre>
+<p>Test template:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token function">it</span><span class="token punctuation">(</span><span class="token string">"rejects authenticated users without project admin permission"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> project <span class="token operator">=</span> <span class="token keyword control-flow">await</span> <span class="token function">seedProjectOwnedBy</span><span class="token punctuation">(</span><span class="token string">"team-a"</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword control-flow">await</span> <span class="token function">seedUserInTeam</span><span class="token punctuation">(</span><span class="token string">"team-b"</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword control-flow">await</span> <span class="token function">request</span><span class="token punctuation">(</span>app<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token method function property-access">patch</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/projects/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>project<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/settings</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token method function property-access">set</span><span class="token punctuation">(</span><span class="token string">"Authorization"</span><span class="token punctuation">,</span> <span class="token function">authTokenFor</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token method function property-access">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Hacked"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token function">expect</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token property-access">status</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">toBe</span><span class="token punctuation">(</span><span class="token number">403</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>CI gate:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">pnpm</span> <span class="token builtin class-name">test</span> -- authorization
+</code></pre>
+<p>Next time agent bikin endpoint write, plan-nya berubah:</p>
+<pre class="language-text"><code class="language-text">This is a write endpoint.
+I need:
+- requireAuth
+- project-level authorization
+- negative test for unauthorized authenticated user
+</code></pre>
+<p>Senior tidak perlu mengulang komentar "authn bukan authz".</p>
+<hr>
+<h2 id="skenario-ketiga-migration-berbahaya">Skenario ketiga: migration berbahaya<a aria-hidden="true" class="anchor-heading icon-link" href="#skenario-ketiga-migration-berbahaya"></a></h2>
+<h3 id="before-1">BEFORE<a aria-hidden="true" class="anchor-heading icon-link" href="#before-1"></a></h3>
+<p>Agent diminta:</p>
+<p>"Rename column <code>status</code> to <code>subscription_status</code>."</p>
+<p>Agent membuat migration:</p>
+<pre class="language-sql"><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> subscriptions <span class="token keyword">RENAME</span> <span class="token keyword">COLUMN</span> <span class="token keyword">status</span> <span class="token keyword">TO</span> subscription_status<span class="token punctuation">;</span>
+</code></pre>
+<p>Di dev aman.</p>
+<p>Senior review:</p>
+<pre class="language-text"><code class="language-text">This is not safe. Existing app version still reads status. Use expand-contract migration.
+</code></pre>
+<p>Agent memperbaiki. Tapi lagi-lagi, lesson hilang.</p>
+<h3 id="after-1">AFTER<a aria-hidden="true" class="anchor-heading icon-link" href="#after-1"></a></h3>
+<p>Rule di <code>AGENTS.md</code>:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Database migration safety</span>
+
+<span class="token list punctuation">-</span> Do not perform breaking schema changes in one step.
+<span class="token list punctuation">-</span> Use expand-contract for production tables.
+<span class="token list punctuation">-</span> Backward-compatible migration first, code rollout second, cleanup later.
+<span class="token list punctuation">-</span> Destructive changes require human approval.
+</code></pre>
+<p>Skill file:</p>
+<pre class="language-text"><code class="language-text"># Safe Migration Skill
+
+Use this skill for schema changes.
+
+## Expand-contract pattern
+
+1. Add new nullable column.
+2. Write to both old and new columns.
+3. Backfill in batches.
+4. Switch reads to the new column after verification.
+5. Remove old column in a later deploy.
+
+## Never do without approval
+
+- Drop column
+- Rename column directly
+- Change type on large table
+- Add non-concurrent index on large table
+- Add non-null column without default/backfill plan
+</code></pre>
+<p>Agent berikutnya akan membuat plan:</p>
+<pre class="language-text"><code class="language-text">This rename should use expand-contract:
+1. Add subscription_status.
+2. Dual-write status and subscription_status.
+3. Backfill existing rows.
+4. Switch reads.
+5. Later cleanup migration.
+</code></pre>
+<p>Senior review pindah dari "jangan rename langsung" ke "apakah rollout plan ini cocok dengan release cadence kita?"</p>
+<hr>
+<h2 id="pola-before-after-yang-bisa-dipakai-sebagai-template">Pola before-after yang bisa dipakai sebagai template<a aria-hidden="true" class="anchor-heading icon-link" href="#pola-before-after-yang-bisa-dipakai-sebagai-template"></a></h2>
+<p>Setiap kali ada review comment berulang, pakai format ini:</p>
+<h3 id="before-2">Before<a aria-hidden="true" class="anchor-heading icon-link" href="#before-2"></a></h3>
+<pre class="language-text"><code class="language-text">Agent/junior membuat kesalahan.
+Senior melihat.
+Senior komentar.
+Kesalahan diperbaiki.
+Pelajaran hilang.
+Kesalahan muncul lagi.
+</code></pre>
+<h3 id="after-2">After<a aria-hidden="true" class="anchor-heading icon-link" href="#after-2"></a></h3>
+<pre class="language-text"><code class="language-text">Senior melihat pola.
+Pola diubah jadi:
+- rule pendek
+- skill file detail
+- contoh good/bad
+- test/linter/sensor
+- CI gate jika critical
+Agent membaca sebelum kerja.
+Sensor menangkap saat salah.
+Review manusia fokus ke judgement lebih tinggi.
+</code></pre>
+<h3 id="pertanyaan-konversinya">Pertanyaan konversinya<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-konversinya"></a></h3>
+<p>Untuk setiap komentar review, tanya:</p>
+<ul>
+<li>Apakah ini sering muncul?</li>
+<li>Kalau iya, bisa jadi rule tidak?</li>
+<li>Butuh contoh panjang? Kalau iya, jadikan skill.</li>
+<li>Bisa dicek otomatis? Kalau iya, buat linter/static analysis.</li>
+<li>Bisa dibuktikan behavior-nya? Kalau iya, buat test.</li>
+<li>Risikonya tinggi? Kalau iya, jadikan CI gate atau human approval rule.</li>
+<li>Butuh konteks keputusan? Kalau iya, buat ADR/concept note.</li>
+</ul>
+<h2 id="kesimpulan">Kesimpulan<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan"></a></h2>
+<p>Kalau gue ringkas jadi lebih tegas:</p>
+<ul>
+<li>Before: senior adalah <strong>manual quality gate</strong>.</li>
+<li>After: senior adalah <strong>harness designer</strong>.</li>
+</ul>
+<p>Before, AI membuat output lebih banyak dan review burden makin berat.
+After, AI tetap bikin output banyak, tapi sistem juga mulai menjaga output itu.</p>
+<p>Yang gue suka dari model after adalah: kesalahan yang sama jadi lebih sulit muncul lagi, bukan hanya dikomentari ulang.</p>
+<p><strong>Before: “Agent salah, senior koreksi.”</strong>
+<strong>After: “Agent salah sekali, senior ubah sistem agar kesalahan itu makin sulit terulang.”</strong></p>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.self-hosted-agent-runner">Self-Hosted Cloud Agent Runner</a></li>
+<li><a href="/sotoy/notes/til.ai.semgrep.guardrails">Semgrep sebagai guardrail agentic engineering</a></li>
+<li><a href="/sotoy/notes/notes.security.sast.semgrep">Semgrep sebagai SAST / static analysis tool</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.reference.martin-fowler-harness-engineering">Martin Fowler - Harness Engineering for Coding Agent Users</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.senior-judgement-to-harness">Senior Judgement yang Dipindahkan ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">harness (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">nplusone (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1778003596758">Review comments should be encoded as guardrails, not left in PR threads</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.heavyskill-heavy-thinking-as-inner-skill">HeavySkill: Heavy Thinking as Inner Skill in Agentic Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.senior-judgement-to-harness">Senior Judgement yang Dipindahkan ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.single-verification-entrypoint">Single verification entrypoint</a></li>
+<li><a href="/sotoy/notes/zettel.literature.how-i-use-ai-to-code">How I Use AI to Code — literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>

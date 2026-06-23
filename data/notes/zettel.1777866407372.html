@@ -1,0 +1,51 @@
+<h1 id="batasan-stealth-dalam-browser-automation">Batasan stealth dalam browser automation<a aria-hidden="true" class="anchor-heading icon-link" href="#batasan-stealth-dalam-browser-automation"></a></h1>
+<p>Stealth mode dalam browser automation tidak membuat bot menjadi manusia. Ia bekerja dengan cara menutupi atau merapikan sinyal fingerprint browser yang mudah dikenali, seperti <code>navigator.webdriver</code>, WebGL fingerprint, dan property JS yang umum dipakai detektor.</p>
+<p>Klaim yang paling aman dipahami adalah bahwa stealth mode <strong>mengurangi kemungkinan deteksi dari permukaan browser</strong>. Itu termasuk:</p>
+<ul>
+<li>property masking dan API spoofing</li>
+<li>randomisasi fingerprint per session</li>
+<li>patching native function agar inspeksi JS terlihat normal</li>
+<li>blocking tracker/anti-bot domains yang menambah observability</li>
+</ul>
+<p>Namun deteksi bot modern bukan hanya soal fingerprint browser. Ada tiga lapisan sinyal yang sering diterapkan:</p>
+<ol>
+<li><code>Browser-level fingerprint</code>
+<ul>
+<li>nilai property JS, canvas/WebGL output, audio fingerprint, device memory, dan konfigurasi hardware.</li>
+</ul>
+</li>
+<li><code>Behavioral signal</code>
+<ul>
+<li>pola klik/scroll, timing interaksi, fokus window, durasi sesi, dan ritme navigasi.</li>
+</ul>
+</li>
+<li><code>Operational/network signal</code>
+<ul>
+<li>reputasi IP/proxy, TLS fingerprint, session continuity, cookie reuse, dan dependency pada layanan pihak ketiga.</li>
+</ul>
+</li>
+</ol>
+<p>Dua failure mode utama:</p>
+<ul>
+<li><code>Inconsistency</code>: stealth patch memperbaiki satu sinyal tetapi meninggalkan kontradiksi di sinyal lain, sehingga detektor akhirnya lebih mudah mengenali bot.</li>
+<li><code>Behavioral/network fallback</code>: browser fingerprint tampak normal, tetapi pola perilaku atau network tetap bot-like, sehingga deteksi tetap terjadi.</li>
+</ul>
+<p>Intinya:</p>
+<ul>
+<li>Stealth mode adalah bentuk <strong>risk reduction</strong>, bukan <strong>invisibility</strong>.</li>
+<li>Ia membantu bot lolos dari pintu depan, tetapi bisa tetap ketahuan dari jalan, suara, atau alamat rumahnya.</li>
+<li>Untuk use case seperti AI agent internal, stealth bisa cukup untuk menundukkan permukaan deteksi.</li>
+<li>Untuk scraping situs pihak ketiga dengan anti-bot kuat, stealth hanya satu bagian dari strategi yang lebih besar.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">stealth (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">browser-automation (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/daily.journal.2026.05.04">2026-05-04</a></li>
+</ul>

@@ -1,0 +1,363 @@
+<h1 id="rust">Rust<a aria-hidden="true" class="anchor-heading icon-link" href="#rust"></a></h1>
+<h2 id="setup">Setup<a aria-hidden="true" class="anchor-heading icon-link" href="#setup"></a></h2>
+<ul>
+<li>untuk install rust cukup mudah, cukup pakai <code>rustup</code></li>
+<li>kalau install satu persatu pastikan <code>gcc</code> terinstall, lalu install <code>rustc</code> dan <code>cargo</code></li>
+<li>cargo adalah dependency management, bukan hanya itu cargo juga bisa dipakai untuk build dan run program rust
+<ul>
+<li><code>cargo new</code> untuk membuat project</li>
+<li><code>cargo build</code> untuk build program rust dan akan membuat file executable di <code>target/debug</code></li>
+<li><code>cargo run</code> untuk build dan running program rust, tapi cargo tidak akan melakukan rebuild jika tidak ada program yang berubah</li>
+<li><code>cargo check</code> untuk mngecek code dan memastikan code bisa di compile tapi gak memproduce file executable
+<ul>
+<li>command ini bermanfaat untuk mengecek secara cepat dibandingkan melakukan <code>build</code></li>
+</ul>
+</li>
+<li><code>cargo build --release</code> untuk melakukan release ketika program sudah selesai.
+<ul>
+<li>command ini akan melakukan optimisasi dan akan membuat executable file di <code>target/release</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>lalu apa bedanya <code>rustc</code> dan <code>cargo</code>
+<ul>
+<li>untuk program yang simple cargo tidak jauh berbeda dengan rustc, tapi ketika kita membuat project yang banyak dependency ini akan sangat membantu</li>
+</ul>
+</li>
+</ul>
+<h2 id="coding">Coding<a aria-hidden="true" class="anchor-heading icon-link" href="#coding"></a></h2>
+<ul>
+<li>untuk membuat variable gunakan <code>let</code></li>
+<li>by default variable di rust itu immutable, 
+<ul>
+<li>artinya ketika kita sudah memberikan nilai ke valu maka value tidak bisa diubah</li>
+</ul>
+</li>
+<li>untuk membuat variable menjadi mutable, gunakan <code>mut</code> sebelum variable name</li>
+</ul>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">let</span> apples <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// immutable</span>
+<span class="token keyword">let</span> <span class="token keyword">mut</span> bananas <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// mutable</span>
+</code></pre>
+<ul>
+<li>
+<p>untuk <code>associated function</code> gunakan <code>::</code></p>
+<ul>
+<li>kalau di golang pake <code>.</code> String.new() kalau dirust String::new()</li>
+</ul>
+</li>
+<li>
+<p>untuk melakukan import dengan menggunakan keyword <code>use</code> di awal program</p>
+<ul>
+<li>sebagai contoh <code>std::io</code>, memiliki <code>stdin()</code>, didalamnya ada <code>read_line</code>
+<ul>
+<li>maka penggunaannya <code>io::stdin().read_line(&#x26;mut guess).exepect("Failed to read line")</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>tanda <code>&#x26;</code> mengindikasikan kalau ini adalah reference</p>
+<ul>
+<li>Reference yang tidak dapat diubah (&#x26;T): Ini memungkinkan Anda untuk membaca nilai tanpa mengubahnya.</li>
+<li>Reference yang dapat diubah (&#x26;mut T): Ini memungkinkan Anda untuk mengubah nilai yang direferensikan.</li>
+</ul>
+</li>
+<li>
+<p>yang menarik dari sini, rust memaksa kita untuk memberikan result pada function stdin, melalui expect, <code>Result</code> ini bersifat enumeration <code>ok</code> dan <code>error</code>, jika error maka akan menampilak pesan yang ada pada kolom expect</p>
+</li>
+<li>
+<p><code>crate</code> adalah collection dari source code rust,seperti go package</p>
+<ul>
+<li>sebelum memulai menggunakan function yang ada di crate kita perlu menulis dependencies </li>
+</ul>
+</li>
+<li>
+<p>carg memiliki mekanisme untuk memastikan kita bisa rebuild artifak yang sema setiap waktu</p>
+<ul>
+<li>cargo akan menggunakan versi dari dependensi yang sudah di lock, menggunakan <code>cargo.lock</code></li>
+</ul>
+</li>
+<li>
+<p>dalam penamaan variable rust mengizinkan untuk melakukan shadowing</p>
+<pre class="language-rust"><code class="language-rust">  <span class="token keyword">let</span> <span class="token keyword">mut</span> guess <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token namespace">io<span class="token punctuation">::</span></span><span class="token function">stdin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">read_line</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> guess<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">"Failed to read line"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">let</span> guess<span class="token punctuation">:</span> <span class="token keyword">u32</span> <span class="token operator">=</span> guess
+      <span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">"Please type a number!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</li>
+<li>
+<p>code diatas diperbolehkan, ada 2 variale lalu variable tersebut diganti typenya dengan menggunakan expression <code>trim</code> dan <code>parse</code></p>
+<ul>
+<li><code>guess</code> diambil dari variable guest pertama</li>
+<li>lalu <code>trim()</code> method dari string akan mengeliminasi whitespace</li>
+<li>lalu <code>parse()</code> yang melakukan convert string ke type lain
+<ul>
+<li>yang menariknya method parse ini hanya akan berkerja di character yang secara logika bisa di convert ke number</li>
+<li>jadi kalau ada charakter selain number, maka akan terjadi error, maka dari itu diperlukan method <code>expect()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>untuk error handling, rust menyediakan expression <code>match</code>, expression ini bisa digunakan untuk menagkap error.</p>
+<ul>
+<li>jika sebelumnya <code>expect()</code> digunakan untuk menuliskan ekspektasi input, <code>match</code> bisa menangkapnya</li>
+<li>fungsi <code>parse</code> memiliki result dan result pasti berisi <code>ok</code> dan <code>err</code></li>
+<li><code>match</code> seperti <code>catch</code> dibahasa pemrograman lain</li>
+</ul>
+</li>
+<li>
+<p>variable</p>
+<ul>
+<li>variable immutable by default</li>
+<li>jika mau mutable tambahakan <code>mut</code></li>
+<li>variable itu scopenya local, tidak bisa digunakan diluar fn</li>
+<li>rust tidak mengizinkan unused variable</li>
+</ul>
+</li>
+<li>
+<p>constant</p>
+<ul>
+<li>memiliki cakupan statis, tidak dihapus dari memory selama program berjalan dan bisa diakses dari manasaja didalam module tempat constant itu dideklarasikan atau module lain jika public</li>
+<li>nilai dari const harus ditentukan pada waktu kompilasi, jadi tidak bisa di set ketika program sudah berjalan atau selalu immutable</li>
+<li>untuk penomoran rust menggunakan convention huruf besar dengan underscore contoh <code>THREE_HOURS_IN_SECONDS</code></li>
+</ul>
+</li>
+<li>
+<p>shadowing</p>
+<ul>
+<li>yang menarik dari shadowing adalah kita bisa mengubah value tanpa <code>mut</code></li>
+</ul>
+</li>
+</ul>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> x <span class="token operator">=</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> x <span class="token operator">=</span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x in the inner scope is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li>
+<p>kode diatas bisa digunakan untuk mengubah nilai dari <code>x</code>, sebelumnya nilai <code>x</code> adalah 5, lalu <code>x</code> diubah menjadi <code>x + 1</code> yaitu 6, lalu <code>x</code> diubah kembali didalam inner scope <code>x * 6</code> yaitu 12, karena itu didalam scope maka tidak akan mengubah value yang ada di luar scope, jadi jika di print <code>x</code> yang diluar scope maka akan tetap <code>6</code></p>
+</li>
+<li>
+<p>Data type</p>
+<ul>
+<li>
+<p>Scalar Types</p>
+<ul>
+<li>
+<p>integers</p>
+<ul>
+<li>
+<p>integer adalah number tanpa fractional component / tanpa pecahan</p>
+<ul>
+<li>
+<p>jadi integer adalah bilangan bulat</p>
+</li>
+<li>
+<p>integer terdiri dari unsigned dan signed</p>
+<ul>
+<li>
+<p>signed: -1</p>
+</li>
+<li>
+<p>unsgned: 1 (semua bilangan positif)</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Length</th><th>Signed</th><th>Usigned</th></tr></thead><tbody><tr><td>8-bit</td><td>i8</td><td>u8</td></tr><tr><td>16-bit</td><td>i16</td><td>u16</td></tr><tr><td>32-bi</td><td>t</td><td>i32</td></tr><tr><td>64-bi</td><td>t</td><td>i64</td></tr><tr><td>128-b</td><td>it</td><td>i128</td></tr><tr><td>arch</td><td>isize</td><td>usize</td></tr></tbody></table></div>
+</li>
+</ul>
+</li>
+<li>
+<p>arch ini maksudnya arsitektur dependent, tipedata ini karena ukurannya bergantuk pada arsitektur sistem yang digunakan </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>floating-point numbers</p>
+</li>
+<li>
+<p>booleans</p>
+</li>
+<li>
+<p>characer</p>
+<ul>
+<li>di rust charakter ada type berbeda, char dan string. 
+<ul>
+<li>char: Ini adalah tipe data untuk karakter tunggal. Di Rust, char selalu mewakili satu karakter Unicode Scalar Value, yang mungkin lebih luas daripada hanya ASCII. char didefinisikan menggunakan single quotes, seperti 'a', '1', atau '🎉'.</li>
+<li>String atau &#x26;str: Ini adalah tipe data untuk string, yaitu urutan karakter. String adalah string yang dapat tumbuh, berubah, dan dimiliki, sementara &#x26;str adalah referensi ke string yang ada di tempat lain, biasanya tidak dapat diubah. String didefinisikan menggunakan double quotes, seperti "hello" atau "world".</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Compound Types</p>
+<ul>
+<li>
+<p>tuples</p>
+<ul>
+<li>
+<p>tipe data komposit yang dapat mentimpan sekumpulan nilai dengan tipe berbeda. contoh</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> tup <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token number">6.4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> z<span class="token punctuation">)</span> <span class="token operator">=</span> tup<span class="token punctuation">;</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of y is: {y}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of z is: {z}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// index</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> tup<span class="token number">.0</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> y <span class="token operator">=</span> tup<span class="token number">.1</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> z <span class="token operator">=</span> tup<span class="token number">.2</span><span class="token punctuation">;</span>
+            
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of y is: {y}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of z is: {z}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: {x}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>array</p>
+<ul>
+<li>ini sama seperti array pada bahasa lain, tapi bedanya array gak bisa berbeda type</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Function</p>
+<ul>
+<li>tidak ada yang berbeda sama seperti bahasa lain, bedanya return value di rust tidak perlu keyword return seperti golang <code>return</code></li>
+</ul>
+</li>
+<li>
+<p>Control Flow</p>
+<ul>
+<li>
+<p>if expression</p>
+<ul>
+<li>if expression bisa digunakan berbarengan dengan let</li>
+</ul>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> condition <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> number <span class="token operator">=</span> <span class="token keyword">if</span> condition <span class="token punctuation">{</span> <span class="token number">5</span> <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token number">6</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of number is: {number}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+<li>
+<p>loops</p>
+<ul>
+<li>
+<p>loop</p>
+<ul>
+<li>
+<p>loop ini adalah basic looping dari rust, yang menariknya loop di sini bisa dibuat lable</p>
+<ul>
+<li>
+<p>loop label dimulai dengan single quote, contoh codenya</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token lifetime-annotation symbol">'counting_up</span><span class="token punctuation">:</span> <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"count = {count}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> remaining <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+            <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"remaining = {remaining}"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> remaining <span class="token operator">==</span> <span class="token number">9</span> <span class="token punctuation">{</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> count <span class="token operator">==</span> <span class="token number">2</span> <span class="token punctuation">{</span>
+                <span class="token keyword">break</span> <span class="token lifetime-annotation symbol">'counting_up</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            remaining <span class="token operator">-=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        count <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>while</p>
+<ul>
+<li>dengan while kita bisa menambahkan kondisi</li>
+<li>kodisinya berupa true or false</li>
+</ul>
+</li>
+<li>
+<p>for</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>

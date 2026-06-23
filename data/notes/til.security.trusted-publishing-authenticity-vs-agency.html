@@ -1,0 +1,17 @@
+<h1 id="trusted-publishing-membuktikan-origin-tapi-tidak-membuktikan-kontrol-publish">Trusted publishing membuktikan origin, tapi tidak membuktikan kontrol publish<a aria-hidden="true" class="anchor-heading icon-link" href="#trusted-publishing-membuktikan-origin-tapi-tidak-membuktikan-kontrol-publish"></a></h1>
+<p>TIL: trusted publishing di konteks npm berarti OIDC + Sigstore + provenance attestation untuk memverifikasi identitas dan workflow CI saat publish. Itu jawaban untuk "percaya siapa yang publish", bukan "percaya bahwa publish itu dilakukan dengan kontrol yang aman."</p>
+<p>Kasus Axios/OpenAI menunjukkan bahwa kalau attacker berhasil mengambil alih maintainer atau session, provenance bisa tetap valid sementara intent/kontrol sudah hilang.</p>
+<p>Intinya:</p>
+<ul>
+<li>authenticity = rilis datang dari jalur resmi</li>
+<li>agency = publisher masih mengendalikan proses secara sah</li>
+</ul>
+<p>Provenance hanya kuat terhadap pemalsuan origin. Ia lemah terhadap kompromi identitas asli dan social engineering.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">provenance (Private)</a></li>
+</ol>

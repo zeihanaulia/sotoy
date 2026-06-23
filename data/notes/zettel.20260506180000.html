@@ -1,0 +1,22 @@
+<h1 id="verifysh-is-a-verification-entrypoint-not-a-sensor">verify.sh is a verification entrypoint, not a sensor<a aria-hidden="true" class="anchor-heading icon-link" href="#verifysh-is-a-verification-entrypoint-not-a-sensor"></a></h1>
+<p><code>verify.sh</code> bukan sensor otomatis. Ia adalah single verification entrypoint: satu command stabil yang menjalankan check yang sudah disiapkan tim.</p>
+<p>Karena itu:</p>
+<ul>
+<li>kalau <code>verify.sh</code> hanya berisi <code>lint</code>, <code>typecheck</code>, dan <code>test</code>, ia tidak akan otomatis menemukan N+1.</li>
+<li>ia hanya akan mendeteksi N+1 jika sensor N+1 sudah ditambahkan ke dalamnya, seperti Semgrep rule, query-count regression test, atau runtime query profiler.</li>
+</ul>
+<p>Intinya: <code>verify.sh</code> membuat definition of done executable, bukan membuat definition of done sendiri.</p>
+<p>Related: <a href="/sotoy/notes/notes.agentic-engineering.single-verification-entrypoint">Single verification entrypoint</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">verification (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">harness (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1778003596758">Review comments should be encoded as guardrails, not left in PR threads</a></li>
+</ul>

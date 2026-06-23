@@ -1,0 +1,153 @@
+<h1 id="hunk-review-first-terminal-diff-viewer-untuk-changeset">Hunk: review-first terminal diff viewer untuk changeset<a aria-hidden="true" class="anchor-heading icon-link" href="#hunk-review-first-terminal-diff-viewer-untuk-changeset"></a></h1>
+<h2 id="apa-itu-hunk">Apa itu Hunk?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-hunk"></a></h2>
+<p>Gue lihat Hunk sebagai terminal diff viewer yang bukan sekadar <code>git diff</code> berwarna.
+Hunk lebih mirip <strong>local code review UI untuk changeset</strong>, dengan:</p>
+<ul>
+<li>sidebar file navigation</li>
+<li>multi-file review stream</li>
+<li>split/stack layout</li>
+<li>mouse + keyboard support</li>
+<li>auto-reload/watch mode</li>
+<li>agent/AI annotation workflow</li>
+</ul>
+<p>Di dokumentasinya dia menyebut diri sebagai "review-first terminal diff viewer for agent-authored changesets". Itu kena banget: fokusnya bukan tampilan patch, tapi membuat diff terasa seperti sesi review.</p>
+<h2 id="kenapa-mitchell-mengganti-diff-viewer-lain">Kenapa Mitchell mengganti diff viewer lain?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-mitchell-mengganti-diff-viewer-lain"></a></h2>
+<p>Di thread Mitchell dia bilang beberapa hal penting:</p>
+<ul>
+<li>looks good</li>
+<li>speedy</li>
+<li>good keyboard shortcuts</li>
+<li>good mouse support for fallback</li>
+</ul>
+<p>Itu bukan pujian default buat tool terminal.
+Gue baca sebagai sinyal bahwa dia dapat pengalaman yang lebih mulus ketimbang viewer lain: navigasinya lebih enak, layout-nya tidak bikin kepala pusing, dan dia bisa pakai mouse kalau perlu.</p>
+<p>Plus, Hunk memang menjanjikan workflow yang dekat dengan review hasil agent, bukan cuma comparing file.</p>
+<h2 id="apa-itu-jj--jujutsu-di-konteks-ini">Apa itu <code>jj</code> / Jujutsu di konteks ini?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-jj--jujutsu-di-konteks-ini"></a></h2>
+<p><code>jj</code> bukan alias diff tool. <code>jj</code> adalah Jujutsu: sebuah version control system yang punya command seperti <code>jj diff</code>, <code>jj show</code>, <code>jj rebase</code>, dan lain-lain.</p>
+<p>Jujutsu mencoba mengemas ulang UX VCS sambil tetap kompatibel dengan Git. <code>jj diff</code> dan <code>jj show</code> di thread Hunk artinya orang pengen Hunk bisa dipakai sebagai viewer untuk workflow Jujutsu, bukan cuma Git.</p>
+<p>Jadi bagian <code>JJ</code> di note ini bukan sekadar integrasi pager. Dia adalah integrasi antara:</p>
+<ul>
+<li><strong>engine version control</strong> (<code>jj</code>/Jujutsu)</li>
+<li>dan <strong>review UI diff</strong> (Hunk)</li>
+</ul>
+<p>Itu penting supaya lo ngerti kenapa thread Hunk ada banyak referensi ke <code>jj</code>.</p>
+<h2 id="use-case-paling-cocok-buat-apa">Use case paling cocok buat apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#use-case-paling-cocok-buat-apa"></a></h2>
+<p>Use case Hunk yang paling pas menurut gue:</p>
+<ol>
+<li>
+<p><strong>Review changeset lokal di repo Git</strong></p>
+<ul>
+<li><code>hunk diff</code> untuk working tree</li>
+<li><code>hunk show</code> untuk commit</li>
+<li>cocok buat pre-commit review dan melihat perubahan multi-file</li>
+</ul>
+</li>
+<li>
+<p><strong>Review live saat coding</strong></p>
+<ul>
+<li><code>hunk diff --watch</code></li>
+<li>Hunk auto-reload saat file berubah</li>
+<li>pas banget buat buka editor di satu terminal dan review di terminal lain</li>
+</ul>
+</li>
+<li>
+<p><strong>Review patch atau stdin diff</strong></p>
+<ul>
+<li><code>git diff --no-color | hunk patch -</code></li>
+<li>cocok buat skrip, patch generator, atau output tool lain</li>
+</ul>
+</li>
+<li>
+<p><strong>Review output agent / AI-generated changes</strong></p>
+<ul>
+<li>Hunk punya workflow agent notes</li>
+<li>bisa pakai <code>hunk diff</code> sambil agent bantu anotasi</li>
+<li>ini sesuai positioning resmi mereka</li>
+</ul>
+</li>
+</ol>
+<h2 id="cara-pakainya">Cara pakainya<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-pakainya"></a></h2>
+<h3 id="dasar">Dasar<a aria-hidden="true" class="anchor-heading icon-link" href="#dasar"></a></h3>
+<p>Install:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> i -g hunkdiff
+<span class="token comment"># atau</span>
+brew <span class="token function">install</span> modem-dev/tap/hunk
+</code></pre>
+<p>Jalankan:</p>
+<pre class="language-bash"><code class="language-bash">hunk
+hunk --version
+</code></pre>
+<h3 id="review-repo-git">Review repo Git<a aria-hidden="true" class="anchor-heading icon-link" href="#review-repo-git"></a></h3>
+<pre class="language-bash"><code class="language-bash">hunk <span class="token function">diff</span>
+hunk show
+hunk show HEAD~1
+</code></pre>
+<h3 id="live-watch-mode">Live watch mode<a aria-hidden="true" class="anchor-heading icon-link" href="#live-watch-mode"></a></h3>
+<pre class="language-bash"><code class="language-bash">hunk <span class="token function">diff</span> --watch
+hunk <span class="token function">diff</span> before.ts after.ts --watch
+</code></pre>
+<h3 id="review-patch-dari-pipe">Review patch dari pipe<a aria-hidden="true" class="anchor-heading icon-link" href="#review-patch-dari-pipe"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">diff</span> --no-color <span class="token operator">|</span> hunk patch -
+</code></pre>
+<h3 id="integrasi-git-pager">Integrasi Git pager<a aria-hidden="true" class="anchor-heading icon-link" href="#integrasi-git-pager"></a></h3>
+<p>Kalau mau pakai Hunk sebagai pager Git:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">git</span> config --global core.pager <span class="token string">"hunk pager"</span>
+</code></pre>
+<p>Atau alias opt-in:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">git</span> config --global alias.hdiff <span class="token string">"-c core.pager=<span class="token entity" title="\&#x22;">\"</span>hunk pager<span class="token entity" title="\&#x22;">\"</span> diff"</span>
+<span class="token function">git</span> config --global alias.hshow <span class="token string">"-c core.pager=<span class="token entity" title="\&#x22;">\"</span>hunk pager<span class="token entity" title="\&#x22;">\"</span> show"</span>
+</code></pre>
+<p>Lalu pakai:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">git</span> hdiff
+<span class="token function">git</span> hshow
+</code></pre>
+<h3 id="integrasi-jujutsu-jj">Integrasi Jujutsu (JJ)<a aria-hidden="true" class="anchor-heading icon-link" href="#integrasi-jujutsu-jj"></a></h3>
+<p>Hunk bisa auto-detect JJ workspace dan support <code>hunk diff [revset]</code> / <code>hunk show [revset]</code>.
+Kalau mau paksa VCS:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token comment"># ~/.config/hunk/config.toml</span>
+<span class="token key property">vcs</span> <span class="token punctuation">=</span> <span class="token string">"jj"</span>
+</code></pre>
+<p>Untuk JJ pager:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">ui</span><span class="token punctuation">]</span>
+<span class="token key property">pager</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"hunk"</span><span class="token punctuation">,</span> <span class="token string">"pager"</span><span class="token punctuation">]</span>
+<span class="token key property">diff-formatter</span> <span class="token punctuation">=</span> <span class="token string">":git"</span>
+</code></pre>
+<h2 id="limitasi-dibanding-tool-diff-lain">Limitasi dibanding tool diff lain<a aria-hidden="true" class="anchor-heading icon-link" href="#limitasi-dibanding-tool-diff-lain"></a></h2>
+<p>Hunk punya keunggulan di sisi review-first UI, tapi bukan pakar structural diff.
+Kalau lo butuh AST-aware diff atau syntax-aware structural comparison, tool lain seperti <code>difftastic</code> masih lebih tepat.</p>
+<p>Beberapa limitasi yang gue tangkap:</p>
+<ul>
+<li><strong>bukan structural diff tool</strong> seperti difftastic</li>
+<li><strong>UI review lebih penting daripada algoritma diff</strong></li>
+<li>integrasi JJ dulu sempat agak kurang jelas, meski sekarang dokumentasinya sudah mendingan</li>
+</ul>
+<h2 id="kesimpulan">Kesimpulan<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan"></a></h2>
+<p>Hunk paling kuat kalau lo mau memposisikan changeset sebagai objek review, bukan cuma text patch.
+Kalau workflow lo butuh:</p>
+<ul>
+<li>navigasi file cepat,</li>
+<li>preview diff multi-file,</li>
+<li>live watch mode,</li>
+<li>keyboard + mouse terminal UI,</li>
+<li>dan review hasil AI/agent,</li>
+</ul>
+<p>maka Hunk bisa jadi tool yang benar-benar menggantikan <code>git diff</code> biasa.</p>
+<p>Kalau lo cuma butuh structural syntax diff, mungkin Hunk bukan tool utama.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">prompt-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">devtools (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">diff (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">terminal (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">jj (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">jujutsu (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+</ul>

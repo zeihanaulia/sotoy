@@ -1,0 +1,27 @@
+<h1 id="mekanisme-penegakan-loop-loop-enforcement">Mekanisme Penegakan Loop (Loop Enforcement)<a aria-hidden="true" class="anchor-heading icon-link" href="#mekanisme-penegakan-loop-loop-enforcement"></a></h1>
+<h2 id="konsep">Konsep<a aria-hidden="true" class="anchor-heading icon-link" href="#konsep"></a></h2>
+<p>Instruksi dalam prompt (misal: "Tolong jalankan test sebelum selesai") sering diabaikan oleh AI jika ia merasa sudah menemukan solusi atau ingin mengakhiri tugas dengan cepat. <strong>Loop Enforcement</strong> adalah penggunaan mekanisme teknis untuk memaksa agent melewati jalur verifikasi.</p>
+<h2 id="bentuk-penegakan">Bentuk Penegakan<a aria-hidden="true" class="anchor-heading icon-link" href="#bentuk-penegakan"></a></h2>
+<ol>
+<li><strong>Physical Hooks</strong>: Menggunakan event-driven hooks (seperti <code>PostToolUse</code> atau <code>Stop</code> hooks) yang menyuntikkan output tool secara otomatis ke dalam context window agent.</li>
+<li><strong>Protocol Files</strong>: Menggunakan file seperti <code>CLAUDE.md</code> sebagai referensi permanen yang mendefinisikan state machine dari tugas (Write <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Check <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Fix <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Repeat).</li>
+<li><strong>Escalation Paths</strong>: Menyediakan sub-agent dengan context fresh (misal: <code>@fixer</code>) untuk memutus loop stagnan (stuck in a loop).</li>
+</ol>
+<h2 id="anti-cheat-patterns">Anti-Cheat Patterns<a aria-hidden="true" class="anchor-heading icon-link" href="#anti-cheat-patterns"></a></h2>
+<p>Untuk mencegah agent "curang" (misal: menghapus test agar pass), penegakan harus mencakup:</p>
+<ul>
+<li><strong>Test Integrity</strong>: Larangan mengubah test suite selama loop implementasi.</li>
+<li><strong>No-Progress Detection</strong>: Deteksi jika error yang sama muncul berulang kali, yang memicu penghentian loop atau eskalasi.</li>
+</ul>
+<h2 id="relasi">Relasi<a aria-hidden="true" class="anchor-heading icon-link" href="#relasi"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.ai-engineering.claude-code-loop-setup">Practical Loop Setup in Claude Code: From Messenger to Reviewer</a>: Contoh setup praktis menggunakan hooks dan protocol files.</li>
+<li><a href="/sotoy/notes/zettel.ai.verified-done">Definisi 'Done' sebagai 'Verified'</a>: Tujuan akhir dari loop enforcement adalah mencapai status 'Verified Done'.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-automation (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">guardrails (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">workflow-design (Private)</a></li>
+</ol>

@@ -1,0 +1,276 @@
+<h1 id="setup-mvp-untuk-workflow-real-behavior-proof">Setup MVP untuk workflow real behavior proof<a aria-hidden="true" class="anchor-heading icon-link" href="#setup-mvp-untuk-workflow-real-behavior-proof"></a></h1>
+<h2 id="inti-setup">Inti setup<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-setup"></a></h2>
+<p>Setup ini bukan sekadar nyiapin screen recorder. Yang dibangun adalah <strong>evidence pipeline</strong>:</p>
+<ol>
+<li>kode berubah</li>
+<li>test jalan</li>
+<li>app dijalankan</li>
+<li>skenario direproduksi</li>
+<li>behavior direkam</li>
+<li>artifact ditempel ke PR</li>
+</ol>
+<p>Jadi tools-nya harus menutup tiga kebutuhan utama:</p>
+<ul>
+<li>kontrol environment</li>
+<li>kontrol input</li>
+<li>bukti output</li>
+</ul>
+<h2 id="tools-minimum-untuk-mulai">Tools minimum untuk mulai<a aria-hidden="true" class="anchor-heading icon-link" href="#tools-minimum-untuk-mulai"></a></h2>
+<p>Paling kecil yang diperlukan:</p>
+<ul>
+<li>Git</li>
+<li>Runtime project sesuai stack
+<ul>
+<li>Node.js / pnpm untuk JS/TS</li>
+<li>Python / pytest untuk Python</li>
+<li>Go / cargo untuk Go</li>
+</ul>
+</li>
+<li>Test runner
+<ul>
+<li>Vitest / Jest / pytest / go test / cargo test</li>
+</ul>
+</li>
+<li>Script runner
+<ul>
+<li>bash / npm scripts / Makefile / justfile</li>
+</ul>
+</li>
+<li>Recorder sederhana
+<ul>
+<li>Playwright video untuk web</li>
+<li>OBS / ffmpeg untuk manual / desktop</li>
+</ul>
+</li>
+<li>Tempat simpan artifact
+<ul>
+<li>GitHub Actions artifacts</li>
+<li>S3/R2</li>
+<li>attachment PR langsung</li>
+</ul>
+</li>
+<li>Template PR comment</li>
+</ul>
+<p>Kalau sudah punya ini, versi pertama sudah bisa jalan.</p>
+<h2 id="kalau-flow-nya-browserweb-app">Kalau flow-nya browser/web app<a aria-hidden="true" class="anchor-heading icon-link" href="#kalau-flow-nya-browserweb-app"></a></h2>
+<p>Stack yang masuk akal:</p>
+<ul>
+<li>Playwright
+<ul>
+<li>buka app</li>
+<li>jalankan skenario</li>
+<li>record video / screenshot</li>
+<li>simpan artifact</li>
+</ul>
+</li>
+<li>GitHub Actions
+<ul>
+<li>checkout main</li>
+<li>jalankan before</li>
+<li>checkout PR</li>
+<li>jalankan after</li>
+<li>upload artifacts</li>
+<li>comment ke PR</li>
+</ul>
+</li>
+</ul>
+<p>Tools konkret:</p>
+<ul>
+<li>Git</li>
+<li>GitHub Actions</li>
+<li>Node.js / pnpm / npm</li>
+<li>Playwright</li>
+<li>ffmpeg (optional untuk trim/convert)</li>
+<li>gh CLI untuk comment PR</li>
+</ul>
+<h2 id="kalau-flow-nya-desktop-app-seperti-telegram">Kalau flow-nya desktop app seperti Telegram<a aria-hidden="true" class="anchor-heading icon-link" href="#kalau-flow-nya-desktop-app-seperti-telegram"></a></h2>
+<p>Tools-nya lebih berat:</p>
+<ul>
+<li>Linux VM / container dengan GUI</li>
+<li>Xvfb atau display server nyata</li>
+<li>VNC / noVNC untuk inspect manual</li>
+<li>Telegram Desktop</li>
+<li>ffmpeg untuk screen recording</li>
+<li>scripted input tool
+<ul>
+<li>xdotool / ydotool</li>
+<li>Playwright kalau ada browser part</li>
+<li>custom automation</li>
+</ul>
+</li>
+</ul>
+<p>Untuk Telegram khususnya:</p>
+<ul>
+<li>Telegram Desktop terinstal</li>
+<li>akun Telegram test</li>
+<li>grup / channel test</li>
+<li>bot token untuk SUT</li>
+<li>session persistence supaya login tidak ulang terus</li>
+<li>secret management untuk token/session</li>
+</ul>
+<p>Jangan remehkan real login/session. Kalau tiap run butuh login manual, workflow langsung rapuh.</p>
+<h2 id="satu-pc-sebagai-environment-eksekusi">“Satu PC” sebagai environment eksekusi<a aria-hidden="true" class="anchor-heading icon-link" href="#satu-pc-sebagai-environment-eksekusi"></a></h2>
+<p>Dalam konteks ini, “satu PC” bukan harus perangkat fisik khusus. Ini adalah satu environment eksekusi yang punya display/session untuk menjalankan app dan merekam behavior.</p>
+<p>Bentuknya bisa:</p>
+<ul>
+<li>PC/laptop lokal: cocok untuk eksperimen awal.</li>
+<li>VM dengan GUI: cocok untuk automation serius.</li>
+<li>Cloud runner dengan virtual display: cocok untuk CI web/headless.</li>
+<li>Remote desktop pool: cocok untuk desktop app nyata seperti Telegram Desktop.</li>
+<li>Container biasa: cukup kalau cuma web/headless test.</li>
+</ul>
+<p>Perbedaan utama:</p>
+<ul>
+<li>Web app biasanya cukup dengan Playwright + Chromium + video recording di CI.</li>
+<li>Desktop app nyata butuh GUI session, login session, dan recorder seperti ffmpeg.</li>
+</ul>
+<p>Trade-off:</p>
+<ul>
+<li>disposable runner:
+<ul>
+<li>
+<ul>
+<li>bersih</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>aman</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>repeatable</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>login ulang susah</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>setup lebih lama</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>persistent runner:
+<ul>
+<li>
+<ul>
+<li>session login tetap ada</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>butuh jaga secret/state</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>rentan noisy state</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="untuk-github-pr-automation">Untuk GitHub PR automation<a aria-hidden="true" class="anchor-heading icon-link" href="#untuk-github-pr-automation"></a></h2>
+<p>Minimal:</p>
+<ul>
+<li>GitHub Actions</li>
+<li>actions/checkout</li>
+<li>actions/upload-artifact</li>
+<li>gh CLI</li>
+<li>GitHub token dengan permission comment PR</li>
+</ul>
+<p>Lebih proper:</p>
+<ul>
+<li>Cloudflare R2 / S3 / GCS</li>
+<li>metadata artifact
+<ul>
+<li>commit SHA before</li>
+<li>commit SHA after</li>
+<li>test command</li>
+<li>scenario name</li>
+<li>timestamp</li>
+<li>environment info</li>
+</ul>
+</li>
+</ul>
+<h2 id="optional-tapi-bikin-workflow-matang">Optional tapi bikin workflow matang<a aria-hidden="true" class="anchor-heading icon-link" href="#optional-tapi-bikin-workflow-matang"></a></h2>
+<p>Biar lebih disiplin:</p>
+<ul>
+<li>label bot</li>
+<li>review bot</li>
+<li>changelog checker</li>
+<li>code owner routing</li>
+<li>scoped test detector</li>
+<li>before/after diff generator</li>
+<li>evidence retention policy</li>
+</ul>
+<h2 id="kenapa-mock-model-penting">Kenapa mock model penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-mock-model-penting"></a></h2>
+<p>Real behavior proof lo harus terkontrol. Kalau pake model live, before/after bisa beda karena output model, bukan karena patch.</p>
+<p>Mock model yang deterministik membuat variabel pengujian jadi jelas:</p>
+<ul>
+<li>prompt sama</li>
+<li>response sama</li>
+<li>channel sama</li>
+<li>UI sama</li>
+</ul>
+<p>Yang diuji cuma patch / formatter / behavior change.</p>
+<h2 id="level-maturity-setup">Level maturity setup<a aria-hidden="true" class="anchor-heading icon-link" href="#level-maturity-setup"></a></h2>
+<p>Level 1 — paling murah:</p>
+<ul>
+<li>Unit/regression test</li>
+<li>Manual screen recording</li>
+<li>Manual PR comment</li>
+</ul>
+<p>Level 2 — semi otomatis:</p>
+<ul>
+<li>Playwright</li>
+<li>GitHub Actions</li>
+<li>auto upload artifact</li>
+<li>auto PR comment</li>
+</ul>
+<p>Level 3 — real behavior automation:</p>
+<ul>
+<li>VM/runner GUI</li>
+<li>ffmpeg</li>
+<li>VNC/noVNC</li>
+<li>real account/session</li>
+<li>mock service deterministik</li>
+<li>auto before/after run</li>
+</ul>
+<p>Level 4 — agentic evidence pipeline:</p>
+<ul>
+<li>Codex / agent untuk generate fix/proof notes</li>
+<li>review bot untuk correctness/security/changelog</li>
+<li>label bot untuk proof required/supplied</li>
+<li>artifact server</li>
+<li>scenario registry</li>
+</ul>
+<h2 id="cara-pikir-yang-benar">Cara pikir yang benar<a aria-hidden="true" class="anchor-heading icon-link" href="#cara-pikir-yang-benar"></a></h2>
+<p>Jangan lihat tools sebagai daftar belanja. Lihat sebagai rantai:</p>
+<ul>
+<li>Test runner → membuktikan logic</li>
+<li>Mock service → membuat input deterministic</li>
+<li>Runner / VM → jalankan app di environment nyata</li>
+<li>Recorder → tangkap behavior</li>
+<li>Artifact storage → simpan bukti</li>
+<li>PR bot → bawa bukti ke tempat keputusan merge</li>
+</ul>
+<p>Insight-nya: setup terbaik bukan yang paling lengkap. Setup terbaik adalah yang menjawab pertanyaan:</p>
+<blockquote>
+<p>Jika reviewer lihat PR ini, apakah dia bisa percaya bahwa bug yang diklaim sudah berubah behavior-nya?</p>
+</blockquote>
+<p>Kalau iya, MVP lo sudah benar.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">qa (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">evidence (Private)</a></li>
+</ol>

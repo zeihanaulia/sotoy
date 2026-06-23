@@ -1,0 +1,164 @@
+<h1 id="tanstack-npm-supply-chain-compromise--postmortem-notes">TanStack npm supply-chain compromise — postmortem notes<a aria-hidden="true" class="anchor-heading icon-link" href="#tanstack-npm-supply-chain-compromise--postmortem-notes"></a></h1>
+<h2 id="inti-kejadian">Inti kejadian<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-kejadian"></a></h2>
+<p>11 Mei 2026, attacker berhasil mempublish 84 versi malicious di 42 paket <code>@tanstack/*</code> dalam sekitar 19:20–19:26 UTC.</p>
+<p>Postmortem TanStack menyebut rangkaian ini bukan credential theft tradisional: npm token tidak dicuri. Yang pecah adalah chain trust di depan jalur publish resmi.</p>
+<p>Kunci insiden ini:</p>
+<ul>
+<li><code>pull_request_target</code> request yang mengeksekusi code PR di konteks base repo</li>
+<li>GitHub Actions cache poisoning yang memindahkan payload ke workflow resmi</li>
+<li>ekstraksi token OIDC dari memori runner untuk publish npm</li>
+</ul>
+<h2 id="kenapa-trusted-publishing-oidc-tidak-menyelamatkan">Kenapa trusted publishing OIDC tidak menyelamatkan<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-trusted-publishing-oidc-tidak-menyelamatkan"></a></h2>
+<p>Gue baca bagian ini sebagai bukti bahwa kita sering terlalu cepat menganggap "jalan publish resmi = aman".
+Trusted publishing memang memberi bukti bahwa paket dipublish dari workflow resmi.</p>
+<p>Namun dalam kasus ini, attacker tidak perlu memalsukan workflow. Mereka mendapatkan code execution di runner yang sudah punya hak <code>id-token: write</code>.</p>
+<p>Jadi dari sisi npm, publish itu tetap sah. Tapi dari sisi kontrol, runner sudah dimanipulasi.</p>
+<p>Ini membuktikan:</p>
+<ul>
+<li>provenance = "siapa publish"</li>
+<li>provenance ≠ "apakah kontrol publish sah"</li>
+<li>trusted publishing tidak sama dengan sandbox</li>
+</ul>
+<h2 id="rantai-serangan-teknis">Rantai serangan teknis<a aria-hidden="true" class="anchor-heading icon-link" href="#rantai-serangan-teknis"></a></h2>
+<h3 id="1-pr-jahat-dengan-pull_request_target">1. PR jahat dengan <code>pull_request_target</code><a aria-hidden="true" class="anchor-heading icon-link" href="#1-pr-jahat-dengan-pull_request_target"></a></h3>
+<p>Attacker membuat fork repo TanStack/router, lalu PR normal-looking.</p>
+<p>Workflow yang jalan adalah <code>bundle-size.yml</code> dan <code>labeler.yml</code>, kedua-duanya memakai <code>pull_request_target</code>.</p>
+<p>Masalahnya:</p>
+<ul>
+<li><code>pull_request_target</code> berjalan di konteks base repo</li>
+<li>build checkout PR merge result</li>
+<li>jadi code PR untrusted bisa ikut dieksekusi</li>
+</ul>
+<p>Dalam praktiknya, menjalankan code PR ini sering berarti melakukan build/install langkah seperti <code>npm install</code> / <code>pnpm install</code> / <code>yarn install</code> di konteks PR.
+Itu penting karena install lifecycle bisa memicu hook, script, atau dependency jahat yang kemudian membaca token/kredensial dan mengeksekusi payload.</p>
+<p>Intinya: ini bukan PR contributor biasa yang sudah dimerge.
+PR berbahaya ini bisa takeover tanpa harus masuk ke <code>main</code> terlebih dulu. PR hanya perlu diterima enough untuk menjalankan workflow yang trusted.</p>
+<p>Proses yang sebenarnya bermasalah adalah:</p>
+<ul>
+<li>attacker buka PR dari fork</li>
+<li>workflow trusted di base repo jalan karena trigger <code>pull_request_target</code></li>
+<li>workflow itu kini menjalankan kode yang ada di PR atau dependency PR</li>
+<li>pada titik itu, PR sudah bisa memengaruhi pipeline resmi meski belum dimerge</li>
+</ul>
+<p>Jadi analoginya:</p>
+<ul>
+<li>normal: PR dibuat → review → merge → kode jalan di main</li>
+<li>TanStack issue: PR dibuat → trusted workflow jalan → kode PR dieksekusi sebelum merge</li>
+</ul>
+<p>Ini adalah definisi pwn request: trusted trigger menjalankan untrusted code.</p>
+<h3 id="2-cache-poisoning">2. Cache poisoning<a aria-hidden="true" class="anchor-heading icon-link" href="#2-cache-poisoning"></a></h3>
+<p>PR jahat menaruh payload ke <code>pnpm store</code> dengan key yang sama dengan cache key workflow resmi.</p>
+<p>Pada akhirnya cache yang dikendalikan attacker bisa direstore oleh workflow <code>main</code>.</p>
+<p>Pelajaran teknis:</p>
+<ul>
+<li>cache adalah trust boundary</li>
+<li>cache bukan sekadar optimisasi performa</li>
+<li>cache bisa jadi kendaraan eksekusi lintas boundary</li>
+</ul>
+<h3 id="3-token-oidc-di-memori-runner">3. Token OIDC di memori runner<a aria-hidden="true" class="anchor-heading icon-link" href="#3-token-oidc-di-memori-runner"></a></h3>
+<p>Workflow resmi punya <code>id-token: write</code> untuk npm trusted publishing.</p>
+<p>Payload tidak menggunakan step publish resmi. Sebaliknya, dia mengekstrak token OIDC dari memori runner dan hit <code>registry.npmjs.org</code> langsung.</p>
+<p>Jadi attacker berhasil mem-push paket karena ia mendapatkan token valid yang dikeluarkan untuk workflow tersebut. Token itu sudah sah bagi npm, sehingga request publikasi terlihat datang dari workflow resmi meskipun eksekusinya berjalan lewat payload jahat di runner.</p>
+<p>Ini menunjukkan:</p>
+<ul>
+<li>publish resmi bisa dilewati</li>
+<li>trusted publishing memverifikasi identitas workflow, bukan jalur eksekusi token di dalam runner</li>
+</ul>
+<h2 id="apa-malware-nya-lakukan">Apa malware-nya lakukan<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-malware-nya-lakukan"></a></h2>
+<p>Payload aktif saat install (<code>npm install</code>, <code>pnpm install</code>, <code>yarn install</code>).</p>
+<p>Fungsinya:</p>
+<ul>
+<li>ambil kredensial: AWS, GCP, Kubernetes, Vault, <code>~/.npmrc</code>, GitHub token, SSH key</li>
+<li>exfiltrate via Session/Oxen messenger</li>
+<li>cari package lain korban dan republish dengan injeksi serupa</li>
+</ul>
+<p>Intinya, host yang install affected version harus diasumsikan compromised.</p>
+<h2 id="kelemahan-desain-sistem-paling-fatal">Kelemahan desain sistem paling fatal<a aria-hidden="true" class="anchor-heading icon-link" href="#kelemahan-desain-sistem-paling-fatal"></a></h2>
+<h3 id="pull_request_target-dijalankan-tanpa-batasan-execution-code"><code>pull_request_target</code> dijalankan tanpa batasan execution code<a aria-hidden="true" class="anchor-heading icon-link" href="#pull_request_target-dijalankan-tanpa-batasan-execution-code"></a></h3>
+<p>Workflow ini seharusnya hanya dipakai untuk trust-safe operations. Namun ia mengeksekusi PR code dan dependency PR.</p>
+<p>Contoh simulasi sebelumnya:</p>
+<ul>
+<li>Repo punya job <code>labeler</code> atau <code>bundle-size</code> yang perlu membaca PR metadata dan komentar.</li>
+<li>Developer menggunakan <code>pull_request_target</code> karena job itu harus punya akses token base repo yang tidak tersedia pada fork.</li>
+<li>Job tersebut juga checkout hasil merge PR dan menjalankan script build/install dependency untuk menghitung ukuran bundle atau assign label.</li>
+<li>Pada dasarnya, workflow trusted ini jadi mengeksekusi code PR yang belum diverifikasi.</li>
+</ul>
+<p>Seharusnya model yang lebih aman seperti ini:</p>
+<ul>
+<li><code>pull_request_target</code> hanya melakukan operasi metadata yang tidak bergantung pada kode PR, misalnya membaca komentar atau menulis label.</li>
+<li>Semua kode PR yang perlu dieksekusi harus dijalankan di job terpisah dengan <code>pull_request</code> atau <code>pull_request_target</code> yang sangat terbatas dan tanpa akses ke secret/base repo.</li>
+<li>Jika perlu build PR, gunakan workflow yang membangun PR di konteks fork saja dan tidak memberikan akses sensitif pada base repo.</li>
+<li>Atau gunakan <code>pull_request_target</code> dengan strict guardrail: jangan checkout PR code, jangan install dependency PR, dan jangan restore cache yang bisa dipengaruhi PR.</li>
+</ul>
+<p>Dengan cara ini, trigger trusted tidak lagi menjadi jalur eksekusi untuk code untrusted.</p>
+<h3 id="cache-dianggap-bukan-attack-surface">Cache dianggap bukan attack surface<a aria-hidden="true" class="anchor-heading icon-link" href="#cache-dianggap-bukan-attack-surface"></a></h3>
+<p>Cache restore pada scope base repo jadi jalur terpenting. Tim sering lupa bahwa restore cache mempengaruhi apa yang dieksekusi selanjutnya.</p>
+<h3 id="id-token-write-dipercaya-sebagai-safe-capability"><code>id-token: write</code> dipercaya sebagai safe capability<a aria-hidden="true" class="anchor-heading icon-link" href="#id-token-write-dipercaya-sebagai-safe-capability"></a></h3>
+<p>Token OIDC aman secara desain, tapi jika runner sudah dieksekusi code asing, token itu bisa diambil dari memori.</p>
+<h3 id="kurangnya-monitoring-publish-internal">Kurangnya monitoring publish internal<a aria-hidden="true" class="anchor-heading icon-link" href="#kurangnya-monitoring-publish-internal"></a></h3>
+<p>TanStack tahu dari luar. Artinya observability internal terhadap publish yang abnormal masih lemah.</p>
+<h2 id="pelajaran-praktis">Pelajaran praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#pelajaran-praktis"></a></h2>
+<h3 id="review-workflow-secara-behavioral-bukan-hanya-yaml">Review workflow secara behavioral, bukan hanya YAML<a aria-hidden="true" class="anchor-heading icon-link" href="#review-workflow-secara-behavioral-bukan-hanya-yaml"></a></h3>
+<p>Tanya:</p>
+<ul>
+<li>kode apa yang benar-benar dieksekusi?</li>
+<li>apakah untrusted code bisa mempengaruhi workflow trusted?</li>
+<li>apakah cache/restore masuk dalam trust boundary?</li>
+</ul>
+<h3 id="perlakukan-pull_request_target-sebagai-high-risk">Perlakukan <code>pull_request_target</code> sebagai high-risk<a aria-hidden="true" class="anchor-heading icon-link" href="#perlakukan-pull_request_target-sebagai-high-risk"></a></h3>
+<p>Bukan larangan total, tapi wajib audit jika ia checkout PR code, build PR, atau install dependency PR.</p>
+<h3 id="perlakukan-cache-sebagai-artefak-supply-chain">Perlakukan cache sebagai artefak supply-chain<a aria-hidden="true" class="anchor-heading icon-link" href="#perlakukan-cache-sebagai-artefak-supply-chain"></a></h3>
+<p>Jangan anggap cache sekadar kecepatan. Cache yang restore dalam workflow resmi perlu perlakuan yang sama seperti binary dependency.</p>
+<h3 id="jangan-anggap-oidctrusted-publishing-sebagai-sandbox">Jangan anggap OIDC/trusted publishing sebagai sandbox<a aria-hidden="true" class="anchor-heading icon-link" href="#jangan-anggap-oidctrusted-publishing-sebagai-sandbox"></a></h3>
+<p>Ini bagus untuk provenance, tapi tidak mencegah code execution jahat di runner.</p>
+<h3 id="siapkan-deteksi-internal-untuk-publish-gak-biasa">Siapkan deteksi internal untuk publish gak biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#siapkan-deteksi-internal-untuk-publish-gak-biasa"></a></h3>
+<p>Minimal:</p>
+<ul>
+<li>publish dari workflow yang tidak expected</li>
+<li>step publish yang dilewati</li>
+<li>request npm yang aneh</li>
+</ul>
+<h3 id="kurangi-blast-radius-maintainer">Kurangi blast radius maintainer<a aria-hidden="true" class="anchor-heading icon-link" href="#kurangi-blast-radius-maintainer"></a></h3>
+<p>Semakin banyak maintainer dengan hak luas, semakin banyak target. Hak publikasi yang lebar perlu dikurangi dan dijaga.</p>
+<h2 id="koherensi-dengan-mental-model-yang-lebih-sehat">Koherensi dengan mental model yang lebih sehat<a aria-hidden="true" class="anchor-heading icon-link" href="#koherensi-dengan-mental-model-yang-lebih-sehat"></a></h2>
+<p>Insiden TanStack ini mendukung pemikiran:</p>
+<ul>
+<li>trusted publishing itu satu lapis</li>
+<li>tidak berarti trust penuh</li>
+<li>masih perlu delay gate, behavioral checks, approval, isolation</li>
+<li>boundary antar stage harus dipahami, bukan hanya fitur permukaan</li>
+</ul>
+<h2 id="konkret-apa-yang-perlu-dicek-besok-pagi">Konkret: apa yang perlu dicek besok pagi<a aria-hidden="true" class="anchor-heading icon-link" href="#konkret-apa-yang-perlu-dicek-besok-pagi"></a></h2>
+<ul>
+<li><code>pull_request_target</code> jobs yang checkout PR code</li>
+<li>cache key/restore yang bisa dipengaruhi PR</li>
+<li><code>id-token: write</code> di runner yang bisa dieksekusi code eksternal</li>
+<li>apakah publish workflow punya approval/monitoring tambahan</li>
+<li>apakah package baru di pipeline sensitif punya cooling period</li>
+</ul>
+<p>Catatan: postmortem ini penting bukan karena bug tunggal, tapi karena menyusun beberapa asumsi trust yang masing-masing kelihatan kecil menjadi rantai serangan fatal.</p>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.trusted-publishing-checklist">Trusted publishing: kritik argumen dan checklist operasional</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+<li><a href="/sotoy/notes/zettel.trusted-publishing-authenticity-vs-agency">Trusted publishing memverifikasi origin, bukan kontrol publish</a></li>
+<li><a href="/sotoy/notes/zettel.pull-request-target-takeover">pull_request_target bisa menjadi jalur takeover PR sebelum merge</a></li>
+<li><a href="/sotoy/notes/zettel.cache-as-trust-boundary">Cache CI adalah trust boundary, bukan hanya optimisasi performa</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">postmortem (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">tanstack (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/handbook.dependency-management.npm-supply-chain-cooldown">Hardening npm dependency installs dengan cooldown policy</a></li>
+<li><a href="/sotoy/notes/notes.security.npm-supply-chain-cooldown-policy">NPM supply-chain cooldown policy</a></li>
+<li><a href="/sotoy/notes/notes.security.trusted-publishing-checklist">Trusted publishing: kritik argumen dan checklist operasional</a></li>
+</ul>

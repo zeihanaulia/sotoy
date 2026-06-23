@@ -1,0 +1,86 @@
+<h1 id="video-proof-qa">Video Proof Qa<a aria-hidden="true" class="anchor-heading icon-link" href="#video-proof-qa"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Thread ini bukan cuma soal "ada video QA". Ini soal mereka memindahkan bukti kualitas dari teks statis ke artefak visual yang bisa diaudit, lalu masuk ke workflow review.</p>
+<p>Dari konteks OpenClaw, inti pengumumannya adalah: mereka sekarang bisa generate <strong>video proof untuk issue</strong> sebagai bagian dari QA automation. Komponennya mencakup:</p>
+<ul>
+<li>workflow GitHub/Codex yang bikin <strong>before/after</strong></li>
+<li><strong>crabbox</strong> untuk screen recording</li>
+<li>automasi login Telegram nyata</li>
+</ul>
+<p>Kalimat ringkasnya: bukan sekadar test pass/fail, tapi artefak bukti yang bisa dilihat dan diverifikasi.</p>
+<h2 id="4-pertanyaan-kunci">4 pertanyaan kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#4-pertanyaan-kunci"></a></h2>
+<h3 id="1-sebenernya-peter-lagi-ngumumin-apa">1. Sebenernya Peter lagi ngumumin apa?<a aria-hidden="true" class="anchor-heading icon-link" href="#1-sebenernya-peter-lagi-ngumumin-apa"></a></h3>
+<p>Peter ngasih sinyal bahwa OpenClaw sekarang bisa menghasilkan evidence video sekaligus automation. Yang dia garis bawahi:</p>
+<ul>
+<li>output QA bukan hanya hijau/merah</li>
+<li>artefak bukti bukti kondisi sebelum dan sesudah</li>
+<li>interaksi dengan UI nyata, termasuk login Telegram real</li>
+<li>bukti dikemas untuk review, bukan cuma internal log</li>
+</ul>
+<p>Jadi konsepnya adalah kombinasi:</p>
+<ul>
+<li>automation runner</li>
+<li>UI session recorder</li>
+<li>packaging evidence ke PR/review flow</li>
+</ul>
+<h3 id="2-kenapa-reply-reply-orang-ngerasa-ini-penting-banget">2. Kenapa reply-reply orang ngerasa ini penting banget?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-reply-reply-orang-ngerasa-ini-penting-banget"></a></h3>
+<p>Reply di thread ini konsisten menunjuk pada satu tema: <strong>trust dan auditability</strong>.</p>
+<ul>
+<li>ada yang langsung bilang ingin setup serupa untuk kerjaan mereka</li>
+<li>ada yang apresiasi karena ini open source dan bisa direplikasi</li>
+<li>ada yang ingatkan bahwa perubahan UI/behavior sulit divalidasi hanya dari diff</li>
+<li>ada yang bilang banyak repro steps itu fiction</li>
+<li>ada yang komentar screenshot sudah terasa jadul karena transition lebih bisa diperlihatkan dengan video</li>
+<li>ada yang sebut ini "boring stuff" yang membuat agent berguna untuk pekerjaan nyata</li>
+</ul>
+<p>Intinya: bukti visual bukan gimmick. Ini respond terhadap problem yang nyata di QA + review: manusia susah verifikasi perubahan hanya dari kode.</p>
+<h3 id="3-apa-implikasi-praktisnya-buat-engineeringqa-workflow">3. Apa implikasi praktisnya buat engineering/QA workflow?<a aria-hidden="true" class="anchor-heading icon-link" href="#3-apa-implikasi-praktisnya-buat-engineeringqa-workflow"></a></h3>
+<p>Beberapa implikasi utama:</p>
+<ul>
+<li>PR review bergeser dari code-only ke code + behavior evidence</li>
+<li>QA automation jadi lebih komunikatif untuk engineer, PM, designer, QA, dan pemangku kepentingan non-teknis</li>
+<li>cocok untuk sistem agentic: agent bisa buat perubahan, manusia butuh bukti eksternal</li>
+<li>bisa jadi primitive baru untuk triage issue: reproduce, record before, apply fix, record after, attach ke issue/PR</li>
+</ul>
+<p>Yang penting: bukan hanya mempercepat review, tapi memperpendek gap antara perubahan kode dan efek nyata di UI/perilaku.</p>
+<h3 id="4-di-balik-hype-nya-apa-batasan-dan-failure-mode-nya">4. Di balik hype-nya, apa batasan dan failure mode-nya?<a aria-hidden="true" class="anchor-heading icon-link" href="#4-di-balik-hype-nya-apa-batasan-dan-failure-mode-nya"></a></h3>
+<p>Video proof kuat, tapi bukan kebenaran mutlak.</p>
+<ul>
+<li>video hanya menunjukkan permukaan, bukan semua layer sistem</li>
+<li>ia tidak menjamin data layer aman, side effect benar, performance stabil, atau accessibility beres</li>
+<li>determinism di UI rentan pada timing, network, animasi, external service, session</li>
+<li>infra dan maintenance lebih mahal dibanding screenshot: recording, storage, trimming, diffing, attach ke PR, secret management, environment stabil</li>
+<li>ada risiko overtrust: bukti yang enak dilihat dianggap lengkap walau belum mengecek semua aspek</li>
+</ul>
+<h2 id="synthesis">Synthesis<a aria-hidden="true" class="anchor-heading icon-link" href="#synthesis"></a></h2>
+<p>Kalau disambung, benang merahnya:</p>
+<ul>
+<li>post utama bicara tentang otomasi bukti</li>
+<li>reply menegaskan masalah ambiguity di review dan QA</li>
+<li>implikasi praktis menunjukkan agentic workflow perlu evidence pipeline</li>
+<li>batasan mengingatkan bahwa visual proof harus ditempatkan sebagai bagian dari sistem validasi yang lebih luas</li>
+</ul>
+<p>Dengan kata lain:</p>
+<blockquote>
+<p>Semakin kuat agent/automasinya, semakin besar kebutuhan pada bukti yang mudah diaudit.</p>
+</blockquote>
+<p>Thread ini resonate karena ia tidak cuma memperkenalkan "video". Ia memperlihatkan bentuk trust infrastructure praktis untuk dunia yang makin cepat berubah.</p>
+<h2 id="kesimpulan">Kesimpulan<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan"></a></h2>
+<p>Poin yang paling penting bukan sekadar "video QA baru".</p>
+<p>Poin pentingnya adalah: mereka sedang membangun mekanisme pembuktian untuk perubahan yang dibuat sistem otomatis. Video before/after adalah salah satu artefak yang membantu manusia percaya pada output agent.</p>
+<p>Kalau lo ingin lanjut, ada tiga lapisan berikutnya yang bisa ditulis:</p>
+<ol>
+<li>arsitektur teknis yang mungkin dipakai</li>
+<li>implikasi buat agent/codex workflow</li>
+<li>checklist mereplikasi pola ini di project lo</li>
+</ol>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">qa (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">evidence (Private)</a></li>
+</ol>

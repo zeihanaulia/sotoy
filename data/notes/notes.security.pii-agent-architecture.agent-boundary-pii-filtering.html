@@ -1,0 +1,136 @@
+<h1 id="pii-guardrail-antar-agent-dari-x402-ke-brainstorming--coding-agent">PII guardrail antar-agent: dari x402 ke brainstorming + coding agent<a aria-hidden="true" class="anchor-heading icon-link" href="#pii-guardrail-antar-agent-dari-x402-ke-brainstorming--coding-agent"></a></h1>
+<p>Waktu gue baca <code>Hardening x402</code>, yang nyantol bukan blockchain-nya. Yang nyantol adalah pola arsitekturnya: data harus dicegat sebelum berpindah boundary, lalu disaring sebelum dia diproses lebih lanjut.</p>
+<p>Itu yang bikin paper ini relevan buat sistem dua-agent gue/elo.</p>
+<h2 id="dua-agent-dan-satu-problem-yang-sama">Dua agent dan satu problem yang sama<a aria-hidden="true" class="anchor-heading icon-link" href="#dua-agent-dan-satu-problem-yang-sama"></a></h2>
+<p>Di sistem gue ada dua peran yang jelas:</p>
+<ul>
+<li><strong>Brainstorming Agent</strong>: dia yang baca requirement, dokumen bisnis, meeting notes, screenshot, atau input user. Dia bikin PRD, Jira task, breakdown, atau desain solusi.</li>
+<li><strong>Coding Agent</strong>: dia yang baca artifact dari brainstorming agent plus context repo, lalu output-nya jadi code, patch, test, review, atau implementasi teknis.</li>
+</ul>
+<p>Kalau gue tidak pasang proteksi boundary, PII bisa turun dari user input ke artifact engineering lalu ke generated code / repo / trace.</p>
+<p>Contoh yang gue lihat bisa bocor:</p>
+<ul>
+<li>prompt LLM berisi screenshot atau dokumen dengan NIK / nomor rekening,</li>
+<li>vector DB index malah menyimpan teks asli,</li>
+<li>Jira issue atau Confluence page berisi detail pribadi,</li>
+<li>coding agent nulis unit test pakai data nyata,</li>
+<li>trace Langfuse mencatat tool args berisi email atau nomor telepon.</li>
+</ul>
+<h2 id="mapping-dari-x402-ke-agent-case">Mapping dari x402 ke agent case<a aria-hidden="true" class="anchor-heading icon-link" href="#mapping-dari-x402-ke-agent-case"></a></h2>
+<p>Di paper, fokusnya bukan payment value atau settlement. Fokusnya adalah tiga field metadata x402 yang ikut melekat pada request dan bisa mengandung PII:</p>
+<ul>
+<li><code>resource_url</code>: alamat atau identifier resource yang dibayar. Di situ bisa ada path/user id/slug yang membawa informasi sensitif.</li>
+<li><code>description</code>: teks penjelasan transaksi. Ini sering jadi tempat “alasan bisnis”, dan bisa memuat nama, email, rekening, atau nomor invoice.</li>
+<li><code>reason</code>: rationale pembayaran. Ini bisa berisi komentar bebas dari server yang sebenarnya tidak perlu diketahui payment facilitator.</li>
+</ul>
+<p>Buat gue, inti paper ini adalah: metadata itu sendiri adalah vektor. Kalau request dikirim tanpa menyaring metadata, agent sudah mengirim PII sebelum action final dieksekusi.</p>
+<p>Kalau saya terjemahkan ke sistem dua-agent, analoginya bukan lagi tiga nama field literal. Yang setara adalah semua konten yang bergerak dari satu agent ke boundary lain. Di workflow kita, bentuknya bisa muncul sebagai:</p>
+<ul>
+<li><code>user_message</code></li>
+<li><code>uploaded_document_text</code></li>
+<li><code>retrieved_context</code></li>
+<li><code>tool_call_args</code></li>
+<li><code>agent_scratchpad</code></li>
+<li><code>generated_artifact</code></li>
+<li><code>jira_description</code></li>
+<li><code>confluence_body</code></li>
+<li><code>git_commit_message</code></li>
+<li><code>test_fixture</code></li>
+<li><code>trace_payload</code></li>
+</ul>
+<p>Jadi yang gue tarik dari paper ini adalah: bukan hanya <code>resource_url</code>/<code>description</code>/<code>reason</code> yang harus disaring. Prinsipnya adalah <code>metadata transport</code> — semua konten yang keluar dari boundary agent harus dicek dulu.</p>
+<h2 id="privacy-boundary-yang-harus-gue-bangun">Privacy boundary yang harus gue bangun<a aria-hidden="true" class="anchor-heading icon-link" href="#privacy-boundary-yang-harus-gue-bangun"></a></h2>
+<p>Adaptasi x402 buat sistem ini jadi layer berikut:</p>
+<ol>
+<li>
+<p><strong>Ingestion / Input Guard</strong></p>
+<ul>
+<li>scan semua input awal untuk PII</li>
+<li>jangan langsung teruskan raw text ke agent</li>
+</ul>
+</li>
+<li>
+<p><strong>Context Sanitization Gateway</strong></p>
+<ul>
+<li>mask / redact / pseudonymize / synthesize</li>
+<li>pisahkan versi raw dengan versi aman</li>
+</ul>
+</li>
+<li>
+<p><strong>Artifact Guard</strong></p>
+<ul>
+<li>sebelum Brainstorming Agent output jadi input Coding Agent, scan ulang</li>
+<li>pastikan artifact yang dipindahkan tidak mengandung raw PII</li>
+</ul>
+</li>
+<li>
+<p><strong>Output Guard</strong></p>
+<ul>
+<li>scan semua output sebelum disimpan atau dikirim ke Jira/Confluence/Git/trace</li>
+</ul>
+</li>
+<li>
+<p><strong>Audit Log</strong></p>
+<ul>
+<li>catat keputusan masking/filtering tanpa menyimpan raw PII</li>
+</ul>
+</li>
+</ol>
+<h2 id="policy-per-agent-menurut-gue">Policy per agent menurut gue<a aria-hidden="true" class="anchor-heading icon-link" href="#policy-per-agent-menurut-gue"></a></h2>
+<p>Brainstorming Agent:</p>
+<ul>
+<li>boleh menerima context yang sudah <code>pseudonymized</code> atau <code>redacted</code></li>
+<li>boleh menjaga konsistensi entitas dengan token stabil (<code>PERSON_001</code>, <code>ACCOUNT_001</code>)</li>
+<li>tidak boleh menerima raw NIK, nomor rekening, email, telepon, atau data reguler sensitif</li>
+</ul>
+<p>Coding Agent:</p>
+<ul>
+<li>harus bisa bekerja dengan <code>synthetic</code> atau <code>placeholder</code> examples</li>
+<li>tidak butuh PII asli untuk bikin schema, validation, atau test</li>
+<li>raw PII tidak boleh masuk prompt, generated code, atau fixture</li>
+</ul>
+<h2 id="kenapa-ini-penting-buat-gue">Kenapa ini penting buat gue<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting-buat-gue"></a></h2>
+<p>Kalimat yang gue pakai kalau mau jelasin ke CISO:</p>
+<blockquote>
+<p>"Hardening x402 menjelaskan prinsip kontrol sebelum request dieksekusi. Di platform kita, prinsip yang sama berlaku ke semua agent boundary: data hanya boleh bergerak antar-agent setelah melewati PII gateway, bukan langsung dari brain dump ke prompt atau artifact." </p>
+</blockquote>
+<p>Yang penting bagi gue adalah bahwa ini bukan soal satu sanitizer. Ini soal menjadikan <code>agent boundary</code> sebagai bagian dari security architecture.</p>
+<h2 id="implementasi-teknis-yang-gue-anggap-logis">Implementasi teknis yang gue anggap logis<a aria-hidden="true" class="anchor-heading icon-link" href="#implementasi-teknis-yang-gue-anggap-logis"></a></h2>
+<p>Komponen minimal yang gue butuh:</p>
+<ul>
+<li><code>pii_detector</code> (NER + regex + schema-aware rules)</li>
+<li><code>pii_transformer</code> (mask / redact / pseudonymize / synthesize)</li>
+<li><code>policy_engine</code> (destination-aware: brainstorming/coding/LLM/trace/storage)</li>
+<li><code>privacy_gateway</code> (middleware sebelum agent dan sebelum artifact persist)</li>
+<li><code>audit_logger</code> (keputusan, entitas, action)</li>
+<li><code>safe_context_store</code> (versi sanitized)</li>
+<li><code>raw_vault</code> (raw data terpisah, akses dibatasi)</li>
+</ul>
+<h2 id="prinsip-yang-gue-pegang">Prinsip yang gue pegang<a aria-hidden="true" class="anchor-heading icon-link" href="#prinsip-yang-gue-pegang"></a></h2>
+<ul>
+<li><code>Jangan anggap kalau agent sudah pakai LLM internal berarti data aman.</code></li>
+<li><code>Jangan hanya filter sekali; scan lagi saat data keluar boundary.</code></li>
+<li><code>Jangan letakkan raw data dan sanitized data di tempat yang sama.</code></li>
+<li><code>Pseudonymization sering lebih berguna daripada redaksi kasar untuk Brainstorming Agent.</code></li>
+<li><code>Untuk Coding Agent, synthetic data sering lebih aman dan lebih berguna.</code></li>
+</ul>
+<h2 id="link">Link<a aria-hidden="true" class="anchor-heading icon-link" href="#link"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.hardening-x402">Hardening x402: PII-Safe Agentic Payments</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

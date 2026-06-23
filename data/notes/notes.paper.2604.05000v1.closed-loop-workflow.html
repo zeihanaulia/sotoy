@@ -1,0 +1,230 @@
+<h1 id="paper-arxiv-260405000v1-closed-loop-backlog-workflow">Paper arXiv 2604.05000v1: Closed-loop backlog workflow<a aria-hidden="true" class="anchor-heading icon-link" href="#paper-arxiv-260405000v1-closed-loop-backlog-workflow"></a></h1>
+<h2 id="konteks">Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#konteks"></a></h2>
+<p>Dari gue, paper ini penting karena menjelaskan bagaimana workflow closed-loop seharusnya bekerja untuk perbaikan kode dan backlog. Ini bukan sekadar chatbot yang bilang "generate fix". Arti workflow di sini adalah alur kerja sistem dari backlog mentah sampai ticket selesai/diverifikasi, di mana AI hanyalah salah satu operator di dalam pabrik kecil itu.</p>
+<p>Intinya:</p>
+<p><code>source docs / Jira / scan finding → canonical backlog → grooming → fix queue → isolated code fix → verification → publish ke Jira → reconcile balik ke backlog → audit trail</code></p>
+<h2 id="5-pertanyaan-kunci">5 Pertanyaan Kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#5-pertanyaan-kunci"></a></h2>
+<ol>
+<li>Dari mana kerjaan masuk?</li>
+<li>Bagaimana sistem memutuskan ticket mana yang aman dikerjakan?</li>
+<li>Kapan AI boleh mengubah kode?</li>
+<li>Siapa yang mengecek hasilnya?</li>
+<li>Bagaimana hasilnya balik ke Jira dan backlog?</li>
+</ol>
+<h2 id="1-intake-dari-mana-kerjaan-masuk">1. Intake: dari mana kerjaan masuk?<a aria-hidden="true" class="anchor-heading icon-link" href="#1-intake-dari-mana-kerjaan-masuk"></a></h2>
+<p>Input datang dari banyak sumber, bukan cuma Jira. Paper ini menyebut setidaknya 13 dokumen terstruktur sebagai sumber:</p>
+<ul>
+<li>planning document</li>
+<li>design spec</li>
+<li>architecture review</li>
+<li>security assessment</li>
+<li>deployment manifest</li>
+<li>runbook</li>
+<li>existing Jira tickets</li>
+<li>codebase scan findings</li>
+</ul>
+<p>Workflow Lane 1 adalah <code>Backlog Sync &#x26; Intake</code>.</p>
+<p>Tugasnya:</p>
+<ul>
+<li>membaca semua sumber,</li>
+<li>membuat item backlog yang eksplisit,</li>
+<li>menambahkan field minimal: identifier, title, description, source reference, tags, priority, owner.</li>
+</ul>
+<p><strong>Atomic idea</strong>: kerjaan harus dibuat eksplisit dulu sebelum bisa diotomasi. Kalau requirement masih cuma "ada di dokumen", agent belum boleh asal memperbaiki.</p>
+<h2 id="2-canonical-backlog-sumber-kebenaran-lokal">2. Canonical backlog: sumber kebenaran lokal<a aria-hidden="true" class="anchor-heading icon-link" href="#2-canonical-backlog-sumber-kebenaran-lokal"></a></h2>
+<p>Paper ini tidak menjadikan Jira sebagai source of truth utama. Jira hanya public status surface. Source of truth yang otoritatif adalah <strong>canonical backlog lokal</strong> yang versioned.</p>
+<p>Analogi:</p>
+<ul>
+<li><code>canonical backlog = buku besar akuntansi</code></li>
+<li><code>Jira = papan pengumuman publik</code></li>
+</ul>
+<p>Workflow-nya:</p>
+<pre><code>Raw input
+  ↓
+Canonical backlog lokal
+  ↓
+Jira disinkronkan sebagai representasi publik
+</code></pre>
+<p>Ini penting, karena kalau Jira langsung dianggap kebenaran utama, agent bisa terjebak oleh status yang salah, duplicate ticket, atau komentar tidak lengkap.</p>
+<h2 id="3-canonicalization-dan-confidence-tiers">3. Canonicalization dan confidence tiers<a aria-hidden="true" class="anchor-heading icon-link" href="#3-canonicalization-dan-confidence-tiers"></a></h2>
+<p>Setelah item masuk backlog, sistem melakukan dedup dan matching.</p>
+<p>Strateginya meliputi:</p>
+<ul>
+<li>exact tag matching,</li>
+<li>key matching,</li>
+<li>summary similarity,</li>
+<li>fuzzy text matching.</li>
+</ul>
+<p>Paper memakai score similarity <code>s</code> dengan tier:</p>
+<pre><code>s >= 0.83       → autonomous action
+0.50 &#x3C;= s &#x3C; 0.83 → human review
+s &#x3C; 0.50        → halt / re-ingest
+</code></pre>
+<p><strong>Atomic idea</strong>: autonomy bukan boolean; autonomy adalah confidence tier.</p>
+<p>Sistem menanyakan:</p>
+<blockquote>
+<p>seberapa yakin item ini cocok dengan task/fix plan yang sudah dikenal?</p>
+</blockquote>
+<p>Kalau sangat yakin, boleh lanjut. Kalau setengah yakin, manusia harus review. Kalau rendah, jangan diteruskan.</p>
+<h2 id="4-grooming-menyiapkan-strategi-fix">4. Grooming: menyiapkan strategi fix<a aria-hidden="true" class="anchor-heading icon-link" href="#4-grooming-menyiapkan-strategi-fix"></a></h2>
+<p>Lane 3 adalah <code>Backlog Groomer</code>.
+Dia tidak langsung memperbaiki kode. Dia menyiapkan <code>fix_queue</code>.</p>
+<p>Isi <code>fix_queue</code> kira-kira:</p>
+<ul>
+<li>ticket_id</li>
+<li>priority_score</li>
+<li>priority_type</li>
+<li>relevant_paths</li>
+<li>area</li>
+<li>confidence</li>
+<li>fix_strategy</li>
+</ul>
+<p>Lane 3 berperan seperti tech lead kecil: menyortir ticket, menentukan mana yang actionable, memilih area kode relevan, dan mengirim ke Lane 4.</p>
+<p><strong>Atomic idea</strong>: agent fixer tidak boleh memilih sendiri sesukanya. Dia cuma mengerjakan queue yang sudah digrooming.</p>
+<h2 id="5-claim-ticket-ownership-harus-terlihat">5. Claim ticket: ownership harus terlihat<a aria-hidden="true" class="anchor-heading icon-link" href="#5-claim-ticket-ownership-harus-terlihat"></a></h2>
+<p>Sebelum Lane 4 membaca kode, agent harus mengunci ticket di Jira dengan transisi:</p>
+<pre><code>To Do → In Progress
+</code></pre>
+<p>Fungsinya sebagai distributed lock.
+Kalau gagal, berarti ticket sudah diklaim agent lain atau manusia, maka worker harus abandon dan ambil ticket lain.</p>
+<p><strong>Atomic idea</strong>: sebelum agent mengubah kode, ownership harus terlihat secara eksternal.</p>
+<h2 id="6-execution-isolated-worktree">6. Execution: isolated worktree<a aria-hidden="true" class="anchor-heading icon-link" href="#6-execution-isolated-worktree"></a></h2>
+<p>Lane 4 adalah AI Code Fixer.
+Dia bekerja di isolated worktree, bukan on main working directory.</p>
+<p>Workflow:</p>
+<ul>
+<li>ticket diklaim,</li>
+<li>buat isolated worktree,</li>
+<li>AI/code fixer apply perubahan,</li>
+<li>generate diff,</li>
+<li>simpan evidence.</li>
+</ul>
+<p>Ada time budget:</p>
+<ul>
+<li>standard hourly run: 45 menit,</li>
+<li>nightly deep sweep: 120 menit,</li>
+<li>checkpoint 10 menit,</li>
+<li>kalau stuck → hard stop.</li>
+</ul>
+<p>Kalau gagal, worktree dibuang dan ticket kembali ke queue.</p>
+<p><strong>Atomic idea</strong>: agent boleh eksperimen, tapi eksperimennya terjadi di ruang isolasi.</p>
+<h2 id="7-verification-executor-tidak-boleh-jadi-auditor">7. Verification: executor tidak boleh jadi auditor<a aria-hidden="true" class="anchor-heading icon-link" href="#7-verification-executor-tidak-boleh-jadi-auditor"></a></h2>
+<p>Ini prinsip paling penting.
+Setelah Lane 4 membuat perubahan, Lane 6 menjalankan quality gate.</p>
+<p>Verifikator meliputi:</p>
+<ul>
+<li>product verifier: compile, unit test, integration constraint,</li>
+<li>security verifier: npm audit, eslint/static analysis, security ticket verifier,</li>
+<li>mutation/state check.</li>
+</ul>
+<p>Workflow:</p>
+<pre><code>Diff dari Lane 4
+  ↓
+Lane 6: Quality Gate
+  ↓
+Pass atau fail
+</code></pre>
+<p>Kalau pass:</p>
+<pre><code>In Progress → Done
+</code></pre>
+<p>Kalau fail:</p>
+<pre><code>In Progress → To Do
+</code></pre>
+<p>Fail kembali ke <code>To Do</code> supaya harus melewati pipeline lagi dengan review baru.</p>
+<p><strong>Atomic idea</strong>: failure harus balik ke sistem keputusan, bukan dipaksa lanjut oleh agent yang sama.</p>
+<h2 id="8-publication-post-ke-jira-dengan-deduplication">8. Publication: post ke Jira dengan deduplication<a aria-hidden="true" class="anchor-heading icon-link" href="#8-publication-post-ke-jira-dengan-deduplication"></a></h2>
+<p>Setelah verification selesai, hasil dipublish ke Jira.</p>
+<p>Ada tiga lapis dedup:</p>
+<ul>
+<li>local receipt log,</li>
+<li>Jira comment history,</li>
+<li>per-run cache.</li>
+</ul>
+<p>Output yang dipost harus mencakup:</p>
+<ul>
+<li>run ID,</li>
+<li>timestamp,</li>
+<li>transition ID,</li>
+<li>permalink ke evidence log.</li>
+</ul>
+<p>Tujuannya agar manusia bisa menelusuri:</p>
+<ul>
+<li>ticket ini berubah karena run mana,</li>
+<li>apa input-nya,</li>
+<li>apa diff-nya,</li>
+<li>verifier apa yang jalan,</li>
+<li>hasilnya apa.</li>
+</ul>
+<h2 id="9-reconciliation-sinkronisasi-balik-ke-canonical-backlog">9. Reconciliation: sinkronisasi balik ke canonical backlog<a aria-hidden="true" class="anchor-heading icon-link" href="#9-reconciliation-sinkronisasi-balik-ke-canonical-backlog"></a></h2>
+<p>Setelah Jira diperbarui, sistem reconcile ke canonical backlog.</p>
+<p>Workflow:</p>
+<pre><code>Jira result
+  ↓
+Reconciliation
+  ↓
+Update canonical backlog
+  ↓
+Commit/versioning dengan run ID + timestamp
+</code></pre>
+<p>Ini yang membuat loop-nya closed. Bukan sekadar <code>agent fix ticket → selesai</code>, tapi <code>agent fix ticket → verify → publish → reconcile → state sistem berubah.</code></p>
+<h2 id="10-ops-intelligence-dan-recovery">10. Ops intelligence dan recovery<a aria-hidden="true" class="anchor-heading icon-link" href="#10-ops-intelligence-dan-recovery"></a></h2>
+<p>Lane 5 adalah <code>Ops Intelligence</code>.</p>
+<p>Dia memantau:</p>
+<ul>
+<li>lane health,</li>
+<li>Jira connectivity,</li>
+<li>stale lock,</li>
+<li>stale <code>In Progress</code> ticket,</li>
+<li>aging <code>On Hold</code> ticket,</li>
+<li>queue drain,</li>
+<li>degraded mode.</li>
+</ul>
+<p>Kalau Jira down, sistem masuk degraded mode dan menyimpan intent lokal:</p>
+<ul>
+<li>jira_write_outbox.json,</li>
+<li>mcp_replay_needed.json,</li>
+<li>jira_fallback_queue.md.</li>
+</ul>
+<p>Begitu Jira hidup lagi, Lane 5 replay queued writes.</p>
+<p><strong>Atomic idea</strong>: automation yang bergantung pada Jira tidak boleh langsung corrupt saat Jira bermasalah.</p>
+<h2 id="11-lane-ringkas">11. Lane ringkas<a aria-hidden="true" class="anchor-heading icon-link" href="#11-lane-ringkas"></a></h2>
+<p>Ringkasnya ada tujuh lane:</p>
+<ul>
+<li>Lane 1 = intake + backlog sync</li>
+<li>Lane 2 = codebase auditor read-only</li>
+<li>Lane 3 = grooming, dedup, scoring, fix queue</li>
+<li>Lane 4 = AI fixer apply perubahan</li>
+<li>Lane 5 = ops watchdog dan recovery</li>
+<li>Lane 6 = quality gate dan verifier</li>
+<li>Lane 7 = spec completeness auditor</li>
+</ul>
+<h2 id="12-insight">12. Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#12-insight"></a></h2>
+<p>Workflow paper ini bukan "AI baca ticket lalu langsung ngoding".</p>
+<p>Dia lebih mirip pabrik kecil:</p>
+<ul>
+<li>intake,</li>
+<li>sortir,</li>
+<li>eksekusi,</li>
+<li>quality control,</li>
+<li>publikasi,</li>
+<li>audit.</li>
+</ul>
+<p>AI hanya satu operator di pabrik itu, bukan bos bebas.</p>
+<p>Kalau mau meniru, jangan mulai dari "bikin 7 agent". Mulai dari loop minimal:</p>
+<ol>
+<li>canonical backlog,</li>
+<li>claim/lock mechanism,</li>
+<li>executor,</li>
+<li>verifier terpisah,</li>
+<li>evidence log,</li>
+<li>failure kembali ke backlog.</li>
+</ol>
+<p>Kalau enam hal itu belum ada, nambah agent cuma bikin automation kelihatan canggih tapi state-nya rapuh.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">paper (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #ff9a8a;" href="/sotoy/notes/tags.workflow">workflow</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">backlog (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+</ol>

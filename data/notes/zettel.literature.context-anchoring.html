@@ -1,0 +1,209 @@
+<h1 id="context-anchoring--memindahkan-konteks-keputusan-dari-chat-ke-dokumen-hidup">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup<a aria-hidden="true" class="anchor-heading icon-link" href="#context-anchoring--memindahkan-konteks-keputusan-dari-chat-ke-dokumen-hidup"></a></h1>
+<h2 id="tentang-sumber">Tentang Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#tentang-sumber"></a></h2>
+<ul>
+<li><strong>Judul</strong>: Context Anchoring</li>
+<li><strong>Penulis / Author</strong>: Rahul Garg</li>
+<li><strong>Tahun</strong>: 2026</li>
+<li><strong>Jenis</strong>: artikel</li>
+<li><strong>Link / ISBN</strong>: <a href="https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html">Thoughtworks / Martin Fowler blog</a></li>
+</ul>
+<hr>
+<h2 id="catatan-per-gagasan">Catatan Per Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#catatan-per-gagasan"></a></h2>
+<h3 id="paragraf-0--pembuka-mendefinisikan-problem-dan-solusi">Paragraf 0 — pembuka mendefinisikan problem dan solusi<a aria-hidden="true" class="anchor-heading icon-link" href="#paragraf-0--pembuka-mendefinisikan-problem-dan-solusi"></a></h3>
+<blockquote>
+<p>AI conversations are ephemeral by design — decisions made early fade as sessions lengthen, and nothing survives the session boundary. Developers hold on to long conversations not because long sessions are productive, but because the context lives nowhere else. I propose externalizing decision context into a living document — external memory that persists what the context window cannot, turning transient alignment into durable shared understanding.</p>
+</blockquote>
+<p>Catatan gue: pembuka ini langsung menegaskan tesis utama artikel. Percakapan AI itu fana; keputusan awal memudar; developer mempertahankan sesi panjang karena konteks tidak hidup di tempat lain. Solusinya adalah memindahkan konteks keputusan ke dokumen hidup.</p>
+<p>Atomic idea: percakapan AI bukan tempat penyimpanan keputusan jangka panjang; konteks penting harus die-eksternalisasi.</p>
+<p>Kenapa penting: ini tesis utama seluruh artikel. Semua paragraf berikutnya pada dasarnya menjelaskan dan membuktikan klaim ini.</p>
+<h3 id="atomic-idea--dokumen-bersama-sebagai-external-memory-di-kolaborasi-manusia">Atomic idea — dokumen bersama sebagai external memory di kolaborasi manusia<a aria-hidden="true" class="anchor-heading icon-link" href="#atomic-idea--dokumen-bersama-sebagai-external-memory-di-kolaborasi-manusia"></a></h3>
+<blockquote>
+<p>When I work with a colleague on a feature that spans several days, we keep a shared document. Not formal documentation: a working record. What we decided, why, what we rejected, what questions remain open. If either of us is absent for a day, the other picks up where we left off. Neither of us relies on memory alone. The document is our external memory — it persists what individual recall cannot.</p>
+</blockquote>
+<p>Penulis merujuk ini dari paragraf 1.</p>
+<p>Catatan gue: penulis memulai dari praktik engineering manusia-manusia. Untuk fitur multi-hari, tim secara alami memindahkan memori kerja penting ke dokumen bersama yang merekam keputusan, alasan, penolakan, dan pertanyaan terbuka.</p>
+<p>Atomic idea: dalam kolaborasi manusia, memori kerja penting secara alami dipindahkan ke dokumen bersama.</p>
+<p>Kenapa penting: ini baseline. Penulis tidak mulai dari AI, tapi dari praktik yang sudah normal. Jadi ketika dia mengusulkan hal serupa untuk AI, itu bukan ide aneh—itu perpanjangan dari kebiasaan engineer.</p>
+<h3 id="atomic-idea--memory-tool-ai-sekarang-mayoritas-hanya-project-level">Atomic idea — memory tool AI sekarang mayoritas hanya project-level<a aria-hidden="true" class="anchor-heading icon-link" href="#atomic-idea--memory-tool-ai-sekarang-mayoritas-hanya-project-level"></a></h3>
+<blockquote>
+<p>With AI coding assistants, the conversation is still largely the record. Some tools now offer persistent memory features (Claude's project memory, Cursor's rules files, Copilot's workspace indexing) but these operate at the project level, not the feature level. They remember that the project uses Fastify, not that yesterday's session rejected a RetryQueue abstraction for specific reasons.</p>
+</blockquote>
+<p>Penulis merujuk ini dari paragraf 2.</p>
+<p>Catatan gue: AI tools modern punya “memory”, tapi itu kebanyakan konteks proyek: stack, pola umum, konvensi. Mereka masih gagal menyimpan keputusan fitur spesifik, terutama alasan dan keputusan yang ditolak.</p>
+<p>Atomic idea: tool memory saat ini gagal menyimpan keputusan fitur; akibatnya developer terjebak mempertahankan chat panjang yang justru makin merusak kualitas konteks.</p>
+<p>Kenapa penting: di sini artikel mulai menyempitkan problem. Bukan sekadar “AI lupa”, tapi AI tidak punya tempat yang tepat untuk menyimpan reasoning fitur.</p>
+<h3 id="atomic-idea--kecemasan-menutup-chat-sebagai-heuristik-context-leakage">Atomic idea — kecemasan menutup chat sebagai heuristik context leakage<a aria-hidden="true" class="anchor-heading icon-link" href="#atomic-idea--kecemasan-menutup-chat-sebagai-heuristik-context-leakage"></a></h3>
+<blockquote>
+<p>Here is a test I find revealing: could I close this conversation right now and start a new one without anxiety? If that question creates discomfort, if I feel I would lose something important — my context is trapped inside a medium that was never designed to preserve it.</p>
+</blockquote>
+<p>Penulis merujuk ini dari paragraf 3.</p>
+<p>Catatan gue: rasa cemas saat menutup chat adalah sinyal bahwa konteks masih terjebak dalam medium yang salah. Itu berarti Anda sedang bergantung pada percakapan sebagai tempat penyimpanan, bukan sekadar alat berpikir.</p>
+<p>Atomic idea: rasa cemas saat menutup chat adalah sinyal bahwa konteks masih hidup di tempat yang salah.</p>
+<p>Kenapa penting: ini mengubah problem teknis jadi heuristik praktis. Lo tidak perlu teori token untuk mendeteksi masalah—cukup cek rasa “sayang nutup chat”.</p>
+<h3 id="atomic-idea--erosi-konteks-ai-adalah-isu-arsitektural-bukan-bug-acak">Atomic idea — erosi konteks AI adalah isu arsitektural, bukan bug acak<a aria-hidden="true" class="anchor-heading icon-link" href="#atomic-idea--erosi-konteks-ai-adalah-isu-arsitektural-bukan-bug-acak"></a></h3>
+<blockquote>
+<p>The degradation is not random. It follows from how large language models process context.</p>
+</blockquote>
+<p>Penulis merujuk ini dari paragraf 4.</p>
+<p>Catatan gue: kehilangan konteks pada AI bukan akibat kebetulan atau limit kecil. Ini adalah konsekuensi arsitektural dari cara LLM memprioritaskan token, sehingga reasoning menengah mudah menguap.</p>
+<p>Atomic idea: kehilangan konteks pada AI adalah konsekuensi arsitektural, bukan sekadar bug acak.</p>
+<p>Kenapa penting: penulis menggeser pembahasan dari gejala ke mekanisme. Ini penting supaya solusi yang ditawarkan tidak terasa seperti workaround asal-asalan.</p>
+<h3 id="atomic-idea--context-window-besar-tetap-cepat-habis-dalam-praktik-engineering">Atomic idea — context window besar tetap cepat habis dalam praktik engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#atomic-idea--context-window-besar-tetap-cepat-habis-dalam-praktik-engineering"></a></h3>
+<blockquote>
+<p>Every model has a finite context window: a hard limit on how many tokens it can attend to at once. Current models offer windows ranging from hundreds of thousands to over a million tokens. These numbers sound generous, but a productive development session generates context quickly: code snippets, design discussions, decision rationale, file contents. The window fills faster than most developers expect.</p>
+</blockquote>
+<p>Penulis merujuk ini dari paragraf 5.</p>
+<p>Catatan gue: semua model memang punya context window terbatas. Walau angka token terlihat besar, kerja engineering nyata mengonsumsi konteks sangat cepat karena banyaknya kode, diskusi, dan reasoning.</p>
+<p>Atomic idea: context window besar tetap cepat habis dalam kerja engineering nyata.</p>
+<p>Kenapa penting: ini membongkar ilusi umum bahwa context window yang besar sudah cukup. Penulis bilang: besar di atas kertas belum tentu besar di praktik.</p>
+<h3 id="context-anchoring-adalah-memindahkan-konteks-keputusan-dari-chat-yang-sementara-ke-dokumen-yang-hidup">Context anchoring adalah memindahkan konteks keputusan dari chat yang sementara ke dokumen yang hidup<a aria-hidden="true" class="anchor-heading icon-link" href="#context-anchoring-adalah-memindahkan-konteks-keputusan-dari-chat-yang-sementara-ke-dokumen-yang-hidup"></a></h3>
+<blockquote>
+<p>Penulis mengusulkan "externalizing decision context into a living document" dan menjadikannya "external memory".</p>
+</blockquote>
+<p>Catatan gue: context anchoring bukan sekadar ringkasan chat atau wiki projek. Ini adalah dokumen fitur yang menyimpan:</p>
+<ul>
+<li>keputusan yang dibuat,</li>
+<li>alasan di baliknya,</li>
+<li>alternatif yang ditolak,</li>
+<li>constraint yang harus dihormati,</li>
+<li>apa yang masih terbuka,</li>
+<li>status pekerjaan.</li>
+</ul>
+<p>Ini membuat alignment menjadi lebih tahan waktu, karena chat hanya medium berpikir sementara.</p>
+<h3 id="kelemahan-kontekstual-ai-adalah-rapuhnya-memori-kerja-model-bukan-kurangnya-kecerdasan">Kelemahan kontekstual AI adalah rapuhnya memori kerja model, bukan kurangnya "kecerdasan"<a aria-hidden="true" class="anchor-heading icon-link" href="#kelemahan-kontekstual-ai-adalah-rapuhnya-memori-kerja-model-bukan-kurangnya-kecerdasan"></a></h3>
+<blockquote>
+<p>Erosi konteks AI terjadi karena token window terbatas, diskusi engineering padat, dan model cenderung kehilangan reasoning yang dibahas di tengah sesi.</p>
+</blockquote>
+<p>Catatan gue: masalahnya bukan AI tidak lulus fakta. Yang paling mahal hilang adalah "why". Model bisa masih ingat "pakai PostgreSQL", tapi lupa kenapa PostgreSQL dipilih dan apa konsekuensi komprominya.</p>
+<p>Ini mirip dengan failure mode di mana junior dev tahu aturan permukaan, tapi tidak paham tujuan desain.</p>
+<h3 id="codebase-hanya-menunjukkan-hasil-bukan-rentang-keputusan-yang-dilewati">Codebase hanya menunjukkan hasil, bukan rentang keputusan yang dilewati<a aria-hidden="true" class="anchor-heading icon-link" href="#codebase-hanya-menunjukkan-hasil-bukan-rentang-keputusan-yang-dilewati"></a></h3>
+<blockquote>
+<p>Codebase memberi jejak outcome. Itu tidak menunjukkan alternatif, pertanyaan terbuka, atau constraint yang melahirkan keputusan.</p>
+</blockquote>
+<p>Catatan gue: ini alasan utama kenapa feature document perlu ada. Code memberi tahu apa yang dipakai, tetapi tidak mengungkap proses berpikir.</p>
+<p>Ini relevan dengan ADR: catatan arsitektur menyimpan reasoning, sedangkan repo hanya menyimpan implementasi. Artikel ini mengajak membuat ADR ringan di level fitur.</p>
+<h3 id="external-memory-praktisnya-adalah-feature-document-yang-hidup-bukan-dokumentasi-formal-besar">External memory praktisnya adalah feature document yang hidup, bukan dokumentasi formal besar<a aria-hidden="true" class="anchor-heading icon-link" href="#external-memory-praktisnya-adalah-feature-document-yang-hidup-bukan-dokumentasi-formal-besar"></a></h3>
+<blockquote>
+<p>Contoh Notification Service v1 menunjukkan format ringkas:</p>
+</blockquote>
+<ul>
+<li>Decisions (dengan reason dan rejected alternative)</li>
+<li>Constraints</li>
+<li>Open questions</li>
+<li>State</li>
+</ul>
+<p>Catatan gue: struktur ini membuat dokumen menjadi state container, bukan dokumentasi pasif. Dokumen fitur harus cepat di-update setiap sesi dan mudah dibaca kembali.</p>
+<h3 id="ada-dua-lapisan-konteks-project-level-priming-dan-feature-level-anchoring">Ada dua lapisan konteks: project-level priming dan feature-level anchoring<a aria-hidden="true" class="anchor-heading icon-link" href="#ada-dua-lapisan-konteks-project-level-priming-dan-feature-level-anchoring"></a></h3>
+<blockquote>
+<p>Priming document = konteks proyek yang relatif stabil.
+Feature document = konteks fitur yang dinamis.</p>
+</blockquote>
+<p>Catatan gue: dua lapisan ini tidak saling menggantikan. Priming memberi norma dan bahasa, sementara feature document memberi riwayat keputusan lokal.</p>
+<p>Jika hanya ada priming, AI tahu proyek tapi tidak tahu alasan keputusan spesifik. Jika hanya ada feature doc, AI tahu keputusan sekarang tapi tidak tahu nilai-nilai proyek.</p>
+<h3 id="praktik-ini-worth-it-ketika-pekerjaan-lintas-sesi-atau-lintas-tim">Praktik ini worth it ketika pekerjaan lintas sesi atau lintas tim<a aria-hidden="true" class="anchor-heading icon-link" href="#praktik-ini-worth-it-ketika-pekerjaan-lintas-sesi-atau-lintas-tim"></a></h3>
+<blockquote>
+<p>Uji sederhana: "Could I close this conversation right now and start a new one without anxiety?"</p>
+</blockquote>
+<p>Catatan gue: context anchoring paling berguna untuk fitur multi-hari, fitur yang akan direvisit, atau ketika satu fitur dikerjakan oleh lebih dari satu developer. Untuk quick fix atau debugging singkat, overheadnya bisa lebih besar dari manfaat.</p>
+<hr>
+<h2 id="zettels-yang-dibuat-dari-sumber-ini">Zettels yang Dibuat dari Sumber Ini<a aria-hidden="true" class="anchor-heading icon-link" href="#zettels-yang-dibuat-dari-sumber-ini"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</li>
+<li><a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</li>
+<li><a href="/sotoy/notes/zettel.20260420131312">AI memory tools sekarang kebanyakan project-level, bukan feature-level</a> — AI memory tools sekarang kebanyakan project-level, bukan feature-level</li>
+<li><a href="/sotoy/notes/zettel.20260420131400">Kecemasan menutup chat adalah indikator context leakage</a> — Kecemasan menutup chat adalah indikator context leakage</li>
+<li><a href="/sotoy/notes/zettel.20260420131401">Erosi konteks AI adalah isu arsitektural, bukan bug acak</a> — Erosi konteks AI adalah isu arsitektural, bukan bug acak</li>
+<li><a href="/sotoy/notes/zettel.20260420131402">Context window besar tetap cepat habis dalam praktik engineering</a> — Context window besar tetap cepat habis dalam praktik engineering</li>
+<li><a href="/sotoy/notes/zettel.20260420131403">Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang</a> — Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang</li>
+<li><a href="/sotoy/notes/zettel.20260420131404">Dalam erosi konteks, why hilang sebelum what</a> — Dalam erosi konteks, "why" hilang sebelum "what"</li>
+<li><a href="/sotoy/notes/zettel.20260420131405">Kalau medium lupa, pindahkan memori ke luar medium itu</a> — Kalau medium lupa, pindahkan memori ke luar medium itu</li>
+<li><a href="/sotoy/notes/zettel.20260420131406">Summarization otomatis menyelamatkan what, bukan why</a> — Summarization otomatis menyelamatkan what, bukan why</li>
+<li><a href="/sotoy/notes/zettel.20260420131407">Alignment tanpa persistence tetap rapuh</a> — Alignment tanpa persistence tetap rapuh</li>
+<li><a href="/sotoy/notes/zettel.20260420131408">Context anchoring adalah durability layer untuk alignment manusia-AI</a> — Context anchoring adalah durability layer untuk alignment manusia-AI</li>
+<li><a href="/sotoy/notes/zettel.20260420131409">Decision context harus menjadi external state, bukan jejak chat</a> — Decision context harus menjadi external state, bukan jejak chat</li>
+<li><a href="/sotoy/notes/zettel.20260420131410">Project context dan feature context punya fungsi berbeda</a> — Project context dan feature context punya fungsi berbeda</li>
+<li><a href="/sotoy/notes/zettel.20260420131411">Priming document adalah memori stabil level proyek</a> — Priming document adalah memori stabil level proyek</li>
+<li><a href="/sotoy/notes/zettel.20260420131412">Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung</a> — Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung</li>
+<li><a href="/sotoy/notes/zettel.20260420131413">Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal</a> — Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal</li>
+<li><a href="/sotoy/notes/zettel.20260420131414">Membaca codebase tidak sama dengan memahami keputusan</a> — Membaca codebase tidak sama dengan memahami keputusan</li>
+<li><a href="/sotoy/notes/zettel.20260420131415">Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana</a> — Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana</li>
+<li><a href="/sotoy/notes/zettel.20260420131416">Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode</a> — Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode</li>
+<li><a href="/sotoy/notes/zettel.20260420131417">Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR</a> — Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR</li>
+<li><a href="/sotoy/notes/zettel.20260420131418">Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta</a> — Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta</li>
+<li><a href="/sotoy/notes/zettel.20260420131419">Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal</a> — Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal</li>
+<li><a href="/sotoy/notes/zettel.20260420131420">Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu</a> — Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu</li>
+<li><a href="/sotoy/notes/zettel.20260420131421">Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model</a> — Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model</li>
+<li><a href="/sotoy/notes/zettel.20260420131422">Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori</a> — Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori</li>
+<li><a href="/sotoy/notes/zettel.20260420131423">Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya</a> — Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya</li>
+<li><a href="/sotoy/notes/zettel.20260420131424">Feature document yang efektif itu ringkas dan operasional</a> — Feature document yang efektif itu ringkas dan operasional</li>
+<li><a href="/sotoy/notes/zettel.20260420131425">Struktur minimal feature document jelas dan praktis</a> — Struktur minimal feature document jelas dan praktis</li>
+<li><a href="/sotoy/notes/zettel.20260420131426">Nilai anchoring muncul saat sesi baru bisa warm start</a> — Nilai anchoring muncul saat sesi baru bisa warm start</li>
+<li><a href="/sotoy/notes/zettel.20260420131427">Maintenance dokumen harus menempel ke ritme kerja alami</a> — Maintenance dokumen harus menempel ke ritme kerja alami</li>
+<li><a href="/sotoy/notes/zettel.20260420131428">Feature document memaksa reasoning menjadi lebih jelas</a> — Feature document memaksa reasoning menjadi lebih jelas</li>
+<li><a href="/sotoy/notes/zettel.20260420131429">Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat</a> — Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat</li>
+<li><a href="/sotoy/notes/zettel.20260420131430">Context anchoring adalah alat yang harus dikalibrasi, bukan default universal</a> — Context anchoring adalah alat yang harus dikalibrasi, bukan default universal</li>
+<li><a href="/sotoy/notes/zettel.20260420131431">Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang</a> — Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang</li>
+<li><a href="/sotoy/notes/zettel.20260420131432">Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks</a> — Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks</li>
+<li><a href="/sotoy/notes/zettel.20260420131433">Keinginan mempertahankan chat adalah indikator anchoring belum cukup</a> — Keinginan mempertahankan chat adalah indikator anchoring belum cukup</li>
+<li><a href="/sotoy/notes/zettel.20260420131434">Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan</a> — Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan</li>
+<li><a href="/sotoy/notes/zettel.20260420131435">Keberhasilan context anchoring diukur dari murahnya restart</a> — Keberhasilan context anchoring diukur dari murahnya restart</li>
+</ul>
+<h2 id="pertanyaan-terbuka">Pertanyaan Terbuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-terbuka"></a></h2>
+<ul>
+<li>Bagaimana workflow terbaik untuk menulis feature document agar tetap ringan tapi berguna?</li>
+<li>Seberapa sering feature document harus ditinjau atau dikonversi menjadi ADR formal?</li>
+<li>Bagaimana memadukan context anchoring dengan tool memory AI tanpa menjadikan dokumen sebagai "summary dump"?</li>
+<li>Apa batasannya untuk tim kecil atau pekerjaan one-off?</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #154406;" href="/sotoy/notes/tags.literature-note">literature-note</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">decision-making (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131312">AI memory tools sekarang kebanyakan project-level, bukan feature-level</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131400">Kecemasan menutup chat adalah indikator context leakage</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131401">Erosi konteks AI adalah isu arsitektural, bukan bug acak</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131402">Context window besar tetap cepat habis dalam praktik engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131403">Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131404">Dalam erosi konteks, why hilang sebelum what</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131405">Kalau medium lupa, pindahkan memori ke luar medium itu</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131406">Summarization otomatis menyelamatkan what, bukan why</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131407">Alignment tanpa persistence tetap rapuh</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131408">Context anchoring adalah durability layer untuk alignment manusia-AI</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131409">Decision context harus menjadi external state, bukan jejak chat</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131410">Project context dan feature context punya fungsi berbeda</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131411">Priming document adalah memori stabil level proyek</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131412">Feature document adalah memori dinamis level pekerjaan yang sedang berlangsung</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131413">Agar efektif, AI butuh dua lapis konteks: fondasi stabil dan riwayat lokal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131414">Membaca codebase tidak sama dengan memahami keputusan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131415">Code menyimpan outcome; reasoning dan rejected history tidak tampak di sana</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131416">Feature document lebih semantik-padatan dan token-efisien daripada mengekstrak reasoning dari kode</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131417">Context anchoring untuk AI adalah versi kontemporer dari kebutuhan yang melahirkan ADR</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131418">Feature document adalah ADR hidup selama proses, bukan catatan pasca-fakta</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131419">Feature document bisa jadi jembatan antara kerja harian dan dokumentasi formal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131420">Context anchoring adalah infrastruktur koordinasi tim, bukan hanya memori individu</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131421">Dokumen adalah mekanisme persistence yang menggantikan keterbatasan model</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131422">Solusi ini bisa dipasang ke contoh praktis, bukan sekadar teori</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131423">Begitu keputusan desain terkristal, pindahkan ke dokumen bersama alasannya</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131424">Feature document yang efektif itu ringkas dan operasional</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131425">Struktur minimal feature document jelas dan praktis</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131426">Nilai anchoring muncul saat sesi baru bisa warm start</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131427">Maintenance dokumen harus menempel ke ritme kerja alami</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131428">Feature document memaksa reasoning menjadi lebih jelas</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131429">Feature document mengompresi hari kerja menjadi konteks yang bisa diakses ulang cepat</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131430">Context anchoring adalah alat yang harus dikalibrasi, bukan default universal</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131431">Kebutuhan anchoring naik seiring durasi, revisit, dan jumlah orang</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131432">Nilai anchoring ditentukan oleh overhead dokumentasi versus biaya kehilangan konteks</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131433">Keinginan mempertahankan chat adalah indikator anchoring belum cukup</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131434">Chat adalah medium berpikir; dokumen adalah medium penyimpanan keputusan</a></li>
+<li><a href="/sotoy/notes/zettel.20260420131435">Keberhasilan context anchoring diukur dari murahnya restart</a></li>
+</ul>

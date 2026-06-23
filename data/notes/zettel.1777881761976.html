@@ -1,0 +1,35 @@
+<h1 id="pre-execution-metadata-filtering-is-essential-for-agentic-x402-payments">Pre-execution metadata filtering is essential for agentic x402 payments<a aria-hidden="true" class="anchor-heading icon-link" href="#pre-execution-metadata-filtering-is-essential-for-agentic-x402-payments"></a></h1>
+<blockquote>
+<p>In agentic x402 payment flows, the payment metadata fields <code>resource_url</code>, <code>description</code>, and <code>reason</code> are a PII leakage vector that must be filtered before the payment request is executed.</p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li>x402 isn't just money transfer; it's also metadata transfer.</li>
+<li>In agentic mode, metadata is auto-filled and can include email, name, SSN, IBAN, or phone numbers.</li>
+<li>If this metadata is sent raw, PII leaks to payment servers and facilitators before settlement.</li>
+</ul>
+<p>Implikasi:</p>
+<ul>
+<li>payment security for agentic systems needs pre-execution guards, not just on-chain or post-payment checks.</li>
+<li>the right control point is the client-side middleware that sanitizes x402 metadata.</li>
+<li>high assurance requires both PII filtering and policy enforcement (spending limits, replay detection, auditability).</li>
+</ul>
+<p>Link:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.hardening-x402">Hardening x402: PII-Safe Agentic Payments</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">payment (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.hardening-x402">Hardening x402: PII-Safe Agentic Payments</a></li>
+</ul>

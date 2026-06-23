@@ -1,0 +1,93 @@
+<h1 id="bun-rewrite-zig--rust-oracle-test-dan-validasi-independen">Bun rewrite Zig → Rust: oracle test dan validasi independen<a aria-hidden="true" class="anchor-heading icon-link" href="#bun-rewrite-zig--rust-oracle-test-dan-validasi-independen"></a></h1>
+<h2 id="konteks">Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#konteks"></a></h2>
+<p>Thread Rhys Sullivan ini masih sangat nyambung ke diskusi Bun rewrite.
+Bukan lagi soal arsitektur porting, atau syarat merge, tetapi soal epistemologi rewrite: bagaimana kita tahu bahwa port itu benar?</p>
+<ul>
+<li>Tweet: <a href="https://x.com/RhysSullivan/status/2053238350648406378">https://x.com/RhysSullivan/status/2053238350648406378</a></li>
+</ul>
+<h2 id="klaim-utama-rhys">Klaim utama Rhys<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama-rhys"></a></h2>
+<p>Rhys menempatkan nilai tes sebagai sumber kebenaran yang lebih independen daripada implementasi.
+Intinya:</p>
+<ul>
+<li>rewrite Zig → Rust harus divalidasi oleh tests yang tidak ikut ditulis ulang bersama implementasinya.</li>
+<li>itu membuat tes berfungsi sebagai oracle eksternal.</li>
+<li>tanpa oracle itu, rewrite bisa terasa "lulus" hanya karena kode dan tes tumbuh bersama.</li>
+</ul>
+<h2 id="kenapa-ini-penting-buat-bun-port">Kenapa ini penting buat Bun port?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting-buat-bun-port"></a></h2>
+<p>Ini langsung nyambung ke Bun karena portnya bukan refactor kecil. Kalau implementasi baru dan test sama-sama ikut berubah, kita tidak punya basis perbandingan yang kuat.</p>
+<p>Rhys memberi satu jawaban sederhana:</p>
+<ul>
+<li>kalau test suite tetap, maka kita punya referensi behavior yang relatif lebih netral,</li>
+<li>kalau test suite ikut berubah, kita hanya punya narasi internal implementasi.</li>
+</ul>
+<p>Itu penting untuk cabang B sebelumnya: measurable better.
+Tanpa oracle independen, "lebih baik" bisa jadi sekadar wishful thinking.</p>
+<h2 id="reply-yang-paling-penting">Reply yang paling penting<a aria-hidden="true" class="anchor-heading icon-link" href="#reply-yang-paling-penting"></a></h2>
+<h3 id="david-fowler">David Fowler<a aria-hidden="true" class="anchor-heading icon-link" href="#david-fowler"></a></h3>
+<p>Dia menambahkan bahwa test harus "really good".
+Kalau tests dangkal, agent atau implementasi baru bisa membohongi kita.
+Jadi bukan hanya "tests terpisah", tetapi "tests terpisah yang susah digame".</p>
+<h3 id="yeyito">Yeyito<a aria-hidden="true" class="anchor-heading icon-link" href="#yeyito"></a></h3>
+<p>Dia merumuskannya dengan tajam:</p>
+<blockquote>
+<p>if the agent rewrites implementation and the oracle in the same mental language, you don't get verification, you get a very confident pact between two bugs.</p>
+</blockquote>
+<p>Ini penting karena dia menggarisbawahi risiko co-adaptation antara implementasi dan tes.</p>
+<h3 id="lifcc">lifcc<a aria-hidden="true" class="anchor-heading icon-link" href="#lifcc"></a></h3>
+<p>Menurutnya yang utama adalah behavior, bukan bahasa atau struktur internal.
+Tests harus mengunci perilaku, bukan representasi implementasi.</p>
+<h3 id="nathan-oyler">Nathan Oyler<a aria-hidden="true" class="anchor-heading icon-link" href="#nathan-oyler"></a></h3>
+<p>Dia menggarisbawahi nilai dari memiliki implementasi lama yang tetap bisa dijalankan sebagai baseline hidup.
+Itu memberi dua jenis oracle: test suite dan runtime legacy.</p>
+<h2 id="debat-utama">Debat utama<a aria-hidden="true" class="anchor-heading icon-link" href="#debat-utama"></a></h2>
+<p>Debat sejatinya adalah:</p>
+<ul>
+<li>apakah test harus ditulis di bahasa/metode yang berbeda? (heuristik Rhys)</li>
+<li>atau yang lebih penting adalah apakah test mengunci <strong>behavior eksternal</strong>?</li>
+</ul>
+<p>Dari thread, jawaban tertumpu ke arah kedua:</p>
+<ul>
+<li>bahasa berbeda membantu,</li>
+<li>tetapi yang lebih kuat adalah tests yang menguji behavior, bukan internals.</li>
+</ul>
+<p>Kalau tests bergantung pada shape internal, mereka bisa rusak saat implementasi diganti.</p>
+<h2 id="arah-diskusi">Arah diskusi<a aria-hidden="true" class="anchor-heading icon-link" href="#arah-diskusi"></a></h2>
+<p>Diskusinya mengarah ke epistemologi rewrite:</p>
+<ul>
+<li>rewrite perlu oracle eksternal,</li>
+<li>oracle itu bisa berupa test suite independen,</li>
+<li>tapi test harus berkualitas dan sulit dipuaskan oleh implementasi palsu,</li>
+<li>dan legacy implementation yang masih jalan bisa menjadi oracle tambahan.</li>
+</ul>
+<p>Dengan kata lain, thread ini menempatkan testing bukan sebagai ritual, tetapi sebagai salah satu cara kita tahu bahwa port Bun benar-benar berhasil.</p>
+<h2 id="insight-besar">Insight besar<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-besar"></a></h2>
+<p>Rhys mempertegas satu hal penting:
+<strong>rewrite besar harus dinilai bukan hanya dari apakah implementasi baru lulus tests, tetapi dari apakah tests itu tetap berfungsi sebagai guru eksternal.</strong></p>
+<p>Kalau implementasi dan tests sama-sama "direwrite", kita kehilangan sudut pandang verifikasi.</p>
+<blockquote>
+<p>Ini bukan soal bahasa berbeda. Ini soal membedakan antara implementasi yang berubah dan oracle yang bertahan.</p>
+</blockquote>
+<h2 id="kaitan">Kaitan<a aria-hidden="true" class="anchor-heading icon-link" href="#kaitan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.software-architechture.bun-rust-porting">Bun porting dari Zig ke Rust: masalah layering, crates, dan tagged pointer</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124520">Rewrite sistem low-level hanya sah jika terukur lebih baik secara performa, memori, dan stabilitas</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124521">Hand-porting besar lebih efektif jika breadth-first dan tulis semua dulu</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #7a6a4f;" href="/sotoy/notes/tags.software-architechture">software-architechture</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">zig (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">bun (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">testing (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.testing.oracle">Oracle dalam software testing</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+</ul>

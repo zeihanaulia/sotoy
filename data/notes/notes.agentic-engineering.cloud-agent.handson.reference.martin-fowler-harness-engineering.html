@@ -1,0 +1,44 @@
+<h1 id="martin-fowler---harness-engineering-for-coding-agent-users">Martin Fowler - Harness Engineering for Coding Agent Users<a aria-hidden="true" class="anchor-heading icon-link" href="#martin-fowler---harness-engineering-for-coding-agent-users"></a></h1>
+<h2 id="why-this-reference-matters">Why this reference matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-reference-matters"></a></h2>
+<p>Martin Fowler mengikat agentic engineering ke konsep harness yang disusun untuk coding agent users. Ini penting karena dia menempatkan konteks, verifikasi, dan loop feedback sebagai bagian dari pekerjaan teknis, bukan sekadar dekorasi di atas prompt.</p>
+<h2 id="what-it-supports">What it supports<a aria-hidden="true" class="anchor-heading icon-link" href="#what-it-supports"></a></h2>
+<ul>
+<li>Perubahan kecil idealnya didefinisikan sebagai scope keputusan dan risiko yang terbatas, bukan jumlah baris.</li>
+<li>Harness yang baik seharusnya meningkatkan probabilitas hasil benar, sekaligus memperbaiki masalah sebelum sampai ke reviewer manusia.</li>
+<li>Agar AI coding bisa dipercaya, kita butuh feedforward (guide) dan feedback (sensor) yang berfungsi bersama.</li>
+</ul>
+<h2 id="key-quotes">Key quotes<a aria-hidden="true" class="anchor-heading icon-link" href="#key-quotes"></a></h2>
+<ul>
+<li>"A well-built outer harness serves two goals: it increases the probability that the agent gets it right in the first place, and it provides a feedback loop that self-corrects as many issues as possible before they even reach human eyes."</li>
+<li>"Separately, you get either an agent that keeps repeating the same mistakes (feedback-only) or an agent that encodes rules but never finds out whether they worked (feed-forward-only)."</li>
+<li>"Feedback sensors, including the new inferential ones, need to be distributed across the lifecycle accordingly."</li>
+</ul>
+<h2 id="practical-takeaway">Practical takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-takeaway"></a></h2>
+<p>Untuk GitLab MR review agent dan code generation harness, ini berarti:</p>
+<ul>
+<li>jangan andalkan satu promt besar; bangun gate, linter, dan status check sebagai feedforward.</li>
+<li>jangan hanya review output setelah agent jalan; letakkan sensor yang bisa memvalidasi perubahan sedini mungkin.</li>
+<li>kecilkan ruang keputusan agent dengan single-purpose changes yang punya satu cara verifikasi.</li>
+</ul>
+<h2 id="references">References<a aria-hidden="true" class="anchor-heading icon-link" href="#references"></a></h2>
+<ul>
+<li><a href="https://martinfowler.com/articles/harness-engineering.html">https://martinfowler.com/articles/harness-engineering.html</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cloud-agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handson (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">reference (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">harness (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1778001021442">Agentic engineering differs from vibe coding</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.references">Cloud Agent Hands-on References</a></li>
+</ul>

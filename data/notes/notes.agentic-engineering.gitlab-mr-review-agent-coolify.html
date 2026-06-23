@@ -1,0 +1,279 @@
+<h1 id="gitlab-mr-review-agent-di-coolify">GitLab MR Review Agent di Coolify<a aria-hidden="true" class="anchor-heading icon-link" href="#gitlab-mr-review-agent-di-coolify"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Use case gue adalah GitLab Merge Request review agent yang gue deploy di Coolify.</p>
+<p>Yang gue mau bukan semua MR otomatis direview. Triggernya harus dari comment di MR, misalnya <code>/agent review security</code> atau <code>/agent review</code>.</p>
+<p>Ini bukan agent coding bebas. Ini lebih pas disebut <strong>MR review bot dengan worker agent di belakangnya</strong>.</p>
+<h2 id="terminologi-penting">Terminologi penting<a aria-hidden="true" class="anchor-heading icon-link" href="#terminologi-penting"></a></h2>
+<ul>
+<li><strong>Mention</strong> = komentar di MR seperti <code>/agent review</code>. Di GitLab ini masuk kategori Comment event / Note event.</li>
+<li><strong>Post comment balik</strong> = pakai Notes API atau Discussions API untuk balas comment di MR.</li>
+<li><strong>Coolify deployment</strong> = deploy container via Dockerfile atau Docker Compose, dengan env vars, volumes, dan domain.</li>
+</ul>
+<h2 id="flow-yang-gue-rekomendasikan">Flow yang gue rekomendasikan<a aria-hidden="true" class="anchor-heading icon-link" href="#flow-yang-gue-rekomendasikan"></a></h2>
+<pre class="language-text"><code class="language-text">GitLab MR comment
+  "/agent review"
+        ↓
+GitLab Note Event Webhook
+        ↓
+Coolify app: webhook API
+        ↓
+Validate secret token + parse payload
+        ↓
+Check command mention
+        ↓
+Queue review job
+        ↓
+Worker clone repo + checkout MR source branch
+        ↓
+Fetch MR diff + existing discussions + project instructions
+        ↓
+Run agent review
+        ↓
+Generate structured review report
+        ↓
+Post comment to GitLab MR
+</code></pre>
+<p>Penting: <strong>jangan jalankan agent langsung di HTTP request</strong>. Webhook harus cepat balas <code>200 OK</code>, lalu kerja berat dijalankan di queue/worker.</p>
+<h2 id="arsitektur-coolify-yang-gue-pakai">Arsitektur Coolify yang gue pakai<a aria-hidden="true" class="anchor-heading icon-link" href="#arsitektur-coolify-yang-gue-pakai"></a></h2>
+<p>Gue pisahkan API dan worker.</p>
+<p>Contoh konfigurasi Docker Compose minimal:</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">api</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> node dist/server.js
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"3000:3000"</span>
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> GITLAB_BASE_URL=$<span class="token punctuation">{</span>GITLAB_BASE_URL<span class="token punctuation">:</span><span class="token punctuation">?</span><span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> GITLAB_TOKEN=$<span class="token punctuation">{</span>GITLAB_TOKEN<span class="token punctuation">:</span><span class="token punctuation">?</span><span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> GITLAB_WEBHOOK_SECRET=$<span class="token punctuation">{</span>GITLAB_WEBHOOK_SECRET<span class="token punctuation">:</span><span class="token punctuation">?</span><span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> AGENT_PROVIDER=$<span class="token punctuation">{</span>AGENT_PROVIDER<span class="token punctuation">:</span><span class="token punctuation">-</span>openai<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> OPENAI_API_KEY=$<span class="token punctuation">{</span>OPENAI_API_KEY<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> ANTHROPIC_API_KEY=$<span class="token punctuation">{</span>ANTHROPIC_API_KEY<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> REDIS_URL=redis<span class="token punctuation">:</span>//redis<span class="token punctuation">:</span><span class="token number">6379</span>
+      <span class="token punctuation">-</span> WORKSPACE_DIR=/workspaces
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> agent<span class="token punctuation">-</span>workspaces<span class="token punctuation">:</span>/workspaces
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> redis
+
+  <span class="token key atrule">worker</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> node dist/worker.js
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> GITLAB_BASE_URL=$<span class="token punctuation">{</span>GITLAB_BASE_URL<span class="token punctuation">:</span><span class="token punctuation">?</span><span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> GITLAB_TOKEN=$<span class="token punctuation">{</span>GITLAB_TOKEN<span class="token punctuation">:</span><span class="token punctuation">?</span><span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> OPENAI_API_KEY=$<span class="token punctuation">{</span>OPENAI_API_KEY<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> ANTHROPIC_API_KEY=$<span class="token punctuation">{</span>ANTHROPIC_API_KEY<span class="token punctuation">}</span>
+      <span class="token punctuation">-</span> REDIS_URL=redis<span class="token punctuation">:</span>//redis<span class="token punctuation">:</span><span class="token number">6379</span>
+      <span class="token punctuation">-</span> WORKSPACE_DIR=/workspaces
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> agent<span class="token punctuation">-</span>workspaces<span class="token punctuation">:</span>/workspaces
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> redis
+
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis<span class="token punctuation">:</span>7<span class="token punctuation">-</span>alpine
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> redis<span class="token punctuation">-</span>data<span class="token punctuation">:</span>/data
+
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token key atrule">agent-workspaces</span><span class="token punctuation">:</span>
+  <span class="token key atrule">redis-data</span><span class="token punctuation">:</span>
+</code></pre>
+<h2 id="gitlab-setup-yang-gue-sarankan">GitLab setup yang gue sarankan<a aria-hidden="true" class="anchor-heading icon-link" href="#gitlab-setup-yang-gue-sarankan"></a></h2>
+<p>Di project GitLab:</p>
+<ul>
+<li>Settings → Webhooks</li>
+<li>URL: <code>https://agent-domain-elo.com/webhooks/gitlab</code></li>
+<li>Event: Comments / Note events</li>
+<li>Secret token: random secret</li>
+</ul>
+<p>Di app, validasi header <code>X-Gitlab-Token</code>.</p>
+<h2 id="trigger-command">Trigger command<a aria-hidden="true" class="anchor-heading icon-link" href="#trigger-command"></a></h2>
+<p>Gunakan command eksplisit, jangan cuma <code>@agent</code>.</p>
+<p>Contoh:</p>
+<pre class="language-text"><code class="language-text">/agent review
+/agent review security
+/agent review performance
+</code></pre>
+<p>Rule trigger yang gue pake:</p>
+<ul>
+<li>event adalah <code>Note Hook</code></li>
+<li><code>noteable_type</code> adalah <code>MergeRequest</code></li>
+<li>body dimulai dengan <code>/agent review</code></li>
+<li>author bukan bot sendiri</li>
+</ul>
+<h2 id="permission-dan-token">Permission dan token<a aria-hidden="true" class="anchor-heading icon-link" href="#permission-dan-token"></a></h2>
+<p>Buat bot user dengan token scope minimal.</p>
+<p>Untuk review-only, token cukup dengan:</p>
+<ul>
+<li><code>read_repository</code></li>
+<li><code>api</code></li>
+</ul>
+<p>Jangan pakai token personal utama.</p>
+<h2 id="data-yang-worker-butuh">Data yang worker butuh<a aria-hidden="true" class="anchor-heading icon-link" href="#data-yang-worker-butuh"></a></h2>
+<p>Worker harus ambil:</p>
+<ul>
+<li>Project ID</li>
+<li>MR IID</li>
+<li>Source branch</li>
+<li>Target branch</li>
+<li>MR diff</li>
+<li>MR title/description</li>
+<li>Existing discussions jika perlu</li>
+<li>Repository instructions seperti <code>AGENTS.md</code> atau <code>.agent-review.md</code></li>
+</ul>
+<p>Endpoint GitLab yang relevan:</p>
+<ul>
+<li><code>GET /projects/:id/merge_requests/:merge_request_iid</code></li>
+<li><code>GET /projects/:id/merge_requests/:merge_request_iid/diffs</code></li>
+<li><code>GET /projects/:id/merge_requests/:merge_request_iid/discussions</code></li>
+<li><code>POST /projects/:id/merge_requests/:merge_request_iid/notes</code></li>
+</ul>
+<h2 id="comment-vs-discussion">Comment vs discussion<a aria-hidden="true" class="anchor-heading icon-link" href="#comment-vs-discussion"></a></h2>
+<p>Untuk MVP, gue pilih general comment dulu lewat Notes API.</p>
+<p>Discussion API bagus untuk thread atau diff comment, tapi itu bikin implementasi awal lebih rumit.</p>
+<h2 id="contoh-review-output-yang-gue-inginkan">Contoh review output yang gue inginkan<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-review-output-yang-gue-inginkan"></a></h2>
+<p>Agent comment harus terstruktur, evidence-based, dan bukan opini dangkal.</p>
+<p>Contoh:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Agent Code Review</span>
+
+<span class="token title important"><span class="token punctuation">###</span> Summary</span>
+
+Found 2 issues.
+
+<span class="token title important"><span class="token punctuation">###</span> Findings</span>
+
+<span class="token title important"><span class="token punctuation">####</span> 1. Missing authorization check</span>
+Severity: High
+File: <span class="token code-snippet code keyword">`src/projects/project.controller.ts`</span>
+Evidence: <span class="token code-snippet code keyword">`PATCH /projects/:id/settings`</span> checks authentication but does not check ownership.
+Suggested fix: call <span class="token code-snippet code keyword">`requireProjectAdmin(user.id, project.id)`</span> before update.
+Confidence: High
+
+<span class="token title important"><span class="token punctuation">####</span> 2. Possible N+1 query</span>
+Severity: Medium
+File: <span class="token code-snippet code keyword">`src/reports/billing.ts`</span>
+Evidence: repository call inside loop over customers.
+Suggested fix: bulk fetch invoices by customer IDs.
+Confidence: Medium
+
+<span class="token title important"><span class="token punctuation">###</span> Verification</span>
+
+<span class="token list punctuation">-</span> Static review: completed
+<span class="token list punctuation">-</span> Tests run: not run
+<span class="token list punctuation">-</span> Security scan: not run
+
+<span class="token title important"><span class="token punctuation">###</span> Human review needed</span>
+
+Yes. Authorization logic should be checked by project owner.
+</code></pre>
+<h2 id="minimal-implementation-yang-gue-pikirkan">Minimal implementation yang gue pikirkan<a aria-hidden="true" class="anchor-heading icon-link" href="#minimal-implementation-yang-gue-pikirkan"></a></h2>
+<h3 id="serverts"><code>server.ts</code><a aria-hidden="true" class="anchor-heading icon-link" href="#serverts"></a></h3>
+<p>Menerima webhook, validasi token, parse payload, queue job.</p>
+<h3 id="workerts"><code>worker.ts</code><a aria-hidden="true" class="anchor-heading icon-link" href="#workerts"></a></h3>
+<p>Ambil job, fetch MR info/diff/discussions, run review, post comment.</p>
+<h3 id="gitlabts"><code>gitlab.ts</code><a aria-hidden="true" class="anchor-heading icon-link" href="#gitlabts"></a></h3>
+<p>Wrapper GitLab API untuk MR, diffs, discussions, notes.</p>
+<h2 id="clone-repo-atau-diff-only-review">Clone repo atau diff-only review?<a aria-hidden="true" class="anchor-heading icon-link" href="#clone-repo-atau-diff-only-review"></a></h2>
+<p>Untuk MVP, gue mulai dengan diff-only review dulu. Clone full repo bisa ditambahkan setelah komentar awal stabil.</p>
+<p>Flow clone repo:</p>
+<pre class="language-text"><code class="language-text">1. Ambil MR metadata.
+2. Clone repo ke workspace.
+3. Checkout source branch.
+4. Baca `AGENTS.md` / `.agent-review.md`.
+5. Ambil diff.
+6. Jalankan review.
+7. Post comment.
+8. Hapus workspace atau simpan untuk audit.
+</code></pre>
+<h2 id="instruction-file-di-repo">Instruction file di repo<a aria-hidden="true" class="anchor-heading icon-link" href="#instruction-file-di-repo"></a></h2>
+<p>Contoh <code>.agent-review.md</code> yang gue taruh di repo:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Agent MR Review Instructions</span>
+
+Review priorities:
+<span class="token list punctuation">1.</span> Security
+<span class="token list punctuation">2.</span> Correctness
+<span class="token list punctuation">3.</span> Data integrity
+<span class="token list punctuation">4.</span> Performance risks
+<span class="token list punctuation">5.</span> Maintainability
+
+Do not comment on style unless it affects readability or correctness.
+
+For each finding, include:
+<span class="token list punctuation">-</span> severity
+<span class="token list punctuation">-</span> file path
+<span class="token list punctuation">-</span> evidence from diff
+<span class="token list punctuation">-</span> why it matters
+<span class="token list punctuation">-</span> suggested fix
+<span class="token list punctuation">-</span> confidence
+</code></pre>
+<h2 id="safety-guardrail">Safety guardrail<a aria-hidden="true" class="anchor-heading icon-link" href="#safety-guardrail"></a></h2>
+<p>Yang gue tanam di awal:</p>
+<ul>
+<li>validasi webhook secret</li>
+<li>allowlist project</li>
+<li>allowlist trigger users</li>
+<li>anti self-trigger</li>
+<li>idempotency <code>projectId:mrIid:noteId</code></li>
+<li>concurrency limit</li>
+<li>timeout</li>
+<li>jangan auto-approve/merge</li>
+</ul>
+<h2 id="before-after-workflow">Before-after workflow<a aria-hidden="true" class="anchor-heading icon-link" href="#before-after-workflow"></a></h2>
+<p>Sebelum:</p>
+<pre class="language-text"><code class="language-text">Developer mention human senior.
+Senior buka MR, baca diff, komentar manual.
+</code></pre>
+<p>Setelah MVP:</p>
+<pre class="language-text"><code class="language-text">Developer comment `/agent review security`.
+Worker ambil MR diff.
+Agent review.
+Post comment.
+Senior cek only high-risk findings.
+</code></pre>
+<h2 id="roadmap">Roadmap<a aria-hidden="true" class="anchor-heading icon-link" href="#roadmap"></a></h2>
+<ol>
+<li>webhook + comment balik</li>
+<li>diff-only LLM review</li>
+<li>instructions file support</li>
+<li>clone repo dan workspace</li>
+<li>scanner integration</li>
+<li>optional discussion thread</li>
+</ol>
+<h2 id="kesimpulan">Kesimpulan<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan"></a></h2>
+<p>Menurut gue, MVP ini feasible di Coolify.</p>
+<p>Target pertama:</p>
+<ul>
+<li>api service</li>
+<li>worker service</li>
+<li>redis</li>
+<li>GitLab Note event trigger</li>
+<li>review-only comment response</li>
+</ul>
+<p>Jangan mulai dari push/code-fix. Mulai dari review-only dulu.</p>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.gitlab-mr-comment-formatting">Cloud Agent Hands-on: MR Comment Formatting</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.references">Cloud Agent Hands-on References</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">gitlab (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">coolify (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">mr-review (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.how-i-use-ai-to-code">How I Use AI to Code — literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.gitlab-mr-comment-formatting">Cloud Agent Hands-on: MR Comment Formatting</a></li>
+</ul>

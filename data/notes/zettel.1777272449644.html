@@ -1,0 +1,34 @@
+<h1 id="output-llm-dibangun-lewat-next-token-prediction">Output LLM dibangun lewat next-token prediction<a aria-hidden="true" class="anchor-heading icon-link" href="#output-llm-dibangun-lewat-next-token-prediction"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Yang gue tangkap dari quote ini adalah bahwa LLM menghasilkan perilaku kompleks dari mekanisme yang sangat sederhana: menebak token berikutnya berulang kali. Karena output dibangun token demi token, prompt bukan hanya instruksi—dia menentukan trajectory model dan mengubah cara model berpikir.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>The model predicts the word most likely to appear next in the sequence, over and over...</p>
+</blockquote>
+<h2 id="kenapa-ini-core">Kenapa ini core<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-core"></a></h2>
+<p>Quote ini penting karena dia menjelaskan banyak fenomena sekaligus:</p>
+<ul>
+<li>prompt sensitivity: sedikit perbedaan input bisa mengubah trajectory output secara drastis.</li>
+<li>hallucination: model bisa terdengar meyakinkan karena dia masih menebak kata paling mungkin, bukan karena dia punya pemahaman kebenaran.</li>
+<li>variability: output tidak deterministik karena ia memilih token satu per satu.</li>
+<li>reasoning as generated trajectory: apa yang kita panggil "reasoning" adalah lintasan token yang dibuat model, bukan proses internal yang terpisah.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Chapter 1</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">chapter-1 (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.the-developers-guide-to-ai">MOC The Developer's Guide to AI</a></li>
+</ul>

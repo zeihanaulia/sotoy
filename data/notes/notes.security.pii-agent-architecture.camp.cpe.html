@@ -1,0 +1,114 @@
+<h1 id="cpe-mengukur-risiko-pii-sebagai-akumulasi-session-bukan-message">CPE: mengukur risiko PII sebagai akumulasi session, bukan message<a aria-hidden="true" class="anchor-heading icon-link" href="#cpe-mengukur-risiko-pii-sebagai-akumulasi-session-bukan-message"></a></h1>
+<h2 id="inti-penjelasan">Inti penjelasan<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-penjelasan"></a></h2>
+<p>Pertanyaan kedua dari paper CAMP adalah: apa yang baru dari CPE?</p>
+<p>Jawaban pendeknya: CPE memindahkan privacy risk dari level single message ke level session. Dalam agentic conversation, bukan cuma satu pesan yang penting; yang penting adalah akumulasi dan kombinasi entitas PII sepanjang percakapan.</p>
+<h2 id="unit-analisis-yang-berubah">Unit analisis yang berubah<a aria-hidden="true" class="anchor-heading icon-link" href="#unit-analisis-yang-berubah"></a></h2>
+<p>Per-turn masker bertanya:</p>
+<ul>
+<li>"Apakah pesan ini mengandung PII?"</li>
+</ul>
+<p>CPE bertanya:</p>
+<ul>
+<li>"Setelah semua pesan sejauh ini digabung, apakah percakapan ini sudah membentuk profil yang bisa mengidentifikasi user?"</li>
+</ul>
+<p>Itu adalah perubahan cara pandang utama.</p>
+<h2 id="struktur-cpe">Struktur CPE<a aria-hidden="true" class="anchor-heading icon-link" href="#struktur-cpe"></a></h2>
+<p>CPE digarap dengan tiga komponen utama.</p>
+<h3 id="1-entity-type">1. Entity type<a aria-hidden="true" class="anchor-heading icon-link" href="#1-entity-type"></a></h3>
+<p>Pertama, sistem mengkategorikan PII berdasarkan jenisnya: Person, Location, Organization, Email, Phone, DOB, SSN, Medical Condition, Salary, dan seterusnya.</p>
+<h3 id="2-base-sensitivity-weight">2. Base sensitivity weight<a aria-hidden="true" class="anchor-heading icon-link" href="#2-base-sensitivity-weight"></a></h3>
+<p>Kedua, setiap entity type diberi bobot sensitivitas dasar. Contoh bobot dalam paper:</p>
+<ul>
+<li>SSN / credit card: 1.0</li>
+<li>DOB: 0.9</li>
+<li>Medical condition: 0.85</li>
+<li>Email: 0.8</li>
+<li>Phone: 0.75</li>
+<li>Person / Salary: 0.6</li>
+<li>Location / IP: 0.5</li>
+<li>Organization: 0.3</li>
+</ul>
+<p>Bobot ini menjawab: "seberapa sensitif entity ini ketika berdiri sendiri?"</p>
+<h3 id="3-co-occurrence-graph">3. Co-occurrence graph<a aria-hidden="true" class="anchor-heading icon-link" href="#3-co-occurrence-graph"></a></h3>
+<p>Ketiga, CPE membangun graph dari entity types yang muncul bersama dalam session.</p>
+<ul>
+<li>node = tipe entity</li>
+<li>edge = dua tipe entity muncul bersama dalam session</li>
+</ul>
+<p>Graph ini memungkinkan CPE menangkap kombinasi risiko.
+Entity yang muncul sendirian memiliki degree rendah. Entity yang muncul bersama banyak entity lain punya degree tinggi, sehingga kontribusinya meningkat.</p>
+<h2 id="bagaimana-amplifier-bekerja">Bagaimana amplifier bekerja<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-amplifier-bekerja"></a></h2>
+<p>Paper memakai amplifier berbasis degree node:</p>
+<p>f(v) = 1 + α × deg(v)</p>
+<ul>
+<li><code>f(v)</code> adalah faktor peningkat untuk node <code>v</code></li>
+<li><code>deg(v)</code> adalah jumlah koneksi node itu di graph</li>
+<li><code>α</code> adalah parameter yang mengatur seberapa agresif kombinasi menaikkan risiko</li>
+</ul>
+<p>Kalau <code>α = 0.3</code> dan sebuah node punya degree 3, amplifier-nya menjadi 1.9. Dengan kata lain, entity itu hampir dua kali lipat lebih berbahaya karena ia muncul dalam kombinasi yang kaya.</p>
+<h2 id="cpe-sebagai-skor">CPE sebagai skor<a aria-hidden="true" class="anchor-heading icon-link" href="#cpe-sebagai-skor"></a></h2>
+<p>CPE dihitung sebagai total bobot entity setelah diamplifikasi:</p>
+<p>CPE(t) = Σ_v w(v) × (1 + α × deg(v))</p>
+<ul>
+<li><code>w(v)</code> = base sensitivity weight entity <code>v</code></li>
+<li><code>deg(v)</code> = seberapa banyak entity <code>v</code> terkoneksi dengan entity lain</li>
+<li><code>CPE(t)</code> = skor cumulative exposure pada turn ke-<code>t</code></li>
+</ul>
+<h2 id="mengapa-ini-bukan-sekadar-daftar-pii">Mengapa ini bukan sekadar "daftar PII"<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-bukan-sekadar-daftar-pii"></a></h2>
+<p>Kalau sistem hanya mencatat jenis entity, ia hanya punya daftar. CPE lebih dari itu karena ia memberi skor pada akumulasi dan kombinasi.</p>
+<ul>
+<li>Base weight menjawab "bagaimana sensitif entity ini sendirian?"</li>
+<li>Co-occurrence graph menjawab "bagaimana entity ini jadi lebih berbahaya ketika digabung dengan entity lain?"</li>
+<li>CPE menggabungkan keduanya.</li>
+</ul>
+<h2 id="contoh-kenaikan-non-linear">Contoh kenaikan non-linear<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-kenaikan-non-linear"></a></h2>
+<p>Bayangkan percakapan bertahap:</p>
+<ul>
+<li>Turn 1: Person saja -> CPE rendah</li>
+<li>Turn 2: tambah Location -> CPE tumbuh lebih dari jumlah sederhana</li>
+<li>Turn 3: tambah Organization -> CPE tumbuh lagi karena semua node sekarang punya degree lebih tinggi</li>
+</ul>
+<p>Ini penting: CPE tidak bertambah linear seperti penjumlahan bobot; ia bisa tumbuh superlinear karena kombinasi antar entity.</p>
+<h2 id="batasan-cpe">Batasan CPE<a aria-hidden="true" class="anchor-heading icon-link" href="#batasan-cpe"></a></h2>
+<p>CPE terlihat matematis, tetapi banyak komponennya masih heuristic.</p>
+<h3 id="1-bobot-entity-tetap-subjektif">1. Bobot entity tetap subjektif<a aria-hidden="true" class="anchor-heading icon-link" href="#1-bobot-entity-tetap-subjektif"></a></h3>
+<p>Nilai sensitivitas entity seperti Person = 0.6 atau Organization = 0.3 adalah keputusan desain, bukan hasil eksperimen teruji panjang.</p>
+<h3 id="2-edge-amplifier-masih-sederhana">2. Edge amplifier masih sederhana<a aria-hidden="true" class="anchor-heading icon-link" href="#2-edge-amplifier-masih-sederhana"></a></h3>
+<p>Degree-based amplifier memperlakukan semua co-occurrence sebagai sama. Padahal tidak semua kombinasi entity sama bahayanya.</p>
+<h3 id="3-nilai-spesifik-entity-tidak-dihitung">3. Nilai spesifik entity tidak dihitung<a aria-hidden="true" class="anchor-heading icon-link" href="#3-nilai-spesifik-entity-tidak-dihitung"></a></h3>
+<p>CPE paper fokus pada tipe entity, bukan uniqueness atau rarity dari nilai actual. "Location=Jakarta" dan "Location=Dusun kecil X" diperlakukan sama di level tipe.</p>
+<h3 id="4-implicit-inference-belum-tertangkap">4. Implicit inference belum tertangkap<a aria-hidden="true" class="anchor-heading icon-link" href="#4-implicit-inference-belum-tertangkap"></a></h3>
+<p>CPE naik hanya jika extractor mendeteksi PII. Kalau user memberikan clue implisit—misalnya "kantor super-app ijo"—ekstraktor mungkin tidak menangkapnya, tapi model/adversary masih bisa menebak.</p>
+<h3 id="5-threshold-masih-knob-manual">5. Threshold masih knob manual<a aria-hidden="true" class="anchor-heading icon-link" href="#5-threshold-masih-knob-manual"></a></h3>
+<p>Paper mencoba τ = 1.5, 2.0, 2.5, tetapi belum memberi cara sistematis untuk memilih threshold yang valid di domain nyata.</p>
+<h2 id="kenapa-cpe-masih-penting">Kenapa CPE masih penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-cpe-masih-penting"></a></h2>
+<p>Meski belum sempurna, CPE punya nilai sebagai engineering pattern. Ia membawa perhatian ke dua hal yang sering dilupakan:</p>
+<ul>
+<li>privacy risk adalah properti session, bukan message,</li>
+<li>kombinasi entitas dapat menaikkan risiko lebih besar daripada jumlah entitas.</li>
+</ul>
+<p>Dengan cara ini, CPE memperkenalkan mekanisme trigger policy untuk retroactive intervention, bukan sekadar detection.</p>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">camp (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">measurement (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+</ul>

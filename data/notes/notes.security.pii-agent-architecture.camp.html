@@ -1,0 +1,103 @@
+<h1 id="camp-cross-turn-pii-protection-for-llm-conversations">CAMP: Cross-Turn PII Protection for LLM Conversations<a aria-hidden="true" class="anchor-heading icon-link" href="#camp-cross-turn-pii-protection-for-llm-conversations"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>Paper ini menegaskan bahwa proteksi PII untuk agentic multi-turn masih terlalu stateless. Sistem seperti Presidio, PAPILLON, dan adaptive masking lain sering memeriksa satu pesan per turn, lalu hasilnya hilang begitu saja. Padahal history percakapan yang terus dikirim ulang ke LLM bisa menggabungkan potongan-potongan kecil menjadi profil yang cukup kuat untuk re-identification.</p>
+<h2 id="three-question-lens">Three-question lens<a aria-hidden="true" class="anchor-heading icon-link" href="#three-question-lens"></a></h2>
+<p>Paper ini sebenarnya dibangun dari tiga pertanyaan berurutan:</p>
+<ul>
+<li>apa yang salah dengan per-turn masking?</li>
+<li>apa yang baru dari Cumulative PII Exposure (CPE)?</li>
+<li>apa yang baru dari CAMP sebagai solusi?</li>
+</ul>
+<p>Kalau lo paham tiga ini, lo bisa menilai apakah CAMP cuma "masking baru" atau benar-benar perubahan unit analisis dari message-level ke session-level.</p>
+<p>Untuk pembahasan mendalam soal per-turn masking, lihat <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a>.
+Untuk pembahasan mendalam soal CPE, lihat <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a>.
+Untuk pembahasan mendalam soal solusi CAMP, lihat <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a>.
+Untuk pembahasan indexed masking / tokenized pseudonymization, lihat <a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a>.</p>
+<h2 id="cumulative-pii-exposure-cpe">Cumulative PII Exposure (CPE)<a aria-hidden="true" class="anchor-heading icon-link" href="#cumulative-pii-exposure-cpe"></a></h2>
+<p>CAMP memperkenalkan CPE sebagai metrik session-level. Prinsipnya:</p>
+<ul>
+<li>bukan hanya apakah satu message mengandung PII,</li>
+<li>tetapi apakah kombinasi entitas yang terkumpul sepanjang session sudah berisiko.</li>
+</ul>
+<p>Setiap tipe entitas diberi bobot sensitivitas berbeda: SSN/credit card 1.0, date of birth 0.9, medical 0.85, email 0.8, phone 0.75, person/salary 0.6, location/IP 0.5, organization 0.3.</p>
+<p>Lalu paper menambahkan co-occurrence graph:</p>
+<ul>
+<li>node = tipe entitas yang muncul di session,</li>
+<li>edge = dua tipe entitas muncul bersama dalam session.</li>
+</ul>
+<p>Karena risiko tidak linear, entity baru bisa menaikkan skor lebih besar jika dia terhubung ke banyak entity lain. Formula yang dipakai mirip:</p>
+<p>CPE = Σ weight(v) × (1 + α × degree(v))</p>
+<p>Jadi satu entity yang "terhubung" ke banyak entitas lain memberi amplifikasi risiko.</p>
+<h2 id="camp-architecture">CAMP architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#camp-architecture"></a></h2>
+<p>Solusi CAMP bekerja sebagai middleware antara user dan external LLM. Komponennya:</p>
+<ul>
+<li><strong>Per-turn PII extractor</strong>: masih deteksi PII seperti sistem lama, tetapi hasilnya disimpan.</li>
+<li><strong>Session registry</strong>: menyimpan semua entitas PII yang pernah muncul, lengkap dengan tipe, nilai asli, dan turn pertama.</li>
+<li><strong>Co-occurrence graph + CPE scorer</strong>: menghitung risiko kombinasi antar entitas sepanjang session.</li>
+<li><strong>Hard block rules</strong>: tipe sangat sensitif (SSN, kartu kredit, bank account) langsung diblokir sejak awal.</li>
+<li><strong>Retroactive pseudonymization</strong>: ketika threshold terlampaui, tulis ulang seluruh history dengan pseudonym yang konsisten.</li>
+<li><strong>De-masking layer</strong>: setelah LLM menjawab, ganti synthetic values kembali ke nilai asli sebelum ditampilkan ke user.</li>
+</ul>
+<p>Contoh efeknya:</p>
+<ul>
+<li>history asli: "Nama gue Andi", "Gue tinggal di Bandung", "Gue kerja di Tokopedia", "Gaji gue 28 juta"</li>
+<li>history pseudo: "Nama gue Budi", "Gue tinggal di Surabaya", "Gue kerja di Acme Corp", "Gaji gue 21 juta"</li>
+</ul>
+<p>External LLM hanya melihat history pseudo. User tetap mendapat jawaban personal setelah de-masking.</p>
+<h2 id="threshold-dan-trade-off">Threshold dan trade-off<a aria-hidden="true" class="anchor-heading icon-link" href="#threshold-dan-trade-off"></a></h2>
+<p>CAMP punya knob privasi: threshold CPE.</p>
+<ul>
+<li>threshold rendah = proteksi lebih cepat, context lebih sering dipseudonymize,</li>
+<li>threshold tinggi = lebih banyak konteks asli lewat, tapi risiko terlambat proteksi.</li>
+</ul>
+<p>Domain seperti healthcare dan finance harus lebih konservatif. General assistant bisa pakai threshold lebih longgar.</p>
+<h2 id="why-this-matters">Why this matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-matters"></a></h2>
+<p>Untuk security agent design, paper ini mengubah perspektif dari "masking per pesan" ke "mengelola risiko PII pada level sesi".</p>
+<p>Implikasinya:</p>
+<ul>
+<li>agent harus punya stateful PII registry,</li>
+<li>proteksi harus sadar <strong>cumulative exposure</strong>, bukan hanya <strong>current message content</strong>,</li>
+<li>retroactive rewriting bisa jadi mekanisme penting ketika seluruh history sudah melewati batas risiko.</li>
+</ul>
+<h2 id="limitations">Limitations<a aria-hidden="true" class="anchor-heading icon-link" href="#limitations"></a></h2>
+<ul>
+<li>CAMP bergantung pada kualitas deteksi PII. Implicit disclosure atau phrasing yang tidak eksplisit masih bisa lolos.</li>
+<li>Eksperimennya synthetic dan belum diuji pada percakapan nyata yang noisy.</li>
+<li>Bobot entitas dan parameter α masih bersifat heuristic.</li>
+<li>Pseudonymization bisa mengganggu semantics untuk kasus tertentu jika tidak preserve meaning dengan hati-hati.</li>
+<li>De-masking sulit jika model memparafrase nilai synthetic secara tidak terduga.</li>
+</ul>
+<h2 id="related-zettel">Related zettel<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettel"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777875390302">Cross-turn PII exposure requires session-aware masking, not per-turn masking</a></li>
+</ul>
+<p>Original paper: <a href="https://arxiv.org/abs/2604.16521">https://arxiv.org/abs/2604.16521</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+</ol>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">llm (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777875390302">Cross-turn PII exposure requires session-aware masking, not per-turn masking</a></li>
+<li><a href="/sotoy/notes/zettel.1777878417390">Agentic privacy lebih baik dengan typed indexed placeholders daripada fake identities</a></li>
+<li><a href="/sotoy/notes/zettel.1777881085671">Threshold-based session privacy still leaves pre-trigger exposure</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.cpe">CPE: mengukur risiko PII sebagai akumulasi session, bukan message</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.per-turn-masking">Per-turn masking gagal untuk agentic multi-turn chat</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.why-camp">CAMP: apa yang baru dari solusi session-aware PII middleware</a></li>
+</ul>

@@ -1,0 +1,25 @@
+<h1 id="pii-shield-browser-overlay-for-personal-data-management">PII Shield: Browser Overlay for Personal Data Management<a aria-hidden="true" class="anchor-heading icon-link" href="#pii-shield-browser-overlay-for-personal-data-management"></a></h1>
+<h2 id="problem">Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#problem"></a></h2>
+<p>PII Shield mengangkat masalah browser-based agents: prompt sering berisi PII sebelum sampai ke model cloud. Tanpa lapisan depan, data sensitif dari teks, form, atau clipboard bisa dikirim tanpa kontrol pengguna.</p>
+<h2 id="solution">Solution<a aria-hidden="true" class="anchor-heading icon-link" href="#solution"></a></h2>
+<p>Solusi paper ini adalah browser overlay yang mendeteksi entitas personal secara lokal dan menggantinya dengan placeholder atau versi yang disetujui pengguna. Selain itu, sistem menerapkan smokescreen untuk mengurangi risiko profiling dan tracking dari interaksi asli.</p>
+<h2 id="real-case-implementation">Real case implementation<a aria-hidden="true" class="anchor-heading icon-link" href="#real-case-implementation"></a></h2>
+<p>Implementasinya berupa ekstensi browser atau UI-layer yang menganalisis prompt sebelum submit. Ketika ditemukan PII, pengguna diberi opsi untuk menghapus atau mengganti data tersebut, sementara model hanya menerima versi anonim atau disingkat. Ini cocok untuk agent personal assistant yang beroperasi langsung dari browser dan menggabungkan teks serta data form.</p>
+<h2 id="relevance">Relevance<a aria-hidden="true" class="anchor-heading icon-link" href="#relevance"></a></h2>
+<p>PII Shield menunjukkan bahwa privacy boundary terbaik untuk user-facing agents adalah di sisi klien. Local redaction dan user transparency menjadi lapisan awal yang penting sebelum request memasuki model cloud.</p>
+<p>Original paper: <a href="https://arxiv.org/abs/2603.24895">https://arxiv.org/abs/2603.24895</a></p>
+<p>Link: <a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">browser (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>

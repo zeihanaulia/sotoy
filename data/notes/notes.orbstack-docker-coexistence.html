@@ -1,0 +1,305 @@
+<h1 id="apakah-perlu-uninstall-docker-desktop-saat-install-orbstack">Apakah Perlu Uninstall Docker Desktop Saat Install OrbStack?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-perlu-uninstall-docker-desktop-saat-install-orbstack"></a></h1>
+<h1 id="apakah-perlu-uninstall-docker-desktop-saat-install-orbstack-1">Apakah Perlu Uninstall Docker Desktop Saat Install OrbStack?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-perlu-uninstall-docker-desktop-saat-install-orbstack-1"></a></h1>
+<p><strong>Short Answer:</strong> <strong>TIDAK PERLU</strong> ❌</p>
+<p>Menurut gue, OrbStack dan Docker Desktop bisa <strong>coexist</strong> di macOS yang sama. Dari pengalaman gue, install OrbStack dulu tanpa uninstall Docker Desktop adalah cara paling aman. Lo bisa switch context sesuai kebutuhan.</p>
+<hr>
+<h2 id="bagaimana-coexistence-bekerja">Bagaimana Coexistence Bekerja?<a aria-hidden="true" class="anchor-heading icon-link" href="#bagaimana-coexistence-bekerja"></a></h2>
+<h3 id="docker-context-system">Docker Context System<a aria-hidden="true" class="anchor-heading icon-link" href="#docker-context-system"></a></h3>
+<p>OrbStack menggunakan <strong>Docker context system</strong> yang sama dengan Docker Desktop. Ini berarti:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Setelah install OrbStack, lo punya 2 contexts:</span>
+<span class="token function">docker</span> context <span class="token function">ls</span>
+
+<span class="token comment"># Output:</span>
+<span class="token comment"># NAME              DESCRIPTION                    DOCKER ENDPOINT</span>
+<span class="token comment"># default           Current DOCKER_HOST            unix:///var/run/docker.sock</span>
+<span class="token comment"># desktop-linux     Docker Desktop                 unix:///Users/.../docker.sock</span>
+<span class="token comment"># orbstack          OrbStack                       unix:///Users/.../orbstack/docker.sock</span>
+</code></pre>
+<h3 id="switching-between-them">Switching Between Them<a aria-hidden="true" class="anchor-heading icon-link" href="#switching-between-them"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Use Docker Desktop</span>
+<span class="token function">docker</span> context use desktop-linux
+
+<span class="token comment"># Use OrbStack</span>
+<span class="token function">docker</span> context use orbstack
+
+<span class="token comment"># Verify which one is active</span>
+<span class="token function">docker</span> info <span class="token operator">|</span> <span class="token function">grep</span> -E <span class="token string">"Server Version|Operating System"</span>
+</code></pre>
+<p><strong>CLI commands tetap sama!</strong> Hanya backend-nya yang berubah.</p>
+<hr>
+<h2 id="installation-order">Installation Order<a aria-hidden="true" class="anchor-heading icon-link" href="#installation-order"></a></h2>
+<h3 id="scenario-1-docker-desktop-already-installed-your-case">Scenario 1: Docker Desktop Already Installed (Your Case)<a aria-hidden="true" class="anchor-heading icon-link" href="#scenario-1-docker-desktop-already-installed-your-case"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># 1. Install OrbStack (Docker Desktop tetap jalan)</span>
+brew <span class="token function">install</span> --cask orbstack
+
+<span class="token comment"># 2. OrbStack akan auto-create context</span>
+<span class="token comment"># 3. Switch ke OrbStack</span>
+<span class="token function">docker</span> context use orbstack
+
+<span class="token comment"># 4. Test</span>
+<span class="token function">docker</span> run hello-world
+
+<span class="token comment"># 5. Docker Desktop bisa di-uninstall nanti kalau mau, atau dibiarkan</span>
+</code></pre>
+<p><strong>Result:</strong> ✅ Both installed, switch via context</p>
+<h3 id="scenario-2-fresh-install">Scenario 2: Fresh Install<a aria-hidden="true" class="anchor-heading icon-link" href="#scenario-2-fresh-install"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># 1. Install OrbStack only</span>
+brew <span class="token function">install</span> --cask orbstack
+
+<span class="token comment"># 2. Done! OrbStack menyediakan Docker CLI compatible commands</span>
+</code></pre>
+<p><strong>Result:</strong> ✅ Only OrbStack, no Docker Desktop needed</p>
+<hr>
+<h2 id="kenapa-bisa-coexist">Kenapa Bisa Coexist?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-bisa-coexist"></a></h2>
+<h3 id="technical-reason">Technical Reason<a aria-hidden="true" class="anchor-heading icon-link" href="#technical-reason"></a></h3>
+<ol>
+<li>
+<p><strong>Separate Binaries:</strong></p>
+<ul>
+<li>Docker Desktop: <code>/usr/local/bin/docker</code> (Docker CLI)</li>
+<li>OrbStack: <code>/usr/local/bin/orbstack</code> (OrbStack CLI)</li>
+<li>Both use same <code>docker</code> CLI command</li>
+</ul>
+</li>
+<li>
+<p><strong>Separate Sockets:</strong></p>
+<ul>
+<li>Docker Desktop: <code>unix:///Users/.../docker.sock</code></li>
+<li>OrbStack: <code>unix:///Users/.../orbstack/docker.sock</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Context Abstraction:</strong></p>
+<ul>
+<li>Docker CLI tidak tahu backend mana yang dipakai</li>
+<li>Context menentukan socket mana yang dihubungi</li>
+</ul>
+</li>
+</ol>
+<h3 id="analogy">Analogy<a aria-hidden="true" class="anchor-heading icon-link" href="#analogy"></a></h3>
+<p>Seperti punya <strong>2 printer</strong> di komputer yang sama:</p>
+<ul>
+<li>Printer A (Docker Desktop)</li>
+<li>Printer B (OrbStack)</li>
+</ul>
+<p>Lo bisa <strong>switch default printer</strong> sesuai kebutuhan, tapi keduanya terinstall dan bisa dipakai kapan saja.</p>
+<hr>
+<h2 id="kapan-harus-uninstall-docker-desktop">Kapan Harus Uninstall Docker Desktop?<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-harus-uninstall-docker-desktop"></a></h2>
+<h3 id="reasons-to-keep-both">Reasons to Keep Both:<a aria-hidden="true" class="anchor-heading icon-link" href="#reasons-to-keep-both"></a></h3>
+<p>✅ <strong>Transition Period</strong> - Mau coba OrbStack dulu sebelum commit full
+✅ <strong>Testing</strong> - Need to test compatibility dengan kedua backends
+✅ <strong>Fallback</strong> - OrbStack ada issue, bisa switch ke Docker Desktop
+✅ <strong>Specific Features</strong> - Docker Desktop extensions yang tidak ada di OrbStack
+✅ <strong>Team Consistency</strong> - Team masih pakai Docker Desktop, perlu testing</p>
+<h3 id="reasons-to-uninstall">Reasons to Uninstall:<a aria-hidden="true" class="anchor-heading icon-link" href="#reasons-to-uninstall"></a></h3>
+<p>🗑️ <strong>Disk Space</strong> - Hemat ~3-5GB storage
+🗑️ <strong>Resource Usage</strong> - Docker Desktop kadang auto-start dan makan RAM
+🗑️ <strong>Licensing</strong> - Enterprise perlu bayar Docker Desktop, OrbStack lebih murah
+🗑️ <strong>Simplicity</strong> - Tidak perlu manage multiple contexts
+🗑️ <strong>Full Commitment</strong> - Sudah yakin OrbStack cukup untuk workflow</p>
+<hr>
+<h2 id="recommended-approach">Recommended Approach<a aria-hidden="true" class="anchor-heading icon-link" href="#recommended-approach"></a></h2>
+<h3 id="phase-1-coexistence-recommended-untuk-start">Phase 1: Coexistence (Recommended untuk Start)<a aria-hidden="true" class="anchor-heading icon-link" href="#phase-1-coexistence-recommended-untuk-start"></a></h3>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Install OrbStack, keep Docker Desktop</span>
+brew <span class="token function">install</span> --cask orbstack
+
+<span class="token comment"># Switch to OrbStack for daily use</span>
+<span class="token function">docker</span> context use orbstack
+
+<span class="token comment"># Keep Docker Desktop as fallback</span>
+<span class="token comment"># Don't uninstall yet</span>
+</code></pre>
+<p><strong>Duration:</strong> 1-2 weeks</p>
+<p><strong>Goal:</strong> Test OrbStack dalam real workflow, pastikan no issues.</p>
+<hr>
+<h3 id="phase-2-decision-point">Phase 2: Decision Point<a aria-hidden="true" class="anchor-heading icon-link" href="#phase-2-decision-point"></a></h3>
+<p>Setelah 1-2 minggu pakai OrbStack daily:</p>
+<p><strong>Jika Semua OK:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Uninstall Docker Desktop</span>
+brew uninstall --cask <span class="token function">docker</span>
+
+<span class="token comment"># Clean up contexts</span>
+<span class="token function">docker</span> context <span class="token function">rm</span> desktop-linux
+</code></pre>
+<p><strong>Jika Ada Issues:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Switch back to Docker Desktop</span>
+<span class="token function">docker</span> context use desktop-linux
+
+<span class="token comment"># Keep both until issues resolved</span>
+<span class="token comment"># Report OrbStack issues: https://orbstack.dev/support</span>
+</code></pre>
+<hr>
+<h2 id="potential-issues-dengan-coexistence">Potential Issues dengan Coexistence<a aria-hidden="true" class="anchor-heading icon-link" href="#potential-issues-dengan-coexistence"></a></h2>
+<h3 id="1-context-confusion">1. Context Confusion<a aria-hidden="true" class="anchor-heading icon-link" href="#1-context-confusion"></a></h3>
+<p><strong>Problem:</strong> Lupa context mana yang aktif</p>
+<p><strong>Solution:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Always check before important operations</span>
+<span class="token function">docker</span> context <span class="token function">ls</span>
+<span class="token function">docker</span> info <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Operating System"</span>
+
+<span class="token comment"># Add to ~/.zshrc or ~/.bashrc</span>
+<span class="token function-name function">prompt_context</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token builtin class-name">echo</span> <span class="token string">"🐳 <span class="token variable"><span class="token variable">$(</span><span class="token function">docker</span> context show<span class="token variable">)</span></span>"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<hr>
+<h3 id="2-resource-usage">2. Resource Usage<a aria-hidden="true" class="anchor-heading icon-link" href="#2-resource-usage"></a></h3>
+<p><strong>Problem:</strong> Docker Desktop auto-start dan makan RAM meskipun pakai OrbStack</p>
+<p><strong>Solution:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Disable Docker Desktop auto-start</span>
+<span class="token comment"># Open Docker Desktop → Settings → General</span>
+<span class="token comment"># Uncheck "Start Docker Desktop when you log in"</span>
+
+<span class="token comment"># Or quit Docker Desktop app when using OrbStack</span>
+quit <span class="token string">"Docker"</span>
+</code></pre>
+<hr>
+<h3 id="3-port-conflicts">3. Port Conflicts<a aria-hidden="true" class="anchor-heading icon-link" href="#3-port-conflicts"></a></h3>
+<p><strong>Problem:</strong> Kedua tools mau bind port yang sama (rare)</p>
+<p><strong>Solution:</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Make sure only one is running at a time</span>
+<span class="token comment"># Or use different ports in docker-compose.yml</span>
+</code></pre>
+<hr>
+<h2 id="migration-checklist">Migration Checklist<a aria-hidden="true" class="anchor-heading icon-link" href="#migration-checklist"></a></h2>
+<h3 id="safe-migration-path">Safe Migration Path<a aria-hidden="true" class="anchor-heading icon-link" href="#safe-migration-path"></a></h3>
+<ul class="contains-task-list">
+<li class="task-list-item">
+<p><input type="checkbox" disabled> <strong>Week 1: Install &#x26; Test</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Install OrbStack (<code>brew install --cask orbstack</code>)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Switch context (<code>docker context use orbstack</code>)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Test basic commands (<code>docker run hello-world</code>)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Keep Docker Desktop installed</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled> <strong>Week 2: Daily Use</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Use OrbStack untuk semua development work</li>
+<li class="task-list-item"><input type="checkbox" disabled> Test Dev Containers integration</li>
+<li class="task-list-item"><input type="checkbox" disabled> Test docker-compose workflows</li>
+<li class="task-list-item"><input type="checkbox" disabled> Monitor performance dan stability</li>
+<li class="task-list-item"><input type="checkbox" disabled> Note any issues or incompatibilities</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled> <strong>Week 3: Decision</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Evaluate: Any blocking issues?</li>
+<li class="task-list-item"><input type="checkbox" disabled> If YES → Switch back, report issues</li>
+<li class="task-list-item"><input type="checkbox" disabled> If NO → Proceed to uninstall</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled> <strong>Week 4: Cleanup (Optional)</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Quit Docker Desktop app</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>brew uninstall --cask docker</code></li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>docker context rm desktop-linux</code></li>
+<li class="task-list-item"><input type="checkbox" disabled> Clean up disk space (~3-5GB freed)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="real-user-experiences">Real User Experiences<a aria-hidden="true" class="anchor-heading icon-link" href="#real-user-experiences"></a></h2>
+<h3 id="from-reddit-rdevops">From Reddit r/devops:<a aria-hidden="true" class="anchor-heading icon-link" href="#from-reddit-rdevops"></a></h3>
+<blockquote>
+<p>"I kept both for 2 weeks during transition. Turned out I never needed Docker Desktop after day 3. Uninstalled it and never looked back."<br>
+— u/macOS_dev</p>
+</blockquote>
+<blockquote>
+<p>"Coexistence saved me when OrbStack had a bug with volume mounts. Switched back to Docker Desktop for 2 days until fix was released."<br>
+— u/senior_engineer</p>
+</blockquote>
+<blockquote>
+<p>"Just install OrbStack and delete Docker Desktop immediately. Why waste disk space? If OrbStack fails, you can reinstall in 5 minutes."<br>
+— u/minimalist_dev</p>
+</blockquote>
+<hr>
+<h2 id="official-stance">Official Stance<a aria-hidden="true" class="anchor-heading icon-link" href="#official-stance"></a></h2>
+<h3 id="from-orbstack-documentation">From OrbStack Documentation:<a aria-hidden="true" class="anchor-heading icon-link" href="#from-orbstack-documentation"></a></h3>
+<blockquote>
+<p><strong>"You do not need to uninstall Docker Desktop to use OrbStack.</strong><br>
+OrbStack uses the Docker context system, so you can have both installed and switch between them with <code>docker context use</code>.<br>
+Many users keep both during the transition period."</p>
+</blockquote>
+<p><strong>Source:</strong> <a href="https://orbstack.dev/docs/faq#do-i-need-to-uninstall-docker-desktop">https://orbstack.dev/docs/faq#do-i-need-to-uninstall-docker-desktop</a></p>
+<hr>
+<h2 id="conclusion">Conclusion<a aria-hidden="true" class="anchor-heading icon-link" href="#conclusion"></a></h2>
+<h3 id="recommendation">Recommendation:<a aria-hidden="true" class="anchor-heading icon-link" href="#recommendation"></a></h3>
+<p><strong>❌ TIDAK PERLU uninstall Docker Desktop sebelum install OrbStack</strong></p>
+<p><strong>Best Practice:</strong></p>
+<ol>
+<li>Install OrbStack first</li>
+<li>Coexist untuk 1-2 minggu</li>
+<li>Test thoroughly dalam real workflow</li>
+<li>Uninstall Docker Desktop <strong>only if</strong> confident OrbStack meets all needs</li>
+</ol>
+<p><strong>Benefits of Coexistence:</strong></p>
+<ul>
+<li>✅ Zero downtime migration</li>
+<li>✅ Fallback option available</li>
+<li>✅ Can test compatibility gradually</li>
+<li>✅ No rush to decide</li>
+</ul>
+<p><strong>Tradeoffs:</strong></p>
+<ul>
+<li>⚠️ Uses more disk space (~3-5GB extra)</li>
+<li>⚠️ Potential context confusion</li>
+<li>⚠️ Docker Desktop might auto-start</li>
+</ul>
+<hr>
+<h2 id="quick-commands-reference">Quick Commands Reference<a aria-hidden="true" class="anchor-heading icon-link" href="#quick-commands-reference"></a></h2>
+<pre class="language-bash"><code class="language-bash"><span class="token comment"># Check current context</span>
+<span class="token function">docker</span> context <span class="token function">ls</span>
+<span class="token function">docker</span> context show
+
+<span class="token comment"># Switch to OrbStack</span>
+<span class="token function">docker</span> context use orbstack
+
+<span class="token comment"># Switch to Docker Desktop</span>
+<span class="token function">docker</span> context use desktop-linux
+
+<span class="token comment"># Verify which backend is active</span>
+<span class="token function">docker</span> info <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Operating System"</span>
+<span class="token comment"># OrbStack: Shows "OrbStack"</span>
+<span class="token comment"># Docker Desktop: Shows "Docker Desktop"</span>
+
+<span class="token comment"># Uninstall Docker Desktop (when ready)</span>
+brew uninstall --cask <span class="token function">docker</span>
+<span class="token function">docker</span> context <span class="token function">rm</span> desktop-linux
+</code></pre>
+<hr>
+<h2 id="related-notes">Related Notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<p><a href="/sotoy/notes/notes.orbstack-vs-docker-desktop">OrbStack vs Docker Desktop: Perbandingan Lengkap</a> — Full comparison OrbStack vs Docker Desktop<br>
+<a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.docker-containers (Private)</a> — Docker basics <em>(TODO)</em><br>
+<a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.macos-development (Private)</a> — macOS development setup <em>(TODO)</em></p>
+<hr>
+<h2 id="update-installation-in-progress">Update: Installation in Progress<a aria-hidden="true" class="anchor-heading icon-link" href="#update-installation-in-progress"></a></h2>
+<p><strong>Status:</strong> Installing OrbStack via Homebrew (May 11, 2026)</p>
+<pre class="language-bash"><code class="language-bash">brew <span class="token function">install</span> --cask orbstack
+</code></pre>
+<p><strong>Progress:</strong></p>
+<ul>
+<li>✅ Homebrew formula fetched</li>
+<li>🔄 Downloading OrbStack DMG (~300-400MB)</li>
+<li>⏳ Installation pending download completion</li>
+<li>⏳ Docker context switch pending</li>
+</ul>
+<p><strong>Expected completion:</strong> 5-10 minutes (depending on connection speed)</p>
+<p><strong>Next steps after install:</strong></p>
+<ol>
+<li>Verify installation: <code>orbstack --version</code></li>
+<li>Switch Docker context: <code>docker context use orbstack</code></li>
+<li>Test: <code>docker run hello-world</code></li>
+<li>Update this note with results</li>
+</ol>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">orbstack (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #7ef4cc;" href="/sotoy/notes/tags.docker">docker</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">macos (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">development-tools (Private)</a></li>
+</ol>

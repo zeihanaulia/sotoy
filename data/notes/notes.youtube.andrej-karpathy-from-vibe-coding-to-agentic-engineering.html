@@ -1,0 +1,125 @@
+<h1 id="andrej-karpathy-from-vibe-coding-to-agentic-engineering">Andrej Karpathy: From Vibe Coding to Agentic Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#andrej-karpathy-from-vibe-coding-to-agentic-engineering"></a></h1>
+<p>Link: <a href="https://www.youtube.com/watch?v=96jN2OCOfLs&#x26;t=1s">https://www.youtube.com/watch?v=96jN2OCOfLs&#x26;t=1s</a></p>
+<h2 id="summary">Summary<a aria-hidden="true" class="anchor-heading icon-link" href="#summary"></a></h2>
+<p>Yang gue tangkap dari talk ini adalah bahwa Karpathy enggak sekadar ngomong soal AI bikin coding lebih cepat. Dia sedang mencoba memberi kata lain untuk perubahan cara kerja programmer: <strong>vibe coding</strong> untuk produktivitas dan eksperimen, lalu <strong>agentic engineering</strong> untuk menjaga standar kualitas profesional.</p>
+<p>Kalimat yang paling nempel buat gue adalah: "You can outsource your thinking but you can’t outsource your understanding." Itu bukan sekadar soundbite. Itu menegaskan batas antara apa yang bisa diserahkan ke agent dan apa yang harus tetap ada dalam kepala manusia.</p>
+<p>Gue juga catet bahwa talk April 2026 merujuk pada fase shift yang Karpathy lihat di akhir <strong>Desember 2025</strong>. Business Insider dan sumber lain menguatkan bahwa perubahan workflow tersebut sudah terasa sebelum talk dan bukan sekadar framing pasca-event.</p>
+<h2 id="highlights">Highlights<a aria-hidden="true" class="anchor-heading icon-link" href="#highlights"></a></h2>
+<ul>
+<li><strong>Vibe coding</strong> muncul ketika model mulai memberikan kode yang "langsung benar" cukup sering. Bukan karena AI sempurna, tapi karena trust threshold manusia terlewati. Awalnya agent bantu potongan kode, lalu berubah jadi workflow di mana manusia hanya mengalirkan intent.</li>
+<li><strong>Software 3.0</strong> adalah perubahan paradigma komputasi. Karpathy membagi era software menjadi 1.0 (kode eksplisit), 2.0 (neural network dilatih), dan 3.0 (prompt + context window). Dalam era ini, context window menjadi instruksi operasional utama.</li>
+<li>Contoh praktisnya adalah Menugen, eksperimen Karpathy untuk bikin app foto menu restoran yang mengubah teks menu jadi gambar makanan. Versi lama pakai pipeline upload foto, OCR, generate gambar, render UI, deploy. Versi Software 3.0 cukup beri input foto ke model lalu minta overlay visual langsung. Kesimpulannya: beberapa app lama mungkin artefak paradigma lama.</li>
+<li><strong>Verifiability</strong> jadi kunci. Model kuat pada domain yang outputnya bisa diperiksa: math, code, tests, security, benchmark. Tapi ia masih "jagged": bisa refactor codebase besar, tapi bisa salah dalam reasoning sehari-hari.</li>
+<li><strong>LLM knowledge base</strong> bukan sekadar RAG atau vector DB. Karpathy melihatnya sebagai cara agar LLM mengambil dokumen mentah dan mengompilasinya ulang menjadi struktur yang membantu pemahaman manusia—wiki, outline, Q&#x26;A, dan reframing informasi—bukan hanya menyajikan potongan jawaban.</li>
+<li><strong>RL circuits matter.</strong> Jika use case lo berada di area yang masuk training/RL loop, lo bisa "fly." Kalau keluar dari distribusi itu, lo akan struggle dan perlu fine-tuning sendiri.</li>
+<li><strong>Vibe coding menaikkan floor, agentic engineering menaikkan ceiling.</strong> Vibe coding memudahkan banyak orang masuk ke software. Agentic engineering memastikan pekerjaan profesional tetap punya quality bar: secure, maintainable, testable, observability jelas.</li>
+<li><strong>Skill manusia yang naik nilainya</strong> adalah judgment, taste, spec, dan oversight. Agent bisa isi detail, tapi manusia harus menjaga invariants sistem, misalnya user identity harus persistent ID, bukan cocok-cocokan email.</li>
+<li>Karpathy bilang detail API bisa dilupakan—detail <code>keepdims</code>, <code>axis</code>, <code>reshape</code> bisa ditangani agent—tapi <strong>fundamental</strong> seperti tensor view, storage, memory copy, efisiensi tetap harus dipahami.</li>
+</ul>
+<h2 id="atomic-ideas">Atomic ideas<a aria-hidden="true" class="anchor-heading icon-link" href="#atomic-ideas"></a></h2>
+<ol>
+<li>Trust threshold mengubah workflow coding: ketika output AI cukup sering benar, manusia mulai mengubah cara berpikir, bukan sekadar cara mengetik.</li>
+<li>Vibe coding adalah mode eksplorasi cepat yang berguna untuk prototyping, bukan pengganti disiplin quality assurance.</li>
+<li>Dalam Software 3.0, prompt dan context window menjadi source code sementara untuk interpreter LLM.</li>
+<li>Agent bisa menggantikan sebagian scripting eksplisit dengan instruksi adaptif yang melihat environment dan debug sendiri.</li>
+<li>LLM knowledge base bisa membuat dokumen mentah direcompile menjadi struktur pemahaman baru—wiki, outline, Q&#x26;A, timeline—sehingga manusia dapat insight, bukan hanya jawaban.</li>
+<li>Dokumentasi operasi bisa berubah fungsi menjadi input executable-ish untuk agent.</li>
+<li>Beberapa aplikasi lama bisa menjadi artefak paradigma lama, karena model sekarang dapat menelan pipeline yang sebelumnya diperlukan.</li>
+<li>Peluang terbesar ada pada hal yang tidak mungkin dilakukan sebelumnya, bukan sekadar mempercepat workflow lama.</li>
+<li>Verifikasi adalah bahan bakar otomasi LLM; capability model sering puncak di domain yang bisa diverifikasi.</li>
+<li>LLM capability itu jagged, bukan merata, sehingga manusia harus tetap berada dalam loop dan menggunakan model sebagai alat.</li>
+<li>Agentic engineering menjaga quality bar profesional sambil memanfaatkan kecepatan AI.</li>
+<li>Skill manusia yang paling penting adalah taste, judgment, spec, oversight, dan maintenance of system invariants.</li>
+<li>AI bisa mengambil alih hafalan detail API, tapi tidak bisa menggantikan pemahaman fundamental.</li>
+<li>Kode yang jalan tidak sama dengan kode yang baik: simplification dan taste masih butuh evaluasi manusia karena tidak selalu muncul dalam RL circuits.</li>
+<li>LLM bukan animal intelligence; lebih tepat dipahami sebagai statistical simulation circuits plus RL.</li>
+<li>Infrastruktur saat ini masih human-native; masa depan agent-native butuh docs, API, permissions, sensor, dan actuator yang legible untuk agent.</li>
+<li>Agent bisa menjadi lapisan representasi sosial-operasional yang memungkinkan agen orang/organisasi berinteraksi.</li>
+<li>Understanding adalah bottleneck terakhir: thinking bisa didelegasikan, understanding tidak.</li>
+</ol>
+<h2 id="timeline-note">Timeline note<a aria-hidden="true" class="anchor-heading icon-link" href="#timeline-note"></a></h2>
+<h3 id="00470227">00:47–02:27<a aria-hidden="true" class="anchor-heading icon-link" href="#00470227"></a></h3>
+<p>Karpathy cerita transisinya dari merasa alat AI hanya bantu potongan kode, ke fase di mana model sering benar sehingga dia mulai nge-work dalam mode vibe coding. Ini asal-usul istilahnya.</p>
+<h3 id="02280450">02:28–04:50<a aria-hidden="true" class="anchor-heading icon-link" href="#02280450"></a></h3>
+<p>Karpathy jelasin era Software 1.0, 2.0, dan 3.0. Di era 3.0, programming berubah jadi menulis prompt dan context yang jadi leverage atas LLM sebagai interpreter.</p>
+<p>Dia memberi contoh OpenClaw: bukannya menulis shell script kompleks lintas platform, paradigma baru adalah menulis teks untuk dicopy-paste ke agent dan membiarkan agent melihat environment, mengecek, dan debugging sendiri.</p>
+<h3 id="04540736">04:54–07:36<a aria-hidden="true" class="anchor-heading icon-link" href="#04540736"></a></h3>
+<p>Contoh Menugen: eksperimen app foto menu restoran yang awalnya pakai pipeline upload foto, OCR, generate gambar, dan render ulang menu. Aplikasi lama ini bisa jadi spurious kalau model sekarang bisa langsung handle input mentah dan render output. Ini bukan cuma percepatan, tapi juga revisit eksistensi aplikasi.</p>
+<h3 id="09411336">09:41–13:36<a aria-hidden="true" class="anchor-heading icon-link" href="#09411336"></a></h3>
+<p>Verifiability jadi pembeda utama. Model kuat di domain yang bisa diverifikasi, kurang stabil di reasoning yang tidak jelas reward-nya. Karena frontier labs melatih model dengan RL reward, kemampuan model sering puncak di area verifiable dan stagnan di area non-verifiable.</p>
+<p>Karpathy juga memberi contoh jaggedness: model bisa refactor 100.000 baris kode tapi masih menyarankan jalan kaki ke car wash 50 meter jauhnya. Itu menunjukkan pentingnya tetap berada di loop dan menganggap model sebagai alat.</p>
+<h3 id="13371509">13:37–15:09<a aria-hidden="true" class="anchor-heading icon-link" href="#13371509"></a></h3>
+<p>Founder advice: domain yang bisa diverifikasi tetap menarik meski lab besar sudah fokus di math dan coding. Jika lo bisa membangun RL environment atau dataset khusus sendiri, itu memberi leverage untuk fine-tuning dan custom automation.</p>
+<h3 id="15461718">15:46–17:18<a aria-hidden="true" class="anchor-heading icon-link" href="#15461718"></a></h3>
+<p>Beda vibe coding dan agentic engineering: floor vs ceiling. Vibe coding menghasilkan karya cepat, agentic engineering menjamin kualitas profesional tetap hidup.</p>
+<p>Karpathy menyebut agent sebagai entitas spiky, fable, stochastic: powerful tapi perlu dikordinasi dengan benar agar tidak menurunkan quality bar.</p>
+<h3 id="17191928">17:19–19:28<a aria-hidden="true" class="anchor-heading icon-link" href="#17191928"></a></h3>
+<p>AI-native engineer terlihat dari kemampuan memaksimalkan tool, setup sendiri, dan membangun proyek besar, bukan sekadar mengerjakan puzzle coding kecil. Karpathy menyarankan hiring process beralih ke proyek besar plus stress test dengan agent lain.</p>
+<h3 id="19292212">19:29–22:12<a aria-hidden="true" class="anchor-heading icon-link" href="#19292212"></a></h3>
+<p>Agent masih butuh oversight. Contoh Menugen: agent nyoba cross-correlate user via email Stripe dan email Google. Ini terlihat logis, tapi melanggar invariant desain identitas user.</p>
+<h3 id="21022212">21:02–22:12<a aria-hidden="true" class="anchor-heading icon-link" href="#21022212"></a></h3>
+<p>Karpathy menjelaskan bahwa detail API bisa dilupakan—agent punya recall kuat—tapi fundamental seperti tensor view, storage, dan memory copy tetap harus dipahami. Ini membuat manusia lebih fokus pada desain, taste, dan sistem, bukan hafalan permukaan.</p>
+<h3 id="22142330">22:14–23:30<a aria-hidden="true" class="anchor-heading icon-link" href="#22142330"></a></h3>
+<p>Taste dan judgment belum jadi reward utama. Model sering menghasilkan kode bloaty, copy-paste, awkward abstractions, dan sulit menyederhanakan kode karena simplification belum menjadi bagian dari RL circuits. Karpathy menyebutkan proyek microGPT sebagai contoh: minta model menyederhanakan kode, dan model terasa seperti luar dari RL circuits—perlu usaha tarik gigi.</p>
+<h3 id="23312515">23:31–25:15<a aria-hidden="true" class="anchor-heading icon-link" href="#23312515"></a></h3>
+<p>LLM bukan animal intelligence. Karpathy menekankan mereka adalah statistical simulation circuits dengan pretraining plus RL bolted on. Mindset ini membantu kita tetap skeptis dan tidak memberi mereka motivasi manusiawi.</p>
+<h3 id="25182737">25:18–27:37<a aria-hidden="true" class="anchor-heading icon-link" href="#25182737"></a></h3>
+<p>Infrastruktur saat ini masih ditulis untuk manusia. Karpathy bilang masa depan harus agent-native: docs, API, dan workflow yang bisa langsung dimakan agent, bukan cuma manusia.</p>
+<p>Dia membayangkan dunia di mana agent memiliki representasi untuk orang/organisasi, lalu agen saling bicara untuk mengatur detail meeting atau tugas rutin.</p>
+<h2 id="takeaways">Takeaways<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaways"></a></h2>
+<ul>
+<li>Talk ini bukan argumen bahwa programming sudah mati. Ini tentang pergeseran peran: dari penulis detail ke desainer sistem kerja.</li>
+<li>Biar agent bisa bantu, manusia harus tetap pegang understanding. Tanpa itu, output agent cuma sekilas "jalan" tapi bisa punya masalah serius.</li>
+<li>Ide AI production-ready bukan sekadar mempercepat coding, tapi menjaga spec, verifikasi, keamanan, dan observability.</li>
+<li>Untuk startup: domain yang bisa diverifikasi dan punya feedback loop spesifik adalah area yang paling menjanjikan.</li>
+</ul>
+<h2 id="related-notes">Related notes<a aria-hidden="true" class="anchor-heading icon-link" href="#related-notes"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.senior-judgement-to-harness">Senior Judgement yang Dipindahkan ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.single-verification-entrypoint">Single verification entrypoint</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.next-wave-cloud-agents">Next Wave: Cloud Agents dan Autonomous Orchestration</a></li>
+<li><a href="/sotoy/notes/zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering">Karpathy — From Vibe Coding to Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">book-summary (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">youtube (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">karpathy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-3-0 (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260507100000">AI execution cheapens but direction becomes expensive</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100300">Verifiability is the fuel for LLM automation</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100400">LLM capability is jagged, so human-in-the-loop stays essential</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100500">Operational docs are turning into agent-executable artifacts</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100600">Agent-native infrastructure needs agent-legible sensors and actuators</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100700">AI can handle API details, but humans must keep fundamental understanding</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100800">Trust threshold shifts AI workflow from assistant to production</a></li>
+<li><a href="/sotoy/notes/zettel.20260507100900">Vibe coding is exploration flow, not quality discipline</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101000">Context window is temporary source code for LLMs</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101100">Agent instructions replace deterministic scripting in variable environments</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101200">Largest AI opportunities are new work formats, not faster old workflows</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101300">Future agentic systems may be AI-hosted with classical tools as co-processors</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101400">Specification fuels classical software; verification fuels agentic AI</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101500">LLM capability is a jagged map, not a smooth curve</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101600">LLM can be genius at code but dumb at simple common-sense reasoning</a></li>
+<li><a href="/sotoy/notes/zettel.20260507101800">AI moat can be a domain-specific verifier and RL environment</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102000">AI may speed delivery, but engineering responsibility stays with humans</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102100">Assess agentic engineers with system-building projects, not puzzles</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102200">Agent can fill in details, but humans must maintain invariant system design</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102300">AI handles API details, humans must understand fundamentals</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102400">Working code is not the same as good code</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102500">Understanding LLM as statistical simulation circuits, not animal intelligence</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102600">Agent-native infrastructure needs agent-legible docs, APIs, and actuators</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102700">Agent can become social-operational representation for people and organizations</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102800">Understanding is the last bottleneck in agentic systems</a></li>
+<li><a href="/sotoy/notes/zettel.literature.karpathy-from-vibe-coding-to-agentic-engineering">Karpathy — From Vibe Coding to Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.07">2026-05-07</a></li>
+</ul>

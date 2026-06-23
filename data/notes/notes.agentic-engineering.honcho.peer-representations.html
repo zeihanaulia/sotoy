@@ -1,0 +1,571 @@
+<h1 id="peer-representations">Peer Representations<a aria-hidden="true" class="anchor-heading icon-link" href="#peer-representations"></a></h1>
+<p>Link: <a href="https://honcho.dev/docs/v3/documentation/core-concepts/representation">https://honcho.dev/docs/v3/documentation/core-concepts/representation</a></p>
+<p><strong>“peer representations” di Honcho = kumpulan hasil reasoning Honcho tentang satu peer dari waktu ke waktu</strong>. Bukan “representation” dalam arti embedding vektor doang, dan bukan juga “profile user” sederhana.</p>
+<p>Di sini “peer” berarti entitas yang dimodelkan Honcho: bisa user, agent, customer, student, NPC, project, atau entitas lain. “Representation” berarti state pemahaman Honcho tentang peer itu: siapa dia, apa pola perilakunya, apa yang dia pedulikan, apa konteks historisnya, dan bagaimana pemahaman itu berubah ketika message baru masuk.</p>
+<h2 id="1-pertanyaan-kunci">1. Pertanyaan kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci"></a></h2>
+<p>Ada 7 pertanyaan penting:</p>
+<ol>
+<li>Apa itu peer representation secara inti?</li>
+<li>Isi representation itu apa saja?</li>
+<li>Kenapa representation bukan sekadar memory/fact list?</li>
+<li>Apa bedanya conclusion, summary, dan peer card?</li>
+<li>Apa itu observation dan perspective-taking?</li>
+<li>Kenapa representasi bisa berbeda tergantung siapa yang mengamati?</li>
+<li>Risiko atau failure mode-nya apa?</li>
+</ol>
+<p>★ Insight ─────────────────────────
+Peer representation adalah “model mental” Honcho tentang satu entitas.</p>
+<p>Kalau message adalah catatan mentah, representation adalah hasil pemahaman yang dibangun dari catatan itu. Mirip manusia: elo tidak mengingat semua kalimat teman elo secara literal, tapi elo punya model tentang “dia orangnya gimana, biasanya peduli apa, punya pola apa, dan history gue sama dia apa.”</p>
+<p>Bedanya: Honcho mencoba membuat model itu secara eksplisit lewat reasoning, bukan cuma lewat ingatan kabur.
+───────────────────────────────────</p>
+<h2 id="2-definisi-inti-apa-itu-peer-representation">2. Definisi inti: apa itu peer representation?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-definisi-inti-apa-itu-peer-representation"></a></h2>
+<p>Page-nya mendefinisikan:</p>
+<blockquote>
+<p>“A representation is the collection of reasoning Honcho has done about a peer over time.”</p>
+</blockquote>
+<p>Ini kalimat kunci. Representation bukan raw chat log. Representation adalah <strong>koleksi hasil reasoning</strong>.</p>
+<p>Lalu page lanjut:</p>
+<blockquote>
+<p>“It’s the continual learning about a peer over every message that’s been written to it.”</p>
+</blockquote>
+<p>Artinya setiap message baru bisa memperbarui representation. Jadi representation itu dinamis, bukan profil statis.</p>
+<p>Formula sederhananya:</p>
+<pre><code>messages about / from peer
+→ reasoning
+→ premises
+→ conclusions
+→ summaries
+→ peer card
+→ peer representation
+</code></pre>
+<p>Kalau peer-nya adalah user, representation bisa berisi:</p>
+<pre><code>- user sering minta penjelasan tajam
+- user tidak suka jawaban netral yang mengaburkan posisi
+- user tertarik AI agent, memory system, sandboxing
+- user suka struktur ide kecil yang saling dihubungkan
+</code></pre>
+<p>Kalau peer-nya agent, representation bisa berisi:</p>
+<pre><code>- agent ini sering bertindak sebagai coding assistant
+- agent ini berinteraksi dengan user dalam konteks debugging
+- agent ini punya pola menjawab teknis dan prosedural
+</code></pre>
+<p>Kalau peer-nya project, representation bisa berisi:</p>
+<pre><code>- project ini terkait sandbox security
+- concern utama: file access, environment secrets, repo-level config
+- keputusan sebelumnya: perlu env sanitization
+</code></pre>
+<p>Atomic idea-nya:</p>
+<p><strong>Peer representation = state yang dipelajari tentang entitas.</strong></p>
+<h2 id="3-representation-bukan-database-fakta">3. Representation bukan “database fakta”<a aria-hidden="true" class="anchor-heading icon-link" href="#3-representation-bukan-database-fakta"></a></h2>
+<p>Ini penting. Banyak memory system menyimpan fakta seperti:</p>
+<pre><code>User uses macOS.
+User likes Python.
+User works on project X.
+</code></pre>
+<p>Itu berguna, tapi dangkal.</p>
+<p>Honcho representation lebih kaya karena berisi hasil reasoning seperti:</p>
+<pre><code>User is likely concerned with practical security boundaries when using coding agents.
+</code></pre>
+<p>Itu bukan fakta mentah. Itu kesimpulan dari beberapa interaksi.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Think of it as Honcho’s understanding of who that peer is, what they care about, and how they behave, built through formal logic rather than simple storage.”</p>
+</blockquote>
+<p>Bagian pentingnya: <strong>built through formal logic rather than simple storage</strong>.</p>
+<p>Jadi representation bukan cuma daftar memory. Ia adalah struktur pemahaman yang dibangun dari:</p>
+<pre><code>apa yang eksplisit dikatakan
+apa yang bisa disimpulkan
+pola apa yang muncul
+kontradiksi apa yang perlu direkonsiliasi
+ringkasan sesi apa yang relevan
+data biografis dasar apa yang harus tetap stabil
+</code></pre>
+<p>Dengan kata lain:</p>
+<pre><code>Memory biasa:
+"apa yang pernah disimpan?"
+
+Peer representation:
+"apa yang sekarang Honcho pahami tentang peer ini?"
+</code></pre>
+<h2 id="4-isi-peer-representation-tiga-artifact-utama">4. Isi peer representation: tiga artifact utama<a aria-hidden="true" class="anchor-heading icon-link" href="#4-isi-peer-representation-tiga-artifact-utama"></a></h2>
+<p>Page menyebut representation terdiri dari beberapa artifact:</p>
+<ol>
+<li>Conclusions</li>
+<li>Summaries</li>
+<li>Peer cards</li>
+</ol>
+<p>Kita pecah.</p>
+<h2 id="41-conclusions-insight-hasil-reasoning">4.1 Conclusions: insight hasil reasoning<a aria-hidden="true" class="anchor-heading icon-link" href="#41-conclusions-insight-hasil-reasoning"></a></h2>
+<p>Conclusions adalah insight yang diturunkan lewat formal logic.</p>
+<p>Page membagi conclusion ke beberapa tipe:</p>
+<pre><code>Deductive conclusions
+Inductive conclusions
+Abductive conclusions
+</code></pre>
+<h3 id="deductive-conclusion">Deductive conclusion<a aria-hidden="true" class="anchor-heading icon-link" href="#deductive-conclusion"></a></h3>
+<p>Deductive conclusion adalah kesimpulan yang relatif pasti berdasarkan premis.</p>
+<p>Contoh:</p>
+<p>Premis:</p>
+<pre><code>User said they use macOS.
+sandbox-exec is a macOS sandboxing tool.
+</code></pre>
+<p>Deductive conclusion:</p>
+<pre><code>sandbox-exec advice is relevant to this user’s environment.
+</code></pre>
+<p>Deduksi idealnya ketat: kalau premis benar, kesimpulan harus mengikuti.</p>
+<p>Dalam representation, deduksi membantu agent tidak perlu mengulang inference sederhana setiap kali.</p>
+<h3 id="inductive-conclusion">Inductive conclusion<a aria-hidden="true" class="anchor-heading icon-link" href="#inductive-conclusion"></a></h3>
+<p>Inductive conclusion membaca pola dari banyak message.</p>
+<p>Contoh message lintas sesi:</p>
+<pre><code>User often asks:
+- failure mode-nya apa?
+- trade-off-nya apa?
+- logical fallacy-nya apa?
+- jangan main tengah
+</code></pre>
+<p>Inductive conclusion:</p>
+<pre><code>User evaluates topics by testing assumptions, trade-offs, and failure modes.
+</code></pre>
+<p>Ini bukan dari satu pesan, tapi dari pola.</p>
+<p>Page memberi contoh sejenis:</p>
+<blockquote>
+<p>“if a user frequently mentions work deadlines and rarely mentions hobbies, Honcho might inductively conclude they’re time-constrained or career-focused.”</p>
+</blockquote>
+<p>Ini contoh bahwa Honcho mencoba mengambil pola perilaku dari banyak sinyal.</p>
+<h3 id="abductive-conclusion">Abductive conclusion<a aria-hidden="true" class="anchor-heading icon-link" href="#abductive-conclusion"></a></h3>
+<p>Abductive conclusion mencari penjelasan paling sederhana untuk perilaku yang diamati.</p>
+<p>Contoh:</p>
+<p>Observasi:</p>
+<pre><code>User sering curiga dokumen tanpa sitasi.
+User sering minta cek sumber.
+User sering membedakan fakta, opini, dan framing.
+</code></pre>
+<p>Abductive conclusion:</p>
+<pre><code>User is concerned with epistemic reliability and source quality.
+</code></pre>
+<p>Abduction ini kuat, tapi paling rawan salah. Karena dia menjelaskan “kemungkinan sebab”, bukan kebenaran pasti.</p>
+<p>Jadi di representation, abductive conclusion harus dipahami sebagai <strong>hipotesis berguna</strong>, bukan fakta keras.</p>
+<h2 id="42-summaries-kompresi-session">4.2 Summaries: kompresi session<a aria-hidden="true" class="anchor-heading icon-link" href="#42-summaries-kompresi-session"></a></h2>
+<p>Summaries menangkap esensi session.</p>
+<p>Page menyebut:</p>
+<blockquote>
+<p>“Short summaries are generated every 20 messages by default, and long summaries every 60 messages.”</p>
+</blockquote>
+<p>Ini menarik karena Honcho tidak hanya menyimpan conclusion tentang peer, tapi juga ringkasan percakapan.</p>
+<p>Kenapa summary penting?</p>
+<p>Karena raw chat history bisa panjang dan mahal dimasukkan ke prompt. Summary mengompresnya menjadi konteks padat.</p>
+<p>Contoh session:</p>
+<pre><code>User and agent discussed macOS sandbox-exec. Main concern: sandbox blocks filesystem access but does not automatically sanitize environment variables. Suggested mitigation: launch agent with clean env and restrict secrets at shell/session level.
+</code></pre>
+<p>Itu lebih berguna daripada memasukkan 100 message mentah.</p>
+<p>Atomic idea:</p>
+<pre><code>Conclusion = insight tentang peer
+Summary = kompresi episode/session
+</code></pre>
+<p>Keduanya beda.</p>
+<p>Conclusion lebih seperti “apa yang dipelajari tentang entitas”.</p>
+<p>Summary lebih seperti “apa yang terjadi dalam sesi ini”.</p>
+<h2 id="43-peer-cards-grounding-dasar-peer">4.3 Peer cards: grounding dasar peer<a aria-hidden="true" class="anchor-heading icon-link" href="#43-peer-cards-grounding-dasar-peer"></a></h2>
+<p>Peer card berisi informasi biografis atau identitas dasar tentang peer.</p>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Peer cards contain key biographical information.”</p>
+</blockquote>
+<p>Lalu:</p>
+<blockquote>
+<p>“They essentially cache the most basic information about a peer (name, occupation, interests) to ensure the model never loses its grounding.”</p>
+</blockquote>
+<p>Peer card itu seperti kartu identitas ringkas.</p>
+<p>Contoh peer card untuk user:</p>
+<pre><code>Name: Raka
+Interests: AI agents, economics, software architecture, Indonesian politics
+Communication preference: Indonesian casual style, structured explanation
+</code></pre>
+<p>Contoh peer card untuk agent:</p>
+<pre><code>Name: coding_agent
+Role: helps debug software projects and explain architecture
+Context: often works with user on CLI tools and sandboxing
+</code></pre>
+<p>Peer card penting karena agent bisa kehilangan grounding kalau konteks terlalu panjang atau session sudah lama. Peer card memastikan hal-hal dasar tetap ada.</p>
+<p>Tapi hati-hati: peer card yang salah bisa sangat merusak, karena ia menjadi “identitas dasar” yang sering dipakai.</p>
+<h2 id="5-continuous-improvement-representation-terus-berubah">5. Continuous improvement: representation terus berubah<a aria-hidden="true" class="anchor-heading icon-link" href="#5-continuous-improvement-representation-terus-berubah"></a></h2>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Each new message refines conclusions, updates summaries, and keeps peer cards current.”</p>
+</blockquote>
+<p>Jadi peer representation bukan snapshot sekali jadi. Ia seperti model yang terus diperbarui.</p>
+<p>Contoh perubahan:</p>
+<p>Awal:</p>
+<pre><code>User prefers concise answers.
+</code></pre>
+<p>Setelah beberapa sesi:</p>
+<pre><code>User prefers concise answers for simple topics, but asks for deep structured dives on technical systems.
+</code></pre>
+<p>Setelah lebih banyak data:</p>
+<pre><code>User prefers atomic, linked explanations; depth is acceptable when the topic is architectural or conceptual.
+</code></pre>
+<p>Ini contoh representation yang makin nuanced.</p>
+<p>Atomic idea:</p>
+<pre><code>representation yang baik bukan makin panjang,
+tapi makin akurat dan kontekstual.
+</code></pre>
+<p>Kalau cuma menumpuk memory, hasilnya bising. Kalau reasoning-nya bagus, representation harus menggabungkan, memperbaiki, dan membatasi kesimpulan.</p>
+<h2 id="6-observation-siapa-yang-diamati">6. Observation: siapa yang diamati?<a aria-hidden="true" class="anchor-heading icon-link" href="#6-observation-siapa-yang-diamati"></a></h2>
+<p>Bagian ini penting dan agak unik.</p>
+<p>Honcho punya konsep observation dan perspective-taking.</p>
+<p>Ada dua mode utama:</p>
+<pre><code>observe_me
+observe_others
+</code></pre>
+<h3 id="61-observe_me">6.1 observe_me<a aria-hidden="true" class="anchor-heading icon-link" href="#61-observe_me"></a></h3>
+<p>Page menjelaskan:</p>
+<blockquote>
+<p>“Honcho observing peers (observe_me): When enabled (default), Honcho forms a representation of the peer based on all messages they’ve sent across all sessions.”</p>
+</blockquote>
+<p>Artinya kalau <code>observe_me</code> aktif, Honcho membangun representation tentang peer berdasarkan semua message yang peer itu kirim.</p>
+<p>Contoh:</p>
+<p>Alice sebagai peer mengirim message di banyak session.</p>
+<p>Honcho mengamati semua message Alice.</p>
+<p>Lalu Honcho membangun representation tentang Alice.</p>
+<p>Kalau <code>observe_me: false</code>, Honcho tidak melakukan reasoning tentang peer itu.</p>
+<p>Ini berguna kalau ada entitas yang tidak ingin dimodelkan karena privacy, compliance, atau noise.</p>
+<h3 id="62-observe_others">6.2 observe_others<a aria-hidden="true" class="anchor-heading icon-link" href="#62-observe_others"></a></h3>
+<p>Page menjelaskan:</p>
+<blockquote>
+<p>“Peers observing others (observe_others): When enabled at the session level, a peer will form representations of other peers in that session based only on messages they’ve observed.”</p>
+</blockquote>
+<p>Ini lebih menarik.</p>
+<p>Artinya satu peer bisa punya representation tentang peer lain, tapi hanya berdasarkan interaksi yang dia saksikan.</p>
+<p>Contoh:</p>
+<pre><code>Session 1 dan 2:
+Alice ngobrol dengan Bob.
+
+Session 3:
+Alice ngobrol dengan Charlie.
+</code></pre>
+<p>Kalau Bob punya <code>observe_others: true</code>, Bob membangun representation tentang Alice berdasarkan session 1 dan 2 saja.</p>
+<p>Kalau Charlie punya <code>observe_others: true</code>, Charlie membangun representation tentang Alice berdasarkan session 3 saja.</p>
+<p>Maka:</p>
+<pre><code>Bob's representation of Alice ≠ Charlie's representation of Alice
+</code></pre>
+<p>Kenapa? Karena pengalaman mereka terhadap Alice berbeda.</p>
+<p>Ini disebut perspective-taking.</p>
+<h2 id="7-perspective-taking-kenapa-penting">7. Perspective-taking: kenapa penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#7-perspective-taking-kenapa-penting"></a></h2>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Why would you want peers observing others? So you can simulate stateful perspectives.”</p>
+</blockquote>
+<p>Ini inti konsepnya.</p>
+<p>Tanpa perspective-taking, semua agent bisa jadi omniscient. Semua agent tahu semua hal tentang semua orang. Itu tidak realistis dan bisa merusak trust.</p>
+<p>Contoh:</p>
+<p>Bob pernah debat panjang dengan Alice di session 1 dan 2.</p>
+<p>Charlie baru bertemu Alice di session 3.</p>
+<p>Kalau Charlie tiba-tiba tahu inside joke atau konflik lama Alice-Bob, simulasi jadi rusak. Charlie seperti punya pengetahuan yang tidak pernah ia alami.</p>
+<p>Honcho mencoba mencegah itu dengan representasi berbasis perspektif.</p>
+<p>Atomic distinction:</p>
+<pre><code>Global representation:
+Honcho’s overall understanding of Alice.
+
+Perspective representation:
+Bob’s understanding of Alice, based only on what Bob observed.
+</code></pre>
+<p>Ini kuat untuk:</p>
+<pre><code>multi-agent simulation
+group chat
+role-playing game
+customer support dengan banyak agent
+education platform
+team collaboration
+social agents
+</code></pre>
+<h2 id="8-contoh-konkret-alice-bob-charlie">8. Contoh konkret: Alice, Bob, Charlie<a aria-hidden="true" class="anchor-heading icon-link" href="#8-contoh-konkret-alice-bob-charlie"></a></h2>
+<p>Misalnya ada peer:</p>
+<pre><code>Alice = user
+Bob = AI tutor
+Charlie = AI career coach
+</code></pre>
+<p>Session:</p>
+<pre><code>Session 1:
+Alice belajar matematika dengan Bob.
+
+Session 2:
+Alice curhat ke Bob bahwa dia takut ujian.
+
+Session 3:
+Alice ngobrol dengan Charlie soal kerja.
+</code></pre>
+<p>Representation global Alice oleh Honcho:</p>
+<pre><code>Alice is a student who is anxious about exams and is also exploring career planning.
+</code></pre>
+<p>Bob’s representation of Alice:</p>
+<pre><code>Alice struggles with exam anxiety and benefits from patient explanations.
+</code></pre>
+<p>Charlie’s representation of Alice:</p>
+<pre><code>Alice is considering career options and wants practical guidance.
+</code></pre>
+<p>Ketiganya benar, tapi berbeda scope.</p>
+<p>Ini seperti manusia. Teman kuliah, bos kerja, dan terapis bisa punya model berbeda tentang orang yang sama.</p>
+<p>Honcho membuat perbedaan ini eksplisit.</p>
+<h2 id="9-kenapa-representations-work-menurut-honcho">9. Kenapa representations “work” menurut Honcho?<a aria-hidden="true" class="anchor-heading icon-link" href="#9-kenapa-representations-work-menurut-honcho"></a></h2>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Statefulness is simulated through reconstruction of the past.”</p>
+</blockquote>
+<p>Ini klaim filosofis yang penting.</p>
+<p>Agent tidak benar-benar “punya masa lalu” seperti manusia. Agent mensimulasikan statefulness dengan cara merekonstruksi masa lalu yang relevan.</p>
+<p>RAG biasa merekonstruksi masa lalu dengan:</p>
+<pre><code>search facts
+retrieve similar chunks
+hope LLM connects the dots
+</code></pre>
+<p>Honcho ingin merekonstruksi masa lalu dengan:</p>
+<pre><code>reason over past data
+store conclusions
+handle contradictions
+surface implicit insights
+assemble relevant context
+</code></pre>
+<p>Page bilang:</p>
+<blockquote>
+<p>“Honcho reconstructs through reasoning about the past exhaustively, leaving much less to chance.”</p>
+</blockquote>
+<p>Artinya: jangan serahkan semua koneksi makna ke LLM saat inference. Sebagian koneksi sudah dibuat sebelumnya lewat reasoning background.</p>
+<p>Ini logis. Kalau agent baru “berpikir dari nol” setiap kali user bertanya, agent mudah lupa atau inconsistent. Kalau reasoning sudah dikompresi menjadi representation, agent punya state yang lebih stabil.</p>
+<h2 id="10-contoh-implicit-insight-dalam-representation">10. Contoh implicit insight dalam representation<a aria-hidden="true" class="anchor-heading icon-link" href="#10-contoh-implicit-insight-dalam-representation"></a></h2>
+<p>Page memberi contoh:</p>
+<blockquote>
+<p>“If a user mentions they’re saving for a house in one session and complains about subscription costs in another, Honcho can conclude they’re budget-conscious without anyone saying it.”</p>
+</blockquote>
+<p>Ini contoh bagus.</p>
+<p>Raw data:</p>
+<pre><code>Session A:
+User is saving for a house.
+
+Session B:
+User complains about subscription costs.
+</code></pre>
+<p>Representation:</p>
+<pre><code>User is likely budget-conscious.
+</code></pre>
+<p>Ini tidak eksplisit. Tapi berguna.</p>
+<p>Kalau agent nanti menyarankan tool SaaS, ia bisa mempertimbangkan harga.</p>
+<p>Misalnya:</p>
+<pre><code>Instead of recommending expensive enterprise software, suggest low-cost or open-source options first.
+</code></pre>
+<p>Inilah nilai representation: mengubah potongan masa lalu menjadi konteks tindakan.</p>
+<h2 id="11-contradiction-handling">11. Contradiction handling<a aria-hidden="true" class="anchor-heading icon-link" href="#11-contradiction-handling"></a></h2>
+<p>Page juga bilang reasoning bisa menangani kontradiksi:</p>
+<blockquote>
+<p>“when new information conflicts with old conclusions, it reconciles them instead of just accumulating more data.”</p>
+</blockquote>
+<p>Ini penting karena memory yang hanya menumpuk fakta bisa kacau.</p>
+<p>Contoh:</p>
+<p>Memory lama:</p>
+<pre><code>User prefers JavaScript.
+</code></pre>
+<p>Memory baru:</p>
+<pre><code>User now prefers TypeScript for production code.
+</code></pre>
+<p>Sistem buruk akan menyimpan keduanya tanpa konteks.</p>
+<p>Representation yang baik harus merekonsiliasi:</p>
+<pre><code>User previously used JavaScript, but currently prefers TypeScript for production projects.
+</code></pre>
+<p>Atau:</p>
+<pre><code>Preference depends on context: JavaScript for quick scripts, TypeScript for production.
+</code></pre>
+<p>Ini jauh lebih berguna daripada daftar fakta yang saling tabrakan.</p>
+<h2 id="12-prediction-under-uncertainty">12. Prediction under uncertainty<a aria-hidden="true" class="anchor-heading icon-link" href="#12-prediction-under-uncertainty"></a></h2>
+<p>Page menyebut reasoning memungkinkan:</p>
+<blockquote>
+<p>“prediction under uncertainty”</p>
+</blockquote>
+<p>Maksudnya representation bisa membantu agent menebak hal yang mungkin relevan meski data tidak lengkap.</p>
+<p>Contoh:</p>
+<p>Representation:</p>
+<pre><code>User is budget-conscious.
+User prefers open-source tools.
+User dislikes vendor lock-in.
+</code></pre>
+<p>Ketika user bertanya:</p>
+<pre><code>"Tool memory agent enaknya pakai apa?"
+</code></pre>
+<p>Agent bisa memprioritaskan:</p>
+<pre><code>local-first / open-source / self-hosted options
+</code></pre>
+<p>Tapi ini harus hati-hati. Prediction under uncertainty bukan izin untuk sok tahu. Seharusnya dipakai sebagai soft bias, bukan asumsi keras.</p>
+<p>Kalimat sehatnya:</p>
+<pre><code>Given your prior preference for local-first setups, ByteRover or Holographic may fit better.
+</code></pre>
+<p>Bukan:</p>
+<pre><code>You definitely only want local tools.
+</code></pre>
+<h2 id="13-representation-vs-raw-memory-vs-summary-vs-profile">13. Representation vs raw memory vs summary vs profile<a aria-hidden="true" class="anchor-heading icon-link" href="#13-representation-vs-raw-memory-vs-summary-vs-profile"></a></h2>
+<p>Biar bersih, bedakan empat hal ini.</p>
+<pre><code>Raw memory:
+Message mentah yang pernah terjadi.
+
+Summary:
+Ringkasan session atau percakapan.
+
+Profile / peer card:
+Data dasar tentang peer.
+
+Representation:
+Gabungan conclusions, summaries, peer cards, dan reasoning artifacts tentang peer.
+</code></pre>
+<p>Contoh:</p>
+<p>Raw memory:</p>
+<pre><code>User said: "Jangan main tengah lah soal ginian."
+</code></pre>
+<p>Summary:</p>
+<pre><code>The user criticized vague neutrality and asked for a clearer judgment.
+</code></pre>
+<p>Peer card:</p>
+<pre><code>User prefers direct, clear analysis.
+</code></pre>
+<p>Representation:</p>
+<pre><code>User tends to value decisive reasoning, especially in political/economic analysis, and dislikes evasive neutrality when evidence supports a clear judgment.
+</code></pre>
+<p>Representation lebih kaya karena menghubungkan banyak artifact.</p>
+<h2 id="14-kenapa-ini-penting-untuk-ai-agent">14. Kenapa ini penting untuk AI agent?<a aria-hidden="true" class="anchor-heading icon-link" href="#14-kenapa-ini-penting-untuk-ai-agent"></a></h2>
+<p>Agent yang tidak punya peer representation akan sering seperti ini:</p>
+<pre><code>User: Lanjut yang kemarin.
+Agent: Bisa jelaskan maksudnya?
+</code></pre>
+<p>Agent dengan representation bisa lebih seperti:</p>
+<pre><code>User: Lanjut yang kemarin.
+Agent: Kemarin kita bahas sandbox-exec, boundary file access, dan risiko env secret leakage. Bagian yang belum selesai adalah setup Codex per repo vs global.
+</code></pre>
+<p>Perbedaannya bukan sekadar ingat keyword. Agent punya model konteks.</p>
+<p>Untuk agent jangka panjang, representation membantu:</p>
+<pre><code>- mempertahankan preferensi user
+- mengingat keputusan project
+- memahami relasi antar peer
+- menjaga continuity antar session
+- menghindari pengulangan
+- memberi saran lebih sesuai konteks
+</code></pre>
+<h2 id="15-failure-mode-peer-representation">15. Failure mode peer representation<a aria-hidden="true" class="anchor-heading icon-link" href="#15-failure-mode-peer-representation"></a></h2>
+<p>Sistem seperti ini kuat, tapi rawan beberapa masalah.</p>
+<h3 id="failure-1-salah-menyimpulkan-identitas-peer">Failure 1: Salah menyimpulkan identitas peer<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-1-salah-menyimpulkan-identitas-peer"></a></h3>
+<p>Contoh:</p>
+<p>User sering baca artikel ekonomi.</p>
+<p>Kesimpulan salah:</p>
+<pre><code>User is an economist.
+</code></pre>
+<p>Yang lebih aman:</p>
+<pre><code>User often analyzes economic and policy topics.
+</code></pre>
+<p>Representation harus membedakan “interest” dan “identity”.</p>
+<h3 id="failure-2-overfitting-ke-momen-sementara">Failure 2: Overfitting ke momen sementara<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-2-overfitting-ke-momen-sementara"></a></h3>
+<p>User bilang:</p>
+<pre><code>"Jawab pendek, gue lagi buru-buru."
+</code></pre>
+<p>Representation salah:</p>
+<pre><code>User always prefers short answers.
+</code></pre>
+<p>Representation sehat:</p>
+<pre><code>User may prefer short answers in time-constrained situations.
+</code></pre>
+<h3 id="failure-3-perspective-leakage">Failure 3: Perspective leakage<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-3-perspective-leakage"></a></h3>
+<p>Charlie tidak pernah ikut session lama Alice-Bob, tapi tiba-tiba tahu konflik mereka.</p>
+<p>Ini melanggar perspective-taking.</p>
+<p>Dalam multi-agent, leakage semacam ini bikin user merasa sistem “aneh” atau terlalu tahu.</p>
+<h3 id="failure-4-memory-inertia">Failure 4: Memory inertia<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-4-memory-inertia"></a></h3>
+<p>Representation lama tidak cepat berubah.</p>
+<p>Contoh:</p>
+<p>Dulu user beginner.</p>
+<p>Sekarang user advanced.</p>
+<p>Kalau representation masih menganggap user beginner, agent akan terus menjelaskan terlalu dasar.</p>
+<h3 id="failure-5-bad-peer-identity-management">Failure 5: Bad peer identity management<a aria-hidden="true" class="anchor-heading icon-link" href="#failure-5-bad-peer-identity-management"></a></h3>
+<p>Kalau user yang sama dibuat jadi banyak peer ID:</p>
+<pre><code>raka
+raka_1
+user_raka
+raka@gmail.com
+</code></pre>
+<p>Representation terpecah. Agent jadi tidak punya continuity penuh.</p>
+<p>Sebaliknya, kalau dua user berbeda memakai peer ID yang sama, representation tercampur. Ini lebih berbahaya.</p>
+<h2 id="16-linking-hubungan-dengan-architecture-dan-reasoning">16. Linking: hubungan dengan architecture dan reasoning<a aria-hidden="true" class="anchor-heading icon-link" href="#16-linking-hubungan-dengan-architecture-dan-reasoning"></a></h2>
+<p>Sekarang kita hubungkan ke konsep sebelumnya.</p>
+<p>Di arsitektur Honcho:</p>
+<pre><code>Workspace → Peers → Sessions → Messages
+</code></pre>
+<p>Reasoning memproses messages.</p>
+<p>Peer representation adalah hasil yang tersimpan.</p>
+<p>Flow-nya:</p>
+<pre><code>Peer mengirim message dalam session
+→ message disimpan
+→ reasoning berjalan
+→ conclusions / summaries / peer cards dibuat
+→ representation peer diperbarui
+→ agent mengambil context dari representation
+→ agent menjawab lebih stateful
+</code></pre>
+<p>Jadi:</p>
+<pre><code>Architecture = bentuk sistem
+Reasoning = mesin pengolah
+Representation = hasil belajar
+Context endpoint = cara hasil itu dipakai agent
+</code></pre>
+<p>Kalau diibaratkan tubuh:</p>
+<pre><code>Messages = pengalaman
+Reasoning = proses berpikir/refleksi
+Representation = ingatan terstruktur
+Context = apa yang diingat saat perlu bertindak
+</code></pre>
+<h2 id="17-insight-penutup">17. Insight penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#17-insight-penutup"></a></h2>
+<p>★ Insight ─────────────────────────
+Kesalahan umum memahami peer representation adalah mengira ini cuma “profil user otomatis”.</p>
+<p>Lebih tepat: peer representation adalah <strong>state interpretatif</strong> tentang entitas, dibangun dari semua message yang relevan, lalu terus diperbarui melalui reasoning.</p>
+<p>Elo sudah paham kalau bisa membedakan:</p>
+<ol>
+<li>Peer = siapa/apa yang dimodelkan</li>
+<li>Message = bukti mentah</li>
+<li>Reasoning = proses menarik makna</li>
+<li>Conclusion = insight</li>
+<li>Summary = kompresi session</li>
+<li>Peer card = grounding dasar</li>
+<li>Representation = gabungan state yang dipakai agent
+───────────────────────────────────</li>
+</ol>
+<h2 id="18-korelasi-dengan-konsep-lain">18. Korelasi dengan konsep lain<a aria-hidden="true" class="anchor-heading icon-link" href="#18-korelasi-dengan-konsep-lain"></a></h2>
+<p>Konsep pertama: <strong>mental model</strong>.</p>
+<p>Manusia punya mental model tentang orang lain. Elo tahu teman elo biasanya suka apa, sensitif soal apa, gaya komunikasinya bagaimana. Peer representation mencoba membuat mental model itu eksplisit untuk agent.</p>
+<p>Bedanya: mental model manusia sering kabur dan emosional. Honcho ingin membuatnya lebih terstruktur lewat reasoning artifacts.</p>
+<p>Konsep kedua: <strong>CRM customer profile</strong>.</p>
+<p>CRM menyimpan riwayat customer, preferensi, ticket, status, dan catatan. Peer representation mirip CRM untuk AI agent.</p>
+<p>Bedanya: CRM biasanya fact-based dan human-readable. Peer representation lebih aktif: ia bisa menyimpan conclusions, pola, dan perspektif antar peer.</p>
+<p>Konsep ketiga: <strong>event-sourced projection</strong>.</p>
+<p>Dalam event sourcing:</p>
+<pre><code>events → projection/state
+</code></pre>
+<p>Di Honcho:</p>
+<pre><code>messages → reasoning → peer representation
+</code></pre>
+<p>Bedanya: event sourcing biasanya deterministik. Honcho interpretatif karena memakai reasoning model.</p>
+<p>Konsep keempat: <strong>Zettelkasten</strong>.</p>
+<p>Zettelkasten membangun pemahaman dari banyak catatan kecil yang saling terhubung. Peer representation juga begitu: message kecil menjadi premise, conclusion, summary, lalu membentuk state.</p>
+<p>Bedanya: Zettelkasten biasanya idea-centric. Peer representation entity-centric. Fokusnya bukan cuma “ide ini berhubungan dengan ide apa”, tapi “entitas ini sekarang dipahami sebagai apa berdasarkan sejarah interaksinya.”</p>
+<p>Kesimpulan pendeknya: <strong>peer representation adalah pusat memory Honcho: bukan tempat menyimpan semua chat, tapi model yang terus diperbarui tentang peer, berisi conclusion, summary, dan peer card, termasuk perspektif berbeda tergantung siapa yang mengamati.</strong></p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.reasoning">Reasoning</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.design-patterns">Honcho Design Patterns</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">memory (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.reasoning">Reasoning</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.stateful-memory">Stateful Memory</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

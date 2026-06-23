@@ -1,0 +1,44 @@
+<h1 id="2026-06-03">2026-06-03<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-06-03"></a></h1>
+<p>Hari ini gue baca dokumentasi Hermes Agent tentang memory provider. Yang menarik adalah perbedaan antara memori bawaan (<code>MEMORY.md</code> / <code>USER.md</code>) dan provider eksternal. Built-in memory tetap aktif, dan provider eksternal berfungsi sebagai lapisan tambahan untuk persistent memory lintas sesi.</p>
+<p>Inti yang gue tangkap:</p>
+<ul>
+<li>External provider bukan sekadar penyimpanan chat, tapi backend untuk retrieval dan context injection.</li>
+<li>Hanya satu provider eksternal yang bisa aktif sekaligus, supaya konflik sumber, biaya, latency, dan governance tetap terkendali.</li>
+<li>Pilihan provider adalah keputusan epistemik: agent bisa diatur untuk mengingat preferensi user, struktur knowledge project, atau relasi antar entitas.</li>
+</ul>
+<p>Beberapa provider yang dicatat:</p>
+<ul>
+<li><code>Honcho</code>: user modeling / cross-session context.</li>
+<li><code>OpenViking</code>: filesystem knowledge hierarchy.</li>
+<li><code>Mem0</code>: automatic memory extraction.</li>
+<li><code>Hindsight</code>: knowledge graph + synthesis.</li>
+<li><code>Holographic</code>: local SQLite + trust scoring.</li>
+<li><code>RetainDB</code>: hybrid cloud search + compression.</li>
+<li><code>ByteRover</code>: local-first CLI memory tree.</li>
+<li><code>Supermemory</code>: semantic memory + context fencing.</li>
+<li><code>Memori</code>: structured long-term memory dengan tool-aware recall.</li>
+</ul>
+<p>Sekarang ada catatan terpisah tentang OpenViking sebagai context database di <a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.agentic-engineering.openviking-context-database (Private)</a>, arsitektur OpenViking di <a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a>, storage architecture di <a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a>, context extraction di <a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a>, dan context layers OpenViking di <a href="/sotoy/notes/notes.agentic-engineering.openviking.context-layers">OpenViking context layers</a>.</p>
+<p>Kalau nanti mau nulis lebih panjang, ada <code>vault/notes.agentic-engineering.hermes-agent.memory-providers.md</code> yang merangkum pilihan provider dan trade-off-nya. Ini membantu gue ingat bahwa pilihan provider Hermes Agent lebih dari sekadar "storage".</p>
+<p>Hari ini gue juga baca dokumentasi Honcho. Yang bikin beda menurut gue:</p>
+<ul>
+<li>Honcho bukan cuma menyimpan chat, tapi membangun state model tentang entitas yang berubah.</li>
+<li>Dia pakai konsep <code>peer</code>, bukan cuma <code>user</code>, sehingga bisa memodelkan manusia, agent, grup, ide, atau objek.</li>
+<li>Honcho ingin reasoning, bukan sekadar retrieval. Pesan menjadi evidence, lalu disimpulkan menjadi representation.</li>
+<li>Ini paling cocok untuk agent stateful, multi-agent, atau use case yang perlu memahami perubahan konteks dari waktu ke waktu.</li>
+</ul>
+<p>Jadi hari ini ada dua level pemahaman: Hermes memory provider sebagai peta arsitektur memory, dan Honcho sebagai model stateful agent dengan entity-centric reasoning.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.hermes-agent.memory-providers">Memory Providers</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.agentic-engineering.openviking-context-database (Private)</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.stateful-memory">Stateful Memory</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.architecture">Architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.reasoning">Reasoning</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.peer-representations">Peer Representations</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.honcho.design-patterns">Honcho Design Patterns</a></li>
+</ul>

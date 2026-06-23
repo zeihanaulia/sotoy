@@ -1,0 +1,2 @@
+
+Enoch tidak hanya melihat langit, air, dan angin; ia juga dibawa ke ruang hukuman yang disusun sebagai bagian dari arsitektur kosmik itu sendiri. Dalam Chapter 6 ayat 13–24, tempat api, gudang air, dan kedalaman gelap muncul sebagai lokasi tersembunyi yang memegang kekuatan yang melanggar tatanan. Ini menguatkan klaim bahwa buku ini memandang pelanggaran Watchers bukan hanya sebagai dosa moral, tetapi sebagai gangguan terhadap mekanisme teratur realitas. [[zettel.literature.the-complete-book-of-enoch-chapter-6]]

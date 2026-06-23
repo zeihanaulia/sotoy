@@ -1,0 +1,194 @@
+<h1 id="openviking-context-layers">OpenViking context layers<a aria-hidden="true" class="anchor-heading icon-link" href="#openviking-context-layers"></a></h1>
+<p>Gue pakai arti ini: <strong>Context Layers L0/L1/L2 di OpenViking adalah tiga tingkat representasi konteks untuk satu resource/memory/skill</strong>. Ini bukan layer neural network, bukan level permission. Ini strategi loading supaya agent tidak langsung menelan semua isi dokumen ke prompt.</p>
+<h2 id="1-pertanyaan-kunci-yang-gue-pegang">1. Pertanyaan kunci yang gue pegang<a aria-hidden="true" class="anchor-heading icon-link" href="#1-pertanyaan-kunci-yang-gue-pegang"></a></h2>
+<ol>
+<li>Kenapa OpenViking butuh L0/L1/L2?</li>
+<li>Apa fungsi L0?</li>
+<li>Apa fungsi L1?</li>
+<li>Apa fungsi L2?</li>
+<li>Bagaimana L0/L1 dibuat?</li>
+<li>Bagaimana layer ini muncul dalam struktur folder?</li>
+<li>Kapan agent harus pakai L0, L1, atau L2?</li>
+</ol>
+<h2 id="2-kenapa-harus-ada-l0l1l2">2. Kenapa harus ada L0/L1/L2?<a aria-hidden="true" class="anchor-heading icon-link" href="#2-kenapa-harus-ada-l0l1l2"></a></h2>
+<p>Masalah utama agent adalah context budget. Kalaupun data banyak dan relevan, prompt tidak bisa menampung semua. Kalau lo langsung masukin:</p>
+<ul>
+<li>dokumen panjang,</li>
+<li>chat history,</li>
+<li>memory user,</li>
+<li>codebase,</li>
+<li>skill docs,</li>
+<li>tool output,</li>
+</ul>
+<p>maka prompt jadi bengkak, mahal, noisy, dan rawan salah fokus.</p>
+<p>OpenViking bilang: konteks harus dimuat bertahap.</p>
+<blockquote>
+<p>OpenViking uses a three-layer information model to balance retrieval efficiency and content completeness.</p>
+</blockquote>
+<p>Intinya:</p>
+<ul>
+<li><code>L0</code> untuk mencari cepat,</li>
+<li><code>L1</code> untuk memahami scope,</li>
+<li><code>L2</code> untuk baca detail.</li>
+</ul>
+<h2 id="3-l0-abstract">3. L0: Abstract<a aria-hidden="true" class="anchor-heading icon-link" href="#3-l0-abstract"></a></h2>
+<p>L0 adalah representasi paling pendek.</p>
+<ul>
+<li>Nama: Abstract</li>
+<li>File: <code>.abstract.md</code></li>
+<li>Token: sekitar 100 token</li>
+<li>Tujuan: vector search, quick filtering</li>
+</ul>
+<p>L0 dipakai untuk menjawab: “Apakah item ini relevan atau tidak?”</p>
+<p>Contoh L0:</p>
+<blockquote>
+<p>API authentication guide covering OAuth 2.0, JWT tokens, and API keys for secure access.</p>
+</blockquote>
+<p>L0 bukan bukti detail. Dia lebih seperti label semantik.</p>
+<p>Analogi:</p>
+<ul>
+<li><code>L0</code> = judul + abstrak super pendek di kartu katalog perpustakaan.</li>
+</ul>
+<h2 id="4-l1-overview">4. L1: Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#4-l1-overview"></a></h2>
+<p>L1 adalah ringkasan menengah yang benar-benar membantu navigasi.</p>
+<ul>
+<li>Nama: Overview</li>
+<li>File: <code>.overview.md</code></li>
+<li>Token: sekitar 1–2 ribu token</li>
+<li>Tujuan: rerank, content navigation</li>
+</ul>
+<p>L1 menjawab: “Isi area ini apa saja? Bagian mana relevan? File mana yang harus dibuka?”</p>
+<p>Contoh L1:</p>
+<blockquote>
+<p>This guide covers three authentication methods for the API:</p>
+<ul>
+<li><strong>OAuth 2.0</strong> (L2: oauth.md): Complete OAuth flow with code examples</li>
+<li><strong>JWT Tokens</strong> (L2: jwt.md): Token generation and validation</li>
+<li><strong>API Keys</strong> (L2: api-keys.md): Simple key-based authentication</li>
+</ul>
+</blockquote>
+<p>L1 bukan sekadar ringkasan. L1 adalah peta navigasi.</p>
+<p>Ini yang membuat L1 biasanya cukup untuk membangun context LLM.</p>
+<h2 id="5-l2-detail">5. L2: Detail<a aria-hidden="true" class="anchor-heading icon-link" href="#5-l2-detail"></a></h2>
+<p>L2 adalah konten lengkap.</p>
+<ul>
+<li>Nama: Detail</li>
+<li>File: original files/subdirs</li>
+<li>Token: unlimited/full content</li>
+<li>Tujuan: full content, on-demand loading</li>
+</ul>
+<p>L2 menjawab: “Apa isi lengkapnya? Mana bukti/detail teknis?”</p>
+<p>Contoh L2:</p>
+<ul>
+<li><code>read("viking://resources/docs/auth/oauth.md")</code></li>
+<li><code>read("viking://resources/docs/auth/jwt.md")</code></li>
+</ul>
+<p>Tapi L2 tidak boleh dibuka otomatis. L2 hanya dibuka jika L0/L1 sudah menunjukkan bahwa detailnya memang perlu.</p>
+<h2 id="6-mekanisme-pembuatan-l0l1">6. Mekanisme pembuatan L0/L1<a aria-hidden="true" class="anchor-heading icon-link" href="#6-mekanisme-pembuatan-l0l1"></a></h2>
+<p>L0/L1 dibuat saat resource baru ditambahkan dan saat session history dikompresi.</p>
+<p>Flow resource ingestion:</p>
+<ul>
+<li>Input dokumen</li>
+<li>Parser membuat struktur file/directory</li>
+<li>SemanticQueue generate L0/L1 async</li>
+<li>Vector Index dibangun dari URI + metadata</li>
+</ul>
+<p>Flow session archive:</p>
+<ul>
+<li>Chat/session history lama</li>
+<li>SessionCompressor</li>
+<li>Generate L0/L1 untuk history segment</li>
+</ul>
+<p>Jadi L0/L1 bukan cuma untuk dokumen statis. History percakapan lama pun bisa dibangun menjadi layer yang bisa dicari.</p>
+<h2 id="7-bottom-up-generation">7. Bottom-up generation<a aria-hidden="true" class="anchor-heading icon-link" href="#7-bottom-up-generation"></a></h2>
+<p>OpenViking membuat layer dari bawah ke atas:</p>
+<ul>
+<li>leaf nodes → parent directories → root</li>
+</ul>
+<p>Contoh:</p>
+<ul>
+<li>buat L0/L1 untuk <code>oauth.md</code></li>
+<li>buat L0/L1 untuk <code>jwt.md</code></li>
+<li>buat L0/L1 untuk <code>api-keys.md</code></li>
+<li>gabungkan ringkasan child menjadi overview folder <code>auth/</code></li>
+</ul>
+<p>Parent directory overview dibangun dari abstrak child-nya. Jadi folder tahu isi anak-anaknya.</p>
+<h2 id="8-struktur-folder-dan-file">8. Struktur folder dan file<a aria-hidden="true" class="anchor-heading icon-link" href="#8-struktur-folder-dan-file"></a></h2>
+<p>Setiap directory bisa punya struktur seperti:</p>
+<pre><code>viking://resources/docs/auth/
+├── .abstract.md
+├── .overview.md
+├── .relations.json
+├── oauth.md
+├── jwt.md
+└── api-keys.md
+</code></pre>
+<p>L0 dan L1 adalah file nyata di folder. L2 adalah file asli atau subdirectory.</p>
+<h2 id="9-on-demand-loading">9. On-demand loading<a aria-hidden="true" class="anchor-heading icon-link" href="#9-on-demand-loading"></a></h2>
+<p>On-demand loading berarti L2 tidak dibaca otomatis. Agent harus sudah yakin relevan sebelum membuka detail penuh.</p>
+<p>Pattern ideal:</p>
+<ul>
+<li>Lihat L0 dulu</li>
+<li>Buka L1 untuk navigasi</li>
+<li>Kalau perlu, baca L2</li>
+</ul>
+<p>Kalau langsung ke L2, konteks akan boros dan noisy.</p>
+<h2 id="10-kapan-pakai-l0-l1-l2">10. Kapan pakai L0, L1, L2?<a aria-hidden="true" class="anchor-heading icon-link" href="#10-kapan-pakai-l0-l1-l2"></a></h2>
+<ul>
+<li><code>L0</code>: quick relevance check.</li>
+<li><code>L1</code>: pahami content scope dan cari bagian penting.</li>
+<li><code>L2</code>: baca detail asli untuk bukti/gambar/konfigurasi.</li>
+</ul>
+<p>Untuk banyak jawaban, L1 biasanya sudah cukup. L2 dipakai kalau user minta kutipan, nilai teknis, atau detail lengkap.</p>
+<h2 id="11-kaitan-dengan-retrieval">11. Kaitan dengan retrieval<a aria-hidden="true" class="anchor-heading icon-link" href="#11-kaitan-dengan-retrieval"></a></h2>
+<p>Flow retrieval ideal OpenViking:</p>
+<ul>
+<li>Query → L0 candidate search</li>
+<li>L1 navigation/rerank</li>
+<li>Select URI</li>
+<li>L2 read if needed</li>
+</ul>
+<p>Ini berbeda dari RAG flat yang langsung pakai top-k chunks.</p>
+<h2 id="12-contoh-sederhana">12. Contoh sederhana<a aria-hidden="true" class="anchor-heading icon-link" href="#12-contoh-sederhana"></a></h2>
+<p>Query: “Untuk user-facing app, auth method yang direkomendasikan apa?”</p>
+<ul>
+<li>L0 auth: temukan folder auth</li>
+<li>L1 auth: lihat rekomendasi OAuth 2.0</li>
+<li>Bisa jawab tanpa L2</li>
+</ul>
+<p>Query: “Flow OAuth step-by-step gimana?”</p>
+<ul>
+<li>L0 auth: temukan folder auth</li>
+<li>L1 auth: lihat bahwa oauth.md ada</li>
+<li>buka L2 oauth.md untuk detail</li>
+</ul>
+<h2 id="13-insight-penutup">13. Insight penutup<a aria-hidden="true" class="anchor-heading icon-link" href="#13-insight-penutup"></a></h2>
+<p>Context Layers di OpenViking itu cara agent membaca: L0 = "apa ini?", L1 = "bagian mana yang harus dibaca?", L2 = "baca lengkapnya".</p>
+<p>Kalau agent ingin pintar, dia tidak langsung mengunyah semua konten. Dia triage dulu.</p>
+<h2 id="related-documents">Related documents<a aria-hidden="true" class="anchor-heading icon-link" href="#related-documents"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vault/daily.journal.2026.06.03 (Private)</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">openviking (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-layers (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.architecture">OpenViking architecture</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking-context-database">Context Database</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-extraction">OpenViking context extraction</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.context-types">OpenViking context types</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openviking.storage-architecture">OpenViking storage architecture</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.06.03">2026-06-03</a></li>
+</ul>

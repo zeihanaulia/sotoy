@@ -1,0 +1,35 @@
+<h1 id="google-api-key-publik-bisa-naik-privilege-jadi-gemini-credential">Google API key publik bisa naik privilege jadi Gemini credential<a aria-hidden="true" class="anchor-heading icon-link" href="#google-api-key-publik-bisa-naik-privilege-jadi-gemini-credential"></a></h1>
+<ul>
+<li>TIL: string API key <code>AIza...</code> tidak berubah; yang berubah adalah hak akses efektifnya setelah <strong>Gemini / Generative Language API</strong> diaktifkan di project Google Cloud yang sama.</li>
+<li>Ini bukan sekadar secret bocor, melainkan <strong>credential publik lama yang mengalami retroactive privilege expansion</strong>.</li>
+<li>Faktor utama:
+<ul>
+<li>beberapa Google/Firebase API key lama diposisikan sebagai public-ish identifiers/billing tokens.</li>
+<li>Google API keys bisa berlaku ke semua API yang di-enable pada project itu, kecuali direstrict.</li>
+<li>ketika Gemini diaktifkan di project yang sama, existing keys bisa ikut valid untuk endpoint Gemini.</li>
+</ul>
+</li>
+<li>Risiko nyata:
+<ul>
+<li>attacker bisa scrape key publik dari frontend/app/repo </li>
+<li>lalu memanggil endpoint Gemini sensitif seperti <code>/files</code> atau <code>/cachedContents</code></li>
+<li>dampaknya bisa berupa data exposure, quota exhaustion, dan billing abuse.</li>
+</ul>
+</li>
+<li>Pencegahan paling kuat:
+<ul>
+<li>pisahkan project frontend/public dari project Gemini.</li>
+<li>restrict API key by API dan by application.</li>
+<li>jangan pakai key frontend untuk Gemini; gunakan backend.</li>
+<li>audit dan rotate key lama yang public/unrestricted setelah Gemini diaktifkan.</li>
+</ul>
+</li>
+<li>Insight: masalah ini menunjukkan bahwa <strong>desain credential boundary dan default key behavior</strong> bisa sama berbahayanya dengan kesalahan operasional pengguna.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">google-cloud (Private)</a></li>
+</ol>

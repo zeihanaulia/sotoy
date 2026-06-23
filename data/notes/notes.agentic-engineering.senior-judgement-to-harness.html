@@ -1,0 +1,321 @@
+<h1 id="senior-judgement-yang-dipindahkan-ke-harness">Senior Judgement yang Dipindahkan ke Harness<a aria-hidden="true" class="anchor-heading icon-link" href="#senior-judgement-yang-dipindahkan-ke-harness"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue pakai "judgement" di sini sebagai keputusan teknis berbasis pengalaman: kapan query dianggap berbahaya, kapan desain dianggap rapuh, kapan perubahan butuh test, kapan perlu eskalasi manusia.</p>
+<p>Senior engineer yang bagus bukan cuma komentar "ini salah, benerin." Dia tanya: kenapa agent bisa mengulang kesalahan ini, dan bagian mana dari sistem yang harus diubah agar kesalahan ini tidak muncul lagi?</p>
+<h2 id="apa-itu-judgement-senior">Apa itu judgement senior?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-judgement-senior"></a></h2>
+<p>Judgement senior biasanya muncul dalam komentar review singkat seperti:</p>
+<ul>
+<li>"Ini bakal N+1 query."</li>
+<li>"Jangan taruh business logic di controller."</li>
+<li>"Migration ini riskan, rollback-nya mana?"</li>
+<li>"Ini harus idempotent."</li>
+<li>"Authz check-nya hilang."</li>
+<li>"Jangan catch error lalu diam."</li>
+<li>"Ini perlu test regresi."</li>
+<li>"Ini akan lambat kalau datanya 1 juta row."</li>
+<li>"Nama function ini nyembunyiin intent."</li>
+<li>"Ini coupling-nya bikin susah diubah."</li>
+</ul>
+<p>Komentar itu singkat, tapi isinya judgement yang lahir dari pengalaman incident, latency spike, data corruption, security bug, atau maintainability buruk.</p>
+<p>Kalau judgement itu tetap tinggal di review comment, agent dan junior akan mengulang. Reviewer jadi bottleneck. Maka kita perlu turunkan judgement ini menjadi sistem.</p>
+<h2 id="review-comment-yang-berulang--sinyal-harness-belum-lengkap">Review comment yang berulang = sinyal harness belum lengkap<a aria-hidden="true" class="anchor-heading icon-link" href="#review-comment-yang-berulang--sinyal-harness-belum-lengkap"></a></h2>
+<p>Atomic idea: review comment yang berulang adalah sinyal bahwa ada rule/harness yang belum dibuat.</p>
+<p>Transformasi dasarnya:</p>
+<p>Review comment → prinsip → rule → contoh → check → feedback loop.</p>
+<p>Contoh singkat:</p>
+<p>Review comment:</p>
+<ul>
+<li>"Jangan query database di dalam loop."</li>
+</ul>
+<p>Prinsip:</p>
+<ul>
+<li>query di loop bisa menyebabkan N+1, latency linear, dan beban database.</li>
+</ul>
+<p>Rule:</p>
+<ul>
+<li>jika memproses koleksi entity, jangan panggil repository/database per item. Gunakan bulk query, join, eager loading, batching, atau prefetch.</li>
+</ul>
+<p>Contoh:</p>
+<ul>
+<li>bad: <code>for each user: query orders</code></li>
+<li>good: <code>query orders dengan WHERE IN(...) lalu group di memory</code></li>
+</ul>
+<p>Check:</p>
+<ul>
+<li>test jumlah query.</li>
+<li>static analysis cari repository call di dalam loop.</li>
+<li>agent review scan pola N+1.</li>
+<li>CI gagal jika query count > threshold.</li>
+</ul>
+<p>Feedback loop:</p>
+<ul>
+<li>kalau agent masih salah, update skill file dengan kasus nyata baru.</li>
+</ul>
+<h2 id="kapan-pakai-rule-skill-linter-test-gate">Kapan pakai rule, skill, linter, test, gate?<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-pakai-rule-skill-linter-test-gate"></a></h2>
+<p>Ini penting biar harness tidak berantakan.</p>
+<ul>
+<li>
+<p><code>AGENTS.md</code></p>
+<ul>
+<li>cocok untuk aturan pendek, universal, selalu relevan.</li>
+<li>contoh: "Do not introduce database calls inside loops. Prefer bulk fetch, batching, eager loading, or query joins."</li>
+</ul>
+</li>
+<li>
+<p>skill file</p>
+<ul>
+<li>cocok untuk aturan yang butuh penjelasan, contoh, dan prosedur.</li>
+<li>contoh: <code>skills/database-performance.md</code> berisi apa itu N+1, kapan muncul, contoh baik/buruk, cara deteksi, checklist PR.</li>
+</ul>
+</li>
+<li>
+<p>linter / static analysis</p>
+<ul>
+<li>cocok untuk pola mekanis yang bisa dikenali oleh mesin.</li>
+<li>contoh: repository call dalam <code>for</code>, <code>map</code>, <code>forEach</code>; raw SQL interpolation; endpoint tanpa auth middleware.</li>
+</ul>
+</li>
+<li>
+<p>test</p>
+<ul>
+<li>cocok untuk behavior yang perlu dibuktikan.</li>
+<li>contoh: query count maksimal 2 untuk endpoint list, API tetap cepat untuk 1.000 record, migration rollback, authz failure.</li>
+</ul>
+</li>
+<li>
+<p>CI gate</p>
+<ul>
+<li>cocok untuk aturan yang tidak boleh dilanggar sebelum merge.</li>
+<li>contoh: typecheck, lint, security scan, critical vulnerability, migration validation.</li>
+</ul>
+</li>
+</ul>
+<p>Atomic idea: rule jelaskan niat; skill ajarkan cara; linter tangkap pola; test buktikan behavior; CI paksa disiplin.</p>
+<h2 id="contoh-konkret-query-database-di-loop">Contoh konkret: query database di loop<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-konkret-query-database-di-loop"></a></h2>
+<p>Agent sering bikin kode seperti ini:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getUsersWithOrders</span><span class="token punctuation">(</span>userIds<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+  <span class="token keyword control-flow">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> userId <span class="token keyword">of</span> userIds<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword control-flow">await</span> userRepository<span class="token punctuation">.</span><span class="token method function property-access">findById</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span>
+    <span class="token keyword">const</span> orders <span class="token operator">=</span> <span class="token keyword control-flow">await</span> orderRepository<span class="token punctuation">.</span><span class="token method function property-access">findByUserId</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span>
+
+    result<span class="token punctuation">.</span><span class="token method function property-access">push</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      user<span class="token punctuation">,</span>
+      orders<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword control-flow">return</span> result
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Kalau ada 500 user, ini bisa jadi 1.000 query. Di dev kecil aman, di produksi bisa jadi lambat parah.</p>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.gitlab-mr-comment-formatting">Cloud Agent Hands-on: MR Comment Formatting</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<h3 id="ubah-jadi-harness">Ubah jadi harness<a aria-hidden="true" class="anchor-heading icon-link" href="#ubah-jadi-harness"></a></h3>
+<p><code>AGENTS.md</code></p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Database performance rules</span>
+
+<span class="token list punctuation">-</span> Never perform database or repository calls inside loops over collections.
+<span class="token list punctuation">-</span> Prefer bulk queries, joins, eager loading, batching, or prefetching.
+<span class="token list punctuation">-</span> If a looped query is unavoidable, explain why and add a regression test for query count or performance.
+</code></pre>
+<p>Skill file: <code>skills/database-performance.md</code></p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Database Performance Skill</span>
+
+Use this skill when changing repository, ORM, query, serializer, list endpoint, or data-loading code.
+
+<span class="token title important"><span class="token punctuation">##</span> Core rule</span>
+
+Avoid N+1 queries. A code path that handles N items should not execute O(N) database queries unless explicitly justified.
+
+<span class="token title important"><span class="token punctuation">##</span> Bad pattern</span>
+
+Calling repository/database methods inside:
+<span class="token list punctuation">-</span> for / while loops
+<span class="token list punctuation">-</span> map / forEach callbacks
+<span class="token list punctuation">-</span> serializers
+<span class="token list punctuation">-</span> template rendering loops
+<span class="token list punctuation">-</span> GraphQL field resolvers without batching
+
+<span class="token title important"><span class="token punctuation">##</span> Better patterns</span>
+
+Prefer:
+<span class="token list punctuation">-</span> bulk fetch with WHERE IN
+<span class="token list punctuation">-</span> joins
+<span class="token list punctuation">-</span> eager loading
+<span class="token list punctuation">-</span> dataloader/batching
+<span class="token list punctuation">-</span> precomputed lookup maps
+<span class="token list punctuation">-</span> pagination
+<span class="token list punctuation">-</span> query-level aggregation
+
+<span class="token title important"><span class="token punctuation">##</span> Before completing the task</span>
+
+<span class="token list punctuation">1.</span> Search changed files for database calls inside loops.
+<span class="token list punctuation">2.</span> Check list endpoints and serializers.
+<span class="token list punctuation">3.</span> Add or update a test that protects query count when possible.
+<span class="token list punctuation">4.</span> Report expected number of queries for the main path.
+</code></pre>
+<p>Perbaikan kode:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getUsersWithOrders</span><span class="token punctuation">(</span>userIds<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token keyword control-flow">await</span> userRepository<span class="token punctuation">.</span><span class="token method function property-access">findByIds</span><span class="token punctuation">(</span>userIds<span class="token punctuation">)</span>
+  <span class="token keyword">const</span> orders <span class="token operator">=</span> <span class="token keyword control-flow">await</span> orderRepository<span class="token punctuation">.</span><span class="token method function property-access">findByUserIds</span><span class="token punctuation">(</span>userIds<span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> ordersByUserId <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token known-class-name class-name">Map</span><span class="token operator">&#x3C;</span><span class="token builtin">string</span><span class="token punctuation">,</span> <span class="token maybe-class-name">Order</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> order <span class="token keyword">of</span> orders<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> existing <span class="token operator">=</span> ordersByUserId<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token property-access">userId</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    existing<span class="token punctuation">.</span><span class="token method function property-access">push</span><span class="token punctuation">(</span>order<span class="token punctuation">)</span>
+    ordersByUserId<span class="token punctuation">.</span><span class="token method function property-access">set</span><span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token property-access">userId</span><span class="token punctuation">,</span> existing<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword control-flow">return</span> users<span class="token punctuation">.</span><span class="token method function property-access">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+    user<span class="token punctuation">,</span>
+    orders<span class="token operator">:</span> ordersByUserId<span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token property-access">id</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Test pseudo:</p>
+<pre class="language-ts"><code class="language-ts"><span class="token function">it</span><span class="token punctuation">(</span><span class="token string">"loads users with orders without N+1 queries"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword control-flow">await</span> <span class="token function">seedUsersWithOrders</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> queryCounter <span class="token operator">=</span> <span class="token function">startQueryCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword control-flow">await</span> <span class="token function">getUsersWithOrders</span><span class="token punctuation">(</span><span class="token keyword control-flow">await</span> <span class="token function">getSeededUserIds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  <span class="token function">expect</span><span class="token punctuation">(</span>queryCounter<span class="token punctuation">.</span><span class="token method function property-access">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">toBeLessThanOrEqual</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Static check sensor:</p>
+<ul>
+<li>Semgrep rule untuk repository call dalam loop</li>
+<li>query count regression test</li>
+<li>CI yang menjalankan scan + test</li>
+</ul>
+<p>PR template:</p>
+<pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">##</span> Database impact</span>
+
+<span class="token list punctuation">-</span> [ ] This change does not introduce database calls inside loops
+<span class="token list punctuation">-</span> [ ] Query count is bounded for list/bulk paths
+<span class="token list punctuation">-</span> [ ] Bulk loading, batching, or eager loading is used where needed
+<span class="token list punctuation">-</span> [ ] If an exception exists, it is explained below
+</code></pre>
+<h2 id="contoh-lain-authz-migration-dependency">Contoh lain: authz, migration, dependency<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-lain-authz-migration-dependency"></a></h2>
+<h3 id="authz">Authz<a aria-hidden="true" class="anchor-heading icon-link" href="#authz"></a></h3>
+<p>Review comment:</p>
+<ul>
+<li>"Endpoint ini cuma cek authentication, belum cek authorization."</li>
+</ul>
+<p>Harness:</p>
+<p><code>AGENTS.md</code>:</p>
+<pre class="language-markdown"><code class="language-markdown">All write endpoints must check both authentication and authorization. Authentication alone is not sufficient.
+</code></pre>
+<p>Skill: <code>skills/authz-review.md</code>.</p>
+<p>Test:</p>
+<ul>
+<li>user A tidak boleh update resource milik user B.</li>
+</ul>
+<p>CI:</p>
+<ul>
+<li>authz tests wajib jalan untuk semua write endpoint.</li>
+</ul>
+<h3 id="migration">Migration<a aria-hidden="true" class="anchor-heading icon-link" href="#migration"></a></h3>
+<p>Review comment:</p>
+<ul>
+<li>"Migration ini tidak aman untuk table besar."</li>
+</ul>
+<p>Harness:</p>
+<p><code>AGENTS.md</code>:</p>
+<pre class="language-markdown"><code class="language-markdown">Database migrations on large tables must be backward-compatible, non-blocking, and have rollback strategy.
+</code></pre>
+<p>Skill: <code>skills/safe-migration.md</code>.</p>
+<p>Check:</p>
+<ul>
+<li>migration dry-run</li>
+<li>rollback test</li>
+<li>no table lock check</li>
+<li>human approval for destructive migration</li>
+</ul>
+<h3 id="dependency">Dependency<a aria-hidden="true" class="anchor-heading icon-link" href="#dependency"></a></h3>
+<p>Review comment:</p>
+<ul>
+<li>"Kenapa nambah library baru untuk fungsi kecil?"</li>
+</ul>
+<p>Harness:</p>
+<p><code>AGENTS.md</code>:</p>
+<pre class="language-markdown"><code class="language-markdown">Do not add new runtime dependencies without justification. Prefer existing utilities or standard library for small tasks.
+</code></pre>
+<p>Skill: <code>skills/dependency-review.md</code>.</p>
+<p>CI:</p>
+<ul>
+<li>OSV scanner</li>
+<li>license checker</li>
+<li>bundle size check</li>
+</ul>
+<h2 id="batasannya">Batasannya<a aria-hidden="true" class="anchor-heading icon-link" href="#batasannya"></a></h2>
+<p>Tidak semua judgement bisa diautomasi.</p>
+<p>Yang tetap manusia:</p>
+<ul>
+<li>trade-off performa vs complexity untuk bisnis ini</li>
+<li>apakah perubahan domain model sesuai strategi produk</li>
+<li>apakah breaking change bisa diterima pelanggan</li>
+<li>apakah data retention policy cocok dengan regulasi</li>
+<li>apakah desain ini terlalu kompleks untuk ukuran tim</li>
+<li>apakah risiko security ini acceptable atau harus stop release</li>
+</ul>
+<p>Harness membantu menyiapkan evidence, tetapi keputusan akhir tetap manusia.</p>
+<h2 id="workflow-senior-yang-berubah">Workflow senior yang berubah<a aria-hidden="true" class="anchor-heading icon-link" href="#workflow-senior-yang-berubah"></a></h2>
+<p>Dulu:</p>
+<ul>
+<li>senior review PR</li>
+<li>senior komentar sama berkali-kali</li>
+<li>senior jadi bottleneck</li>
+<li>knowledge tetap di kepala senior</li>
+</ul>
+<p>Sekarang:</p>
+<ul>
+<li>senior lihat pola kesalahan</li>
+<li>senior putuskan rule skill test gate mana yang dibutuhkan</li>
+<li>senior perbaiki harness</li>
+<li>agent/junior belajar dari harness</li>
+<li>review berikutnya lebih ringan</li>
+<li>knowledge jadi reusable</li>
+</ul>
+<h2 id="insight">Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#insight"></a></h2>
+<ul>
+<li>harness bukan cuma dokumentasi.</li>
+<li>harness adalah aturan yang diarahkan, dibatasi, diuji, dan diberi feedback.</li>
+<li>review comment berulang harus dilihat sebagai peluang memperbaiki sistem, bukan bukti agen atau junior bodoh.</li>
+<li>judgement senior dipromosikan menjadi artefak operasional, bukan ditempel di PR saja.</li>
+</ul>
+<h2 id="related-zettels">Related Zettels<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettels"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260419190800">Judgement senior harus di-infrastrukturkan sebagai executable instruction AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">harness (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">senior-engineer (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260507101700">Human-in-the-loop is a response to jagged AI, not nostalgia</a></li>
+<li><a href="/sotoy/notes/zettel.20260507102000">AI may speed delivery, but engineering responsibility stays with humans</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.ai-slop-disposable-experimentation">AI Slop dan Batas Disposable Experimentation</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.before-after-judgement-harness">Before-After: Senior Judgement ke Harness</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering">Andrej Karpathy: From Vibe Coding to Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/zettel.literature.how-i-use-ai-to-code">How I Use AI to Code — literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>

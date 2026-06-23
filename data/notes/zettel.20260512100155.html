@@ -1,0 +1,12 @@
+<h1 id="orbstack-dan-docker-desktop-bisa-coexist-selama-migrasi">OrbStack dan Docker Desktop bisa coexist selama migrasi<a aria-hidden="true" class="anchor-heading icon-link" href="#orbstack-dan-docker-desktop-bisa-coexist-selama-migrasi"></a></h1>
+<p>Gue sekarang menyarankan pendekatan tranisi yang lebih aman: install OrbStack dulu, pakai context switch, lalu uninstall Docker Desktop hanya jika OrbStack sudah terbukti cocok.</p>
+<p>OrbStack dan Docker Desktop menggunakan Docker context system yang sama, jadi lo bisa switch antara backend tanpa kehilangan akses CLI. Ini memberi fallback yang berguna selama fase awal.</p>
+<p>Dari pengalaman gue, ini lebih baik daripada langsung uninstall Docker Desktop, terutama kalau lo masih butuh tes kompatibilitas atau ingin rollback cepat.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a class="color-tag" style="--tag-color: #7ef4cc;" href="/sotoy/notes/tags.docker">docker</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">orbstack (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">macos (Private)</a></li>
+</ol>

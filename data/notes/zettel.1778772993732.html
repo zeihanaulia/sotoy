@@ -1,0 +1,28 @@
+<h1 id="rust-compiler-adalah-reviewer-desain-bukan-sekadar-syntax-checker">Rust compiler adalah reviewer desain, bukan sekadar syntax checker<a aria-hidden="true" class="anchor-heading icon-link" href="#rust-compiler-adalah-reviewer-desain-bukan-sekadar-syntax-checker"></a></h1>
+<h2 id="klaim">Klaim<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim"></a></h2>
+<p>Borrow checker Rust seharusnya dipahami sebagai feedback desain, bukan hanya penghalang syntax.</p>
+<h2 id="bukti">Bukti<a aria-hidden="true" class="anchor-heading icon-link" href="#bukti"></a></h2>
+<p>Dari Preface: banyak desain yang terlihat masuk akal di bahasa lain ditolak oleh borrow checker. Itu berarti masalahnya bukan "Rust sulit", melainkan desain ownership dan boundary yang belum jelas.</p>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>Kesalahan Rust sering muncul di compile time sebelum runtime, sehingga debugging desain dimulai lebih awal.</li>
+<li>Setiap borrow-check failure adalah kesempatan untuk mengevaluasi siapa pemilik data, siapa borrower, dan berapa lama data hidup.</li>
+<li>Desain yang jelas di Rust mempromosikan explicit ownership boundaries.</li>
+</ul>
+<h2 id="hubungan">Hubungan<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.design-patterns-and-best-practices-in-rust">Rust-native design lebih dari sekadar pattern</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">design (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-architecture (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

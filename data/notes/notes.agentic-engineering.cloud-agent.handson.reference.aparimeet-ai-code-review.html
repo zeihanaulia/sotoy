@@ -1,0 +1,35 @@
+<h1 id="aparimeet-ai-code-review">Aparimeet AI Code Review<a aria-hidden="true" class="anchor-heading icon-link" href="#aparimeet-ai-code-review"></a></h1>
+<h2 id="why-this-reference-matters">Why this reference matters<a aria-hidden="true" class="anchor-heading icon-link" href="#why-this-reference-matters"></a></h2>
+<p>Aparimeet/ai-code-review paling relevan untuk desain bot layer: service yang menerima webhook MR/PR, segera balas 200, terus proses review di background.</p>
+<h2 id="what-it-teaches">What it teaches<a aria-hidden="true" class="anchor-heading icon-link" href="#what-it-teaches"></a></h2>
+<ul>
+<li>webhook receiver harus cepat dan stateless,</li>
+<li>job queue/worker adalah wajib untuk kerja berat,</li>
+<li>diff/context fetching bisa dipisahkan dari comment posting.</li>
+</ul>
+<h2 id="what-to-copy-for-our-design">What to copy for our design<a aria-hidden="true" class="anchor-heading icon-link" href="#what-to-copy-for-our-design"></a></h2>
+<ul>
+<li><code>webhook -> 200 OK -> background job</code> sebagai pola MVP,</li>
+<li>clean separation antara event ingestion dan review execution,</li>
+<li>fallback/resilience saat review gagal.</li>
+</ul>
+<h2 id="gap-vs-our-design">Gap vs our design<a aria-hidden="true" class="anchor-heading icon-link" href="#gap-vs-our-design"></a></h2>
+<p>Aparimeet fokus ke comment pipeline, tapi belum cukup memaksa output jadi pedagogis dengan before-after, proposed diff, dan counter-argument space.</p>
+<h2 id="practical-takeaway">Practical takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-takeaway"></a></h2>
+<p>Gunakan ini sebagai blueprint arsitektur bot; tambahkan teaching format di atas pipeline yang mereka rekomendasikan.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cloud-agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handson (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">reference (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">gitlab (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.references">Cloud Agent Hands-on References</a></li>
+</ul>

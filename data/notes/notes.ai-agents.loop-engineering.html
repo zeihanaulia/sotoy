@@ -1,0 +1,84 @@
+<h1 id="loop-engineering-from-prompting-to-system-design">Loop Engineering: From Prompting to System Design<a aria-hidden="true" class="anchor-heading icon-link" href="#loop-engineering-from-prompting-to-system-design"></a></h1>
+<h2 id="apa-itu-loop-engineering">Apa itu Loop Engineering?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-loop-engineering"></a></h2>
+<p>Loop Engineering adalah pergeseran paradigma dalam berinteraksi dengan AI coding agents. Jika Prompt Engineering fokus pada <em>apa</em> yang dikatakan kepada AI untuk mendapatkan hasil tertentu, Loop Engineering fokus pada <em>bagaimana</em> membangun sistem yang mengotomatisasi siklus kerja AI.</p>
+<p>Sederhananya: <strong>Loop Engineering = Prompt Engineering yang dijadikan sistem.</strong></p>
+<h3 id="evolusi-interaksi-ai">Evolusi Interaksi AI<a aria-hidden="true" class="anchor-heading icon-link" href="#evolusi-interaksi-ai"></a></h3>
+<ul>
+<li><strong>Manual Prompting</strong>: Manusia <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Prompt <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> AI <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Hasil <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Manusia (Iterasi manual).</li>
+<li><strong>Loop Engineering</strong>: Manusia <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Desain Sistem (Loop) <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> [Automation <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Agent <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Verifier <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Memory] <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Hasil <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Manusia (Review akhir).</li>
+</ul>
+<h2 id="komponen-utama-sistem-loop">Komponen Utama Sistem Loop<a aria-hidden="true" class="anchor-heading icon-link" href="#komponen-utama-sistem-loop"></a></h2>
+<p>Untuk membangun loop yang efektif, dibutuhkan beberapa komponen kunci:</p>
+<h3 id="1-automations-the-heartbeat">1. Automations (The Heartbeat)<a aria-hidden="true" class="anchor-heading icon-link" href="#1-automations-the-heartbeat"></a></h3>
+<p>Pemicu yang membuat loop berjalan tanpa intervensi manusia. Bisa berupa cron job, webhook dari CI, atau event-based trigger. Tanpa automation, sistem ini hanyalah script sekali jalan, bukan sebuah loop.</p>
+<h3 id="2-worktrees-isolation">2. Worktrees (Isolation)<a aria-hidden="true" class="anchor-heading icon-link" href="#2-worktrees-isolation"></a></h3>
+<p>Penggunaan <code>git worktree</code> untuk memberikan setiap agent direktori kerja terpisah. Ini mencegah <em>collision</em> saat beberapa agent bekerja secara paralel pada repo yang sama.</p>
+<h3 id="3-skills-project-knowledge">3. Skills (Project Knowledge)<a aria-hidden="true" class="anchor-heading icon-link" href="#3-skills-project-knowledge"></a></h3>
+<p>Artefak pengetahuan (seperti <code>SKILL.md</code>) yang menyimpan konvensi coding, aturan arsitektur, dan konteks proyek. Ini mencegah agent mengalami "amnesia" di setiap session baru dan mengurangi <em>intent debt</em>.</p>
+<h3 id="4-connectors-mcp">4. Connectors (MCP)<a aria-hidden="true" class="anchor-heading icon-link" href="#4-connectors-mcp"></a></h3>
+<p>Integrasi dengan tool eksternal (Issue tracker, CI, Slack) melalui Model Context Protocol (MCP). Ini mengubah agent dari sekadar penulis kode menjadi operator workflow.</p>
+<h3 id="5-sub-agents-separation-of-concerns">5. Sub-agents (Separation of Concerns)<a aria-hidden="true" class="anchor-heading icon-link" href="#5-sub-agents-separation-of-concerns"></a></h3>
+<p>Pemisahan peran antara agent yang menulis kode (<em>Implementer</em>) dan agent yang memeriksa kode (<em>Verifier</em>). Hal ini krusial untuk menghindari bias "self-grading" di mana model terlalu ramah terhadap hasilnya sendiri.</p>
+<p><strong>Verification Strategy</strong>: Verifikasi tidak boleh hanya mengandalkan model judge. Strategi verifikasi yang sehat harus bertingkat:</p>
+<ol>
+<li><strong>Deterministic Checks</strong>: Menggunakan JSON schema, menjalankan test, atau validasi contract (OpenAPI). Ini adalah layer termurah dan paling reliable.</li>
+<li><strong>Model Judge</strong>: Digunakan hanya untuk penilaian semantik yang tidak bisa dicek mesin.</li>
+</ol>
+<h3 id="6-memory-state-management">6. Memory (State Management)<a aria-hidden="true" class="anchor-heading icon-link" href="#6-memory-state-management"></a></h3>
+<p>Penyimpanan state di luar context window (misal: file markdown, database, atau task list). Memory bukan sekadar fitur tambahan, melainkan fondasi utama agar loop memiliki kontinuitas lintas waktu. Tanpa memory, setiap run adalah "one-shot" yang tidak belajar dari kegagalan sebelumnya.</p>
+<p><strong>Boring State</strong>: Loop yang bisa dipercaya harus mencatat "boring state": apa yang sudah dicoba, apa yang gagal, apa yang berubah, dan kapan manusia harus intervensi.</p>
+<p><strong>Plumbing vs Assets</strong>: Loop adalah <em>plumbing</em> (infrastruktur eksekusi), sedangkan <em>skills</em> adalah aset utamanya. Loop tanpa reusable skills hanya akan mengulang proses perkenalan proyek di setiap iterasi. Loop yang memanggil library skill yang teruji adalah sistem yang mampu melakukan <em>compounding</em> pengetahuan.</p>
+<h2 id="definisi-dan-spektrum-loop">Definisi dan Spektrum Loop<a aria-hidden="true" class="anchor-heading icon-link" href="#definisi-dan-spektrum-loop"></a></h2>
+<p>Istilah "loop" sering digunakan secara ambigu. Secara operasional, loop adalah program kecil yang mem-prompt coding agent, membaca hasilnya, memutuskan apakah sudah selesai, dan melakukan prompt ulang jika belum.</p>
+<p>Loop bukan sekadar cron job (penjadwalan), melainkan "cron plus a decision-maker". Nilai utamanya terletak pada kemampuan model untuk membaca state, memilih langkah berikutnya, dan memproses feedback.</p>
+<h3 id="spektrum-evolusi-loop">Spektrum Evolusi Loop<a aria-hidden="true" class="anchor-heading icon-link" href="#spektrum-evolusi-loop"></a></h3>
+<p>Loop berkembang melalui beberapa level abstraksi:</p>
+<ul>
+<li><strong>ReAct</strong>: Loop akademik dasar (Reason + Act).</li>
+<li><strong>Goal Loops (e.g., AutoGPT)</strong>: Berjalan hingga tujuan akhir tercapai.</li>
+<li><strong>Ralph Loops</strong>: Mengulang prompt dengan context anchor yang tetap.</li>
+<li><strong><code>/goal</code></strong>: Loop dengan stopping condition yang eksplisit dan terverifikasi.</li>
+<li><strong>Orchestration Loops</strong>: Mengawasi dan mengoordinasikan banyak agent atau thread secara paralel.</li>
+</ul>
+<h2 id="risiko-dan-tantangan">Risiko dan Tantangan<a aria-hidden="true" class="anchor-heading icon-link" href="#risiko-dan-tantangan"></a></h2>
+<p>Meskipun meningkatkan leverage, Loop Engineering membawa risiko baru:</p>
+<h3 id="comprehension-debt">Comprehension Debt<a aria-hidden="true" class="anchor-heading icon-link" href="#comprehension-debt"></a></h3>
+<p>Kesenjangan antara kecepatan produksi kode oleh AI dan kecepatan pemahaman manusia terhadap kode tersebut. Jika kode dikirim lebih cepat daripada yang bisa dipahami oleh engineer, tim akan kehilangan ownership atas codebase mereka.</p>
+<p><strong>Mitigasi</strong>: Untuk mencegah hal ini, diperlukan "comprehension engineering", seperti ritual review yang didesain, audit architectural diff berkala, dan dokumentasi learning notes dari setiap run.</p>
+<h3 id="cognitive-surrender">Cognitive Surrender<a aria-hidden="true" class="anchor-heading icon-link" href="#cognitive-surrender"></a></h3>
+<p>Kecenderungan manusia untuk berhenti memberikan penilaian kritis dan menerima hasil AI hanya karena prosesnya terlihat otomatis dan rapi.</p>
+<h3 id="security-attack-surface">Security Attack Surface<a aria-hidden="true" class="anchor-heading icon-link" href="#security-attack-surface"></a></h3>
+<p>Loop yang membaca input eksternal (web, issue tracker) mewarisi attack surface manusia. Setiap input adalah potensi <em>injection point</em>. Loop yang aman membutuhkan permission minimal, sandbox, dan approval boundary untuk aksi berbahaya.</p>
+<h3 id="economics-of-loop-management">Economics of Loop Management<a aria-hidden="true" class="anchor-heading icon-link" href="#economics-of-loop-management"></a></h3>
+<p>AI menurunkan biaya produksi kode, tetapi menaikkan biaya kontrol produksi. Biaya mahal dalam Loop Engineering bukan lagi pada penulisan kode, melainkan pada:</p>
+<ul>
+<li><strong>Verification</strong>: Menjalankan test, lint, dan model judge.</li>
+<li><strong>Guardrails</strong>: Deteksi <em>no-progress</em> dan <em>infinite loop</em>.</li>
+<li><strong>Budgeting</strong>: Pengaturan token cap dan dollar ceiling.</li>
+<li><strong>Cleanup</strong>: Membersihkan artifact atau worktree yang gagal.</li>
+</ul>
+<p><strong>Failure Mode</strong>: Loop yang tidak memiliki <em>hard stop</em> (max iterations, budget cap) berisiko menyebabkan <em>billing surprise</em> dan produksi <em>slop</em> secara masif.</p>
+<h2 id="kesimpulan-build-the-loop-stay-the-engineer">Kesimpulan: Build the Loop, Stay the Engineer<a aria-hidden="true" class="anchor-heading icon-link" href="#kesimpulan-build-the-loop-stay-the-engineer"></a></h2>
+<p>Loop Engineering memindahkan titik leverage dari "kemampuan menulis prompt" ke "kemampuan mendesain sistem". Namun, tanggung jawab verifikasi dan kualitas tetap berada pada manusia. Engineer harus tetap menjadi pengawal kualitas (<em>quality gate</em>) agar loop tidak menjadi mesin pembuat <em>slop</em> (kode berkualitas rendah yang terlihat benar).</p>
+<p>Referensi: <a href="https://x.com/addyosmani/status/2064127981161959567">https://x.com/addyosmani/status/2064127981161959567</a></p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-agents (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">loop-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">productivity (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260611100004">Comprehension Debt</a></li>
+<li><a href="/sotoy/notes/zettel.20260611110001">Loop Engineering as Systemic Prompting</a></li>
+<li><a href="/sotoy/notes/zettel.20260611110002">The Danger of Comprehension Debt</a></li>
+<li><a href="/sotoy/notes/zettel.20260611110003">Separation of Implementer and Verifier in AI Loops</a></li>
+<li><a href="/sotoy/notes/zettel.20260611120001">Deterministic Verification > Model Judge</a></li>
+<li><a href="/sotoy/notes/zettel.20260611120002">The Importance of Boring State</a></li>
+<li><a href="/sotoy/notes/zettel.20260611120003">AI Loop as an Attack Surface</a></li>
+<li><a href="/sotoy/notes/zettel.20260611130001">Loop as a Decision-Making Wrapper</a></li>
+<li><a href="/sotoy/notes/zettel.20260611130002">Loop Plumbing vs. Skill Assets</a></li>
+</ul>

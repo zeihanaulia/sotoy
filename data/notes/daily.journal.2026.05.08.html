@@ -1,0 +1,83 @@
+<h1 id="2026-05-08">2026-05-08<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-05-08"></a></h1>
+<h2 id="ai-slop-sebagai-eksperimen-disposable">AI slop sebagai eksperimen disposable<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-slop-sebagai-eksperimen-disposable"></a></h2>
+<p>Gue tulis note baru dari thread Mitchell Hashimoto: <a href="/sotoy/notes/notes.agentic-engineering.ai-slop-disposable-experimentation">AI Slop dan Batas Disposable Experimentation</a>. Intinya, "AI slop" dia pakai untuk output kasar yang berguna sebagai eksperimen, bukan sebagai kode final yang masuk ke customer.</p>
+<h3 id="ringkasannya">Ringkasannya<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasannya"></a></h3>
+<ul>
+<li>Ngeslop dan ngevibing code tidak otomatis bermasalah selama posisinya jelas sebagai eksplorasi atau prototype.</li>
+<li>Slop bagus kalau buat eksperimen cepat dan paralel, terutama kalau fungsinya menghasilkan insight, bukan jadi produk final.</li>
+<li>Slop berbahaya kalau jadi fondasi, customer-facing, atau menyentuh boundary kritikal.</li>
+<li>Skill baru AI coding adalah tahu mana yang boleh disposable dan mana yang harus bersih.</li>
+<li>Frontend bisa dikasih slop dulu; core workflow, auth, billing, data contract, dan security tidak boleh dianggap aman hanya karena berjalan di demo.</li>
+<li>Quality gate customer-facing harus lebih dari sekali manual test: behavior, error handling, data, security, observability, rollback, dan tim paham.</li>
+<li>Analogi yang gue pakai: slop itu scaffolding atau triplek sementara di lokasi konstruksi.</li>
+</ul>
+<h2 id="heavyskill-paper">HeavySkill paper<a aria-hidden="true" class="anchor-heading icon-link" href="#heavyskill-paper"></a></h2>
+<p>Gue juga catat paper baru arXiv 2605.02396v1: "HeavySkill: Heavy Thinking as the Inner Skill in Agentic Harness." Intinya, pola agentic yang kuat bukan cuma framework rumit, melainkan "parallel reasoning → deliberation" yang dipaketkan sebagai skill file.</p>
+<p>Link: <a href="/sotoy/notes/notes.agentic-engineering.heavyskill-heavy-thinking-as-inner-skill">HeavySkill: Heavy Thinking as Inner Skill in Agentic Harness</a></p>
+<h3 id="4-pertanyaan-kunci">4 pertanyaan kunci<a aria-hidden="true" class="anchor-heading icon-link" href="#4-pertanyaan-kunci"></a></h3>
+<ol>
+<li>Kalau input-nya satu pertanyaan, kenapa sistem bikin banyak jawaban dulu?
+<ul>
+<li>Karena satu reasoning path rapuh dan mudah terjebak asumsi awal.</li>
+</ul>
+</li>
+<li>Apa bedanya parallel reasoning dengan tanya model berkali-kali biasa?
+<ul>
+<li>Parallel reasoning membuat jawaban independen. Bukan sekadar ulangi model yang sama.</li>
+</ul>
+</li>
+<li>Apa yang terjadi di tahap sequential deliberation?
+<ul>
+<li>Model reviewer membaca semua trajectory, membandingkan reasoning, mencari error, lalu synthesize jawaban final.</li>
+</ul>
+</li>
+<li>Kenapa hasil akhirnya bisa lebih baik daripada jawaban tunggal?
+<ul>
+<li>Karena reviewer punya banyak hipotesis dan evidence, jadi bisa memilih minoritas benar atau menggabungkan insight.</li>
+</ul>
+</li>
+</ol>
+<h3 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h3>
+<ul>
+<li>Workflow Heavy Thinking bukan "AI mikir panjang." Itu adalah process desain inferensi.</li>
+<li>Ini lebih mirip mini review board: banyak solusi independen, satu reviewer menyimpulkan yang terbaik.</li>
+<li>Kunci success-nya: thinker harus setidaknya berbeda, bukan sekadar keluaran model yang sama 8 kali.</li>
+<li>Kunci kedua: reviewer bias tidak hanya soal posisi; reviewer juga LLM yang bisa pilih jawaban fasih atau mayoritas.</li>
+<li>Paper ini sadar bias itu, tapi solusinya masih parsial: sampling, shuffling cache, pruning, dan prompt-style review.</li>
+<li>Serialized memory cache di paper ini adalah memory eksternal workflow, bukan internal KV-cache model. Bayangin itu sebagai notulen sementara bagi reviewer.</li>
+</ul>
+<h3 id="pertanyaan-lanjutan">Pertanyaan lanjutan<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-lanjutan"></a></h3>
+<ul>
+<li>task mana di workflow kita yang cocok buat heavy thinking?</li>
+<li>apakah kita punya skill file yang bisa merepresentasikan deliberation pattern?</li>
+<li>apakah kita cukup modular untuk menggunakan beberapa trajectory tanpa menumpuk noise?</li>
+<li>apakah kita perlu membedakan role reasoner vs deliberator dalam workflow?</li>
+<li>apa yang jadi evidence utama agar deliberator nggak cuma ikut mayoritas?</li>
+</ul>
+<h3 id="komentar-penting-yang-nambah-batasan">Komentar penting yang nambah batasan<a aria-hidden="true" class="anchor-heading icon-link" href="#komentar-penting-yang-nambah-batasan"></a></h3>
+<ul>
+<li>Devin Stein: slop bisa jadi alat personal, tapi review dari orang lain bisa jadi beban. Itu berarti boundary-nya bukan cuma teknis, tapi juga sosial.</li>
+<li>Manoj: slop sering kali bukan produk gagal; dia adalah riset murah. Kalau 18 dari 20 eksperimen gagal, 18 itu masih punya nilai sebagai cara menemukan 2 arah yang benar.</li>
+<li>Clément Miao: slop debt bisa berguna kalau dicatat, dibatasi, dan dibayar. Kalau tidak, itu berubah jadi tech debt tersembunyi.</li>
+<li>Hanzi: bahaya terbesar muncul ketika Friday prototype bertahan lama dan tegangannya berubah jadi arsitektur.</li>
+<li>Misael &#x26; Felipe: modularity adalah containment strategy. Slop lebih aman kalau sistem modular; lebih berbahaya di monolith besar.</li>
+<li>WiscJohnson / Yaroslav: banyak orang akan abaikan aturan boundary. Argumen Mitchell bergantung pada maturity dan disiplin developer.</li>
+</ul>
+<h3 id="pertanyaan-penting">Pertanyaan penting<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-penting"></a></h3>
+<p>Sekarang gue mau tanya ke diri sendiri:</p>
+<ul>
+<li>mana area sistem ini yang bisa kita generate kasar dulu?</li>
+<li>mana boundary yang harus tetap rapi dari awal?</li>
+<li>siapa yang akan menanggung biaya kalau ini jadi PR tim?</li>
+<li>apa rencana kita untuk bayar utang slop sebelum ia jadi arsitektur?</li>
+<li>apakah sistem kita modular cukup untuk mengurung slop?</li>
+</ul>
+<p>Konteks tambahan: gue baca istilah "yapping" di thread ini sebagai "lagi ngomong panjang soal poin utama," bukan sekadar ngoceh tanpa isi.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">mitchell-hashimoto (Private)</a></li>
+</ol>

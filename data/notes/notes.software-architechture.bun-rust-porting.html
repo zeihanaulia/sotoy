@@ -1,0 +1,197 @@
+<h1 id="bun-porting-dari-zig-ke-rust-masalah-layering-crates-dan-tagged-pointer">Bun porting dari Zig ke Rust: masalah layering, crates, dan tagged pointer<a aria-hidden="true" class="anchor-heading icon-link" href="#bun-porting-dari-zig-ke-rust-masalah-layering-crates-dan-tagged-pointer"></a></h1>
+<h2 id="konteks">Konteks<a aria-hidden="true" class="anchor-heading icon-link" href="#konteks"></a></h2>
+<p>Jared Sumner membahas port Bun yang awalnya tumbuh enak di Zig, tapi lalu ketemu batasan baru saat dibawa ke Rust.
+Bukan diskusi "Rust vs Zig" tribal, tapi tentang bagaimana model modular Rust mengubah arsitektur runtime yang saling terhubung dalam Bun.</p>
+<ul>
+<li>Post: <a href="https://x.com/jarredsumner/status/2053368908372128055">https://x.com/jarredsumner/status/2053368908372128055</a></li>
+</ul>
+<h2 id="problem-utama-jared">Problem utama Jared<a aria-hidden="true" class="anchor-heading icon-link" href="#problem-utama-jared"></a></h2>
+<p>Yang dia ceritakan bukan cuma compile time atau sintaks.
+Ini adalah problem dari transisi arsitektur:</p>
+<ul>
+<li>Bun sudah mulai tumbuh organik di Zig,</li>
+<li>Rust port memecahnya jadi banyak crate,</li>
+<li>crate bagus untuk compile time dan reuse,</li>
+<li>tapi Rust memaksa dependency graph jadi DAG,</li>
+<li>sementara banyak bagian Bun di Zig saling terhubung erat,</li>
+<li>tagged pointers di Zig dulu memudahkan interface heterogen.</li>
+</ul>
+<p>Atomic problemnya:
+<strong>struktur runtime yang nyaman dan interconnected di Zig tidak langsung punya padanan ergonomis di Rust crate-based modularity.</strong></p>
+<h2 id="kenapa-layering-jadi-masalah-besar-di-rust-port">Kenapa layering jadi masalah besar di Rust port<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-layering-jadi-masalah-besar-di-rust-port"></a></h2>
+<p>Layering di Rust bukan sekadar stylistic.
+Ini memaksa keputusan desain baru:</p>
+<ul>
+<li>siapa boleh depend ke siapa,</li>
+<li>di crate mana interface didefinisikan,</li>
+<li>di crate mana type shared ditempatkan,</li>
+<li>di crate mana implementasi behavior tinggal.</li>
+</ul>
+<p>Trade-offnya jelas:</p>
+<ul>
+<li>lebih sedikit crates = graph lebih longgar, tapi compile time dan reuse lebih buruk;</li>
+<li>lebih banyak crates = compile time incremental lebih bagus, tapi cycle dan boundary jadi tajam.</li>
+</ul>
+<p>Untuk Bun, banyak area seperti event loop, process callback, nonblocking I/O, task scheduler itu secara alami saling bersilang.
+Rust memperlakukan itu sebagai masalah arsitektur, bukan sekadar masalah implementasi.</p>
+<h2 id="crates-compile-time-dan-cyclic-deps">Crates, compile time, dan cyclic deps<a aria-hidden="true" class="anchor-heading icon-link" href="#crates-compile-time-dan-cyclic-deps"></a></h2>
+<p>Relasi yang Jared tunjukkan adalah:</p>
+<ul>
+<li>banyak crates → compile unit lebih kecil → compile incremental lebih cepat</li>
+<li>tapi banyak crates → dependency graph harus DAG-ish</li>
+<li>dan DAG-ish → cyclic dependency langsung jadi error desain</li>
+</ul>
+<p>Beberapa reply teknis menanggapi dengan pola arsitektur:</p>
+<ul>
+<li><code>bun-core</code> atau <code>*_types</code> crate sebagai dasar,</li>
+<li><code>*_impl</code> crate untuk implementasi,</li>
+<li>pisahkan data schema dari behavior,</li>
+<li>dispatch logic ditempatkan di layer yang lebih tinggi.</li>
+</ul>
+<p>Itu semua pada dasarnya adalah strategi memutus cycle di Rust.
+Tapi strategi ini juga mengubah bentuk sistem: dari jaringan organik ke builder-style modular architecture.</p>
+<h2 id="kenapa-tagged-pointers-zig-jadi-titik-friksi">Kenapa tagged pointers Zig jadi titik friksi?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-tagged-pointers-zig-jadi-titik-friksi"></a></h2>
+<p>Tagged pointers memberikan fleksibilitas low-level yang sulit ditiru secara ergonomis di Rust.
+Mereka memberi Zig:</p>
+<ul>
+<li>heterogeneity ringan,</li>
+<li>object layout kontrol manual,</li>
+<li>dispatch dan payload dalam satu representasi,</li>
+<li>performa tanpa overhead box/dyn.</li>
+</ul>
+<p>Di Rust, pilihan padanannya biasanya:</p>
+<ul>
+<li><code>Box&#x3C;dyn Trait></code>: ergonomis, tapi punya runtime dispatch / vtable / alloc cost,</li>
+<li><code>T: Trait</code> generic: zero-cost, tapi tidak cocok untuk koleksi heterogen dinamis,</li>
+<li><code>enum</code> of structs: static, no vtable, tapi harus dipusatkan dan bisa jadi besar.</li>
+</ul>
+<p>Jadi friksi utama adalah: Zig bisa pakai tagged pointer sebagai building block runtime, sedangkan Rust mengharuskan kamu memilih antara runtime heterogeneity atau static modularity.</p>
+<h2 id="arah-diskusi-reply-reply">Arah diskusi reply-reply<a aria-hidden="true" class="anchor-heading icon-link" href="#arah-diskusi-reply-reply"></a></h2>
+<p>Diskusinya tidak tampak ingin balik ke Zig sebagai jawaban utama.
+Arah utama yang muncul adalah:</p>
+<ol>
+<li><strong>traits/types split</strong> — taruh kontrak di core crate, implementasi di crate lain.</li>
+<li><strong>core trait crate / bun-core</strong> — shared trait dan types jadi titik temu.</li>
+<li><strong>enum/<code>*_types</code> + <code>*_impl</code> split</strong> — cara klasik memutus cycle.</li>
+<li><strong>static generic vs dynamic trait</strong> — pilih biaya runtime vs compile-time.</li>
+<li>Ada juga suara yang bilang: jika arsitektur Bun memang serupa Zig, mungkin Zig lebih cocok ketimbang paksa Rust.</li>
+</ol>
+<p>Jadi arah thread ini lebih ke negosiasi ulang arsitektur daripada adu fitur Rust/Zig.</p>
+<h2 id="cabang-kualitas-rewrite-measurable-better-dan-stability">Cabang kualitas rewrite: measurable better dan stability<a aria-hidden="true" class="anchor-heading icon-link" href="#cabang-kualitas-rewrite-measurable-better-dan-stability"></a></h2>
+<p>Thread lanjutan Jared menggeser diskusi dari "bagaimana cara port" ke "kapan port ini pantas di-merge".</p>
+<p>Intinya, dia menegaskan bahwa Rust port tidak akan diterima kecuali hasil akhirnya bisa dibuktikan secara terukur lebih baik dari Zig di aspek:</p>
+<ul>
+<li>performance,</li>
+<li>memory usage,</li>
+<li>stability.</li>
+</ul>
+<p>Di cabang ini, reply-reply berfokus pada kekhawatiran berikut:</p>
+<ul>
+<li><strong>stability sulit divalidasi</strong> — test suite besar bisa memukul known failures, tapi unknown bug class baru masih mungkin muncul di dunia nyata.</li>
+<li><strong>rewrite harus measurable</strong> — bukan cukup "works" atau "tests pass"; harus ada benchmark dan evidence.</li>
+<li><strong>benchmark/hot path evidence</strong> — publik mulai menunggu angka nyata, bukan sekadar arsitektur teori.</li>
+</ul>
+<p>Jadi, orang di cabang ini tidak menolak Rust port secara ide. Mereka menaikkan standar pembuktian. Rewrite dianggap hanya sah jika dia menang dalam metrik nyata, bukan sekadar menawarkan design-level safety.</p>
+<p>Definisi stability dalam cabang ini muncul dua level:</p>
+<ol>
+<li><strong>Design-level stability</strong> — Rust mempersulit kelas crash tertentu seperti segfault dan memory safety bugs.</li>
+<li><strong>Field-level stability</strong> — apakah sistem tetap kokoh di paparan penggunaan nyata dan edge case dunia nyata.</li>
+</ol>
+<p>Diskusi kini beralih ke arah yang lebih dewasa:</p>
+<ul>
+<li>menolak argumen "Rust lebih aman" tanpa bukti,</li>
+<li>menerima motivasi Rust untuk mengurangi kelas crash tertentu,</li>
+<li>menuntut benchmark dan test evidence,</li>
+<li>menyadari bahwa stabilitas penuh baru bisa didekati lewat exposure lapangan.</li>
+</ul>
+<h2 id="cabang-sejarah-dan-metodologi-port-besar">Cabang sejarah dan metodologi port besar<a aria-hidden="true" class="anchor-heading icon-link" href="#cabang-sejarah-dan-metodologi-port-besar"></a></h2>
+<p>Tweet Jared selanjutnya menyambung ke kisah asal Bun: port besar pertama kali dibuat dari Go ke Zig, pre-LLM, dan butuh pendekatan mental yang brutal.</p>
+<p>Yang dia jelaskan bukan lagi arsitektur target, tapi <strong>cara berpikir saat melakukan hand-port besar</strong>.</p>
+<p>Dia memberi dua heuristik penting:</p>
+<ul>
+<li><strong>breadth-first</strong>, bukan depth-first,</li>
+<li><strong>tulis semua kode dulu</strong>, jangan incremental-fix satu per satu.</li>
+</ul>
+<p>Kalimatnya sederhana, tapi ini penting:
+port bootstrap line-for-line bukan soal kesempurnaan. Ini soal membentuk kerangka sistem terlebih dahulu.</p>
+<p>Beberapa insight dari cabang ini:</p>
+<ul>
+<li>port besar kadang lebih mirip pekerjaan mekanis daripada desain elegan.</li>
+<li>LOC ported bisa jadi proxy progress awal ketika fitur belum sempurna.</li>
+<li>menjaga source lama dekat dengan source baru membantu beban kognitif.</li>
+<li>fase awal port adalah bootstrap; fase berikutnya adalah fix; fase terakhir adalah redesign/optimization.</li>
+</ul>
+<p>Reply yang paling berharga di cabang ini menegaskan:</p>
+<ul>
+<li>Glauber: port manual sering efektif kalau source lama tetap terlihat di samping source baru.</li>
+<li>Jason: port besar bisa berjalan bersamaan dengan re-architecture, tapi tidak selalu baik kalau langsung dicampur.</li>
+<li>Somi: “sort of work” berarti port awal bisa lulus, tetapi belum benar-benar matang.</li>
+</ul>
+<p>Arah diskusi cabang ini adalah ke model kerja port:</p>
+<ul>
+<li>bootstrap dulu,</li>
+<li>baru kemudian hadapi mismatch arsitektur,</li>
+<li>lalu buktikan hasilnya.</li>
+</ul>
+<p>Itu menambah konteks penting pada keseluruhan thread: Jarred ngomong tidak dari teori, tapi dari pengalaman port besar yang sebenarnya dia pernah jalani.</p>
+<h2 id="insight-besar-buat-desain-software">Insight besar buat desain software<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-besar-buat-desain-software"></a></h2>
+<p>Dari thread ini gue ambil insight ini:</p>
+<ul>
+<li>port bahasa sistem bukan sekadar translasi fitur;</li>
+<li>itu soal memetakan ulang <strong>abstraction model</strong> dan <strong>dependency model</strong>;</li>
+<li>model yang nyaman di satu bahasa bisa jadi beban di bahasa lain;</li>
+<li>modularity dengan banyak unit kompilasi adalah trade-off; bukan free lunch.</li>
+</ul>
+<p>Untuk sistem performa-sensitif dan interconnected, desain yang cocok di Zig bisa jadi:</p>
+<ul>
+<li>lebih organik,</li>
+<li>representasi heterogen dekat ke runtime,</li>
+<li>boundary implicit.</li>
+</ul>
+<p>Sementara desain yang cocok di Rust cenderung:</p>
+<ul>
+<li>lebih eksplisit,</li>
+<li>boundary lebih tegas,</li>
+<li>shared contract di crate khusus,</li>
+<li>heterogeneity dipaksa lewat trait object atau enum.</li>
+</ul>
+<p>Itu bukan soal salah satu lebih hebat.
+Ini soal: <strong>apa model yang paling sesuai dengan sifat sistem yang kamu bawa?</strong></p>
+<h2 id="yang-masih-menggantung">Yang masih menggantung<a aria-hidden="true" class="anchor-heading icon-link" href="#yang-masih-menggantung"></a></h2>
+<p>Bun thread Jared juga menunjukkan bahwa beberapa masalah belum beres:</p>
+<ul>
+<li>seberapa jauh <code>dyn</code> trait bisa dipakai tanpa bikin runtime overhead tidak terkendali?</li>
+<li>kapan <code>enum</code> jadi terlalu besar dan sulit dikembangkan?</li>
+<li>apakah <code>types</code>/<code>impl</code> split membuat sistem terlalu verbose?</li>
+<li>apakah batas crate yang diusulkan lebih banyak membuat kode jadi lebih keras dipahami?</li>
+</ul>
+<p>Ini berarti thread ini berguna sebagai kasus arsitektur nyata, bukan sekadar diskusi bahasa.</p>
+<h2 id="takeaway">Takeaway<a aria-hidden="true" class="anchor-heading icon-link" href="#takeaway"></a></h2>
+<p>Kalau lo punya sistem performa-sensitif, heavily interconnected, dan tumbuh organik, porting ke Rust berarti lo mungkin harus:</p>
+<ul>
+<li>pilih ulang batas modularitas,</li>
+<li>taruh shared contract di crate dasar,</li>
+<li>tentukan mana runtime heterogeneity yang layak bayar dengan <code>dyn</code>,</li>
+<li>dan siap menerima kode lebih verbose sebagai biaya desain.</li>
+</ul>
+<p>Itu lebih menarik daripada sekadar: "Rust harus punya fitur Zig."</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #7a6a4f;" href="/sotoy/notes/tags.software-architechture">software-architechture</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">zig (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">bun (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260511124519">Porting sistem Zig organik ke Rust modular sering butuh negosiasi ulang arsitektur</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124520">Rewrite sistem low-level hanya sah jika terukur lebih baik secara performa, memori, dan stabilitas</a></li>
+<li><a href="/sotoy/notes/zettel.20260511124521">Hand-porting besar lebih efektif jika breadth-first dan tulis semua dulu</a></li>
+<li><a href="/sotoy/notes/notes.software-architechture.bun-rewrite-oracle">Bun rewrite Zig → Rust: oracle test dan validasi independen</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.11">2026-05-11</a></li>
+</ul>

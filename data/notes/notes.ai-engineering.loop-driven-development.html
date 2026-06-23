@@ -1,0 +1,85 @@
+<h1 id="loop-driven-development-ldd-solving-the-oracle-problem">Loop Driven Development (LDD): Solving the Oracle Problem<a aria-hidden="true" class="anchor-heading icon-link" href="#loop-driven-development-ldd-solving-the-oracle-problem"></a></h1>
+<h2 id="inti-pemikiran">Inti Pemikiran<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-pemikiran"></a></h2>
+<p>Dalam era coding agent, biaya untuk menulis kode implementasi dan scaffolding test sudah menjadi sangat murah (hampir gratis). Namun, muncul bottleneck baru yang disebut <strong>The Oracle Problem</strong>: mengetahui apa jawaban yang benar untuk input tertentu.</p>
+<p><strong>Loop Driven Development (LDD)</strong> adalah paradigma di mana fokus utama engineer bergeser dari "menulis kode" menjadi "mendesain sumber feedback (Oracle)" yang berkualitas tinggi, sehingga agent bisa melakukan looping perbaikan implementasi secara mandiri dan akurat.</p>
+<h2 id="the-oracle-problem--feedback-quality">The Oracle Problem &#x26; Feedback Quality<a aria-hidden="true" class="anchor-heading icon-link" href="#the-oracle-problem--feedback-quality"></a></h2>
+<p>Kualitas sebuah loop ditentukan oleh kualitas sumber feedback-nya. Nuno Campos membagi kualitas feedback berdasarkan dua dimensi: <strong>Independence</strong> (independen dari kode yang diuji) dan <strong>Queryability</strong> (bisa ditanya untuk input baru).</p>
+<h3 id="ranking-sumber-feedback-terlemah-rightarrow-terkuat">Ranking Sumber Feedback (Terlemah <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Terkuat)<a aria-hidden="true" class="anchor-heading icon-link" href="#ranking-sumber-feedback-terlemah-rightarrow-terkuat"></a></h3>
+<ol>
+<li><strong>In-thread Review (Self-Review)</strong>: Agent menilai kodenya sendiri. Sangat lemah karena cenderung terjadi <em>self-justification</em>.</li>
+<li><strong>Standards/RFC Text</strong>: Independen tapi statis. Terlalu banyak interpretasi, tidak bisa menjawab edge case spesifik secara otomatis.</li>
+<li><strong>Off-thread Review</strong>: Evaluator agent yang berbeda. Lebih baik, tapi tetap berupa opini/judgment, bukan pengukuran objektif.</li>
+<li><strong>High-quality Test Suites</strong>: Independen dan executable, tapi statis. Hanya bisa menjawab apa yang sudah ditulis dalam test.</li>
+<li><strong>Oracle to Mimic (The Gold Standard)</strong>: Sistem nyata yang sudah ada (misal: real Excel untuk membuat Excel-compatible engine). Independen, deterministic, dan queryable.</li>
+</ol>
+<h2 id="behavior-coverage-vs-code-coverage">Behavior Coverage vs Code Coverage<a aria-hidden="true" class="anchor-heading icon-link" href="#behavior-coverage-vs-code-coverage"></a></h2>
+<p>LDD menekankan perbedaan antara dua jenis coverage:</p>
+<ul>
+<li><strong>Code Coverage</strong>: Menjawab "apakah baris ini pernah dieksekusi?". Bisa 100% tapi sistem tetap salah.</li>
+<li><strong>Behavior Coverage</strong>: Menjawab "apakah skenario domain yang penting sudah dipin dalam test?". Inilah yang menentukan kebenaran sistem.</li>
+</ul>
+<h2 id="teknik-praktis-ldd">Teknik Praktis LDD<a aria-hidden="true" class="anchor-heading icon-link" href="#teknik-praktis-ldd"></a></h2>
+<h3 id="1-mining-high-quality-open-source-test-suites">1. Mining High-Quality Open-Source Test Suites<a aria-hidden="true" class="anchor-heading icon-link" href="#1-mining-high-quality-open-source-test-suites"></a></h3>
+<p>Menggunakan test suite dari project open-source lain sebagai spesifikasi behavior. Agent digunakan untuk mem-port atau mengadaptasi test tersebut ke implementasi kita.</p>
+<ul>
+<li><strong>Prinsip</strong>: Test harus mem-pin behavior (output), bukan detail implementasi (internal).</li>
+</ul>
+<h3 id="2-programmatic-oracle-querying">2. Programmatic Oracle Querying<a aria-hidden="true" class="anchor-heading icon-link" href="#2-programmatic-oracle-querying"></a></h3>
+<p>Membangun pipeline untuk mengambil jawaban dari oracle nyata secara otomatis:
+<code>Live Oracle</code> <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> <code>Capture Output</code> <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> <code>Freeze as Snapshot</code> <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> <code>CI Assert against Snapshot</code>.</p>
+<ul>
+<li><strong>Keuntungan</strong>: CI tetap cepat karena menggunakan snapshot beku, sementara developer bisa me-refresh snapshot dari oracle asli.</li>
+</ul>
+<h2 id="peran-manusia-dalam-ldd">Peran Manusia dalam LDD<a aria-hidden="true" class="anchor-heading icon-link" href="#peran-manusia-dalam-ldd"></a></h2>
+<p>Kreativitas engineer berpindah ke empat area keputusan:</p>
+<ol>
+<li><strong>Which Oracle</strong>: Memilih sumber kebenaran yang tepat.</li>
+<li><strong>Which Properties to Pin</strong>: Menentukan output mana yang harus divalidasi (menghindari <em>brittle tests</em>).</li>
+<li><strong>Shape of Comparison</strong>: Menentukan metode perbandingan (Equality, Distance, Tolerance).</li>
+<li><strong>Definition of Done</strong>: Menentukan kapan loop berhenti (behavior dimension tercakup, snapshot reproducible).</li>
+</ol>
+<h2 id="sintesis-dengan-paradigma-lain">Sintesis dengan Paradigma Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-dengan-paradigma-lain"></a></h2>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Paradigma</th><th>Fokus Utama</th><th>Kontribusi terhadap Loop</th></tr></thead><tbody><tr><td><strong>Loop Engineering</strong></td><td>Orkestrasi &#x26; Sistem</td><td>Menyediakan "mesin" looping dan infrastruktur.</td></tr><tr><td><strong>Engineering Discipline</strong></td><td>Arsitektur &#x26; Boundary</td><td>Menyediakan "rem" dan struktur agar loop tidak chaos.</td></tr><tr><td><strong>LDD</strong></td><td>Feedback &#x26; Oracle</td><td>Menyediakan "kompas" (sumber kebenaran) agar loop terarah.</td></tr></tbody></table></div>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li>Thread X: <a href="https://x.com/nfcampos/status/2064746971944956299">https://x.com/nfcampos/status/2064746971944956299</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ldd (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">testing (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">oracle-problem (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.ai.behavior-coverage-vs-code-coverage">Behavior Coverage vs Code Coverage</a></li>
+<li><a href="/sotoy/notes/zettel.ai.the-oracle-problem">The Oracle Problem dalam AI Coding</a></li>
+</ul>

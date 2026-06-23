@@ -1,0 +1,29 @@
+<h1 id="knowledge-graph--blast-radius-mengurangi-context-waste-dalam-agent-code-review">Knowledge graph + blast radius mengurangi context waste dalam agent code review<a aria-hidden="true" class="anchor-heading icon-link" href="#knowledge-graph--blast-radius-mengurangi-context-waste-dalam-agent-code-review"></a></h1>
+<p>Masalah yang dicek oleh repo seperti code-review-graph bukan sekadar "bisa baca kode". Ini masalah "berapa banyak kode yang harus dibaca sebelum agen mulai berpikir".</p>
+<p>Pendekatannya adalah:</p>
+<ul>
+<li>simpan struktur repo sebagai graph persistent, termasuk function, class, import, dan dependency.</li>
+<li>update graph secara incremental ketika file berubah.</li>
+<li>hitung blast radius untuk perubahan tertentu: caller, callee, dependent, test terkait, dan file terdampak.</li>
+<li>beri agen subset file yang relevan, bukan seluruh repo.</li>
+</ul>
+<p>Kalau konteks dipilih dengan lebih pintar, model bisa fokus pada problem sebenarnya. Ini menjadikan graph bukan sekadar artefak teknis, tapi "filter konteks" yang mengurangi noise dan memperkecil token budget.</p>
+<p>Intinya:</p>
+<ul>
+<li>context waste adalah bottleneck nyata di code review otomatis.</li>
+<li>persistent graph + incremental update adalah cara logis untuk mengurangi overhead pemilihan konteks.</li>
+<li>blast radius menempatkan agent pada area yang mungkin terdampak, bukan pada seluruh kodebase.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">knowledge-graph (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">code-review (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/daily.journal.2026.05.04">2026-05-04</a></li>
+</ul>

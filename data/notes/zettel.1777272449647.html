@@ -1,0 +1,64 @@
+<h1 id="hallucination-adalah-konsekuensi-arsitektural-llm">Hallucination adalah konsekuensi arsitektural LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#hallucination-adalah-konsekuensi-arsitektural-llm"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Yang gue tangkap dari quote “This is referred to as a hallucination” adalah bahwa hallucination adalah produk alami dari LLM yang tetap memprediksi token berikutnya meski konteks relevan lemah. Model bisa terdengar meyakinkan, tapi kalau jawaban itu tidak didukung fakta atau konteks yang benar, itu bukan informasi benar — itu hallucination.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>This is referred to as a hallucination.</p>
+</blockquote>
+<h2 id="kenapa-ini-core">Kenapa ini core<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-core"></a></h2>
+<p>Quote ini penting karena dia memberi definisi yang jelas tentang failure mode AI yang sering disalahpahami. Hallucination bukan sekadar error biasa; dia adalah akibat langsung dari arsitektur probabilistik LLM yang terus menghasilkan output, bahkan ketika pengetahuan yang relevan tidak ada.</p>
+<h2 id="apa-itu-hallucination">Apa itu hallucination?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-hallucination"></a></h2>
+<p>Menurut gue, hallucination adalah ketika LLM mengisi celah dengan pola bahasa yang plausible, bukan dengan fakta atau konteks yang ter-ground. Dia mirip dengan orang yang setengah tahu topik, tapi tetap jawab dengan percaya diri. Model tidak "berbohong" secara moral; dia hanya menebak jawaban yang paling cocok menurut pola bahasa yang dia pelajari.</p>
+<h2 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h2>
+<p>Hallucination adalah konsekuensi dari kombinasi:</p>
+<ul>
+<li>pengetahuan relevan yang kurang atau tidak ada,</li>
+<li>model yang dirancang untuk melanjutkan teks,</li>
+<li>dan kemampuan bahasa yang sangat kuat.</li>
+</ul>
+<p>Karena itu, solusi yang tepat biasanya bukan mencari model yang tidak pernah halu. Solusi yang lebih tepat adalah:</p>
+<ul>
+<li>grounding,</li>
+<li>retrieval,</li>
+<li>prompt constraints,</li>
+<li>tool use,</li>
+<li>dan human review.</li>
+</ul>
+<h2 id="hallucination-vs-error-biasa">Hallucination vs error biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#hallucination-vs-error-biasa"></a></h2>
+<p>Tidak semua jawaban salah = hallucination. Hallucination biasanya melibatkan:</p>
+<ul>
+<li>fabrikasi detail yang plausible,</li>
+<li>rujukan fiktif,</li>
+<li>atau langkah teknis yang terdengar masuk akal tetapi salah.</li>
+</ul>
+<p>Sedangkan error biasa bisa muncul dari reasoning keliru, context misunderstanding, atau retrieval yang buruk.</p>
+<h2 id="implikasi-untuk-sistem">Implikasi untuk sistem<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi-untuk-sistem"></a></h2>
+<p>Hallucination menunjukkan bahwa plausibility ≠ truth. Ini membuat kita paham kenapa:</p>
+<ul>
+<li>prompt yang rapi tidak otomatis berarti jawaban benar,</li>
+<li>human-in-the-loop kadang wajib,</li>
+<li>citations dan source visibility penting,</li>
+<li>risk mitigation lebih penting daripada sekadar capability.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Chapter 1</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">hallucination (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">grounding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">chapter-1 (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777362905431">Grounding adalah menyuplai konteks yang hilang saat inference tanpa mengubah model</a></li>
+<li><a href="/sotoy/notes/zettel.moc.the-developers-guide-to-ai">MOC The Developer's Guide to AI</a></li>
+</ul>

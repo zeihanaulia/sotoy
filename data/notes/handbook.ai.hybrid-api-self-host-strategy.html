@@ -1,0 +1,166 @@
+<h1 id="hybrid-api-first-vs-self-host-ai-strategy">Hybrid API-first vs Self-host AI Strategy<a aria-hidden="true" class="anchor-heading icon-link" href="#hybrid-api-first-vs-self-host-ai-strategy"></a></h1>
+<h2 id="hybrid-ai-deployment-strategy-untuk-enterprise-yang-bukan-ai-first">Hybrid AI deployment strategy untuk enterprise yang bukan AI-first<a aria-hidden="true" class="anchor-heading icon-link" href="#hybrid-ai-deployment-strategy-untuk-enterprise-yang-bukan-ai-first"></a></h2>
+<p>Kalau tujuan kantor cuma internal productivity / coding assistant, investasi deploy model 400B+ on-prem biasanya bukan keputusan bisnis yang sehat. Ini bukan soal "bisa atau nggak", tapi soal apakah value-nya cukup besar untuk membayar biaya komputasi, kapasitas, operasi, dan risiko.</p>
+<h3 id="kenapa-40-gpu-high-end-untuk-5-concurrent-coding-agents-biasanya-tidak-worth-it">Kenapa 40 GPU high-end untuk 5 concurrent coding agents biasanya tidak worth it<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-40-gpu-high-end-untuk-5-concurrent-coding-agents-biasanya-tidak-worth-it"></a></h3>
+<p>Biasanya hanya perusahaan yang AI compute-nya memang core business yang mau masuk level itu:</p>
+<ul>
+<li>hyperscaler atau cloud provider</li>
+<li>model lab dan R&#x26;D lab</li>
+<li>big tech dengan produk AI global</li>
+<li>sovereign AI / government</li>
+<li>enterprise finansial besar dengan volume dan compliance ekstrem</li>
+</ul>
+<p>Untuk perusahaan non-AI, yang lebih realistis adalah:</p>
+<ul>
+<li>API-first untuk workload frontier dan tugas kompleks</li>
+<li>self-host model kecil-menengah untuk task murah, sensitif, dan routable</li>
+<li>internal gateway untuk kontrol data, audit, policy, dan fallback</li>
+</ul>
+<h3 id="model-risiko-dan-benefit-yang-harus-dimasukkan">Model risiko dan benefit yang harus dimasukkan<a aria-hidden="true" class="anchor-heading icon-link" href="#model-risiko-dan-benefit-yang-harus-dimasukkan"></a></h3>
+<p>Jangan bandingkan hanya token API vs listrik GPU. Masukkan juga semua biaya tersembunyi:</p>
+<ul>
+<li>GPU depreciation</li>
+<li>server, storage, networking</li>
+<li>power dan cooling</li>
+<li>rack dan facility</li>
+<li>MLOps / DevOps / SRE salary</li>
+<li>on-call incident</li>
+<li>model upgrade / quantization / patching</li>
+<li>observability dan monitoring</li>
+<li>security review / compliance validation</li>
+<li>downtime / incident cost</li>
+<li>underutilization</li>
+</ul>
+<p>Jika utilization hanya tinggi beberapa jam per hari, ROI-nya bisa jadi sangat buruk. API menang karena lo beli kapasitas elastis, bukan beli mesin yang idle.</p>
+<h2 id="empat-fase-strategi-yang-lebih-masuk-akal">Empat fase strategi yang lebih masuk akal<a aria-hidden="true" class="anchor-heading icon-link" href="#empat-fase-strategi-yang-lebih-masuk-akal"></a></h2>
+<h3 id="phase-1--api-first-dengan-gateway-internal">Phase 1 — API-first dengan gateway internal<a aria-hidden="true" class="anchor-heading icon-link" href="#phase-1--api-first-dengan-gateway-internal"></a></h3>
+<p>Gunakan provider frontier untuk:</p>
+<ul>
+<li>coding agent hard task</li>
+<li>reasoning panjang dan kompleks</li>
+<li>document generation berkualitas tinggi</li>
+</ul>
+<p>Gateway internal harus menambahkan:</p>
+<ul>
+<li>redaction / masking</li>
+<li>audit log</li>
+<li>policy / approval flow</li>
+<li>budget limit</li>
+<li>model routing</li>
+<li>fallback</li>
+</ul>
+<h3 id="phase-2--self-host-model-kecil-menengah-untuk-task-murah-dan-sensitif">Phase 2 — self-host model kecil-menengah untuk task murah dan sensitif<a aria-hidden="true" class="anchor-heading icon-link" href="#phase-2--self-host-model-kecil-menengah-untuk-task-murah-dan-sensitif"></a></h3>
+<p>Self-host cocok untuk:</p>
+<ul>
+<li>summarization</li>
+<li>classification</li>
+<li>extraction</li>
+<li>PII detection/masking</li>
+<li>reranking</li>
+<li>routing</li>
+<li>simple code review</li>
+</ul>
+<p>Model yang masuk akal:</p>
+<ul>
+<li>Qwen 7B/14B/32B/72B</li>
+<li>LLaMA- or Mistral-class kecil-menengah</li>
+<li>model lokal untuk inference cepat dan data-sensitive</li>
+</ul>
+<h3 id="phase-3--ukur-dulu-real-usage">Phase 3 — ukur dulu real usage<a aria-hidden="true" class="anchor-heading icon-link" href="#phase-3--ukur-dulu-real-usage"></a></h3>
+<p>Kumpulkan telemetry 2–3 bulan sebelum bicara GPU besar:</p>
+<ul>
+<li>monthly API spend</li>
+<li>average tokens per request</li>
+<li>peak concurrent sessions</li>
+<li>failure rate</li>
+<li>latency requirement</li>
+<li>data class (public / internal / confidential / PII)</li>
+<li>estimated cost of self-host</li>
+</ul>
+<h3 id="phase-4--baru-hitung-dedicated-gpu-pool">Phase 4 — baru hitung dedicated GPU pool<a aria-hidden="true" class="anchor-heading icon-link" href="#phase-4--baru-hitung-dedicated-gpu-pool"></a></h3>
+<p>Hanya kalau:</p>
+<ul>
+<li>API spend sudah mencapai angka ratusan juta / lebih per bulan</li>
+<li>volume sudah stabil dan predictable</li>
+<li>ada kebutuhan data yang benar-benar tidak boleh keluar</li>
+<li>ada use case yang butuh latency lokal dan kontrol penuh</li>
+</ul>
+<p>Kalau tidak, self-host model raksasa hanya akan jadi vanity infrastructure.</p>
+<h2 id="tier-model-yang-masuk-akal-untuk-kantor-biasa">Tier model yang masuk akal untuk kantor biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#tier-model-yang-masuk-akal-untuk-kantor-biasa"></a></h2>
+<pre class="language-text"><code class="language-text">Tier 1 — API frontier
+  OpenAI / Azure OpenAI / Anthropic / Bedrock / OpenRouter-style router
+  untuk coding agent, reasoning berat, generation kompleks.
+
+Tier 2 — self-host kecil-menengah
+  Qwen 7B/14B/32B/72B untuk summarization, extraction, PII masking, routing, reranking.
+
+Tier 3 — private gateway
+  semua request lewat gateway internal: masking, policy, audit log, budget, model routing, fallback.
+
+Tier 4 — deploy GPU besar hanya kalau volume sudah terbukti
+  Bukan asumsi; dari telemetry nyata.
+</code></pre>
+<h2 id="decision-rule-kasar">Decision rule kasar<a aria-hidden="true" class="anchor-heading icon-link" href="#decision-rule-kasar"></a></h2>
+<pre class="language-text"><code class="language-text">API monthly cost &#x3C; biaya 1–2 engineer infra + GPU rental/amortization
+  => pakai API.
+
+Data tidak boleh keluar sama sekali
+  => self-host, tapi turunkan target model size.
+
+Usage sangat tinggi dan stabil 24/7
+  => self-host mulai masuk akal.
+
+Usage bursty / belum jelas
+  => API jauh lebih masuk akal.
+</code></pre>
+<h2 id="kapan-self-host-model-besar-bisa-dibenarkan">Kapan self-host model besar bisa dibenarkan<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-self-host-model-besar-bisa-dibenarkan"></a></h2>
+<p>Biasanya hanya kalau:</p>
+<ul>
+<li>workload inference adalah core produk atau moat</li>
+<li>volume sangat besar dan stabil</li>
+<li>compliance memaksa data on-prem</li>
+<li>ada tim operasi yang siap menangani MLOps besar</li>
+<li>ada model custom / fine-tuning yang jadi nilai tambah utama</li>
+</ul>
+<p>Untuk kantor biasa, lebih sering masuk akal adalah kombinasi:</p>
+<pre class="language-text"><code class="language-text">Coding hard task        -> API frontier model
+Repo understanding      -> RAG + embeddings lokal
+Summarization           -> model lokal 7B/14B/32B
+PII detection/masking   -> lokal
+Policy guardrail        -> lokal + rules
+Long coding agent       -> API, dengan redaction dan allowlist context
+</code></pre>
+<h2 id="kenapa-api-enterprise-biasanya-jadi-pilihan-terbaik-dulu">Kenapa API enterprise biasanya jadi pilihan terbaik dulu<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-api-enterprise-biasanya-jadi-pilihan-terbaik-dulu"></a></h2>
+<ul>
+<li>cost awal rendah</li>
+<li>scaling ditangani provider</li>
+<li>tim bisa fokus ke produk, bukan infra serving</li>
+<li>model frontier siap dipakai</li>
+<li>provider besar biasanya punya compliance support, DPA, retention control</li>
+</ul>
+<p>Risiko utama yang harus dikelola:</p>
+<ul>
+<li>data governance</li>
+<li>vendor lock-in</li>
+<li>recurring token cost</li>
+<li>latency</li>
+<li>approval compliance</li>
+</ul>
+<p>Kalau bisnisnya belum butuh GPU besar, maka prioritasnya adalah bangun layer kontrolnya: gateway, policy, observability, model routing.</p>
+<h2 id="ringkasannya">Ringkasannya<a aria-hidden="true" class="anchor-heading icon-link" href="#ringkasannya"></a></h2>
+<p>Untuk enterprise non-AI, strategi paling rasional adalah:</p>
+<ol>
+<li>API-first untuk tugas frontier dan yang butuh kualitas model tinggi.</li>
+<li>Self-host model kecil-menengah untuk task murah dan sensitif.</li>
+<li>Pastikan semua request lewat gateway internal.</li>
+<li>Kumpulkan telemetry sebelum mulai investasi GPU besar.</li>
+<li>Only deploy model besar ketika volume, cost, dan compliance benar-benar menyokongnya.</li>
+</ol>
+<p>Jika mau, bisa ditambah link ke <code>[[til.ai.vllm-opencode-context-pressure]]</code> sebagai catatan operasi self-host vLLM dan kapabilitas admission control.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">handbook (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">deployment (Private)</a></li>
+</ol>

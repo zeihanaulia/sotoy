@@ -1,0 +1,338 @@
+<h1 id="2026-05-13">2026-05-13<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-05-13"></a></h1>
+<h2 id="mini-shai-hulud-dan-cara-gue-bacanya">Mini Shai-Hulud dan cara gue bacanya<a aria-hidden="true" class="anchor-heading icon-link" href="#mini-shai-hulud-dan-cara-gue-bacanya"></a></h2>
+<p>Gue baca update terbaru tentang kampanye supply-chain Mini Shai-Hulud, dan yang paling nempel buat gue bukan sekadar "ada paket jahat". Yang berubah adalah insight: installer dependency bagus bisa jadi initial access, sementara config IDE/AI tool seperti <code>.claude/*</code> dan <code>.vscode/*</code> bisa jadi persistence dan propagation.</p>
+<p>Di kepala gue sekarang, skenario ini mirip worm: <code>npm install</code> / <code>pip install</code> bisa masukin payload, terus payload itu nggak cuma jalan sekali. Dia bisa naro file konfigurasi yang bikin project ketularan lagi kalau dibuka di VS Code atau dipakai lewat Claude Code.</p>
+<h2 id="apa-yang-baru">Apa yang baru<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-baru"></a></h2>
+<ul>
+<li>Kampanye ini sudah bukan hanya insiden TanStack. SafeDep sebut lebih dari 170 paket npm dan 2 paket PyPI, total 404 versi berbahaya.</li>
+<li>Targetnya tidak random: paket-paket AI/dev tooling besar seperti TanStack, Mistral AI, UiPath, OpenSearch, dan Guardrails AI.</li>
+<li>Persistence-nya radical: bukan cuma package jahat di node_modules, tapi file <code>.claude/settings.json</code>, <code>.claude/setup.mjs</code>, <code>.claude/router_runtime.js</code>, <code>.vscode/tasks.json</code>, dan <code>.vscode/setup.mjs</code>.</li>
+<li>Itu berarti kalau file-file itu sudah masuk repo atau workstation, <code>npm uninstall</code> nggak cukup.</li>
+</ul>
+<h2 id="mekanisme-yang-gue-pahami">Mekanisme yang gue pahami<a aria-hidden="true" class="anchor-heading icon-link" href="#mekanisme-yang-gue-pahami"></a></h2>
+<p>Dari read-up TanStack + SafeDep:</p>
+<ul>
+<li>payload jalan saat <code>npm install</code> / <code>pnpm install</code> / <code>yarn install</code></li>
+<li>malware bisa nyuri kredensial dan token</li>
+<li>lalu dia bisa commit config beracun lewat API ke branch lain supaya developer lain yang clone/pull ikut kena</li>
+<li>ini bukan sekadar malware package, ini campaign yang memadukan initial access, credential theft, persistence, dan propagation</li>
+</ul>
+<p>Untuk Python, nuance-nya beda:</p>
+<ul>
+<li>Mistral AI bilang paket npm mereka terdampak tapi tidak aktif menyerang karena <code>Setup.mjs</code> merujuk file yang nggak ada</li>
+<li>sementara <code>mistralai==2.4.6</code> di PyPI sudah running skrip berbahaya saat <code>import</code></li>
+<li>dia ngebangun <code>transformers.pyz</code> dan menjalankan proses background</li>
+</ul>
+<h2 id="bentuk-malware-supply-chain-dev-modern">Bentuk malware supply-chain dev modern<a aria-hidden="true" class="anchor-heading icon-link" href="#bentuk-malware-supply-chain-dev-modern"></a></h2>
+<p>Gue sekarang melihat ini bukan malware binary klasik. Bentuk teknisnya sering kelihatan normal, tapi perilakunya parasitik di workflow developer.</p>
+<p>Contoh bentuk yang paling jahat secara konsep:</p>
+<ul>
+<li>package dengan <code>postinstall</code>/<code>install</code> script di <code>package.json</code></li>
+<li>file persistence di <code>.claude/*</code> atau <code>.vscode/*</code></li>
+<li>watcher/service background yang nunggu event</li>
+<li>script yang disamarkan sebagai file dev biasa seperti <code>setup.mjs</code>, <code>runtime.js</code>, <code>monitor.sh</code></li>
+</ul>
+<p>Misalnya, <code>package.json</code> bisa punya:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"postinstall"</span><span class="token operator">:</span> <span class="token string">"node scripts/setup.mjs"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><code>setup.mjs</code> bisa baca environment variable, ambil token, kirim keluar, lalu nulis file persistence ke repo atau home directory.</p>
+<p>Atau <code>.vscode/tasks.json</code> bisa terlihat seperti task setup biasa, tapi kalau command-nya <code>node .vscode/setup.mjs</code>, maka IDE bisa memicu payload hanya dengan membuka workspace atau menjalankan task. Sama dengan <code>.claude/settings.json</code> dan <code>.claude/setup.mjs</code>: file itu bisa jadi persistence launcher yang hidup lagi saat tool AI agent dipakai.</p>
+<h2 id="kapan-dia-jalan">Kapan dia jalan?<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-dia-jalan"></a></h2>
+<p>Trigger utama untuk payload ini adalah event, bukan sekadar keberadaan file:</p>
+<ul>
+<li>saat install dependency (<code>npm install</code>, <code>pnpm install</code>, <code>yarn install</code>, <code>pip install</code>)</li>
+<li>saat package di-import atau dijalankan oleh runtime</li>
+<li>saat workspace tools dengan <code>.vscode</code>/<code>.claude</code> dibuka</li>
+<li>saat task/tool hook dipanggil</li>
+<li>saat watcher/service background aktif</li>
+<li>saat event tertentu terjadi, misalnya token berubah atau environment diakses</li>
+</ul>
+<p>Jadi malware supply-chain modern sering bersifat event-driven. File di disk bisa saja kelihatan biasa, tapi bahaya muncul ketika ada jalur eksekusi dari file itu ke event di mesin.</p>
+<h2 id="kalau-cuma-clone-repo-apakah-bisa-aktif">Kalau cuma clone repo, apakah bisa aktif?<a aria-hidden="true" class="anchor-heading icon-link" href="#kalau-cuma-clone-repo-apakah-bisa-aktif"></a></h2>
+<p>Secara umum: <code>git clone</code> saja biasanya belum aktif. Clone hanyalah copy file. Risiko utama baru naik ketika dependency di-install, task dijalankan, atau workspace dibuka di editor yang mengeksekusi hook.</p>
+<p>Tapi ada edge case:</p>
+<ul>
+<li>repo punya <code>.vscode/tasks.json</code> atau file hook lain, lalu elo buka workspace dan task itu berjalan otomatis atau manual</li>
+<li>user-level config seperti <code>~/.claude/settings.json</code> sudah terkontaminasi, lalu repo baru cuma jadi pemicu event</li>
+</ul>
+<p>Jadi clone-only lebih rendah risikonya, tetapi bukan nol. Repo clone bisa jadi carrier pasif kalau nanti dibuka atau dipakai.</p>
+<h2 id="contoh-fileisi-jahat-yang-gue-ingat">Contoh file/isi jahat yang gue ingat<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-fileisi-jahat-yang-gue-ingat"></a></h2>
+<p>Contoh <code>.vscode/tasks.json</code> yang nampak legal tapi bisa launching persistence:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"2.0.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"Project Setup"</span><span class="token punctuation">,</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span>
+      <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"node .vscode/setup.mjs"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Contoh pola hook yang tampak seperti integrasi tooling:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"hooks"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"onToolCall"</span><span class="token operator">:</span> <span class="token string">"node ~/.claude/router_runtime.js"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Contoh watcher shell sederhana:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token keyword">while</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+  <span class="token comment"># cek token / network state / file tertentu</span>
+  <span class="token function">sleep</span> <span class="token number">60</span>
+<span class="token keyword">done</span>
+</code></pre>
+<p>Bentuknya sederhana. Yang berbahaya adalah apa yang dia cek dan apa yang dia lakukan saat kondisi terpenuhi.</p>
+<h2 id="kenapa-ini-penting">Kenapa ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-penting"></a></h2>
+<p>Linking-nya jelas:</p>
+<ul>
+<li>package install = pintu masuk</li>
+<li>config hook = persistence</li>
+<li>background watcher = delayed action</li>
+<li>repo clone = belum tentu eksekusi</li>
+<li>editor/tool event = pemicu</li>
+</ul>
+<p>Jadi evaluasi risiko harus fokus pada jalur eksekusi, bukan sekadar file ada di disk.</p>
+<h2 id="mitigasi-yang-gue-anggap-penting">Mitigasi yang gue anggap penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mitigasi-yang-gue-anggap-penting"></a></h2>
+<p>Buat gue, ada urutan mitigasi yang harus dipandang sebagai incident response, bukan sekadar dependency cleanup:</p>
+<ol>
+<li>isolasi host yang pernah install paket terdampak</li>
+<li>hapus branch/repo dengan <code>.claude/*</code> atau <code>.vscode/*</code> mencurigakan, tapi simpan bukti jika perlu forensik</li>
+<li>rotate semua secret yang mungkin reachable dari host itu: GitHub token, npm token, AWS/GCP creds, Vault token, Kubernetes secret, SSH key, CI secret</li>
+<li>periksa Git history untuk commit aneh di branch feature/topic, karena malware sengaja sasar branch non-main</li>
+<li>blok domain IOC di DNS/proxy: minimal <code>git-tanstack.com</code>, <code>*.getsession.org</code>, dan <code>83.142.209.194</code></li>
+<li>rebuild environment dari clean base jika host dev/runner dicurigai dieksekusi payload</li>
+</ol>
+<h3 id="kenapa-uninstall-package-doang-nggak-cukup">Kenapa uninstall package doang nggak cukup<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-uninstall-package-doang-nggak-cukup"></a></h3>
+<p>Karena commit <code>.claude</code>/<code>.vscode</code> bisa bikin repo dan host lain terinfeksi lagi tanpa harus install ulang paket yang sama. Jadi pertanyaan yang benar bukan "versi paket mana yang jahat?", tapi "apakah installer sempat jalan di host gue, dan apakah host/repo gue sekarang sudah jadi carrier?"</p>
+<h2 id="apakah-gue-kena">Apakah gue kena?<a aria-hidden="true" class="anchor-heading icon-link" href="#apakah-gue-kena"></a></h2>
+<p>Jawaban gue untuk diri sendiri adalah: belum bisa pasti tanpa cek langsung lockfile, dependency tree, image build, cache, dan repo.</p>
+<p>Kalau gue tidak pernah install/update dependency dalam window 11–12 Mei 2026, tidak punya paket scope terdampak, dan tidak nemu file <code>.claude/*</code> atau <code>.vscode/*</code> aneh di repo, kemungkinan besar nggak kena.</p>
+<p>Kalau gue sempat <code>npm install</code>, <code>pnpm install</code>, <code>yarn install</code>, <code>pip install</code>, build image, atau CI run dengan TanStack/Mistral/OpenSearch/UiPath/Guardrails AI pada waktu itu, berarti ada risiko dan harus audit.</p>
+<h2 id="checklist-audit-cepat">Checklist audit cepat<a aria-hidden="true" class="anchor-heading icon-link" href="#checklist-audit-cepat"></a></h2>
+<p>Untuk JS/TS repo:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">ls</span> @tanstack/react-router @tanstack/router-core @opensearch-project/opensearch <span class="token punctuation">\</span>
+  @mistralai/mistralai @mistralai/mistralai-azure @mistralai/mistralai-gcp <span class="token punctuation">\</span>
+  @uipath/robot <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+
+<span class="token function">grep</span> -n -E <span class="token string">'@tanstack/|@opensearch-project/opensearch|@mistralai/|@uipath/'</span> <span class="token punctuation">\</span>
+  package-lock.json pnpm-lock.yaml yarn.lock <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+</code></pre>
+<p>Cari persistence repo/home:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">find</span> <span class="token builtin class-name">.</span> ~ -type f <span class="token punctuation">\</span><span class="token punctuation">(</span> <span class="token punctuation">\</span>
+  -path <span class="token string">'*/.claude/settings.json'</span> -o <span class="token punctuation">\</span>
+  -path <span class="token string">'*/.claude/setup.mjs'</span> -o <span class="token punctuation">\</span>
+  -path <span class="token string">'*/.claude/router_runtime.js'</span> -o <span class="token punctuation">\</span>
+  -path <span class="token string">'*/.vscode/tasks.json'</span> -o <span class="token punctuation">\</span>
+  -path <span class="token string">'*/.vscode/setup.mjs'</span> <span class="token punctuation">\</span>
+<span class="token punctuation">\</span><span class="token punctuation">)</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+</code></pre>
+<p>Untuk Python:</p>
+<pre class="language-bash"><code class="language-bash">pip show mistralai guardrails-ai <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+<span class="token function">grep</span> -n -E <span class="token string">'mistralai\b|guardrails-ai\b'</span> <span class="token punctuation">\</span>
+  requirements*.txt pyproject.toml uv.lock poetry.lock Pipfile Pipfile.lock <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+</code></pre>
+<p>IOC Linux <code>mistralai==2.4.6</code>:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">ls</span> -l /tmp/transformers.pyz <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+<span class="token function">ps</span> aux <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">'[t]ransformers.pyz'</span>
+<span class="token function">env</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">'^MISTRAL_INIT='</span>
+</code></pre>
+<pre><code>
+## Socket recommended actions yang gue baca
+Socket punya list action yang sebaiknya dibaca sebagai tiga layer: triage artefak, containment, dan credential recovery.
+
+1. Triage artefak
+   - cari `router_init.js` dan cocokkan SHA-256 dengan hash IOC `ab4fcadaec49c03278063dd269ea5eef82d24f2124a8e15d7b90f2fa8601266c`
+   - audit `.claude/` dan `.vscode/` di home dan root project
+   - verifikasi lockfile/integrity untuk paket `@tanstack/*`
+
+2. Containment
+   - hapus `router_runtime.js`, `setup.mjs`, dan entri hook/task yang tidak dikenal
+   - review commit `claude@users.noreply.github.com` yang bukan dari Claude Code App resmi
+   - block egress ke `filev2.getsession[.]org` dan Session-related infrastructure
+   - audit publish logs GitHub Actions untuk publish tak terduga
+
+3. Credential recovery
+   - rotate semua secret pada sistem yang pernah install versi terdampak
+   - prioritaskan npm token, GitHub PAT/OIDC, AWS creds, Vault token, Kubernetes token
+   - cabut dan rebuild ulang GitHub Actions OIDC federation untuk repo yang dipengaruhi
+
+Socket juga bilang: jangan mengandalkan provenance / Sigstore badge sebagai sinyal aman sendirian.
+
+## Relevansi buat kondisi "banyak clone repo tapi belum install"
+Kalau elo cuma clone repo referensi dan belum install dependency, urutan prioritas yang paling masuk akal adalah:
+
+1. cek evidence execution dulu
+   - cari `router_init.js`
+   - audit `.claude/` dan `.vscode/` yang relevan
+   - periksa apakah repo pernah dipakai agent/CI
+
+2. kalau evidence sepi, jangan buru-buru rotate semua secret
+   - rotasi jadi penting kalau ada bukti install atau IOC
+
+3. kalau ketemu indikasi install/hook/persistence, baru naik ke containment + credential recovery
+
+Jadi jawaban langsung buat situasi elo:
+* action Socket yang paling relevan sekarang adalah triage artefak dan persistence hunting
+* action yang kurang relevan adalah rotasi secret berat, kecuali ada evidence bahwa host pernah install paket terdampak
+* action jangka panjangnya adalah CI hardening: verify lockfile/integrity, minimalkan OIDC scope, dan jangan tergoda hanya karena ada Sigstore badge
+
+## Urutan praktis supaya gak chaos
+Untuk jangan panic dan supaya langkahnya logis:
+
+```bash
+# 1) cari IOC artefak utama
+find ~ . -type f -name 'router_init.js' 2>/dev/null
+
+# 2) audit persistence yang relevan
+find ~ . -type f \( \
+  -path '*/.claude/settings.json' -o \
+  -path '*/.claude/setup.mjs' -o \
+  -path '*/.claude/router_runtime.js' -o \
+  -path '*/.vscode/tasks.json' -o \
+  -path '*/.vscode/setup.mjs' \
+\) \
+  -not -path '*/node_modules/*' \
+  -not -path '*/pkg/mod/*' \
+  -not -path '*/Library/Caches/*' \
+  -not -path '*/.cache/*' 2>/dev/null
+
+# 3) cek commit mencurigakan kalau repo pernah dipakai oleh agent/publish flow
+git log --all --author='claude@users.noreply.github.com' 2>/dev/null
+</code></pre>
+<p>Kalau tiga langkah ini bersih, dan elo memang belum pernah install paket terdampak, artinya risiko eksekusi utama cukup rendah. Kalau ada satu temuan IOC atau persistence, barulah aktifkan rotating secret dan containment lebih agresif.</p>
+<p>Kalau ada hasil dari command ini, tempel saja. Gue bantu bedain mana noise, mana red flag.</p>
+<h2 id="coolingdown-bukan-stop-update">Coolingdown bukan stop update<a aria-hidden="true" class="anchor-heading icon-link" href="#coolingdown-bukan-stop-update"></a></h2>
+<p>Matteo ngomong coolingdown itu bukan freeze total dependency update. Yang dia dorong adalah <strong>risk-tiered minimum release age</strong> plus <strong>jalur exception</strong> dan <strong>sandbox/testing</strong>.</p>
+<p>Implikasinya buat workflow tim:</p>
+<ul>
+<li>package baru tidak langsung dianggap aman sekadar karena provenance atau npm publish resmi</li>
+<li>update dependency bukan housekeeping biasa, tapi event supply-chain</li>
+<li>update baru harus masuk ke lingkungan khusus dulu sebelum dipakai di laptop utama, CI penting, atau prod</li>
+</ul>
+<p>Kalau harus ngelompokkan sekarang:</p>
+<ul>
+<li>default dependency biasa: <strong>24–72 jam</strong></li>
+<li>tooling sensitif / AI tooling / build tool: <strong>3–7 hari</strong></li>
+<li>package baru / maintainer baru / package high-risk: <strong>7 hari+ plus review</strong></li>
+<li>emergency security fix: <strong>exception lane</strong>, tapi diuji di sandbox dulu</li>
+</ul>
+<p>Hardening paling efektif menurut gue:</p>
+<ul>
+<li>jangan install package baru langsung di environment paling bernilai</li>
+<li>pisahkan environment: disposable container/VM untuk first install</li>
+<li>commit lockfile dan update lewat PR khusus</li>
+<li>minimize secret di runner yang install dependency</li>
+<li>kurangi scope OIDC / publish token</li>
+<li>review lifecycle script untuk package baru sebelum allow install</li>
+</ul>
+<p>Budaya tim yang sehat bukan takut update. Budaya yang sehat adalah update dengan ritme, bukan spontan. Artinya:</p>
+<ul>
+<li>ada buffer waktu bagi package baru</li>
+<li>ada aturan siapa dan di mana yang boleh jadi pengguna pertama</li>
+<li>ada exception process untuk security patch</li>
+<li>ada tempat “kotor” untuk eksperimen, bukan laptop dev utama</li>
+</ul>
+<p>Kalau lo baca thread Matteo dengan benar, dia bilang: jangan jadi pengguna pertama yang mengeksekusi package baru di environment bernilai tinggi.</p>
+<h2 id="artikel-why-trusted-publishing-cant-save-us">Artikel "Why Trusted Publishing Can't Save Us"<a aria-hidden="true" class="anchor-heading icon-link" href="#artikel-why-trusted-publishing-cant-save-us"></a></h2>
+<p>Gue cek artikel yang bahas trusted publishing di npm, dan konfirmasi pentingnya: istilah itu di sini berarti OIDC + Sigstore + provenance attestation untuk membuktikan package dipublish lewat jalur CI resmi, bukan "maintainer bisa dipercaya." Ini soal mekanisme kripto/verifikasi asal, bukan soal trust sosial.</p>
+<h3 id="5-pertanyaan-kunci-yang-dijawab-artikel">5 pertanyaan kunci yang dijawab artikel<a aria-hidden="true" class="anchor-heading icon-link" href="#5-pertanyaan-kunci-yang-dijawab-artikel"></a></h3>
+<ol>
+<li>apa klaim utama trusted publishing?</li>
+<li>kenapa klaim itu gagal menghadapi social engineering?</li>
+<li>apa pelajaran dari kasus Axios dan OpenAI?</li>
+<li>apa bedanya identity verified dan intent verified?</li>
+<li>kalau provenance tidak cukup, kontrol apa yang dibutuhkan?</li>
+</ol>
+<h3 id="klaim-utama-trusted-publishing">Klaim utama trusted publishing<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama-trusted-publishing"></a></h3>
+<p>Trusted publishing ingin menjawab: "rilis ini datang dari siapa?"</p>
+<p>Kalau provenance valid, kita bisa lihat dari workflow mana, repo mana, dan identitas apa. Tapi artikel ini tegas: itu tidak menjawab apakah orang/CI yang publish itu masih benar-benar mengendalikan proses dengan aman.</p>
+<p>Intinya: authenticity bagus, agency belum tentu.</p>
+<h3 id="kenapa-social-engineering-bisa-nge-bypass-itu">Kenapa social engineering bisa nge-bypass itu?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-social-engineering-bisa-nge-bypass-itu"></a></h3>
+<p>Artikel pakai kasus Axios.</p>
+<p>Rantai serangannya: attacker bikin identitas palsu / Slack palsu, ngerayu maintainer install software review, lalu compromise laptop maintainer. Setelah itu attacker bisa pakai session browser/cookies/token aktif.</p>
+<p>Dari sisi npm/GitHub/CI, hasilnya tetap terlihat valid:</p>
+<ul>
+<li>login valid</li>
+<li>session valid</li>
+<li>identitas valid</li>
+<li>bisa jadi provenance juga valid</li>
+</ul>
+<p>Jadi trusted publishing bisa ikut "membubuhi stempel sah" pada release berbahaya kalau aktor aslinya sudah dikendalikan secara operasional.</p>
+<h3 id="identity-verified-vs-intent-verified">Identity verified vs intent verified<a aria-hidden="true" class="anchor-heading icon-link" href="#identity-verified-vs-intent-verified"></a></h3>
+<p>Artikel ngejelasin perbedaan tajam ini:</p>
+<ul>
+<li>identity verified = publisher atau workflow terverifikasi</li>
+<li>intent verified = tindakan publish itu memang sah, disengaja, dan masih di bawah kontrol pihak yang benar</li>
+</ul>
+<p>Banyak sistem sudah bagus di identity verification, tapi hampir tidak punya mekanisme intent verification.</p>
+<p>Di supply chain modern, attacker sering tidak perlu memalsukan identitas. Cukup ambil alih identitas asli.</p>
+<h3 id="kenapa-openai-dipakai-sebagai-contoh">Kenapa OpenAI dipakai sebagai contoh?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-openai-dipakai-sebagai-contoh"></a></h3>
+<p>Kasus OpenAI dipakai untuk nunjukin bahwa dampak bisa melewati maintainer individu dan nyasar perusahaan dengan security posture matang.</p>
+<p>Pelajarannya:</p>
+<ul>
+<li>valid provenance tidak menjamin build system lo aman jika trust model lo keliru</li>
+<li>supply chain risk meledak karena beberapa asumsi kecil saling bertumpuk: "publisher resmi = aman", "latest version oke", "tag cukup stabil", "langsung pull di CI gak masalah"</li>
+</ul>
+<h3 id="solusi-yang-didorong-artikel">Solusi yang didorong artikel<a aria-hidden="true" class="anchor-heading icon-link" href="#solusi-yang-didorong-artikel"></a></h3>
+<p>Artikel ini nggak bilang provenance useless. Dia bilang: provenance itu satu kontrol, bukan jawaban final.</p>
+<p>Yang dia dorong:
+A. delay window / minimum release age
+B. machine compromise detection / behavioral anomaly check
+C. dual-control publishing untuk package impact tinggi
+D. stop menganggap "trust the publisher" cukup</p>
+<p>Solusi ini nyambung dengan problem: jika identitas asli bisa dikendalikan, maka yang kita butuh bukan cuma bukti siapa, tapi juga bukti bahwa proses publish masih dalam kendali normal.</p>
+<h3 id="benang-merahnya">Benang merahnya<a aria-hidden="true" class="anchor-heading icon-link" href="#benang-merahnya"></a></h3>
+<p>Trusted publishing bagus buat melawan pemalsuan asal, tapi lemah hadapi pengambilalihan identitas asli. Kasus Axios dan OpenAI nunjukin: jika maintainer atau workflow sudah dikompromi, provenance bisa saja tetap valid tapi release tetap berbahaya.</p>
+<p>Jadi artikel ini lebih tepat dibaca sebagai kritik overclaim: provenance itu alat audit asal, bukan alat pembuktian niat dan kontrol.</p>
+<h2 id="praktis-untuk-tim">Praktis untuk tim<a aria-hidden="true" class="anchor-heading icon-link" href="#praktis-untuk-tim"></a></h2>
+<p>Kalau lo nggak mau baca ini sebagai fatalisme, baca ini sebagai pengingat:</p>
+<ul>
+<li>provenance perlu, tapi jangan berhenti di sana</li>
+<li>tambahkan delay/kontainment/behavioral checks</li>
+<li>pikirkan zero trust untuk publishing: bukan cuma "siapa", tapi juga "dari mana", "kondisinya gimana", "apakah pola ini normal"</li>
+<li>jangan cukup puas dengan "signed" atau "official" saja</li>
+</ul>
+<p>Kalau lo mau, gue bisa lanjut bikin checklist praktis dari artikel ini untuk tim dev/CI/CD lo.</p>
+<h2 id="matteo-collina-trusted-publishing-tidak-sama-dengan-kontrol-publish">Matteo Collina: trusted publishing tidak sama dengan kontrol publish<a aria-hidden="true" class="anchor-heading icon-link" href="#matteo-collina-trusted-publishing-tidak-sama-dengan-kontrol-publish"></a></h2>
+<p>Matteo bilang trusted publishing penting, tapi tidak cukup. Inti thread-nya adalah:</p>
+<ul>
+<li>provenance menjawab "siapa yang publish?"</li>
+<li>bukan "apakah jalur publishnya tetap dalam kontrol?"</li>
+<li>bukan "apakah publish itu intended dan bersih?"</li>
+</ul>
+<p>TanStack jadi contoh kuat karena kejadian ini bukan sekadar npm token bocor. Ini kasus di mana jalur resmi (<code>pull_request_target</code>, cache poisoning, OIDC token runner) tetap bisa menghasilkan artifact berbahaya.</p>
+<p>Jadi model yang lebih tepat adalah:</p>
+<ul>
+<li>provenance = siapa</li>
+<li>minimum release age = beri komunitas waktu audit</li>
+<li>sandbox/containment = kurangi blast radius saat install</li>
+</ul>
+<p>Thread ini mendorong sebuah mental model yang lebih lengkap: verifikasi identitas tidak otomatis berarti aman. Authenticity != safety.</p>
+<h3 id="kenapa-ini-relevan-buat-situasi-elo">Kenapa ini relevan buat situasi elo<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-relevan-buat-situasi-elo"></a></h3>
+<p>Untuk elo yang cuma clone repo dan belum install, bagian paling berguna dari thread ini adalah: jangan hanya berharap badge provenance. Kalau ada jalur eksekusi, package bisa saja legit secara identity tapi tetap berbahaya.</p>
+<p>Solusi yang dia dorong:</p>
+<ul>
+<li>pakai minimum release age agar paket jahat bisa ketahuan sebelum dipakai</li>
+<li>jangan menganggap publish official sama dengan publish safe</li>
+<li>tambahkan lapisan pengamanan lain seperti sandbox atau dependency minimization</li>
+</ul>
+<p>Reply thread ngarah ke dua arah utama:</p>
+<ol>
+<li>runtime containment / sandbox (npm diperlakukan seperti JS dari web random)</li>
+<li>kritik ekosistem yang lebih radikal, tapi itu lebih berupa provokasi daripada solusi operasional langsung.</li>
+</ol>
+<p>Kesan pentingnya adalah: build beberapa lapis kontrol, bukan cari satu silver bullet.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-tooling (Private)</a></li>
+</ol>

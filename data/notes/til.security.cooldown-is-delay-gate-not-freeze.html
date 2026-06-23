@@ -1,0 +1,23 @@
+<h1 id="coolingdown-package-baru-itu-delay-gate-bukan-freeze-dependency-update">Coolingdown package baru itu delay gate, bukan freeze dependency update<a aria-hidden="true" class="anchor-heading icon-link" href="#coolingdown-package-baru-itu-delay-gate-bukan-freeze-dependency-update"></a></h1>
+<p>TIL: coolingdown dalam konteks supply-chain modern bukan berarti berhenti update selamanya. Itu artinya: jangan jadi pengguna pertama yang mengeksekusi versi package baru di environment bernilai tinggi.</p>
+<p>Yang masuk akal adalah risk-tiered minimum release age:</p>
+<ul>
+<li>default dependency biasa: 24–72 jam</li>
+<li>tooling sensitif / build/AI tooling: 3–7 hari</li>
+<li>package baru / maintainer baru / high-risk package: 7 hari+ plus review</li>
+<li>emergency security fix: exception lane dengan sandbox/testing</li>
+</ul>
+<p>Jadi policy yang sehat adalah mengubah siapa yang boleh update, kapan, di mana, dan lewat jalur apa.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">dependency-management (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.npm-supply-chain-cooldown-policy">NPM supply-chain cooldown policy</a></li>
+</ul>

@@ -1,0 +1,89 @@
+<h1 id="agentic-engineering-differs-from-vibe-coding">Agentic engineering differs from vibe coding<a aria-hidden="true" class="anchor-heading icon-link" href="#agentic-engineering-differs-from-vibe-coding"></a></h1>
+<p>AI coding matang bukan sekadar menyuruh model menulis kode dan berharap benar.
+Itu adalah vibe coding: output yang muncul cepat, tampak berhasil, dan dilanjutkan tanpa bukti.</p>
+<p>Agentic engineering berbeda. Di sini AI boleh menghasilkan kode, tetapi setiap siklus kerja harus:</p>
+<ul>
+<li>kecil dan bounded,</li>
+<li>punya satu tujuan jelas,</li>
+<li>punya satu cara verifikasi jelas,</li>
+<li>tidak mencampur banyak keputusan sekaligus.</li>
+</ul>
+<p>“Perubahan kecil” bukan berarti sedikit baris kode. Bisa saja 200 baris jika scope-nya masih satu konsep dengan satu risiko utama.
+Yang kecil adalah ruang keputusan dan risiko, bukan jumlah baris.</p>
+<p>Siklus kecil berarti:</p>
+<ul>
+<li>plan kecil → implement kecil → verify → review → lanjut.</li>
+<li>bukan: satu prompt besar lalu agent mengubah separuh repo.</li>
+</ul>
+<p>Evidence:</p>
+<ul>
+<li>Martin Fowler: "A well-built outer harness serves two goals: it increases the probability that the agent gets it right in the first place, and it provides a feedback loop that self-corrects as many issues as possible before they even reach human eyes."</li>
+<li>Martin Fowler: "Separately, you get either an agent that keeps repeating the same mistakes (feedback-only) or an agent that encodes rules but never finds out whether they worked (feed-forward-only)."</li>
+<li>Google Small CLs: "In general, the right size for a CL is one self-contained change."</li>
+<li>Karpathy: "we're now kind of like cooperating with AIs and usually they are doing the generation and we as humans are doing the verification it is in our interest to make this loop go as fast as possible."</li>
+<li>Karpathy: "we have to keep the AI on the leash."</li>
+<li>Karpathy: "it's not useful to me to get a diff of 10,000 lines of code to my repo ... I'm still the bottleneck right even though that 10,000 lines come out instantly I have to make sure that this thing is not introducing bugs."</li>
+<li>Karpathy: "I'm always scared to get way too big diffs i always go in small incremental chunks i want to make sure that everything is good i want to spin this loop very very fast and I sort of work on small chunks of single concrete thing."</li>
+</ul>
+<p>Terminology:</p>
+<ul>
+<li>Leash = batas kontrol terhadap AI agar output tetap bisa diaudit.</li>
+<li>Small incremental chunks = unit kerja kecil dengan scope jelas, verification jelas, dan diff yang bisa ditelusuri.</li>
+<li>Generation-verification loop = AI generate → verify → lanjut.</li>
+<li>Partial autonomy = autonomy slider yang disesuaikan dengan kompleksitas dan risiko task.</li>
+</ul>
+<p>Pertanyaan kunci:</p>
+<ol>
+<li>Kecil itu ukurannya apa?
+<ul>
+<li>satu tujuan, satu risiko utama, satu cara verifikasi.</li>
+</ul>
+</li>
+<li>Kenapa perubahan besar berbahaya?
+<ul>
+<li>review surface membesar, causal chain kabur, verification melemah.</li>
+</ul>
+</li>
+<li>Simulasi vibe coding vs agentic engineering?
+<ul>
+<li>vibe coding memberi agent scope besar; agentic engineering memecah fitur menjadi langkah-langkah kecil dengan boundary eksplisit.</li>
+</ul>
+</li>
+<li>Bagaimana membagi fitur besar?
+<ul>
+<li>data/model → core logic → API boundary → verify → UI → edge cases → cleanup.</li>
+</ul>
+</li>
+<li>Apa hubungan perubahan kecil dengan verification?
+<ul>
+<li>perubahan kecil membuat verifikasi lebih murah, lebih spesifik, dan lebih bisa ditelusuri.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>“The game is not ‘how fast can we build’ any more. It is ‘how fast can we tell whether this is right’.”</p>
+</blockquote>
+<p>Related: <a href="/sotoy/notes/zettel.literature.how-i-use-ai-to-code">How I Use AI to Code — literature note</a></p>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.reference.martin-fowler-harness-engineering">Martin Fowler - Harness Engineering for Coding Agent Users</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.reference.google-small-cls">Google Small CLs</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.reference.karpathy-keep-ai-on-the-leash">Karpathy: Keep AI on the Leash</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">verification (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">discipline (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.how-i-use-ai-to-code">How I Use AI to Code — literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.reference.karpathy-software-is-changing-again">Karpathy — Software Is Changing (Again)</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.06">2026-05-06</a></li>
+</ul>

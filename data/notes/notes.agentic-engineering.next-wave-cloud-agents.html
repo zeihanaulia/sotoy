@@ -1,0 +1,145 @@
+<h1 id="next-wave-cloud-agents-dan-autonomous-orchestration">Next Wave: Cloud Agents dan Autonomous Orchestration<a aria-hidden="true" class="anchor-heading icon-link" href="#next-wave-cloud-agents-dan-autonomous-orchestration"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue baca konsep "next wave" sebagai pergeseran dari agent CLI lokal/interaktif ke cloud agents plus autonomous orchestration. Faktor utamanya bukan model AI yang lebih pintar lagi, tapi kerja software diperlakukan sebagai sistem agentic yang bisa berjalan paralel, di cloud sandbox, dan divalidasi sebelum sampai ke manusia.</p>
+<h2 id="apa-bedanya-agent-cli-dengan-cloud-agents">Apa bedanya agent CLI dengan cloud agents?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-bedanya-agent-cli-dengan-cloud-agents"></a></h2>
+<p>Agent CLI itu biasanya hidup di terminal lokal lo. Elo yang buka session, agent membaca repo, mengedit file, lalu elo menunggu output atau error. Masih ada intensitas kehadiran manusia.</p>
+<p>Cloud agent memindahkan kerja itu ke environment cloud terisolasi. Ia bisa jalan di background, bisa paralel, bikin PR sendiri, memanggil tool, menjalankan test, dan mengulang sampai memenuhi gate tertentu. Itu lebih dekat ke delegasi daripada interaksi.</p>
+<p>Intinya: agent CLI adalah interaksi; cloud agent adalah delegasi.</p>
+<h2 id="kenapa-cloud-agents-jadi-gelombang-berikutnya">Kenapa cloud agents jadi gelombang berikutnya?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-cloud-agents-jadi-gelombang-berikutnya"></a></h2>
+<p>Karena bottlenecknya bergeser lagi.</p>
+<ul>
+<li>Fase awal: bisa AI bantu nulis kode atau tidak?</li>
+<li>Fase kedua: bisa AI kerja di repo nyata atau tidak?</li>
+<li>Fase ketiga: bisakah banyak agent bekerja aman, paralel, dan terverifikasi tanpa membanjiri manusia?</li>
+</ul>
+<p>Cloud agents adalah gelombang berikutnya karena mereka bukan soal satu sesi chat/terminal, melainkan soal sistem terkoordinasi yang mengatur banyak agent, data, dan feedback loop.</p>
+<h2 id="bentuk-autonomous-orchestration-yang-realistis">Bentuk autonomous orchestration yang realistis<a aria-hidden="true" class="anchor-heading icon-link" href="#bentuk-autonomous-orchestration-yang-realistis"></a></h2>
+<p>Bentuk sederhana yang realistis:</p>
+<ol>
+<li>Human membuat issue atau task.</li>
+<li>Planner agent baca issue, repo, dokumen, AGENTS.md, skill files, lalu buat plan.</li>
+<li>Implementer agent kerjakan plan, buat branch, edit kode, jalankan test.</li>
+<li>Reviewer agent periksa correctness, maintainability, security, performa.</li>
+<li>Validator agent jalankan lint, type check, browser automation, observability check.</li>
+<li>Fixer agent perbaiki failure.</li>
+<li>Human approver masuk hanya untuk judgement domain, security-sensitive change, database migration, atau arsitektur.</li>
+</ol>
+<p>Ini bukan satu agent yang jawab prompt. Ini workflow dengan peran, input/output, gate, dan eskalasi.</p>
+<h2 id="kenapa-cloud-environment-penting">Kenapa cloud environment penting?<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-cloud-environment-penting"></a></h2>
+<p>Semakin autonomous seorang agent, semakin penting sandbox yang reproducible.</p>
+<p>Kalau agent masih jalan di laptop lo, environment biasanya implicit: package sudah terinstall, env var ada, service lokal hidup. Itu berbahaya kalau mau scale.</p>
+<p>Cloud agent perlu:</p>
+<ul>
+<li>container atau VM template yang jelas,</li>
+<li>package dan dependency yang terdefinisi,</li>
+<li>network rule dan secret policy,</li>
+<li>mounted files dan permission yang terbatas.</li>
+</ul>
+<p>Tanpa ini, agent bisa salah akses data, salah command, atau malah mengubah hal di luar scope.</p>
+<h2 id="hubungannya-dengan-harness-engineering">Hubungannya dengan harness engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungannya-dengan-harness-engineering"></a></h2>
+<p>Ini yang ngerjain safety system.</p>
+<p>Cloud agents tanpa harness cuma jadi vibe coding at scale.</p>
+<p>Harness adalah semua hal di sekitar model:</p>
+<ul>
+<li>tools,</li>
+<li>permissions,</li>
+<li>sandbox,</li>
+<li>context,</li>
+<li>skills,</li>
+<li>AGENTS.md,</li>
+<li>test,</li>
+<li>linter,</li>
+<li>observability,</li>
+<li>browser automation,</li>
+<li>feedback loop.</li>
+</ul>
+<p>Tujuannya: buat output agent lebih mungkin benar sejak awal, dan sediakan sensor agar agent bisa self-correct sebelum hasilnya sampai manusia.</p>
+<h2 id="contoh-implementasi-secara-bertahap">Contoh implementasi secara bertahap<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-implementasi-secara-bertahap"></a></h2>
+<p>Supaya tidak chaos, jalanin ini secara bertahap:</p>
+<ul>
+<li>Level 1: single cloud task.
+<ul>
+<li>Satu issue kecil.</li>
+<li>Agent bikin branch, perbaiki, jalankan verify command, buka PR.</li>
+</ul>
+</li>
+<li>Level 2: agent PR reviewer.
+<ul>
+<li>Agent review PR dengan struktur: finding, evidence, risk, fix, confidence, human needed.</li>
+</ul>
+</li>
+<li>Level 3: multi-agent loop.
+<ul>
+<li>Planner, implementer, reviewer, fixer, validator, reporter.</li>
+</ul>
+</li>
+<li>Level 4: autonomous workflow with gates.
+<ul>
+<li>Agent bisa ambil task low-risk, bikin PR, validasi overlay, tapi merge hanya lewat gate.</li>
+</ul>
+</li>
+</ul>
+<p>Autonomy harus naik bertahap: task → review → loop → gated workflow.</p>
+<h2 id="implementasi-untuk-engineeringsecurity-review">Implementasi untuk engineering/security review<a aria-hidden="true" class="anchor-heading icon-link" href="#implementasi-untuk-engineeringsecurity-review"></a></h2>
+<p>Kalau lo bikin sistem security review agent, desain minimalnya:</p>
+<ul>
+<li><code>AGENTS.md</code> menjelaskan stack, command test, command security scan, dan policy output.</li>
+<li>skill files untuk security triage, dependency review, SQL injection, secrets review, auth review, migration safety.</li>
+<li>sensors: Semgrep, OSV, gitleaks, npm audit, unit test, type check, SBOM, CI status.</li>
+<li>orchestrated workflow: planner, static scanner, reasoning agent, exploitability agent, fixer, triage agent, reporter.</li>
+<li>output harus evidence-backed: file/line, reachable path, impact, tool signal, verification, confidence.</li>
+</ul>
+<p>Security agent yang bagus bukan yang paling banyak alert tapi yang paling cepat ubah alert jadi decision yang bisa ditindaklanjuti.</p>
+<h2 id="apa-yang-perlu-disiapkan-sebelum-cloud-orchestration">Apa yang perlu disiapkan sebelum cloud orchestration?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-perlu-disiapkan-sebelum-cloud-orchestration"></a></h2>
+<ol>
+<li>Definition of done yang bisa dibaca agent.
+<ul>
+<li>goal, context, constraints, done when, escalate when.</li>
+</ul>
+</li>
+<li><code>AGENTS.md</code> pendek, skill files detail, docs referensi panjang.</li>
+<li>Environment reproducible: Dockerfile/devcontainer, setup script, test command, seed data, mock service, network policy, secret policy.</li>
+<li>Permission ketat: approval mode, sandbox mode, token terbatas, default read-only.</li>
+<li>Observability agent-readable: logs, metrics, traces, screenshot, DOM snapshot.</li>
+</ol>
+<h2 id="related">Related<a aria-hidden="true" class="anchor-heading icon-link" href="#related"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.cloud-agent.handson.references">Cloud Agent Hands-on References</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+</ul>
+<h2 id="insight-penting">Insight penting<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-penting"></a></h2>
+<ul>
+<li>Gelombang berikutnya bukan AI nulis kode lebih bagus. Ini soal agent bekerja paralel di cloud dengan gate dan verifikasi otomatis.</li>
+<li>Cloud agents boleh lebih cepat, tapi tanpa harness mereka cuma mempercepat PR yang bikin reviewer tenggelam.</li>
+<li>Indikator kesiapan: test dipercaya, CI jelas, permission model, AGENTS.md pendek, skill files, artifact report, eskalasi manusia.</li>
+<li>Kalau belum punya itu, cloud agents cuma mempercepat chaos.</li>
+</ul>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><a href="https://developers.openai.com/codex/cloud">https://developers.openai.com/codex/cloud</a></li>
+<li><a href="https://platform.claude.com/docs/en/managed-agents/overview">https://platform.claude.com/docs/en/managed-agents/overview</a></li>
+<li><a href="https://martinfowler.com/articles/harness-engineering.html">https://martinfowler.com/articles/harness-engineering.html</a></li>
+<li><a href="https://openai.com/index/harness-engineering/">https://openai.com/index/harness-engineering/</a></li>
+<li><a href="https://developers.openai.com/codex/learn/best-practices">https://developers.openai.com/codex/learn/best-practices</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-engineering (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">cloud-agents (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">harness (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260507102700">Agent can become social-operational representation for people and organizations</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.how-i-use-ai-to-code">How I Use AI to Code</a></li>
+<li><a href="/sotoy/notes/notes.youtube.andrej-karpathy-from-vibe-coding-to-agentic-engineering">Andrej Karpathy: From Vibe Coding to Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/zettel.literature.how-i-use-ai-to-code">How I Use AI to Code — literature note</a></li>
+<li><a href="/sotoy/notes/zettel.moc.agentic-engineering">MOC Agentic Engineering</a></li>
+<li><a href="/sotoy/notes/notes.agentic-engineering.openclaw-personal-agent-orchestration">Personal Agent Orchestration</a></li>
+<li><a href="/sotoy/notes/daily.journal.2026.05.05">2026-05-05</a></li>
+</ul>

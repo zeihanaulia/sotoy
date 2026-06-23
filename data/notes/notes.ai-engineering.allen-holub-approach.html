@@ -1,0 +1,90 @@
+<h1 id="ai-as-engineering-accelerator-not-replacement-allen-holubs-approach">AI as Engineering Accelerator, Not Replacement: Allen Holub's Approach<a aria-hidden="true" class="anchor-heading icon-link" href="#ai-as-engineering-accelerator-not-replacement-allen-holubs-approach"></a></h1>
+<h2 id="inti-pemikiran">Inti Pemikiran<a aria-hidden="true" class="anchor-heading icon-link" href="#inti-pemikiran"></a></h2>
+<p>Allen Holub menekankan bahwa AI coding agents seharusnya menjadi <strong>akselerator engineering</strong>, bukan pengganti proses engineering itu sendiri. Kesalahan fatal banyak developer saat ini adalah menganggap "AI maksimal" berarti menyerahkan desain fitur besar ke agent dan menerima tumpukan kode yang terlalu luas untuk dipahami.</p>
+<p>Menurut Allen, produktivitas bukan diukur dari volume output kode, tapi dari seberapa cepat sebuah <em>story</em> selesai dengan kualitas tinggi dan kompleksitas yang terkendali.</p>
+<h2 id="strategi-implementasi-waras">Strategi Implementasi "Waras"<a aria-hidden="true" class="anchor-heading icon-link" href="#strategi-implementasi-waras"></a></h2>
+<p>Untuk menjaga kontrol dan kualitas, Allen menerapkan beberapa prinsip utama:</p>
+<h3 id="1-kerja-incremental--small-batches">1. Kerja Incremental &#x26; Small Batches<a aria-hidden="true" class="anchor-heading icon-link" href="#1-kerja-incremental--small-batches"></a></h3>
+<p>Alih-alih memberikan prompt besar untuk membangun seluruh fitur, Allen memecah pekerjaan menjadi batch kecil dan <em>vertical slice</em> yang tipis.</p>
+<ul>
+<li><strong>Tujuan</strong>: Menghindari <em>comprehension debt</em> dan memudahkan review.</li>
+<li><strong>Metode</strong>: Membangun potongan kecil end-to-end yang memiliki nilai domain nyata, bukan membangun layer horizontal secara masif.</li>
+</ul>
+<h3 id="2-human-led-architecture">2. Human-Led Architecture<a aria-hidden="true" class="anchor-heading icon-link" href="#2-human-led-architecture"></a></h3>
+<p>AI tidak boleh menjadi arsitek utama. Engineer tetap memegang kendali penuh atas:</p>
+<ul>
+<li>Struktur besar sistem.</li>
+<li>Definisi API dan messaging.</li>
+<li>Boundary antar komponen.</li>
+<li>Cara komponen masuk ke dalam sistem.</li>
+</ul>
+<p>AI digunakan untuk mengimplementasikan komponen kecil di dalam boundary yang sudah ditentukan oleh manusia.</p>
+<h3 id="3-arsitektur-sebagai-guardrail">3. Arsitektur sebagai Guardrail<a aria-hidden="true" class="anchor-heading icon-link" href="#3-arsitektur-sebagai-guardrail"></a></h3>
+<p>Arsitektur yang koheren adalah guardrail terbaik bagi AI. Dengan boundary yang jelas, AI lebih sulit merusak bagian lain dari codebase.</p>
+<ul>
+<li><strong>Pola yang disarankan</strong>: DDD nested aggregates/entities, message-based components, dan hardened perimeters.</li>
+<li><strong>Efek</strong>: AI bekerja di dalam "kotak" dengan interface yang jelas.</li>
+</ul>
+<h3 id="4-test-sebagai-kontrak-manusia-anti-self-justification">4. Test sebagai Kontrak Manusia (Anti-Self-Justification)<a aria-hidden="true" class="anchor-heading icon-link" href="#4-test-sebagai-kontrak-manusia-anti-self-justification"></a></h3>
+<p>Ini adalah poin paling krusial. Allen <strong>tidak membiarkan AI menulis test</strong>.</p>
+<ul>
+<li><strong>Alasannya</strong>: AI cenderung menulis test yang membenarkan kode salah yang dibuatnya sendiri (<em>self-justification</em>), atau hanya mengetes detail implementasi kecil, bukan behavior domain.</li>
+<li><strong>Pola TDD</strong>: Manusia menulis test terlebih dahulu <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> AI diminta membuat kode yang harus pass test tersebut.</li>
+<li><strong>Prinsip</strong>: Yang menulis kode tidak boleh sekaligus menentukan bukti bahwa kodenya benar.</li>
+</ul>
+<h2 id="kritik-terhadap-agent-swarm-dan-output-volume">Kritik terhadap "Agent Swarm" dan Output Volume<a aria-hidden="true" class="anchor-heading icon-link" href="#kritik-terhadap-agent-swarm-dan-output-volume"></a></h2>
+<p>Allen mengkritik tren "parallel swarm" (menjalankan banyak agent paralel) sebagai upaya perusahaan AI untuk membakar token tanpa menghasilkan output yang benar-benar berguna.</p>
+<ul>
+<li><strong>Cognitive Load</strong>: Terlalu banyak agent paralel meningkatkan beban kognitif dan context switching.</li>
+<li><strong>Mental Model</strong>: Menghasilkan terlalu banyak kode sekaligus merusak mental model engineer terhadap sistemnya sendiri.</li>
+</ul>
+<h2 id="sintesis-dengan-loop-engineering">Sintesis dengan Loop Engineering<a aria-hidden="true" class="anchor-heading icon-link" href="#sintesis-dengan-loop-engineering"></a></h2>
+<p>Jika <em>Loop Engineering</em> (Addy Osmani/Matt Van Horn) fokus pada desain sistem, feedback, dan orkestrasi, maka pendekatan Allen Holub adalah <strong>syarat disiplin</strong> agar loop tersebut tidak menjadi mesin penghasil sampah.</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Dimensi</th><th>Loop Engineering (Sistem)</th><th>Allen Holub (Disiplin)</th></tr></thead><tbody><tr><td><strong>Fokus</strong></td><td>Orkestrasi, Feedback, Memory</td><td>Arsitektur, Test, Boundary</td></tr><tr><td><strong>Tujuan</strong></td><td>Otomasi &#x26; Leverage</td><td>Kualitas &#x26; Understanding</td></tr><tr><td><strong>Risiko</strong></td><td>Comprehension Debt</td><td>Under-utilization of AI</td></tr><tr><td><strong>Sintesis</strong></td><td>Loop boleh jalan, tapi arsitektur dan test harus tetap dipegang manusia.</td><td></td></tr></tbody></table></div>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li>Thread X: <a href="https://x.com/allenholub/status/2064743466693751082">https://x.com/allenholub/status/2064743466693751082</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-coding (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">engineering-discipline (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">architecture (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">testing (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.ai.separation-of-maker-and-checker">Pemisahan Maker dan Checker dalam Verifikasi AI</a></li>
+</ul>

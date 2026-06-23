@@ -1,0 +1,57 @@
+<h1 id="posisi-informasi-memengaruhi-recall-tengah-konteks-adalah-zona-rawan-hilang">Posisi informasi memengaruhi recall; tengah konteks adalah zona rawan hilang<a aria-hidden="true" class="anchor-heading icon-link" href="#posisi-informasi-memengaruhi-recall-tengah-konteks-adalah-zona-rawan-hilang"></a></h1>
+<h2 id="gagasan">Gagasan<a aria-hidden="true" class="anchor-heading icon-link" href="#gagasan"></a></h2>
+<p>Posisi informasi dalam konteks memengaruhi seberapa baik model mengingatnya. Tengah percakapan itu paling rawan hilang.</p>
+<h2 id="mengapa-ini-penting">Mengapa Ini Penting<a aria-hidden="true" class="anchor-heading icon-link" href="#mengapa-ini-penting"></a></h2>
+<p>Bukan semua konteks diperlakukan sama. Ini bikin kita sadar kenapa chat panjang bisa gagal, meski model masih "dengar" banyak.</p>
+<h2 id="apa-itu-posisi-informasi">Apa Itu Posisi Informasi?<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-itu-posisi-informasi"></a></h2>
+<p>Posisi informasi berarti di mana sebuah fakta, alasan, atau keputusan muncul dalam urutan token yang diumpankan ke model. Model transformer memberi perhatian berbeda terhadap token berdasarkan posisi dan fokus akhir-awal.</p>
+<ul>
+<li><code>Awal konteks</code>: informasi yang masuk pertama sering mendapat bobot yang stabil sebagai context primer.</li>
+<li><code>Akhir konteks</code>: informasi terbaru masih segar dan biasanya punya bobot penting karena relevansi langsung.</li>
+<li><code>Tengah konteks</code>: informasi ini harus bersaing dengan banyak token sebelum dan sesudahnya. Itulah yang jadi zona paling rawan hilang.</li>
+</ul>
+<p>Dalam artikel "Context Anchoring", penelitian "Lost in the Middle" disebutkan sebagai bukti bahwa model long-context lebih buruk ketika relevansi muncul di tengah konteks panjang, dibandingkan ketika berada di awal atau akhir.</p>
+<h2 id="simulasi-posisi-informasi">Simulasi Posisi Informasi<a aria-hidden="true" class="anchor-heading icon-link" href="#simulasi-posisi-informasi"></a></h2>
+<p>Bayangkan urutan chat development seperti ini:</p>
+<ol>
+<li><code>Token 1-200</code>: setup proyek, stack, tujuan fitur.</li>
+<li><code>Token 201-600</code>: diskusi detail desain, argumentasi kenapa memilih pendekatan A.</li>
+<li><code>Token 601-1000</code>: contoh kode, review snippet, tanggapan error.</li>
+<li><code>Token 1001-1200</code>: keputusan akhir dan next step.</li>
+</ol>
+<p>Sekarang bandingkan:</p>
+<ul>
+<li>Jika <code>kenapa memilih A</code> muncul di token 50, model masih punya peluang baik untuk mengaitkannya dengan keputusan akhir.</li>
+<li>Jika <code>kenapa memilih A</code> muncul di token 550, itu berada di tengah. Model harus menyimpan reasoning tersebut sambil memproses token 551–1200. Informasi ini lebih mudah kehilangan perhatian.</li>
+<li>Jika <code>kenapa memilih A</code> muncul lagi di token 1150 sebagai ringkasan, model bisa mengingatnya lebih kuat.</li>
+</ul>
+<p>Intinya: bukan sekadar berapa banyak token, tapi <code>di mana</code> informasi penting berada. Tengah percakapan adalah titik paling rawan karena attention dan penggunaan konteks mengikisnya.</p>
+<h2 id="literasi-pendukung">Literasi Pendukung<a aria-hidden="true" class="anchor-heading icon-link" href="#literasi-pendukung"></a></h2>
+<ul>
+<li>Study: "Lost in the Middle: How Language Models Use Long Contexts" — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
+<li>Sumber utama: "Context Anchoring" — <a href="https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html">https://martinfowler.com/articles/reduce-friction-ai/context-anchoring.html</a></li>
+</ul>
+<h2 id="hubungan-ke-zettel-lain">Hubungan ke Zettel Lain<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan-ke-zettel-lain"></a></h2>
+<ul>
+<li>Mendukung <a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — klaim diambil dari Paragraf 6.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131310">Percakapan AI adalah medium berpikir, bukan tempat penyimpanan keputusan</a> — tesis utama bahwa chat AI adalah medium berpikir, bukan tempat penyimpanan keputusan.</li>
+<li>Lihat juga <a href="/sotoy/notes/zettel.20260420131311">Kolaborasi manusia multi-hari memindahkan memori kerja ke dokumen bersama</a> — baseline kolaborasi manusia yang transfer konteks ke dokumen.</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a> — Paragraf 6</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-collaboration (Private)</a></li>
+<li><a class="color-tag" style="--tag-color: #f0944d;" href="/sotoy/notes/tags.knowledge-management">knowledge-management</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">context-anchoring (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.literature.context-anchoring">Context Anchoring — memindahkan konteks keputusan dari chat ke dokumen hidup</a></li>
+</ul>

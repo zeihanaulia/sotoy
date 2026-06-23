@@ -1,0 +1,53 @@
+<h1 id="streaming-token-dapat-diubah-jadi-ux-responsif">Streaming token dapat diubah jadi UX responsif<a aria-hidden="true" class="anchor-heading icon-link" href="#streaming-token-dapat-diubah-jadi-ux-responsif"></a></h1>
+<h2 id="ide-inti">Ide inti<a aria-hidden="true" class="anchor-heading icon-link" href="#ide-inti"></a></h2>
+<p>Dalam aplikasi berbasis LLM, rasa responsif tidak hanya ditentukan oleh seberapa cepat jawaban selesai, tetapi juga oleh apakah user melihat sistem memberi umpan balik progres terus-menerus.</p>
+<h2 id="quote-baseline">Quote baseline<a aria-hidden="true" class="anchor-heading icon-link" href="#quote-baseline"></a></h2>
+<blockquote>
+<p>The cool typing effect ... makes it feel responsive.</p>
+</blockquote>
+<h2 id="kenapa-ini-core">Kenapa ini core<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-ini-core"></a></h2>
+<p>Quote ini penting karena dia menekankan perbedaan antara actual latency dan perceived latency. Typing effect tidak selalu membuat model lebih cepat, tetapi dia membuat user merasa sistem sedang aktif dan bergerak.</p>
+<h2 id="apa-yang-bikin-ini-penting">Apa yang bikin ini penting<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-bikin-ini-penting"></a></h2>
+<ul>
+<li>Kata kunci di sini adalah "feel responsive" — bukan "is responsive." User experience dibentuk oleh bagaimana sistem berkomunikasi selama proses menunggu.</li>
+<li>Typing effect adalah progres indicator yang paling natural untuk interaksi teks/percakapan.</li>
+<li>Tanpa umpan balik seperti ini, waiting time terasa diam, lambat, dan rawan ditafsirkan sebagai error.</li>
+<li>Dengan tampilan responsif, model yang sama bisa terasa jauh lebih usable meski actual latency belum turun banyak.</li>
+</ul>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>Perceived responsiveness bisa sangat menentukan apakah aplikasi AI terasa usable.</li>
+<li>Progress feedback membuat user lebih sabar dan percaya bahwa request mereka sedang diproses.</li>
+<li>UI adalah bagian dari kualitas sistem AI, bukan sekadar lapisan tipis di atas model.</li>
+<li>Streaming harus dilihat sebagai arsitektur end-to-end: backend incremental, transport incremental, UI incremental.</li>
+<li>Typing effect efektif ketika actual latency masih dalam batas wajar; dia bukan pengganti performance engineering.</li>
+</ul>
+<h2 id="hubungan">Hubungan<a aria-hidden="true" class="anchor-heading icon-link" href="#hubungan"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777272449641">LLM membutuhkan grounding untuk bisa berguna</a> — grounding dan kegunaan jawaban yang relevan</li>
+<li><a href="/sotoy/notes/zettel.1777272449652">Streaming token dapat diubah jadi UX responsif</a> — streaming sebagai UX yang mengubah perceived latency</li>
+<li><a href="/sotoy/notes/zettel.1777272449645">Inference dan training adalah dua tahap berbeda</a> — inference time vs training time, karena ini adalah intervensi runtime</li>
+<li><a href="/sotoy/notes/zettel.1777272449651">Local model membantu belajar integrasi tanpa vendor noise</a> — local model sebagai medium belajar integrasi LLM</li>
+</ul>
+<h2 id="sumber">Sumber<a aria-hidden="true" class="anchor-heading icon-link" href="#sumber"></a></h2>
+<ul>
+<li>Chapter 2</li>
+<li><a href="/sotoy/notes/zettel.literature.the-developers-guide-to-ai">The Developer's Guide to AI sebagai literature note</a></li>
+<li><a href="/sotoy/notes/book-summaries.the-developers-guide-to-ai">The Developer's Guide to AI</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">streaming (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ui (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">the-developers-guide-to-ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">chapter-2 (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777272449652">Streaming token dapat diubah jadi UX responsif</a></li>
+<li><a href="/sotoy/notes/zettel.moc.the-developers-guide-to-ai">MOC The Developer's Guide to AI</a></li>
+</ul>

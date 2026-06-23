@@ -1,0 +1,48 @@
+<h1 id="rust-native-design-lebih-dari-sekadar-pattern">Rust-native design lebih dari sekadar pattern<a aria-hidden="true" class="anchor-heading icon-link" href="#rust-native-design-lebih-dari-sekadar-pattern"></a></h1>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<ul>
+<li>Effective Rust development is a design transformation, not a pattern checklist.</li>
+<li>Rust design should begin with ownership, state, boundary, and invariants, not with object hierarchies.</li>
+<li><code>clone()</code> dan <code>Rc&#x3C;RefCell&#x3C;T>></code> are useful escape hatches but become anti-patterns when they mask unclear ownership.</li>
+<li>The Rust compiler acts as a design reviewer: borrow-check failures are signals about boundary clarity.</li>
+<li>The book’s pedagogical progression intentionally uses failure modes first, then translation, then Rust-native synthesis.</li>
+</ul>
+<h2 id="evidence-dari-preface">Evidence dari Preface<a aria-hidden="true" class="anchor-heading icon-link" href="#evidence-dari-preface"></a></h2>
+<ul>
+<li>The thesis line is: “Internalizing Rust's philosophy and allowing it to shape your thinking matters more than any individual pattern or technique.”</li>
+<li>Preface contrasts the appeal of Rust’s guarantees with the frustration of borrow checker rejection for seemingly reasonable designs.</li>
+<li>The text explicitly says the book is not a catalog of Rust pattern implementations.</li>
+<li>It distinguishes between asking OOP-style questions (“Class apa yang perlu dibuat?”) and Rust-style questions (“Data ini dimiliki siapa?”).</li>
+<li>The examples of <code>clone()</code> everywhere and <code>Rc&#x3C;RefCell&#x3C;T>></code> everywhere are presented as symptoms of unclear ownership or forced shared mutable state.</li>
+</ul>
+<h2 id="implikasi-desain">Implikasi desain<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi-desain"></a></h2>
+<ul>
+<li>When evaluating a Rust pattern, ask which design tension it resolves rather than what GoF label it matches.</li>
+<li>Compiler errors should be treated as feedback on ownership and lifetime boundaries.</li>
+<li>A good Rust design prefers explicit ownership and compile-time invariants over runtime workaround.</li>
+<li>Pedagogical examples should include bad designs to expose failure modes before showing idiomatic alternatives.</li>
+</ul>
+<h2 id="relevansi">Relevansi<a aria-hidden="true" class="anchor-heading icon-link" href="#relevansi"></a></h2>
+<ul>
+<li>Link ke software architecture: Rust-native design is a decision layer about data flow and boundary, not just syntax or API shape.</li>
+<li>This note is useful for comparing pattern-driven learning with constraint-driven learning.</li>
+<li>It supports a reading strategy that prioritizes problem → Rust feature → trade-off over pattern name.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a class="color-tag" style="--tag-color: #154406;" href="/sotoy/notes/tags.literature-note">literature-note</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">rust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">software-architecture (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1778772993732">Rust compiler adalah reviewer desain, bukan sekadar syntax checker</a></li>
+<li><a href="/sotoy/notes/zettel.1778772993733">clone() dan Rc&#x3C;RefCell&#x3C;T>> adalah sinyal ownership flow yang belum jelas</a></li>
+<li><a href="/sotoy/notes/zettel.1778772993734">Think in Rust, not memorize Rust patterns</a></li>
+<li><a href="/sotoy/notes/zettel.1778772993735">Effective Rust development is a design transformation, not syntax mastery</a></li>
+<li><a href="/sotoy/notes/zettel.1778772993736">Bad Calculator → Correct Calculator → Samsa: progression pedagogis Rust-native</a></li>
+<li><a href="/sotoy/notes/zettel.moc.software-architecture">MOC: Software Architecture</a></li>
+</ul>

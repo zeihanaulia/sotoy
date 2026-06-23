@@ -1,0 +1,33 @@
+<h1 id="pemisahan-maker-dan-checker-dalam-verifikasi-ai">Pemisahan Maker dan Checker dalam Verifikasi AI<a aria-hidden="true" class="anchor-heading icon-link" href="#pemisahan-maker-dan-checker-dalam-verifikasi-ai"></a></h1>
+<h2 id="konsep">Konsep<a aria-hidden="true" class="anchor-heading icon-link" href="#konsep"></a></h2>
+<p>Dalam pengembangan software menggunakan AI, terdapat risiko besar bernama <strong>self-justification</strong>, di mana AI yang menulis kode juga menulis test-nya. Hasilnya, AI cenderung membuat test yang hanya memvalidasi bahwa kodenya "jalan" (pass), bukan memvalidasi bahwa kodenya "benar" sesuai behavior domain.</p>
+<h2 id="prinsip-utama">Prinsip Utama<a aria-hidden="true" class="anchor-heading icon-link" href="#prinsip-utama"></a></h2>
+<p>Untuk mendapatkan verifikasi yang valid, harus ada pemisahan tegas antara <strong>Maker</strong> (yang mengimplementasikan) dan <strong>Checker</strong> (yang memvalidasi).</p>
+<ol>
+<li><strong>Maker</strong>: AI yang mengimplementasikan fitur/komponen.</li>
+<li><strong>Checker</strong>: Manusia (atau sistem deterministik/model judge yang berbeda) yang menentukan kriteria keberhasilan.</li>
+</ol>
+<h2 id="implementasi-praktis">Implementasi Praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#implementasi-praktis"></a></h2>
+<ul>
+<li><strong>TDD dengan AI</strong>: Manusia menulis test (Checker) <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> AI menulis kode (Maker) <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> Test memverifikasi.</li>
+<li><strong>Deterministic First</strong>: Gunakan validator JSON, test suite, atau OpenAPI spec sebelum menggunakan model judge.</li>
+<li><strong>Boundary Control</strong>: Test harus fokus pada behavior domain (apa yang dilakukan), bukan detail implementasi (bagaimana itu dilakukan).</li>
+</ul>
+<h2 id="relasi">Relasi<a aria-hidden="true" class="anchor-heading icon-link" href="#relasi"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.ai-engineering.allen-holub-approach">AI as Engineering Accelerator, Not Replacement: Allen Holub's Approach</a>: Implementasi keras dari prinsip ini dengan melarang AI menulis test.</li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes.ai-engineering.loop-engineering (Private)</a>: Kebutuhan akan verifier dalam loop untuk menghindari loop abadi atau hasil sampah.</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-verification (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">engineering-discipline (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">testing (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.ai.the-oracle-problem">The Oracle Problem dalam AI Coding</a></li>
+<li><a href="/sotoy/notes/zettel.ai.verified-done">Definisi 'Done' sebagai 'Verified'</a></li>
+</ul>

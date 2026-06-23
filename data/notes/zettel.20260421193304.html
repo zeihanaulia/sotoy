@@ -1,0 +1,56 @@
+<h1 id="planning-harus-dipisah-dari-solutioning-agar-requirement-dan-teknikal-decision-tetap-jernih">Planning harus dipisah dari solutioning agar requirement dan teknikal decision tetap jernih<a aria-hidden="true" class="anchor-heading icon-link" href="#planning-harus-dipisah-dari-solutioning-agar-requirement-dan-teknikal-decision-tetap-jernih"></a></h1>
+<h2 id="pertanyaan-yang-dibuka">Pertanyaan yang dibuka<a aria-hidden="true" class="anchor-heading icon-link" href="#pertanyaan-yang-dibuka"></a></h2>
+<ol>
+<li>Mengapa planning dan solutioning harus dipisah?</li>
+<li>Apa failure mode kalau keduanya dicampur dalam AI-native workflows?</li>
+<li>Bagaimana pemisahan ini membantu konsistensi teknis?</li>
+</ol>
+<h2 id="klaim-utama">Klaim utama<a aria-hidden="true" class="anchor-heading icon-link" href="#klaim-utama"></a></h2>
+<p>Planning dan solutioning adalah dua jenis keputusan berbeda dengan failure mode berbeda. Planning menjawab "apa yang harus dibangun"; solutioning menjawab "bagaimana membangunnya." Pemisahan menjaga target dan jalur teknis tetap jelas.</p>
+<h2 id="peran-masing-masing">Peran masing-masing<a aria-hidden="true" class="anchor-heading icon-link" href="#peran-masing-masing"></a></h2>
+<ul>
+<li>Planning: tujuan fitur, nilai bisnis, FR/NFR, acceptance criteria.</li>
+<li>Solutioning: pola arsitektur, boundary sistem, API style, state model, unit kerja teknis.</li>
+</ul>
+<h2 id="kenapa-penting">Kenapa penting<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-penting"></a></h2>
+<p>Jika implementor/agent harus mengekstrak keputusan teknis langsung dari requirement bisnis, tim akan rentan terhadap:</p>
+<ul>
+<li>konflik lokal antara agent yang berbeda,</li>
+<li>asumsi teknis tersembunyi yang berubah-ubah,</li>
+<li>pilihan teknis inkonsisten seperti REST vs GraphQL, snake_case vs camelCase, state library apa.</li>
+</ul>
+<p>Jika technical design dibahas terlalu dini, requirement bisnis bisa dibajak oleh asumsi teknis sebelum problem jelas.</p>
+<h2 id="implikasi">Implikasi<a aria-hidden="true" class="anchor-heading icon-link" href="#implikasi"></a></h2>
+<ul>
+<li>Planning harus memberi context bisnis dan tujuan.</li>
+<li>Solutioning harus memberi basis teknis bersama untuk implementasi.</li>
+<li>Ini bukan formalitas; ini mekanisme untuk menjaga dua sudut pandang tetap terpisah tapi saling terhubung.</li>
+</ul>
+<h2 id="insight">Insight<a aria-hidden="true" class="anchor-heading icon-link" href="#insight"></a></h2>
+<p>Dengan pemisahan ini, backlog dan story lebih mungkin lahir setelah arsitektur dan keputusan teknis cukup jelas, sehingga work breakdown informed by architecture, bukan hanya oleh daftar fitur.</p>
+<h2 id="kesalahan-umum">Kesalahan umum<a aria-hidden="true" class="anchor-heading icon-link" href="#kesalahan-umum"></a></h2>
+<ul>
+<li>Mengira planning yang bagus otomatis cukup untuk memulai implementasi.</li>
+<li>Mengira solutioning bisa digantikan oleh general prompt jika requirement cukup jelas.</li>
+<li>Mengaburkan planning dan solutioning menjadi satu dokumen yang membuat dual audience bingung.</li>
+</ul>
+<h2 id="lihat-juga">Lihat juga<a aria-hidden="true" class="anchor-heading icon-link" href="#lihat-juga"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260421171633">BMAD brainstorming memperjelas ide sebelum requirement</a> — BMAD brainstorming memperjelas ide sebelum requirement</li>
+<li><a href="/sotoy/notes/zettel.20260421171457">BMAD analysis phase menghentikan ketidakjelasan sebelum berubah jadi PRD dan architecture</a> — BMAD analysis phase menghentikan ketidakjelasan sebelum berubah jadi PRD dan architecture</li>
+<li><a href="/sotoy/notes/zettel.20260421193303">BMAD duduk di lapisan methodology dan orchestration, bukan sekadar prompt atau persona</a> — BMAD duduk di lapisan methodology dan orchestration, bukan sekadar prompt atau persona</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai-native (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">planning (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">solutioning (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">decision-making (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel">Zettelkasten</a></li>
+<li><a href="/sotoy/notes/zettel.moc.ai-native">MOC AI-native engineering</a></li>
+</ul>

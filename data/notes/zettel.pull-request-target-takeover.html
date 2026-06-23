@@ -1,0 +1,16 @@
+<h1 id="pull_request_target-bisa-menjadi-jalur-takeover-pr-sebelum-merge">pull_request_target bisa menjadi jalur takeover PR sebelum merge<a aria-hidden="true" class="anchor-heading icon-link" href="#pull_request_target-bisa-menjadi-jalur-takeover-pr-sebelum-merge"></a></h1>
+<p><code>pull_request_target</code> berjalan di konteks base repo, bukan di konteks fork contributor. Jika workflow tersebut checkout hasil merge PR dan menjalankan build/install PR code, maka trigger trusted bisa menjadi jalur eksekusi untuk code untrusted.</p>
+<p>Ini membuat PR takeover mungkin sebelum merge: attacker membuka PR dari fork, trusted workflow jalan, dan PR dapat memengaruhi pipeline resmi secara langsung. Ini adalah bentuk "pwn request".</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">github-actions (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">supply-chain (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.tanstack-postmortem">TanStack npm supply-chain compromise — postmortem notes</a></li>
+</ul>

@@ -1,0 +1,36 @@
+<h1 id="yo-code-untuk-extension-vs-code">Yo Code untuk Extension VS Code<a aria-hidden="true" class="anchor-heading icon-link" href="#yo-code-untuk-extension-vs-code"></a></h1>
+<p>Yang baru gue tangkap hari ini: <code>yo code</code> itu bukan magic, dia cuma Yeoman generator yang bikin struktur extension VS Code jadi cepat kebangun.</p>
+<p>Selama ini gue pikir bikin extension harus pake semua file manual. Ternyata, <code>yo code</code> cuma bantu scaffold manifest, file <code>src/extension.ts</code>, <code>tsconfig.json</code>, dan config debug. Intinya dia memotong kebosanan boilerplate, bukan mengganti logika extension.</p>
+<p>Use case yang jelas:</p>
+<ul>
+<li>kalao lagi pengin cepat prototipe extension baru.</li>
+<li>kalao pengen valid manifest dan altenatif struktur file standar tanpa mikir dari awal.</li>
+<li>kalao mau belajar extension dengan contoh yang langsung bisa di <code>F5</code>.</li>
+<li>kalao nggak punya ide file mana yang harus ada, apalagi kalau baru pertama kali bikin extension.</li>
+</ul>
+<p>Kapan gue pakai <code>yo code</code>:</p>
+<ul>
+<li>pas jalanin tutorial VS Code pertama kali.</li>
+<li>pas butuh starter yang langsung jalan di Extension Development Host.</li>
+<li>pas mau bandingkan manual setup vs scaffold tanpa buang waktu copy-paste.</li>
+</ul>
+<p>Kapan gue nggak perlu <code>yo code</code>:</p>
+<ul>
+<li>kalau gue sudah paham struktur extension manual dan ingin kontrol penuh.</li>
+<li>kalau ingin bikin layout custom yang berbeda dari template generator.</li>
+<li>kalau proyeknya cuma butuh sedikit file dan aku pengin mencek seperti apa <code>package.json</code>, <code>activationEvents</code>, dan <code>extension.ts</code> secara langsung.</li>
+<li>kalau mau belajar dasar <code>vscode.commands</code>, <code>activate()</code>, <code>webview</code>, atau tree view tanpa auto-generated noise.</li>
+</ul>
+<p>Kesimpulan singkatnya: <code>yo code</code> bagus buat mulai cepat dan mengecek standard scaffolding, tapi bukan sesuatu yang wajib kalau lu ingin ngerti seluk-beluk extension dari nol.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vscode (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">yeoman (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.vscode.extensions-with-typescript">VS Code Extension dengan TypeScript</a></li>
+</ul>

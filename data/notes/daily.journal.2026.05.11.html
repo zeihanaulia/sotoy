@@ -1,0 +1,124 @@
+<h1 id="2026-05-11">2026-05-11<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-05-11"></a></h1>
+<h2 id="baca-dan-catat-hari-ini">Baca dan catat hari ini<a aria-hidden="true" class="anchor-heading icon-link" href="#baca-dan-catat-hari-ini"></a></h2>
+<p>Hari ini gue bikin note baru yang menjelaskan perbedaan product vs service di SaaS B2B dengan contoh HRIS, CRM, dan contoh produk SaaS internal.</p>
+<p>Intinya: product adalah capability inti, service adalah experience berkelanjutan yang bikin tenant betah.</p>
+<h2 id="apa-yang-dibuat">Apa yang dibuat<a aria-hidden="true" class="anchor-heading icon-link" href="#apa-yang-dibuat"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/notes.saas.product-vs-service">Product vs Service dalam SaaS</a> — contoh public untuk HRIS, CRM, dan produk SaaS internal.</li>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.chapter-1">Chapter 1 — The SaaS Mindset</a> — summary Chapter 1 tentang mindset SaaS.</li>
+<li><a href="/sotoy/notes/book-summaries.building-multi-tenant-saas-architectures.chapter-1.close-reading">Chapter 1 Close Reading — The SaaS Mindset</a> — close reading Chapter 1 dengan paragraf, quotes, dan sketch.</li>
+<li><a href="/sotoy/notes/notes.prompt-engineering.lee-robinson-hiring-signals">Lee Robinson: signal-first hiring advice untuk engineer</a> — catatan thread Lee Robinson tentang paket aplikasi engineering signal-first.</li>
+<li><a href="/sotoy/notes/notes.software-architechture.bun-rust-porting">Bun porting dari Zig ke Rust: masalah layering, crates, dan tagged pointer</a> — catatan thread Jarred Sumner tentang port Bun ke Rust, layering, crates, dan tagged pointers.</li>
+<li><a href="/sotoy/notes/notes.software-architechture.bun-rewrite-oracle">Bun rewrite Zig → Rust: oracle test dan validasi independen</a> — catatan thread Rhys Sullivan tentang validasi rewrite Bun Zig→Rust dan oracle testing.</li>
+<li><a href="/sotoy/notes/notes.prompt-engineering.hunk-terminal-diff-reviewer">Hunk: review-first terminal diff viewer untuk changeset</a> — catatan tool Hunk untuk review-first terminal diff dan workflow Jujutsu (<code>jj</code>) integration.</li>
+</ul>
+<h2 id="insight-penting">Insight penting<a aria-hidden="true" class="anchor-heading icon-link" href="#insight-penting"></a></h2>
+<ul>
+<li>Dalam SaaS B2B, customer masuk karena capability, tapi churn karena service experience.</li>
+<li>Service experience meliputi onboarding, operability, support, reliability, trust, dan continuity of value.</li>
+<li>Product-only mindset bisa menghasilkan fitur bagus, tetapi service buruk yang membuat tenant capek.</li>
+</ul>
+<h2 id="thread-x--notes-baru">Thread X &#x26; notes baru<a aria-hidden="true" class="anchor-heading icon-link" href="#thread-x--notes-baru"></a></h2>
+<p>Hari ini gue lihat kemungkinan kuat bahwa thread Markdown vs HTML untuk LLM ini berkaitan langsung dengan artikel Thariq.</p>
+<ul>
+<li>Thariq mengoptimalkan artifact yang harus dibaca manusia dalam workflow agent.</li>
+<li>Antirez mengoptimalisasi representasi yang harus dibaca model, dengan fokus pada token economy dan semantic density.</li>
+<li>Reply terbaik tidak mematahkan keduanya secara frontal; mereka menggeser diskusi ke hybrid pipeline:
+<ul>
+<li><strong>Markdown untuk source / agent-facing context</strong></li>
+<li><strong>HTML untuk rendered / human-facing surface</strong></li>
+<li><strong>Generate HTML dari markdown / reasoning output, bukan pakai HTML sebagai source utama</strong></li>
+</ul>
+</li>
+<li>Jadi arah diskusi yang mulai muncul bukan "Markdown menang" atau "HTML menang" — tapi <strong>keduanya punya tempat berbeda</strong>.</li>
+</ul>
+<p>Buat referensi sendiri: <a href="/sotoy/notes/notes.prompt-engineering.markdown-vs-html-llm">Markdown vs HTML untuk kerja LLM dan kolaborasi manusia</a></p>
+<h2 id="rencana-lanjut">Rencana lanjut<a aria-hidden="true" class="anchor-heading icon-link" href="#rencana-lanjut"></a></h2>
+<p>Lanjut ke Chapter 2: <em>Multi-Tenant Architecture Fundamentals</em> untuk mulai mengurai bagaimana mindset ini bertransformasi ke pilihan arsitektur.</p>
+<h2 id="thread-x-markdown-vs-html-untuk-kerja-bareng-llm">Thread X: Markdown vs HTML untuk kerja bareng LLM<a aria-hidden="true" class="anchor-heading icon-link" href="#thread-x-markdown-vs-html-untuk-kerja-bareng-llm"></a></h2>
+<p>Link: <a href="https://x.com/antirez/status/2053113951123054963">https://x.com/antirez/status/2053113951123054963</a></p>
+<p>Yang gue pilih dulu: diskusinya di thread itu tentang debat format untuk kerja sama dengan LLM, bukan debat web-dev rendering umum.</p>
+<p>Inti yang gue tangkap:</p>
+<ol>
+<li>Pertanyaannya bukan hanya format untuk manusia, tapi format untuk LLM.</li>
+<li>Antirez bilang pindah dari Markdown ke HTML itu "rugi" karena HTML biasanya lebih verbose dan bikin makna tersebar ke banyak token.</li>
+<li>HTML bisa lebih nyaman untuk struktur kompleks, tapi itu belum tentu optimal untuk model yang lebih baik baca teks dan pattern manusia.</li>
+<li>Perbedaan "semantically dense" vs "semantically sparse" itu soal berapa banyak makna yang dibawa tiap token, bukan semata jumlah tag.</li>
+<li>Kesimpulan praktis: Markdown lebih cocok untuk reasoning, notes, dan prompt artifact yang perlu padat. HTML masih relevan untuk presentasi, UI spec, atau transformasi ke sistem lain.</li>
+</ol>
+<p>Insight penting:</p>
+<ul>
+<li>Ini bukan soal mana yang lebih bagus secara absolut. Ini soal representation cost untuk penerima utamanya.</li>
+<li>HTML bisa berguna untuk browser/parser tradisional, tapi untuk LLM kadang wrapper tambahan justru menambah noise.</li>
+<li>Kalau kita pakai satu format untuk dua tujuan sekaligus — reasoning dan rendering — kita mungkin salah kaprah.</li>
+</ul>
+<p>Gue sensenya: thread ini paling sehat kalau dilihat sebagai panggilan untuk memisahkan "working representation" dan "presentation representation". Format yang optimal buat LLM belum tentu sama dengan yang optimal buat browser atau UI.</p>
+<h2 id="thread-x-dp-mindset-di-sistem-nyata">Thread X: DP mindset di sistem nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#thread-x-dp-mindset-di-sistem-nyata"></a></h2>
+<p>Link: <a href="https://x.com/DevanshuXi/status/2053327490106466691">https://x.com/DevanshuXi/status/2053327490106466691</a></p>
+<p>Yang gue pilih dari thread ini: ini bukan thread tentang LeetCode atau definisi DP dari buku. Ini tentang kenapa pola pikir DP muncul di sistem nyata — compiler, database, scheduler, distributed systems — dan kenapa itu penting.</p>
+<ol>
+<li>
+<p>DP itu apa menurut thread?</p>
+<ul>
+<li>DP adalah cara mereduksi ruang pencarian eksponensial jadi state kecil yang bisa dihitung ulang.</li>
+<li>Fokusnya bukan cuma recurrence atau tabel 2D, tapi: ada banyak kemungkinan, ada overlap, dan kita bisa pakai kembali hasil subproblem.</li>
+</ul>
+</li>
+<li>
+<p>Kenapa infrastruktur "diam-diam bergantung" pada ide ini?</p>
+<ul>
+<li>Banyak sistem nyata sedang menjawab: "untuk state X, keputusan terbaik apa?"</li>
+<li>Kalau jawaban itu disimpan dan dibangun dari bagian kecil, aroma DP muncul.</li>
+<li>Ini bukan berarti semua sistem implementasi DP literal. Banyak yang sebenarnya pakai pola pikir serupa: state, cost, reuse, decomposition.</li>
+</ul>
+</li>
+<li>
+<p>Contoh optimizer database itu apa maksudnya?</p>
+<ul>
+<li>Query optimizer klasik (Selinger-style) memang menyimpan plan termurah untuk setiap subset join.</li>
+<li>Itu benar-benar DP: state = subset tabel, value = cost terbaik, transition = gabung subplan.</li>
+<li>Jadi contoh ini bukan sekadar retorika; dia punya DNA DP yang nyata.</li>
+</ul>
+</li>
+<li>
+<p>Semua contoh yang disebut apakah benar-benar DP?</p>
+<ul>
+<li>Beberapa jelas: Viterbi, edit distance, sequence alignment, value iteration, query optimization subset-style.</li>
+<li>Beberapa lain sering mengandung DP tapi tidak otomatis: compiler optimization, register allocation, scheduling, GPU tiling, cache policy.</li>
+<li>Sisanya lebih ke bau DP: TCP congestion, distributed systems thinking, heuristik cost-based.</li>
+<li>Jadi koreksinya: thread kuat sebagai framing mindset, tetapi sedikit overreach kalau semua contoh dibaca sebagai DP literal.</li>
+</ul>
+</li>
+<li>
+<p>Insight penting yang gue ambil:</p>
+<ul>
+<li>Yang paling berharga bukan daftar contoh, tapi cara nanya:
+<ul>
+<li>apa state minimum yang penting?</li>
+<li>apa informasi yang cukup untuk memutuskan masa depan?</li>
+<li>dimana overlap komputasi terjadi?</li>
+<li>apakah local optimality bisa compose jadi global optimality?</li>
+<li>apa dimensi search space yang harus dimodelkan?</li>
+</ul>
+</li>
+<li>Itu adalah mental model DP yang bisa dipakai jauh di luar soal algorithmic DP.</li>
+</ul>
+</li>
+</ol>
+<p>Catatan penting:</p>
+<ul>
+<li>DP bukan cuma memoization. Memoization tanpa recurrence dan optimal substructure belum tentu DP.</li>
+<li>DP juga bukan greedy atau heuristic. Tapi pola pikir serumpun kadang membantu pilih antara DP literal dan heuristic engineer.</li>
+<li>Dalam engineering sehari-hari, yang sering kepake adalah pola pikir: cari state yang relevan, simpan hasil intermediate, dan bangun solusi besar dari bagian kecil.</li>
+</ul>
+<p>Kalau mau lanjut, next gue bisa bedah: "beda DP literal, memoization biasa, greedy, dan heuristic optimizer."</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">saas (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">service (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">product (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">x (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">twitter (Private)</a></li>
+</ol>

@@ -1,0 +1,210 @@
+<h1 id="2026-05-04">2026-05-04<a aria-hidden="true" class="anchor-heading icon-link" href="#2026-05-04"></a></h1>
+<ul>
+<li>
+<p><a href="https://github.com/h4ckf0r0day/obscura">Obscura oleh h4ckf0r0day</a></p>
+<ul>
+<li>Post LinkedIn Eric Vyacheslav ngasih framing Obscura sebagai headless browser engine open-source buat web scraping dan AI automation.</li>
+<li>Klaim utamanya: binary kecil (~70MB), startup cepat, load page 85ms, RAM ~30MB, serta mode stealth buat mengurangi deteksi bot.</li>
+<li>Inti pesan yang gue tangkap: ini bukan cuma tools baru, tapi pitch “lebih ringan, lebih cepat, dan lebih susah dideteksi” dibanding stack browser automation biasa.</li>
+</ul>
+</li>
+<li>
+<p>4 pertanyaan kunci buat ngecek hype ini:</p>
+<ul>
+<li>Sebenarnya post ini lagi ngomongin apa?
+<ul>
+<li>Obscura diposisikan sebagai alternatif <a href="https://github.com/puppeteer/puppeteer">Puppeteer</a>/<a href="https://github.com/microsoft/playwright">Playwright</a> dengan footprint kecil dan kemampuan stealth yang diperkuat.</li>
+</ul>
+</li>
+<li>Kenapa Obscura dianggap menarik?
+<ul>
+<li>Karena menargetkan dua bottleneck sekaligus: biaya resource dan deteksi anti-bot.</li>
+<li>Kalau benar ringan, cepat, dan kompatibel, ini bisa beda buat scraping skala besar dan agent automation.</li>
+</ul>
+</li>
+<li>Klaim mana yang kuat, dan mana yang kebanyakan hype?
+<ul>
+<li>Masuk akal: binary kecil, boot cepat, footprint rendah, Rust + V8 + CDP, upaya masking fingerprint.</li>
+<li>Perlu ditahan: claim "no detector can catch it" dan "drop-in replacement" tanpa bukti kompatibilitas penuh.</li>
+</ul>
+</li>
+<li>Implikasi praktis dan risikonya apa?
+<ul>
+<li>Praktis: cocok untuk scraping terkontrol, AI agent ringan, internal automation, dan testing tertentu.</li>
+<li>Risiko: berada di wilayah dual-use, bisa dipakai untuk abuse, dan deteksi bot sebenarnya lebih dari sekadar browser fingerprint.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Why the stealth claim feels sensitif:</p>
+<ul>
+<li>Deteksi bot modern nggak cuma lihat <code>navigator.webdriver</code> atau user agent.</li>
+<li>Mereka lihat timing, interaksi, network, reputasi IP, session flow, dan pola perilaku.</li>
+<li>Jadi browser stealth bisa membantu, tapi bukan solusi tunggal.</li>
+</ul>
+</li>
+<li>
+<p>Insight personal:</p>
+<ul>
+<li>Yang menarik bukan klaim "chrome kalah", tapi bahwa Obscura bisa jadi contoh specialized runtime yang efisien untuk subset use case.</li>
+<li>Ini mirip trade-off antara full browser dan specialized runtime: kompatibilitas luas vs efisiensi fokus.</li>
+<li>Hype seringnya terjadi ketika "lebih cepat" dicampur dengan "lebih stealth" tanpa memasukkan realitas operasional dan hukum.</li>
+</ul>
+</li>
+<li>
+<p>Kesimpulan ringkas:</p>
+<ul>
+<li>Obscura menarik sebagai eksperimen dan proof-of-concept untuk runtime web automation yang lebih ringan.</li>
+<li>Narasi stealth besar-besaran harus dilihat skeptis.</li>
+<li>Nilai riilnya mungkin ada di scope sempit: scraping/automation tertentu, bukan sebagai pengganti Chrome di semua kasus.</li>
+</ul>
+</li>
+<li>
+<p>Follow-up jika mau lanjut:</p>
+<ul>
+<li>Bedah konsep headless browser, CDP, Puppeteer, Playwright, dan di mana Obscura coba masuk.</li>
+<li>Tinjau komentar teknis di post untuk melihat area mana yang valid dan mana yang overclaim.</li>
+<li>Kembangkan insight ini jadi zettel kecil tentang batasan stealth dalam browser automation. (Sudah dibuat: <a href="/sotoy/notes/zettel.1777866407372">Batasan stealth dalam browser automation</a>)</li>
+<li>Buat zettel tambahan untuk:
+<ul>
+<li>runtime web automation khusus yang menukar kompatibilitas luas dengan efisiensi fokus (<a href="/sotoy/notes/zettel.1777866581063">Runtime web automation khusus menukar kompatibilitas luas dengan efisiensi fokus</a>).</li>
+<li>persistent knowledge graph + blast radius untuk mengurangi context waste di code review agen (<a href="/sotoy/notes/zettel.1777866581064">Knowledge graph + blast radius mengurangi context waste dalam agent code review</a>).</li>
+<li>bottleneck agen coding yang sering ada pada pemilihan konteks, bukan kapasitas model (<a href="/sotoy/notes/zettel.1777866581065">Bottleneck agen coding sering ada pada pemilihan konteks, bukan kapasitas model</a>).</li>
+</ul>
+</li>
+<li>Explore lebih lanjut Obscura dengan use case:
+<ul>
+<li>scraping artikel yang pakai heavy JS, untuk lihat apakah runtime-nya benar-benar eksekusi halaman modern.</li>
+<li>automation internal yang butuh banyak sesi singkat, untuk lihat dampak startup/memory.</li>
+<li>skenario stealth minim, seperti fetch data dari halaman yang sudah pakai anti-bot dasar.</li>
+</ul>
+</li>
+<li>Process yang bisa dicoba:
+<ul>
+<li>clone repo, build/binary check, jalankan sample script, cek apakah page JS heavy berjalan.</li>
+<li>bandingkan hasil render/response dengan Puppeteer/Playwright pada target halaman yang sama.</li>
+<li>tes deteksi sederhana dengan script yang mengecek <code>navigator.webdriver</code>, canvas fingerprint, dan network request.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/tirth8205/code-review-graph">code-review-graph oleh tirth8205</a></p>
+<ul>
+<li>Repo ini muncul di post LinkedIn Youssef Hosni sebagai contoh persistent knowledge graph untuk codebase, supaya coding agent gak harus baca semua file.</li>
+<li>Inti masalah yang diserang: <strong>context waste</strong>. Agent sering dikasih task kecil tetapi malah membaca terlalu banyak file yang tidak relevan, jadi token terbuang dan reasoning model jadi noisy.</li>
+</ul>
+</li>
+<li>
+<p>Mekanisme yang kemungkinan dipakai:</p>
+<ul>
+<li>Repo diparse dengan <a href="https://github.com/tree-sitter/tree-sitter">Tree-sitter</a> untuk ekstraksi struktur: function, class, import, dependency, dan relasi antar file.</li>
+<li>Hasil parsing itu disimpan di <a href="https://github.com/sqlite/sqlite">SQLite</a> sebagai graph persisten, bukan dibangun ulang tiap kali.</li>
+<li>Saat file berubah, sistem update incremental hanya bagian yang berubah.</li>
+<li>Blast radius dihitung: caller, callee, dependent, related test, dan file yang terdampak.</li>
+<li>Agent baru dikasih subset file relevan, bukan seluruh repo.</li>
+</ul>
+</li>
+<li>
+<p>Kenapa pendekatan knowledge graph + blast radius menarik:</p>
+<ul>
+<li>Dia memisahkan pekerjaan finding context dari pekerjaan reasoning.</li>
+<li>Model LLM tidak lagi dibebani untuk jadi parser, navigator repo, dan impact analyzer sekaligus.</li>
+<li>Ini mirip prinsip: komponen murah precompute struktur, komponen mahal fokus berpikir.</li>
+<li>Hasilnya bisa jadi lebih fokus dan lebih murah, terutama di repo besar.</li>
+</ul>
+</li>
+<li>
+<p>Kapan ini berguna dan kapan overkill:</p>
+<ul>
+<li>Berguna untuk repo besar, PR kecil dengan dampak tersebar, code review, change impact analysis, test suggestion, dan monorepo/polyglot.</li>
+<li>Overkill untuk repo kecil, task greenfield/desain API baru, atau codebase yang terlalu dinamis dan runtime-heavy.</li>
+<li>Juga perlu hati-hati kalau dukungan <a href="https://github.com/tree-sitter/tree-sitter">Tree-sitter</a> untuk bahasa tertentu belum cukup mendalam.</li>
+</ul>
+</li>
+<li>
+<p>Klaim yang kuat versus yang perlu hati-hati:</p>
+<ul>
+<li>Kuat: context waste adalah problem nyata; persistent graph + incremental update logis; blast radius buat review masuk akal.</li>
+<li>Hati-hati: angka 6.8x / 49x mungkin cuma valid di benchmark tertentu; "support 23 languages" tidak selalu berarti analisis semantik lengkap untuk semua bahasa; istilah "knowledge graph" bisa kedengaran lebih fancy daripada implementasi praktisnya.</li>
+<li>Explore lebih lanjut code-review-graph dengan use case:
+<ul>
+<li>evaluasi repo besar yang sering PR kecil, untuk lihat apakah blast radius bisa memangkas file relevan.</li>
+<li>proyek yang banyak dependency antar modul, untuk lihat apakah graph membantu hitung impact lebih cepat.</li>
+<li>integrasi agent review, untuk lihat apakah token context berkurang dan hasil review lebih fokus.</li>
+</ul>
+</li>
+<li>Process yang bisa dicoba:
+<ul>
+<li>clone repo, jalankan indexing pada satu repo besar, lalu inspeksi SQLite graph yang dihasilkan.</li>
+<li>ubah satu fungsi kecil di repo target, lihat file mana yang dihitung terdampak dan apakah daftar itu relevan.</li>
+<li>bandingkan alur “agent baca semua file” dengan “agent baca subset dari blast radius” di satu PR nyata.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Insight tambahan:</p>
+<ul>
+<li>Ini bukan hanya tool buat Claude Code. Ini lebih ke gagasan bahwa bottleneck coding agent sering ada di pemilihan konteks, bukan di modelnya.</li>
+<li>Kalau agen adalah analis pintar, project ini bikin "petugas arsip" yang nyaring dokumen relevan sebelum model diminta berpikir.</li>
+<li>Jadi nilai utamanya adalah <strong>fokus</strong>, bukan sekadar hemat token.</li>
+<li>Tujuan utama bukan menyembunyikan bot secara absolut, tapi mereduksi jejak fingerprint dan sinyal yang sering dipakai situs untuk mendeteksi automation.</li>
+<li>Post itu menyebut:
+<ul>
+<li>randomisasi fingerprint per session untuk GPU, canvas, audio, battery</li>
+<li>masking <code>navigator.webdriver</code></li>
+<li>patch native functions</li>
+<li>blocking ribuan tracker domains</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Lapisan teknis stealth yang kemungkinan dimainkan:</p>
+<ul>
+<li>Property masking: override getter di <code>navigator</code>, <code>screen</code>, <code>plugins</code>, <code>languages</code>, WebGL, battery, device memory, dsb.</li>
+<li>Per-session randomization: sesi bot dibuat tidak identik, tapi harus tetap konsisten sebagai fingerprint perangkat nyata.</li>
+<li>Native function patching: bukan hanya output yang harus normal, tapi juga tampilan fungsi saat diinspeksi.</li>
+<li>Tracker/anti-bot suppression: mengurangi observasi pihak ketiga, tapi bisa juga jadi sinyal jika pola request jadi terlalu bersih.</li>
+</ul>
+</li>
+<li>
+<p>Kenapa fitur ini bisa efektif, tapi tidak pernah jaminan?</p>
+<ul>
+<li>Browser-level stealth itu cuma satu lapisan deteksi. Situs modern mengevaluasi banyak sinyal lain seperti IP reputation, timing request, pola klik/scroll, durasi sesi, cookie reuse, dan kontinuitas navigasi.</li>
+<li>Jadi <code>navigator.webdriver</code> lolos saja belum cukup.</li>
+<li>Di use case AI agent internal, stealth bisa kurang penting; di scraping situs pihak ketiga yang serius, stealth hanya titik awal.</li>
+</ul>
+</li>
+<li>
+<p>Batasan / failure mode:</p>
+<ul>
+<li>Inconsistency: patch satu API tapi lupa API lain, jadi terjadi kontradiksi antar sinyal.</li>
+<li>Unrealistic randomness: fingerprint terlalu acak sampai jadi nggak masuk akal.</li>
+<li>Behavioral detection: fingerprint lolos, tapi klik/scroll masih mekanis.</li>
+<li>Network layer kalah: IP/proxy jelek atau TLS fingerprint tidak wajar.</li>
+<li>Compatibility gap: stealth oke, tapi rendering/runtime tidak cocok untuk halaman web modern.</li>
+</ul>
+</li>
+<li>
+<p>Ringkasannya:</p>
+<ul>
+<li>Stealth mode Obscura paling tepat dilihat sebagai risk reduction pada permukaan browser fingerprint.</li>
+<li>Bukan jubah gaib; lebih mirip make-up forensics yang bantu browser bot lolos pintu depan.</li>
+<li>Efektif di satu permukaan, tapi tidak menghapus semua bukti.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">daily (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">browser-automation (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">stealth (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">knowledge-graph (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">code-review (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">research (Private)</a></li>
+</ol>

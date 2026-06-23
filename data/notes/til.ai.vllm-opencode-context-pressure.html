@@ -1,0 +1,652 @@
+<h1 id="opencode--vllm-failure-sering-karena-context-pressure-bukan-param-kecil">OpenCode + vLLM failure sering karena context pressure, bukan param kecil<a aria-hidden="true" class="anchor-heading icon-link" href="#opencode--vllm-failure-sering-karena-context-pressure-bukan-param-kecil"></a></h1>
+<p>Yang gue pelajari dari kasus ini: ketika OpenCode + LiteLLM + vLLM ngelempar error seperti <code>litellm.ServiceUnavailableError</code>, <code>litellm.MidStreamFallbackError</code>, atau <code>APIConnectionError: Hosted_vllmException - 'id'</code>, kemungkinan besar bukan sekadar parameter kecil yang salah.</p>
+<p>Signal yang paling kuat: habis <code>ESC</code> lalu <code>/compact</code> langsung normal lagi. Itu bukan kebetulan. Itu clue bahwa masalahnya ada di context state / KV cache / stream state, bukan jaringan.</p>
+<p>Intinya:</p>
+<ul>
+<li><code>OpenCode</code> bisa gagal mendeteksi overflow dari <code>vLLM</code> karena error signature-nya beda dari OpenAI/Anthropic.</li>
+<li><code>LiteLLM</code> sering nge-wrap root cause asli jadi <code>MidStreamFallbackError</code> / <code>ServiceUnavailableError</code> / <code>APIConnectionError</code>.</li>
+<li><code>vLLM</code> punya behavior yang rentan: streaming stall, preemption, KV cache exhaustion, malformed chunk ketika context panjang.</li>
+<li><code>limit.context = 111616</code> bisa jadi cuma metadata UI/config OpenCode. Belum tentu LiteLLM atau vLLM enforce secara nyata, atau tokenizer sinkron. Runtime KV bisa jebol meski angka metadata terlihat aman.</li>
+<li><code>reasoning: true</code> pada Qwen reasoning model sangat suspicious. Hidden reasoning tokens / internal CoT sering membuat real KV usage jauh lebih besar daripada visible tokens.</li>
+<li>Output 16384 untuk agent coding + long context bukan sekadar "besar"; itu monster. Decode panjang memperbesar chance stream interruption, scheduler preemption, malformed SSE chunk, atau timeout.</li>
+<li>Prefix caching + chunked prefill di vLLM bisa menambah instabilitas untuk agent workflows dengan reasoning, long context, streaming, dan tool calls.</li>
+</ul>
+<p>Karena itu, pendekatan paling masuk akal adalah:</p>
+<ol>
+<li>Turunkan effective context hard limit (misal 48k–60k) walau model support 128k/200k.</li>
+<li>Trigger compact lebih agresif, jangan tunggu 85–90%; mulai di 55–65%.</li>
+<li>Batasi <code>max_tokens</code> output (coba 4k–8k dulu).</li>
+<li>Disable parallel requests sementara supaya KV cache / stream competition berkurang.</li>
+<li>Periksa log <code>vLLM</code> langsung, bukan cuma LiteLLM log.</li>
+<li>Perhatikan compatibility OpenCode ↔ LiteLLM ↔ vLLM versi.</li>
+<li>Ingat: coding agents meng-inflate context dengan diff, tool output, repo context, dan reasoning trace.</li>
+</ol>
+<p>Catatan praktisnya: jika <code>/compact</code> langsung memperbaiki masalah, hampir pasti root cause-nya adalah "context state unhealthy". Ini bukan bug acak, ini masalah pressure / overflow yang tertutup oleh wrapper error.</p>
+<p>Hal spesifik yang perlu dicek:</p>
+<ul>
+<li>apakah vLLM dijalankan dengan <code>--enable-prefix-caching</code> atau <code>--enable-chunked-prefill</code>; jika iya, jejalkan disable sementara.</li>
+<li>apakah log vLLM menunjukkan <code>preempted</code>, <code>KV cache eviction</code>, <code>recompute</code>, atau <code>aborted sequence</code>.</li>
+<li>apakah <code>reasoning: true</code> aktif pada Qwen; ini sering memicu hidden KV growth yang tidak terlihat.</li>
+<li>apakah output size masih 16384; untuk agent coding, coba turunkan ke 4096 dulu.</li>
+<li>apakah OpenCode/LiteLLM/tokenizer accounting mismatch membuat visible context 85k padahal runtime mungkin 105k+.</li>
+</ul>
+<p>Kalau error hilang setelah langkah-langkah ini, kemungkinan besar masalahnya bukan hard overflow, tapi runtime instability / KV cache pressure / mismatch detection.</p>
+<h2 id="serving-capacity-and-admission-control">Serving capacity and admission control<a aria-hidden="true" class="anchor-heading icon-link" href="#serving-capacity-and-admission-control"></a></h2>
+<p>Sekarang diagnosisnya lebih jelas: bukan model atau konteks limit per request, tapi <strong>serving capacity</strong>. Jam sepi aman dan jam sibuk error itu textbook pertanda bahwa beberapa request panjang sedang masuk bersamaan, masing-masing butuh KV cache besar, lalu vLLM mulai preempt/recompute/queue dan LiteLLM menerima stream terputus/malformed.</p>
+<p>Penting diubah secara mental:</p>
+<ul>
+<li><code>max_model_len = 111k</code> bukan berarti aman untuk banyak user concurrent.</li>
+<li>Itu lebih mirip batas maksimum per request.</li>
+<li>Kapasitas effective concurrency jauh lebih kecil karena KV cache tumbuh linear terhadap jumlah request aktif × panjang context × output tokens.</li>
+<li>vLLM metrics seperti <code>vllm:kv_cache_usage_perc</code>, <code>vllm:num_requests_running</code>, <code>vllm:num_requests_waiting</code>, <code>vllm:request_prompt_tokens</code>, dan <code>vllm:request_generation_tokens</code> adalah indikasi tekanan scheduler/KV cache, bukan hanya GPU utilization.</li>
+</ul>
+<p>Untuk angka kapasitas GPU nyata, lihat juga <a href="/sotoy/notes/notes.ai.vllm-qwen3-gpu-capacity">Qwen3.5-397B-A17B-FP8 di vLLM: kebutuhan H100 dan kapasitas runtime</a> dan sumber eksternal <a href="https://www.spheron.network/blog/deploy-qwen-3-5-gpu-cloud/">Spheron Blog: Deploy Qwen 3.5 on GPU Cloud</a> — di situ gue catat bahwa Qwen3.5-397B-A17B-FP8 butuh sekitar 8×H100 dan menyisakan sekitar 100–119 GB untuk KV cache.</p>
+<h3 id="praktik-admission-control">Praktik admission control<a aria-hidden="true" class="anchor-heading icon-link" href="#praktik-admission-control"></a></h3>
+<p>Solusi praktisnya mulai dari depan vLLM:</p>
+<ol>
+<li>Limit concurrency keras.
+<ul>
+<li><code>max concurrent generations = 1–2</code> per model instance untuk long-context coding workloads.</li>
+</ul>
+</li>
+<li>Pisahkan <code>coding model</code> dari <code>chat model</code>.
+<ul>
+<li>small model untuk chat ringan;</li>
+<li>big model hanya untuk coding/deep reasoning.</li>
+</ul>
+</li>
+<li>Hard cap session lifetime.
+<ul>
+<li>auto compact tiap 30–50 turn;</li>
+<li>restart session setelah task besar.</li>
+</ul>
+</li>
+<li>Reduce output tokens drastis.
+<ul>
+<li>16384 terlalu agresif untuk jam ramai;</li>
+<li>production sering clamp di 2k–4k.</li>
+</ul>
+</li>
+<li>Set <code>gpu_memory_utilization</code> lebih tinggi.
+<ul>
+<li>vLLM rekomendasi bisa membantu preemption issue.</li>
+</ul>
+</li>
+<li>Disable prefix caching sementara.
+<ul>
+<li>prefix caching bagus untuk throughput, tapi bisa memperparah KV fragmentation / concurrency weirdness.</li>
+</ul>
+</li>
+<li>Monitor KV cache usage live.
+<ul>
+<li><code>kv_cache_usage_perc > 0.85</code> atau <code>0.95</code> adalah alert.</li>
+</ul>
+</li>
+<li>Jangan pakai streaming untuk internal agent tasks.
+<ul>
+<li>streaming cocok UX, tapi internal tool/summarization lebih stabil non-streaming.</li>
+</ul>
+</li>
+<li>Scale horizontally.
+<ul>
+<li>beberapa replica dengan concurrency kecil lebih stabil daripada satu replica besar.</li>
+</ul>
+</li>
+<li>Separate inference pools.</li>
+</ol>
+<ul>
+<li>pool kecil untuk chat, pool besar untuk coding.</li>
+</ul>
+<ol start="11">
+<li>LiteLLM workaround.</li>
+</ol>
+<ul>
+<li>disable mid-stream fallback atau bypass LiteLLM untuk coding path.</li>
+</ul>
+<ol start="12">
+<li>Temporary operational workaround.</li>
+</ol>
+<ul>
+<li>concurrency rendah, compact agresif, output ≤4096, reasoning off, streaming off untuk internal tasks.</li>
+</ul>
+<h3 id="contoh-konfigurasi-konservatif">Contoh konfigurasi konservatif<a aria-hidden="true" class="anchor-heading icon-link" href="#contoh-konfigurasi-konservatif"></a></h3>
+<pre class="language-bash"><code class="language-bash">vllm serve /path/to/model <span class="token punctuation">\</span>
+  --tensor-parallel-size <span class="token number">8</span> <span class="token punctuation">\</span>
+  --max-model-len <span class="token number">65536</span> <span class="token punctuation">\</span>
+  --max-num-seqs <span class="token number">2</span> <span class="token punctuation">\</span>
+  --max-num-batched-tokens <span class="token number">65536</span> <span class="token punctuation">\</span>
+  --gpu-memory-utilization <span class="token number">0.92</span> <span class="token punctuation">\</span>
+  --enable-prefix-caching
+</code></pre>
+<p>Jika masih error:</p>
+<pre class="language-bash"><code class="language-bash">--max-num-seqs <span class="token number">1</span>
+--max-model-len <span class="token number">49152</span>
+--max-num-batched-tokens <span class="token number">49152</span>
+</code></pre>
+<p>Di OpenCode client, batasi juga:</p>
+<pre class="language-ts"><code class="language-ts">limit<span class="token operator">:</span> <span class="token punctuation">{</span>
+  context<span class="token operator">:</span> <span class="token number">65536</span><span class="token punctuation">,</span>
+  output<span class="token operator">:</span> <span class="token number">4096</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="hosted-provider-vs-self-host-mental-model">Hosted provider vs self-host mental model<a aria-hidden="true" class="anchor-heading icon-link" href="#hosted-provider-vs-self-host-mental-model"></a></h2>
+<p>Penting untuk ingat: OpenRouter tidak menjalankan satu instance vLLM polos yang menerima semua request mentah. Mereka stabil karena banyak lapisan proteksi di atas inference engine.</p>
+<p>Intinya bukan “GPU mereka kuat lalu semua request masuk”. Ini lebih mirip sistem produksi dengan antrian dan routing.</p>
+<p>OpenRouter mendokumentasikan bahwa mereka melakukan provider routing dan load balancing ke beberapa provider, dengan fallback provider aktif secara default. Jadi ketika satu provider lambat/down/throttled, request bisa diarahkan ke provider lain, bukan dipaksa masuk ke satu runtime yang sedang penuh. Mereka juga punya rate limit dan upstream throttle untuk peak usage; traffic tidak dibiarkan masuk tanpa kontrol.</p>
+<p>Bandingkan setup lo:</p>
+<pre class="language-text"><code class="language-text">Lo:
+OpenCode -> LiteLLM -> 1/self-host vLLM pool -> model besar
+
+Hosted provider:
+Client -> gateway -> rate limiter -> router -> queue -> many replicas/providers -> health checker -> fallback -> response
+</code></pre>
+<p>Stabilitas mereka datang dari beberapa hal:</p>
+<ol>
+<li>Admission control
+<ul>
+<li>request tidak langsung masuk GPU saat sistem penuh.</li>
+<li>bisa di-queue, di-throttle, di-429, atau diroute ke provider lain.</li>
+</ul>
+</li>
+<li>Load balancing dan fallback
+<ul>
+<li>tidak hanya satu server model.</li>
+<li>jika satu replica saturated, request bisa diarahkan lain.</li>
+</ul>
+</li>
+<li>Pool isolation
+<ul>
+<li>request pendek, request panjang, free-tier, paid-tier, priority tidak selalu ke resource sama.</li>
+</ul>
+</li>
+<li>Horizontal scaling
+<ul>
+<li>banyak replica dengan concurrency kecil lebih stabil daripada satu replica besar.</li>
+</ul>
+</li>
+<li>Scheduler policy matang
+<ul>
+<li>request 2k token dan 100k token tidak sama.</li>
+</ul>
+</li>
+<li>Parameter clamping
+<ul>
+<li>gateway bisa membatasi parameter agar tidak merusak pool.</li>
+</ul>
+</li>
+<li>Retry aman
+<ul>
+<li>retry biasanya sebelum streaming dimulai atau ke provider lain.</li>
+</ul>
+</li>
+</ol>
+<p>Jadi jawaban pendeknya: OpenRouter stabil bukan karena “satu server kuat”, tapi karena distributed serving dan admission control.</p>
+<h3 id="minimal-architecture-target-untuk-self-host">Minimal architecture target untuk self-host<a aria-hidden="true" class="anchor-heading icon-link" href="#minimal-architecture-target-untuk-self-host"></a></h3>
+<pre class="language-text"><code class="language-text">OpenCode
+  -> Gateway / LiteLLM Router
+  -> Admission Control
+  -> Queue
+  -> Pool Router
+      -> small-chat pool
+      -> coding-agent pool
+      -> summarizer pool
+  -> vLLM replicas
+  -> Metrics + autoscale / manual scale
+</code></pre>
+<p>Untuk coding agent pool, mulai dengan:</p>
+<pre class="language-text"><code class="language-text">1 replica:
+  max_num_seqs = 1 atau 2
+  max_output_tokens = 4096
+  context target = 48k–64k
+  queue request lain
+</code></pre>
+<p>Lebih stabil daripada:</p>
+<pre class="language-text"><code class="language-text">1 replica x max_num_seqs=8
+</code></pre>
+<p>Dan request ringan jangan masuk pool sama:</p>
+<pre class="language-text"><code class="language-text">chat biasa       -> model kecil / pool cepat
+summarization    -> model kecil / non-streaming
+coding long-run  -> model besar / queue ketat
+</code></pre>
+<h2 id="production-sizing-mental-model">Production sizing mental model<a aria-hidden="true" class="anchor-heading icon-link" href="#production-sizing-mental-model"></a></h2>
+<p>Untuk model kelas Qwen3-Coder-480B-A35B FP8, jawabannya bukan “berapa kuat GPU”, tetapi “berapa concurrent long-agent session yang mau lo support dengan latency stabil”.</p>
+<p>Model ini bukan 1–2 GPU kecil. vLLM resmi menyarankan setup kelas <strong>8×H200 atau 8×H20 141GB</strong> untuk Qwen3-Coder-480B-A35B, dan bahkan dengan context asli 262k, satu node tetap bisa tidak cukup. Hugging Face model card juga menyebut model ini total <strong>480B parameters</strong>, <strong>35B activated</strong>, dan native long context <strong>256K tokens</strong>.</p>
+<p>Jadi mental model dasarnya:</p>
+<pre class="language-text"><code class="language-text">1 replica = 1 vLLM deployment model besar
+1 replica kemungkinan = 8 GPU high-memory
+1 long OpenCode session = bisa makan kapasitas besar
+production stability = replicas × admission control × queue
+</code></pre>
+<p>Estimasi realistis:</p>
+<ul>
+<li>
+<p><strong>Internal dev / POC stabil</strong> (1–2 user aktif):</p>
+<ul>
+<li>1 replica = 8×H100 80GB / 8×H200 141GB / 8×MI300X 192GB</li>
+<li><code>max_num_seqs = 1–2</code></li>
+<li><code>context target = 48k–64k</code></li>
+<li><code>output = 2k–4k</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Small production</strong> (3–5 concurrent long-agent sessions):</p>
+<ul>
+<li>3–5 replicas = sekitar 24–40 GPU high-end</li>
+<li>1 replica hanya menerima 1 long-agent request aktif, lainnya queue</li>
+</ul>
+</li>
+<li>
+<p><strong>Serious SaaS / enterprise</strong> (10–20 concurrent long-agent sessions):</p>
+<ul>
+<li>10–20 replicas = sekitar 80–160 GPU high-end</li>
+</ul>
+</li>
+</ul>
+<p>Kalau lo paksa:</p>
+<pre class="language-text"><code class="language-text">1 replica × max_num_seqs=5
+</code></pre>
+<p>kemungkinan besar balik lagi ke error yang sama: KV cache pressure, preemption, stream stall, LiteLLM error.</p>
+<p>Untuk produksi yang lebih sehat:</p>
+<pre class="language-text"><code class="language-text">chat ringan          -> model 7B/14B/32B
+summarization        -> model kecil, non-streaming
+repo search/RAG      -> retrieval + reranker
+coding simple edit   -> 32B/72B coder
+hard coding agent    -> Qwen 480B-A35B pool
+</code></pre>
+<p>Rekomendasi awal:</p>
+<pre class="language-text"><code class="language-text">Production baseline awal:
+2 replicas Qwen besar = 16 GPU high-memory
+
+Replica A:
+  active long agent request = 1
+  standby/overflow = queue
+
+Replica B:
+  active long agent request = 1
+  standby/overflow = queue/fallback
+
+Plus:
+1–2 smaller model pools untuk summarizer/chat/planner
+</code></pre>
+<p>Kenapa minimal 2 replica? Karena 1 replica itu POC, bukan production. Kalau satu replica lagi prefill panjang atau restart, semua kena. Dua replica memberi failover dasar.</p>
+<p>Setting awal yang lebih aman:</p>
+<pre class="language-bash"><code class="language-bash">vllm serve Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8 <span class="token punctuation">\</span>
+  --tensor-parallel-size <span class="token number">8</span> <span class="token punctuation">\</span>
+  --max-model-len <span class="token number">65536</span> <span class="token punctuation">\</span>
+  --max-num-seqs <span class="token number">1</span> <span class="token punctuation">\</span>
+  --max-num-batched-tokens <span class="token number">65536</span> <span class="token punctuation">\</span>
+  --gpu-memory-utilization <span class="token number">0.92</span>
+</code></pre>
+<p>OpenCode/client:</p>
+<pre class="language-ts"><code class="language-ts">limit<span class="token operator">:</span> <span class="token punctuation">{</span>
+  context<span class="token operator">:</span> <span class="token number">65536</span><span class="token punctuation">,</span>
+  output<span class="token operator">:</span> <span class="token number">4096</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Naikkan perlahan jika stabil:</p>
+<pre class="language-text"><code class="language-text">max_num_seqs: 1 -> 2
+context: 64k -> 96k
+output: 4k -> 8k
+</code></pre>
+<p>Rule sizing kasar:</p>
+<pre class="language-text"><code class="language-text">required_replicas = ceil(concurrent_long_agent_sessions / safe_long_sessions_per_replica)
+</code></pre>
+<p>Dengan model ini:</p>
+<pre class="language-text"><code class="language-text">safe_long_sessions_per_replica = 1
+aggressive = 2
+risky = 3+
+</code></pre>
+<p>Jadi:</p>
+<pre class="language-text"><code class="language-text">2 concurrent OpenCode users  -> 2 replicas -> 16 GPU
+5 concurrent OpenCode users  -> 5 replicas -> 40 GPU
+10 concurrent OpenCode users -> 10 replicas -> 80 GPU
+</code></pre>
+<p>Kalau budget tidak masuk, desain lo harus berubah: pakai Qwen besar hanya untuk task sulit, dan mayoritas agent loop dialihkan ke model 32B/72B + retrieval + tool execution.</p>
+<p>Analogi:
+OpenRouter itu seperti bandara dengan gate, antrian, prioritas, reroute, dan fallback. Self-host lo sekarang lebih mirip semua orang disuruh masuk satu pintu pesawat.</p>
+<p>Root cause yang mau dibuktikan tetap sama: self-host lo belum punya admission control dan pool isolation yang cukup untuk long-context concurrent agent workload.</p>
+<p>Rule of thumb:</p>
+<ul>
+<li><code>kv_cache_usage_perc > 0.85</code> selama beberapa menit → mulai queue/throttle</li>
+<li><code>kv_cache_usage_perc > 0.95</code> → reject/429 long request</li>
+<li><code>num_requests_waiting</code> naik terus → kapasitas kurang</li>
+<li>TTFT naik tajam meski request sedikit → long prefill / HOL blocking</li>
+<li>preemption count naik → kurangi concurrency/context</li>
+</ul>
+<h2 id="root-cause-simulation">Root-cause simulation<a aria-hidden="true" class="anchor-heading icon-link" href="#root-cause-simulation"></a></h2>
+<p>Misal config lo:</p>
+<pre class="language-text"><code class="language-text">context limit: 111,616 token
+output limit: 16,384 token
+model: besar, FP8
+traffic: beberapa agent OpenCode concurrent
+</code></pre>
+<p>Satu request panjang agent coding tidak cuma prompt awal. Total active sequence length-nya adalah:</p>
+<pre class="language-text"><code class="language-text">active_tokens ≈ prompt_tokens + generated_tokens_so_far
+</code></pre>
+<p>Contoh:</p>
+<pre class="language-text"><code class="language-text">request A: prompt = 80k, max output = 16k, active max ≈ 96k
+</code></pre>
+<p>Saat sendiri pagi hari:</p>
+<pre class="language-text"><code class="language-text">running requests = 1
+active KV pressure ≈ 96k
+</code></pre>
+<p>Saat ramai:</p>
+<pre class="language-text"><code class="language-text">request A = 96k
+request B = 68k
+request C = 48k
+request D = 24k
+
+total active pressure ≈ 236k
+</code></pre>
+<p>Masing-masing masih di bawah <code>max_model_len</code>, tapi gabungannya bisa melampaui kapasitas KV cache efektif. Ini yang menipu: <code>max_model_len</code> adalah batas per request, bukan kapasitas concurrent.</p>
+<p>Timeline failure yang paling relevan:</p>
+<pre class="language-text"><code class="language-text">T0: request A masuk, prompt panjang.
+T1: request B/C/D ikut masuk.
+T2: KV cache usage naik 70% → 85% → 95%.
+T3: request A sedang decode output panjang sementara B prefill.
+T4: vLLM mulai preemption/recompute karena KV tidak cukup.
+T5: stream A makin lambat, inter-token latency naik.
+T6: salah satu stream timeout/malformed/aborted.
+T7: LiteLLM bongkar stream kotor jadi MidStreamFallbackError / APIConnectionError / 'id'.
+T8: lo tekan ESC + /compact, request jadi jauh lebih pendek, KV pressure turun, semuanya normal lagi.
+</code></pre>
+<p>Jadi <code>/compact</code> tidak membuktikan bug LiteLLM saja. Ia menurunkan request size dan menghindari kondisi runtime buruk di vLLM/LiteLLM.</p>
+<h3 id="eksperimen-mental-untuk-membedakan-root-cause">Eksperimen mental untuk membedakan root cause<a aria-hidden="true" class="anchor-heading icon-link" href="#eksperimen-mental-untuk-membedakan-root-cause"></a></h3>
+<ol>
+<li>Single request vs concurrent request
+<ul>
+<li>Jika satu request panjang stabil tetapi beberapa request panjang bersamaan gagal, root cause adalah capacity contention, bukan context overflow per request.</li>
+</ul>
+</li>
+<li>Output 16k vs 4k
+<ul>
+<li>Jika 16k error tetapi 4k stabil, long decode / scheduler occupancy adalah masalah.</li>
+</ul>
+</li>
+<li>Bypass LiteLLM
+<ul>
+<li><code>OpenCode → vLLM langsung</code>.</li>
+<li>Jika bypass stabil, LiteLLM streaming layer bermasalah.</li>
+</ul>
+</li>
+<li>Turunkan <code>max_num_seqs</code>
+<ul>
+<li>Jika <code>max_num_seqs=1</code> stabil, concurrency/vLLM contention jelas.</li>
+</ul>
+</li>
+<li>Cari preemption log
+<ul>
+<li><code>Sequence group ... is preempted ... because there is not enough KV cache space</code></li>
+<li>Itu smoking gun runtime.</li>
+</ul>
+</li>
+</ol>
+<h3 id="admission-control-rule-of-thumb">Admission-control rule of thumb<a aria-hidden="true" class="anchor-heading icon-link" href="#admission-control-rule-of-thumb"></a></h3>
+<p>Gunakan estimated cost, bukan request count:</p>
+<pre class="language-ts"><code class="language-ts">estimatedCost <span class="token operator">=</span> promptTokens <span class="token operator">+</span> maxOutputTokens
+</code></pre>
+<p>Jangan admit request jika:</p>
+<pre class="language-text"><code class="language-text">currentInflightTokens + estimatedCost > SAFE_INFLIGHT_BUDGET
+</code></pre>
+<p>Untuk long coding request, <code>SAFE_INFLIGHT_BUDGET</code> sering jauh di bawah total model limit.</p>
+<p>Rule alert:</p>
+<ul>
+<li><code>kv_cache_usage_perc > 0.85</code> selama beberapa menit → queue/throttle</li>
+<li><code>kv_cache_usage_perc > 0.95</code> → reject/429 long request</li>
+<li><code>num_requests_waiting</code> naik terus → kapasitas kurang</li>
+<li>TTFT naik tajam dengan sedikit request → long prefill / HOL blocking</li>
+<li>preemption count naik → kurangi concurrency/context</li>
+</ul>
+<h3 id="bypass-test">Bypass test<a aria-hidden="true" class="anchor-heading icon-link" href="#bypass-test"></a></h3>
+<p>Coba jalankan:</p>
+<ul>
+<li><code>OpenCode → LiteLLM → vLLM</code></li>
+<li><code>OpenCode → vLLM langsung</code></li>
+<li><code>curl/openai-sdk → vLLM langsung</code></li>
+</ul>
+<p>Kalau bypass LiteLLM stabil, berarti layer streaming/proxy LiteLLM bermasalah. Kalau tetap error, berarti vLLM/runtime.</p>
+<h2 id="hypothesis-ranking-update">Hypothesis ranking update<a aria-hidden="true" class="anchor-heading icon-link" href="#hypothesis-ranking-update"></a></h2>
+<p>Signal yang sangat penting: kalau model, workflow, dan OpenCode sama, tapi OpenRouter stabil sementara self-host vLLM/LiteLLM bermasalah, probabilitasnya sekarang lebih tinggi ke:</p>
+<ol>
+<li><code>LiteLLM</code> streaming incompatibility / parser issue.</li>
+<li><code>vLLM</code> long-stream runtime instability.</li>
+<li><code>OpenCode</code> auto-compact mismatch dengan vLLM error signature.</li>
+<li>Actual context overflow.</li>
+<li>Model issue itself (kemungkinan kecil sekarang).</li>
+</ol>
+<p>Itu masuk akal karena hosted provider seperti OpenRouter biasanya punya layer tambahan:</p>
+<ul>
+<li>agresif guard request size (truncate/compact/reject),</li>
+<li>retry/recovery layer untuk malformed chunk, fallback, dan timeout,</li>
+<li>lebih ketat mengendalikan reasoning/hidden CoT,</li>
+<li>scheduler/backpressure yang lebih mature.</li>
+</ul>
+<p>Kalau OpenRouter stabil tapi self-host vLLM/LiteLLM bermasalah, itu sangat besar mengarah ke:</p>
+<ul>
+<li>runtime implementation / serving stack,</li>
+<li>bukan modelnya sendiri.</li>
+</ul>
+<p>Karena vLLM/LiteLLM direct lebih raw: request pathological bisa masuk sampai runtime kepanasan. OpenRouter kemungkinan mem-filter, retry, dan recover sebelum sampai ke sana.</p>
+<h3 id="hypothesis-ranking-update-1">Hypothesis ranking update<a aria-hidden="true" class="anchor-heading icon-link" href="#hypothesis-ranking-update-1"></a></h3>
+<p>Urutan kemungkinan sekarang:</p>
+<ol>
+<li><code>LiteLLM</code> streaming incompatibility / parser issue.</li>
+<li><code>vLLM</code> long-stream runtime instability.</li>
+<li><code>OpenCode</code> auto-compact mismatch dengan vLLM error signature.</li>
+<li>Actual context overflow.</li>
+<li>Model issue itself (kemungkinan kecil sekarang).</li>
+</ol>
+<h3 id="most-valuable-isolation-tests">Most valuable isolation tests<a aria-hidden="true" class="anchor-heading icon-link" href="#most-valuable-isolation-tests"></a></h3>
+<ol>
+<li>Bypass LiteLLM.
+<ul>
+<li>Test: <code>OpenCode → vLLM langsung</code> tanpa LiteLLM.</li>
+<li>Jika hilang: artinya problem utamanya ada di LiteLLM streaming layer.</li>
+<li>Jika tetap ada: artinya vLLM/runtime lebih mungkin.</li>
+</ul>
+</li>
+<li>Disable streaming sementara.
+<ul>
+<li>Kalau non-streaming stabil, hampir pasti isu pada SSE chunking/parser/timeout, bukan model inference.</li>
+</ul>
+</li>
+<li>Compare exact provider response schema.
+<ul>
+<li>Bandingkan OpenRouter vs vLLM response format, khususnya <code>id</code>, <code>finish_reason</code>, dan chunk fields.</li>
+</ul>
+</li>
+<li>Upgrade/downgrade LiteLLM.
+<ul>
+<li>Streaming regression sering versi-spesifik.</li>
+</ul>
+</li>
+<li>Test provider lain selain vLLM.
+<ul>
+<li>Coba SGLang/TGI/Ollama atau server lain.</li>
+<li>Jika stabil di provider lain, vLLM stack jadi tersangka utama.</li>
+</ul>
+</li>
+<li>Cek vLLM OpenAI compatibility mode.
+<ul>
+<li>Pastikan <code>/v1/chat/completions</code> dan schema OpenAI-compatible, bukan custom route.</li>
+</ul>
+</li>
+</ol>
+<h3 id="runtimestack-action-items">Runtime/stack action items<a aria-hidden="true" class="anchor-heading icon-link" href="#runtimestack-action-items"></a></h3>
+<ol>
+<li>Limit concurrency keras.
+<ul>
+<li><code>max concurrent generations = 1–2</code> per model instance.</li>
+<li>397B FP8 + long context adalah monster KV cache consumer.</li>
+<li>Bottleneck sering bukan GPU utilization, tapi KV cache / scheduler / preemption.</li>
+</ul>
+</li>
+<li>Pisahkan "coding model" dari "chat model".
+<ul>
+<li>Small model untuk chat ringan.</li>
+<li>Big model hanya untuk coding/deep reasoning.</li>
+<li>Jangan biarkan autocomplete/summarize/healthcheck/planner ikut masuk ke model besar.</li>
+</ul>
+</li>
+<li>Hard cap session lifetime.
+<ul>
+<li>Auto compact setiap 30–50 turns.</li>
+<li>Restart session setelah task besar.</li>
+<li>Long-running session bikin KV fragmentation / preemption / recompute naik.</li>
+</ul>
+</li>
+<li>Reduce output tokens drastis.
+<ul>
+<li>16384 terlalu agresif untuk concurrent streaming.</li>
+<li>Banyak infra production clamp di 2k atau 4k, bahkan untuk coding.</li>
+</ul>
+</li>
+<li>Set <code>gpu_memory_utilization</code> lebih tinggi.
+<ul>
+<li>vLLM merekomendasikan ini ketika preemption muncul.</li>
+<li>Misal naik dari 0.90 ke 0.95 / 0.97, dengan hati-hati agar tidak OOM.</li>
+</ul>
+</li>
+<li>Disable prefix caching sementara.
+<ul>
+<li>Prefix caching bagus untuk throughput, tapi bisa bikin KV fragmentation/concurrency weirdness lebih parah di long-running agent workflows.</li>
+</ul>
+</li>
+<li>Monitor KV cache usage live.
+<ul>
+<li>Cari grafik seperti <code>GPU KV cache usage: 99%</code>.</li>
+<li>Jika error selalu muncul saat >90%, itu smoking gun.</li>
+</ul>
+</li>
+<li>Jangan pakai streaming untuk internal agent tasks.
+<ul>
+<li>Streaming bagus untuk UX manusia, tapi untuk internal tool calls/batch coding/summarization lebih stabil non-streaming.</li>
+</ul>
+</li>
+<li>Scale horizontally.
+<ul>
+<li>Multiple vLLM workers, load balancing, sticky sessions.</li>
+<li>vLLM scheduler under high concurrency bisa saling preempt request.</li>
+</ul>
+</li>
+<li>Separate inference pools.</li>
+</ol>
+<ul>
+<li>Pool A untuk short chat.</li>
+<li>Pool B untuk long coding sessions.</li>
+<li>Kalau dicampur, chat ringan kena starvation.</li>
+</ul>
+<ol start="11">
+<li>LiteLLM workaround.</li>
+</ol>
+<ul>
+<li>Disable mid-stream fallback.</li>
+<li>Atau bypass LiteLLM untuk coding path.</li>
+</ul>
+<ol start="12">
+<li>Temporary operational workaround tercepat.</li>
+</ol>
+<ul>
+<li>Concurrency limit rendah.</li>
+<li>Compact lebih agresif.</li>
+<li>Output ≤ 4096.</li>
+<li>Reasoning OFF untuk coding default.</li>
+<li>Streaming OFF untuk internal tasks.</li>
+</ul>
+<p>Kalau error muncul hanya saat jam sibuk, itu textbook KV contention + scheduler preemption.</p>
+<h2 id="prioritas-action-items">Prioritas action items<a aria-hidden="true" class="anchor-heading icon-link" href="#prioritas-action-items"></a></h2>
+<p>Priority paling efektif:</p>
+<ol>
+<li>Turunkan <code>max_output_tokens</code> dulu.
+<ul>
+<li>Dari <code>output: 16384</code> jadi <code>output: 4096</code>.</li>
+<li>Kalau masih error, turun lagi ke <code>output: 2048</code>.</li>
+<li>Long decode streaming sering jadi sumber stalled stream, malformed SSE, vLLM preemption, dan LiteLLM MidStreamFallbackError.</li>
+</ul>
+</li>
+<li>Compact lebih agresif.
+<ul>
+<li>Set threshold di 50–60%.</li>
+<li>Jangan tunggu 80% ke atas.</li>
+<li>Karena usable context bisa jauh lebih kecil dari advertised limit.</li>
+</ul>
+</li>
+<li>Disable reasoning sementara untuk isolasi.
+<ul>
+<li><code>reasoning: false</code></li>
+<li>Kalau stabil tiba-tiba, hidden reasoning/KV growth adalah pemicunya.</li>
+</ul>
+</li>
+<li>Cek log vLLM langsung.
+<ul>
+<li>Cari <code>preempted</code>, <code>KV cache</code>, <code>recompute</code>, <code>aborted</code>, <code>OOM</code>, <code>scheduler warning</code>.</li>
+<li>Khususnya: <code>preempted due to KV cache pressure</code>.</li>
+</ul>
+</li>
+<li>Disable vLLM optimizations sementara.
+<ul>
+<li>Jika startup ada <code>--enable-prefix-caching</code> atau <code>--enable-chunked-prefill</code>, matikan buat test.</li>
+</ul>
+</li>
+<li>Pastikan concurrency = 1.
+<ul>
+<li>Single request only.</li>
+<li>Tidak ada parallel workers, parallel requests, atau background summarizer.</li>
+</ul>
+</li>
+<li>Test model lebih kecil.
+<ul>
+<li>Coba Qwen 72B atau 32B dengan workflow sama.</li>
+<li>Kalau stabil, itu artinya problemnya runtime pressure 397B, bukan OpenCode.</li>
+</ul>
+</li>
+<li>Tambahkan observability token/context.
+<ul>
+<li>Log estimated input tokens, output tokens, context sebelum compact, request duration, streaming duration.</li>
+<li>Supaya bisa lihat apakah error muncul setelah X token / Y menit.</li>
+</ul>
+</li>
+<li>Cek apakah OpenCode salah detect overflow dari vLLM.
+<ul>
+<li>OpenAI provider bisa decent, tapi vLLM OpenAI-compatible sering punya signature beda.</li>
+<li>Jika terbukti, fix bisa lewat custom error mapping atau patch provider adapter.</li>
+</ul>
+</li>
+<li>Temporary operational workaround.</li>
+</ol>
+<ul>
+<li>Manual compact lebih sering.</li>
+<li>Jangan biarkan session terlalu panjang.</li>
+<li>Split task besar.</li>
+<li>Restart session tiap major task.</li>
+</ul>
+<p>Urutan paling efektif:</p>
+<p>Phase 1 — isolasi cepat</p>
+<ul>
+<li>output → 4096</li>
+<li>reasoning → false</li>
+<li>concurrency → 1</li>
+</ul>
+<p>Kalau langsung stabil: root cause hampir pasti runtime/KV pressure.</p>
+<p>Phase 2 — observability</p>
+<ul>
+<li>inspect vLLM logs</li>
+<li>add token metrics</li>
+<li>monitor preemption</li>
+</ul>
+<p>Phase 3 — optimization</p>
+<ul>
+<li>compact threshold 50–60%</li>
+<li>disable prefix caching/chunked prefill</li>
+<li>patch overflow detection di OpenCode kalau perlu.</li>
+</ul>
+<p>Referensi: issue OpenCode/vLLM context overflow, vLLM KV cache preemption, dan LiteLLM mid-stream parsing mismatch.</p>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">til (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">ai (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vllm (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">opencode (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">debugging (Private)</a></li>
+</ol>

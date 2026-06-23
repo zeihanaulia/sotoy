@@ -1,0 +1,37 @@
+<h1 id="cross-turn-pii-exposure-requires-session-aware-masking-not-per-turn-masking">Cross-turn PII exposure requires session-aware masking, not per-turn masking<a aria-hidden="true" class="anchor-heading icon-link" href="#cross-turn-pii-exposure-requires-session-aware-masking-not-per-turn-masking"></a></h1>
+<blockquote>
+<p>Dalam multi-turn agent, risiko PII bukan hanya dari satu pesan; risiko muncul dari akumulasi fragmen kecil yang bisa digabung menjadi profil identitas.</p>
+<p>Source: <a href="https://arxiv.org/html/2604.16521v1">https://arxiv.org/html/2604.16521v1</a></p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li>Proteksi PII per-turn pada dasarnya stateless. Ia hanya melihat message sekarang dan mengabaikan history yang akan dikirim ulang ke model.</li>
+<li>Cumulative PII Exposure (CPE) membuat unit analisis pindah dari "message" ke "session".</li>
+<li>Konsekuensinya: jika threshold terlampaui, sistem harus menulis ulang seluruh history dengan pseudonym konsisten sebelum mengirim ke LLM.</li>
+</ul>
+<p>Impak:</p>
+<ul>
+<li>Ini bukan hanya soal deteksi data sensitif, tetapi soal governance atas representasi data sepanjang sesi.</li>
+<li>Bagi security agent, berarti stateful PII registry, co-occurrence graph, dan retroactive masking adalah pola arsitektur yang penting.</li>
+</ul>
+<p>Link:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">permanent-note (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">memory (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+</ul>

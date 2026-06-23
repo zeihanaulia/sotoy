@@ -1,0 +1,31 @@
+<h1 id="agentic-privacy-lebih-baik-dengan-typed-indexed-placeholders-daripada-fake-identities">Agentic privacy lebih baik dengan typed indexed placeholders daripada fake identities<a aria-hidden="true" class="anchor-heading icon-link" href="#agentic-privacy-lebih-baik-dengan-typed-indexed-placeholders-daripada-fake-identities"></a></h1>
+<blockquote>
+<p>Untuk agentic multi-turn conversation, lebih aman menyamarkan PII dengan token terindeks daripada menggantinya dengan nilai palsu yang bisa mengubah konteks.</p>
+</blockquote>
+<p>Catatan gue:</p>
+<ul>
+<li>Fake pseudonymization bisa membuat model reasoning berdasarkan dunia palsu, bukan dunia pengguna.</li>
+<li>Indexed placeholders seperti <code>[PERSON_001]</code>, <code>[ORG_001]</code>, <code>[LOCATION_001]</code> menjaga struktur referensi tanpa menambahkan asumsi semantik.</li>
+<li>Mapping asli disimpan lokal, sehingga de-masking bisa dilakukan dengan kontrol.</li>
+</ul>
+<p>Implikasi:</p>
+<ul>
+<li>Privacy layer harus memisahkan identity value dari task-relevant structure.</li>
+<li>Untuk entity yang punya makna task (lokasi, salary, medical condition), placeholder harus dilengkapi metadata abstraction, bukan hanya token polos.</li>
+<li>Ini membuat privacy protection lebih deterministik dan lebih mudah diaudit.</li>
+</ul>
+<p>Hubungan:</p>
+<ul>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp.indexed-masking">Indexed masking untuk agentic PII protection</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture.camp">CAMP: Cross-Turn PII Protection for LLM Conversations</a></li>
+<li><a href="/sotoy/notes/notes.security.pii-agent-architecture">Arsitektur PII filter dan security agent</a></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a class="color-tag" style="--tag-color: #a03623;" href="/sotoy/notes/tags.zettel">zettel</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">privacy (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">pii (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agent (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">masking (Private)</a></li>
+</ol>

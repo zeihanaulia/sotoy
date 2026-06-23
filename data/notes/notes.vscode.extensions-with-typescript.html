@@ -1,0 +1,404 @@
+<h1 id="vs-code-extension-dengan-typescript">VS Code Extension dengan TypeScript<a aria-hidden="true" class="anchor-heading icon-link" href="#vs-code-extension-dengan-typescript"></a></h1>
+<h2 id="kapan-pakai-ini">Kapan pakai ini<a aria-hidden="true" class="anchor-heading icon-link" href="#kapan-pakai-ini"></a></h2>
+<p>Gue nulis ini karena gue lagi nyoba pakai Dendron, tapi extension VS Code-nya sudah lama gak di-maintain. Sepertinya <code>plugin-core</code> udah lama nggak di-maintain secara aktif, jadi gue pakai note ini untuk mencatat: kalau mau bikin extension dari nol, apa saja yang mesti dipahami dan dicobain.</p>
+<h2 id="kenapa-dendron-bikin-penasaran">Kenapa Dendron bikin penasaran<a aria-hidden="true" class="anchor-heading icon-link" href="#kenapa-dendron-bikin-penasaran"></a></h2>
+<p>Dendron di workspace gue udah kayak aplikasi sendiri: ada sidebar <code>Dendron</code>, ada backlinks panel, ada graph panel, ada command untuk reload index. Tapi di belakangnya, extension ini bukan cuma request-response sederhana. Ada engine Dendron, ada file watcher, ada language feature, ada webview.</p>
+<p>Karena belum pernah bikin extension VS Code sendiri, gue ingin tahu apakah semua itu benar-benar butuh begitu banyak layer. Lebih penting lagi, kenapa beberapa hal di Dendron masih terasa kurang mulus, misalnya: file baru kadang nggak langsung muncul di tree view, <code>Reload Index</code> kadang lambat, dan webview-nya berat saat initial load.</p>
+<h2 id="mulai-dari-nol-vanilla-extension">Mulai dari nol: vanilla extension<a aria-hidden="true" class="anchor-heading icon-link" href="#mulai-dari-nol-vanilla-extension"></a></h2>
+<p>Sebelum nyerocos ke Dendron, gue mulai dengan versi paling kecil.</p>
+<h3 id="versi-manual-struktur-folder-yang-perlu-ada">Versi manual: struktur folder yang perlu ada<a aria-hidden="true" class="anchor-heading icon-link" href="#versi-manual-struktur-folder-yang-perlu-ada"></a></h3>
+<p>Kalau mau bikin extension tanpa generator, struktur dasar yang perlu dipahami adalah:</p>
+<pre class="language-text"><code class="language-text">my-extension/
+├── package.json
+├── tsconfig.build.json
+├── src/
+│   └── extension.ts
+├── out/
+│   └── extension.js
+└── .vscode/
+    └── launch.json
+</code></pre>
+<ul>
+<li><code>package.json</code>
+<ul>
+<li>manifest extension. Menentukan nama, versi, <code>engines.vscode</code>, <code>activationEvents</code>, <code>contributes.commands</code>, dan output JS.</li>
+</ul>
+</li>
+<li><code>src/extension.ts</code>
+<ul>
+<li>entry point runtime.</li>
+<li>di sini implementasi <code>activate(context)</code> hidup.</li>
+<li>biasanya register command pakai <code>vscode.commands.registerCommand</code>.</li>
+<li><code>context.subscriptions.push(...)</code> wajib supaya cleanup kerja.</li>
+</ul>
+</li>
+<li><code>tsconfig.build.json</code>
+<ul>
+<li>untuk compile TypeScript ke <code>out/</code>.</li>
+<li>umum pakai <code>module: commonjs</code>, <code>outDir: ./out</code>, dan <code>exclude: ["node_modules", ".vscode-test"]</code>.</li>
+</ul>
+</li>
+<li><code>out/</code>
+<ul>
+<li>hasil compile JS yang dijalankan VS Code.</li>
+</ul>
+</li>
+<li>optional: <code>.vscode/launch.json</code>
+<ul>
+<li>kalau mau debug extension di Extension Development Host.</li>
+</ul>
+</li>
+</ul>
+<h3 id="step-by-step-tulis-kode-minimal">Step-by-step: tulis kode minimal<a aria-hidden="true" class="anchor-heading icon-link" href="#step-by-step-tulis-kode-minimal"></a></h3>
+<p>Setelah struktur siap, ini flow yang gue pakai buat bikin extension kecil:</p>
+<ol>
+<li><code>package.json</code>
+<ul>
+<li>definisikan <code>name</code>, <code>displayName</code>, <code>publisher</code>, <code>version</code>.</li>
+<li>pastikan <code>main</code> mengarah ke <code>./out/extension.js</code>.</li>
+<li>tambahkan <code>activationEvents</code> seperti <code>onCommand:myExtension.helloWorld</code>.</li>
+<li>di <code>contributes.commands</code>, daftar command ID dan judulnya.</li>
+</ul>
+</li>
+<li><code>src/extension.ts</code>
+<ul>
+<li>export <code>activate(context: vscode.ExtensionContext)</code>.</li>
+<li>register command <code>vscode.commands.registerCommand("myExtension.helloWorld", () => { ... })</code>.</li>
+<li>push disposables ke <code>context.subscriptions</code>.</li>
+</ul>
+</li>
+<li><code>tsconfig.build.json</code>
+<ul>
+<li>compile ke <code>out/</code>.</li>
+<li>set <code>module: "commonjs"</code>, <code>target: "es2020"</code>, <code>outDir: "out"</code>.</li>
+<li><code>include: ["src"]</code>, <code>exclude: ["node_modules", ".vscode-test"]</code>.</li>
+</ul>
+</li>
+<li>build dan jalankan
+<ul>
+<li><code>npm install</code></li>
+<li><code>npm run compile</code></li>
+<li>buka folder extension di VS Code</li>
+<li>tekan <code>F5</code></li>
+<li>jalankan command Hello World di Extension Development Host</li>
+</ul>
+</li>
+</ol>
+<p>Contoh minimal:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"my-extension"</span><span class="token punctuation">,</span>
+  <span class="token property">"displayName"</span><span class="token operator">:</span> <span class="token string">"My Extension"</span><span class="token punctuation">,</span>
+  <span class="token property">"publisher"</span><span class="token operator">:</span> <span class="token string">"me"</span><span class="token punctuation">,</span>
+  <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"0.0.1"</span><span class="token punctuation">,</span>
+  <span class="token property">"engines"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"vscode"</span><span class="token operator">:</span> <span class="token string">"^1.77.0"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"activationEvents"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"onCommand:myExtension.helloWorld"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"main"</span><span class="token operator">:</span> <span class="token string">"./out/extension.js"</span><span class="token punctuation">,</span>
+  <span class="token property">"contributes"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"commands"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"myExtension.helloWorld"</span><span class="token punctuation">,</span>
+        <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Hello World"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"compile"</span><span class="token operator">:</span> <span class="token string">"tsc -p tsconfig.build.json"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"devDependencies"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"typescript"</span><span class="token operator">:</span> <span class="token string">"^5.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"@types/vscode"</span><span class="token operator">:</span> <span class="token string">"^1.77.0"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class="language-ts"><code class="language-ts"><span class="token keyword module">import</span> <span class="token imports"><span class="token operator">*</span> <span class="token keyword module">as</span> vscode</span> <span class="token keyword module">from</span> <span class="token string">'vscode'</span><span class="token punctuation">;</span>
+
+<span class="token keyword module">export</span> <span class="token keyword">function</span> <span class="token function">activate</span><span class="token punctuation">(</span>context<span class="token operator">:</span> vscode<span class="token punctuation">.</span><span class="token property-access"><span class="token maybe-class-name">ExtensionContext</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> disposable <span class="token operator">=</span> vscode<span class="token punctuation">.</span><span class="token property-access">commands</span><span class="token punctuation">.</span><span class="token method function property-access">registerCommand</span><span class="token punctuation">(</span><span class="token string">'myExtension.helloWorld'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+    vscode<span class="token punctuation">.</span><span class="token property-access">window</span><span class="token punctuation">.</span><span class="token method function property-access">showInformationMessage</span><span class="token punctuation">(</span><span class="token string">'Hello from my extension!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  context<span class="token punctuation">.</span><span class="token property-access">subscriptions</span><span class="token punctuation">.</span><span class="token method function property-access">push</span><span class="token punctuation">(</span>disposable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword module">export</span> <span class="token keyword">function</span> <span class="token function">deactivate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"module"</span><span class="token operator">:</span> <span class="token string">"commonjs"</span><span class="token punctuation">,</span>
+    <span class="token property">"target"</span><span class="token operator">:</span> <span class="token string">"es2020"</span><span class="token punctuation">,</span>
+    <span class="token property">"outDir"</span><span class="token operator">:</span> <span class="token string">"out"</span><span class="token punctuation">,</span>
+    <span class="token property">"rootDir"</span><span class="token operator">:</span> <span class="token string">"src"</span><span class="token punctuation">,</span>
+    <span class="token property">"strict"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"esModuleInterop"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"skipLibCheck"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"node_modules"</span><span class="token punctuation">,</span> <span class="token string">".vscode-test"</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="versi-cepat-pakai-yo-code">Versi cepat: pakai <code>yo code</code><a aria-hidden="true" class="anchor-heading icon-link" href="#versi-cepat-pakai-yo-code"></a></h3>
+<p>Kalau tidak mau ribet bikin semua file manual, <code>yo code</code> bisa jadi shortcut yang bagus.</p>
+<ul>
+<li><code>yo code</code> akan scaffold manifest dan file <code>src/extension.ts</code> otomatis.</li>
+<li>hasil scaffold biasanya sudah punya <code>package.json</code>, <code>tsconfig.json</code>, <code>src/extension.ts</code>, dan konfigurasi debug.</li>
+<li>setelah itu tinggal fokus ke logic <code>activate()</code> dan command saja.</li>
+<li><code>yo code</code> sebenarnya adalah Yeoman generator yang menjalankan paket <code>generator-code</code>.</li>
+</ul>
+<h4 id="pilihan-di-prompt-yo-code">Pilihan di prompt <code>yo code</code><a aria-hidden="true" class="anchor-heading icon-link" href="#pilihan-di-prompt-yo-code"></a></h4>
+<pre class="language-bash"><code class="language-bash">➜  <span class="token number">1</span>-hello-world git:<span class="token punctuation">(</span>main<span class="token punctuation">)</span> ✗ nix develop -c yo code
+
+     _-----_     ╭──────────────────────────╮
+    <span class="token operator">|</span>       <span class="token operator">|</span>    │   Welcome to the Visual  │
+    <span class="token operator">|</span>--<span class="token punctuation">(</span>o<span class="token punctuation">)</span>--<span class="token operator">|</span>    │   Studio Code Extension  │
+   <span class="token variable"><span class="token variable">`</span>---------´   │        generator<span class="token operator">!</span>        │
+    <span class="token punctuation">(</span> _´U<span class="token variable">`</span></span>_ <span class="token punctuation">)</span>    ╰──────────────────────────╯
+    /___A___<span class="token punctuation">\</span>   /
+     <span class="token operator">|</span>  ~  <span class="token operator">|</span>     
+   __<span class="token string">'.___.'</span>__   
+ ´   <span class="token variable"><span class="token variable">`</span>  <span class="token operator">|</span>° ´ Y <span class="token variable">`</span></span> 
+
+<span class="token variable"><span class="token variable">`</span>list<span class="token variable">`</span></span> prompt is deprecated. Use <span class="token variable"><span class="token variable">`</span><span class="token keyword">select</span><span class="token variable">`</span></span> prompt instead.
+? What <span class="token builtin class-name">type</span> of extension <span class="token keyword">do</span> you want to create?
+❯ New Extension <span class="token punctuation">(</span>TypeScript<span class="token punctuation">)</span>
+  New Extension <span class="token punctuation">(</span>JavaScript<span class="token punctuation">)</span>
+  New Color Theme
+  New Language Support
+  New Code Snippets
+  New Keymap
+  New Extension Pack
+  New Language Pack <span class="token punctuation">(</span>Localization<span class="token punctuation">)</span>
+  New Web Extension <span class="token punctuation">(</span>TypeScript<span class="token punctuation">)</span>
+  New Notebook Renderer <span class="token punctuation">(</span>TypeScript<span class="token punctuation">)</span>
+</code></pre>
+<p>Saat menjalankan <code>yo code</code>, generator biasanya menanyakan jenis extension yang ingin dibuat. Ini artinya:</p>
+<ul>
+<li><code>New Extension (TypeScript)</code> — buat extension VS Code dengan TypeScript. Ini pilihan paling umum jika mau mulai dari extension standar dan pakai TS.</li>
+<li><code>New Extension (JavaScript)</code> — versi tanpa TypeScript. Cocok kalau cuma mau coba cepat tanpa setup TS.</li>
+<li><code>New Color Theme</code> — bikin extension tema warna saja. Hasilnya akan menghasilkan skema warna dan konfigurasi tema VS Code.</li>
+<li><code>New Language Support</code> — untuk bikin extension bahasa baru dengan syntax highlighting, snippets, dan grammar. Pilihan ini cocok kalau ingin menambahkan dukungan bahasa di editor.</li>
+<li><code>New Code Snippets</code> — buat extension berisi potongan kode (<code>snippets</code>) yang bisa dipanggil lewat Intellisense. Cocok untuk paket tooling atau snippet library.</li>
+<li><code>New Keymap</code> — extension yang mengubah keybinding atau menyalin layout keybindings dari editor lain.</li>
+<li><code>New Extension Pack</code> — kumpulan extension lain dalam satu paket. Biasanya dipakai untuk bundling extension yang saling terkait.</li>
+<li><code>New Language Pack (Localization)</code> — extension terjemahan untuk UI VS Code. Bukan extension fungsional, tapi menambahkan dukungan bahasa ke VS Code.</li>
+<li><code>New Web Extension (TypeScript)</code> — versi extension yang bisa berjalan di environment web, bukan hanya desktop VS Code. Penting jika ingin extension kompatibel dengan <code>vscode.dev</code> atau browser-based VS Code.</li>
+<li><code>New Notebook Renderer (TypeScript)</code> — untuk bikin renderer custom pada notebook cell VS Code. Ini lebih spesifik dan berguna kalau butuh tampilan notebook yang berbeda.</li>
+</ul>
+<p>Setelah memilih jenis extension, generator akan menanyakan nama extension, identifier, deskripsi, dan beberapa opsi lain. Setelah itu, semua file yang diperlukan akan otomatis dibuat.</p>
+<pre><code>
+     _-----_     ╭──────────────────────────╮
+    |       |    │   Welcome to the Visual  │
+    |--(o)--|    │   Studio Code Extension  │
+   `---------´   │        generator!        │
+    ( _´U`_ )    ╰──────────────────────────╯
+    /___A___\   /
+     |  ~  |     
+   __'.___.'__   
+ ´   `  |° ´ Y ` 
+
+`list` prompt is deprecated. Use `select` prompt instead.
+✔ What type of extension do you want to create? New Extension (TypeScript)
+✔ What's the name of your extension? hello-world
+✔ What's the identifier of your extension? poc-hello-world
+✔ What's the description of your extension? first extentions vscode
+✔ Initialize a git repository? Yes
+`list` prompt is deprecated. Use `select` prompt instead.
+? Which bundler to use?
+❯ unbundled
+  webpack
+  esbuild
+? Which package manager to use?
+  npm
+  yarn
+❯ pnpm
+</code></pre>
+<p><code>yo code</code> juga nanya package manager. Pilihannya biasanya:</p>
+<ul>
+<li><code>npm</code> — paling aman dan paling umum, cocok kalau pengen nge-minimal toolchain.</li>
+<li><code>yarn</code> — enak kalau pengen lockfile lebih stabil dan workflow yang lebih rapi, tapi ada dua generasi (Classic vs Berry) jadi perlu tahu versi yang dipakai.</li>
+<li><code>pnpm</code> — paling cepat install dan paling hemat disk, karena dia pakai store global dan symlink. Biasa jadi pilihan bagus untuk proyek besar atau monorepo.</li>
+</ul>
+<p>Untuk extension kecil, <code>npm</code> sudah cukup. Kalau pengen upgrade experience di repo yang lebih besar, <code>pnpm</code> biasanya paling menarik, asalkan semua orang di tim nyaman ikut pakai.</p>
+<p>Apa itu <code>bundler</code>? Itu opsi untuk memilih apakah ingin menggunakan bundler seperti Webpack atau esbuild untuk mengemas extension. Biasanya, untuk extension sederhana, <code>unbundled</code> sudah cukup. Bundler lebih berguna jika ada banyak dependensi atau ingin optimasi ukuran extension.</p>
+<ul>
+<li>Unbundled: extension akan tetap dalam format file terpisah. Cocok untuk proyek kecil atau jika ingin kontrol penuh atas struktur file.</li>
+<li>Webpack: menggunakan Webpack untuk mengemas semua file dan dependensi menjadi satu bundle.js. Ini bisa mempercepat load extension, tapi setup-nya lebih kompleks.</li>
+<li>esbuild: alternatif bundler yang lebih cepat daripada Webpack. Cocok jika ingin bundling cepat dengan konfigurasi minimal.</li>
+</ul>
+<p>Perbedaan utama antara bundler dan unbundled adalah pada performa dan target deployment. VS Code docs menyarankan bundling ketika extension ingin mendukung Web (github.dev/vscode.dev) karena browser hanya bisa memuat satu bundled file saja.</p>
+<p>Tabel perbandingan:</p>
+<div class="table-responsive">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Opsi Bundler</th><th>Kelebihan</th><th>Kekurangan</th></tr></thead><tbody><tr><td>Unbundled</td><td>Setup sederhana, kontrol penuh</td><td>Load lebih lambat jika banyak file</td></tr><tr><td>Webpack</td><td>Load lebih cepat, optimasi ukuran</td><td>Setup kompleks, waktu build lebih lama</td></tr><tr><td>esbuild</td><td>Load cepat, setup minimal</td><td>Kurang fleksibel dibanding Webpack</td></tr></tbody></table></div>
+<p>Kenapa gak pake Bun?</p>
+<p>Gue pernah mikir sama: Bun sekarang punya bundler dan klaim benchmark super cepat, jadi kenapa gak langsung pakai Bun untuk extension VS Code juga?</p>
+<p>Jawabannya: buat VS Code extension, dokumentasi resmi masih fokus ke bundler yang jelas-support <code>vscode</code> runtime seperti Webpack dan esbuild. Bun bilang dia bisa bundling 10.000 React component dalam 269.1ms, lebih cepat dari esbuild di benchmarknya, tetapi itu benchmark umum bundling, bukan khusus <code>vscode</code> extension. Sementara VS Code butuh bundling yang nge-exclude <code>vscode</code> runtime module dan bisa cocok untuk web extension.</p>
+<p>Fakta tambahan:</p>
+<ul>
+<li>VS Code docs <code>Bundling Extensions</code> menyebutkan bundling penting untuk <code>vscode.dev</code>/<code>github.dev</code> karena browser hanya bisa memuat satu file untuk extension code. (<a href="https://code.visualstudio.com/api/working-with-extensions/bundling-extension">source</a>)</li>
+<li>esbuild klaim dapat melakukan bundle production untuk 10 copy tiga.js dari scratch dalam ~0.39 detik, sedangkan webpack 5 butuh ~41.21 detik di benchmark default. Itu berarti esbuild bisa 100x lebih cepat dalam skenario bundling sederhana. (<a href="https://esbuild.github.io/faq/#benchmark-details">source</a>)</li>
+<li>Bun klaim bundle 10.000 React components dalam 269.1ms, lebih cepat dari esbuild 571.9ms dan webpack 41.21s di benchmark Bun. (<a href="https://bun.sh/">source</a>)</li>
+<li>Untuk extension kecil tanpa banyak dependensi, <code>unbundled</code> tetap valid dan lebih mudah karena tidak perlu konfigurasi bundler.</li>
+</ul>
+<p>Kalau butuh referensi <code>yo code</code> lebih lengkap, lihat TIL <a href="/sotoy/notes/til.vscode.yo-code">Yo Code untuk Extension VS Code</a> di repo ini — ini catatan internal, bukan link Dendron.</p>
+<p>Dari Dendron, yang paling mirip adalah:</p>
+<ul>
+<li><code>packages/plugin-core/package.json</code> untuk manifest besar</li>
+<li><code>packages/plugin-core/src/_extension.ts</code> sebagai entry point</li>
+</ul>
+<p>Kalau yang simple, cukup: <code>activationEvents</code> pakai <code>onCommand:myExtension.helloWorld</code>, lalu register satu command. Itu sudah cukup buat start.</p>
+<pre><code>✔ Which package manager to use? pnpm
+
+Writing in /Users/zeihanaulia/Programming/research/vscode/1-hello-world/poc-hello-world...
+   create poc-hello-world/.vscode/extensions.json
+   create poc-hello-world/.vscode/launch.json
+   create poc-hello-world/.vscode/settings.json
+   create poc-hello-world/.vscode/tasks.json
+   create poc-hello-world/package.json
+   create poc-hello-world/tsconfig.json
+   create poc-hello-world/.vscodeignore
+   create poc-hello-world/vsc-extension-quickstart.md
+   create poc-hello-world/.gitignore
+   create poc-hello-world/README.md
+   create poc-hello-world/CHANGELOG.md
+   create poc-hello-world/src/extension.ts
+   create poc-hello-world/src/test/extension.test.ts
+   create poc-hello-world/.vscode-test.mjs
+   create poc-hello-world/eslint.config.mjs
+   create poc-hello-world/.npmrc
+
+Changes to package.json were detected.
+
+Running pnpm install for you to install the required dependencies.
+ WARN  1 deprecated subdependencies found: glob@10.5.0
+Packages: +229
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 229, reused 229, downloaded 0, added 229, done
+
+devDependencies:
++ @types/mocha 10.0.10
++ @types/node 22.19.17 (25.6.0 is available)
++ @types/vscode 1.118.0
++ @vscode/test-cli 0.0.12
++ @vscode/test-electron 2.5.2
++ eslint 9.39.4 (10.3.0 is available)
++ typescript 5.9.3 (6.0.3 is available)
++ typescript-eslint 8.59.2
+
+Done in 3.3s using pnpm v10.23.0
+
+Your extension poc-hello-world has been created!
+
+To start editing with Visual Studio Code, use the following commands:
+
+     code poc-hello-world
+
+Open vsc-extension-quickstart.md inside the new extension for further instructions
+on how to modify, test and publish your extension.
+
+For more information, also visit http://code.visualstudio.com and follow us @code.
+
+
+`list` prompt is deprecated. Use `select` prompt instead.
+✔ Do you want to open the new folder with Visual Studio Code? Open with `code`
+</code></pre>
+<p>oke, extension sudah siap. Sekarang tinggal buka folder <code>poc-hello-world</code> di VS Code, lalu ikuti instruksi di <code>vsc-extension-quickstart.md</code> untuk mulai testing dan modifikasi.</p>
+<h2 id="ngetes-hello-world-di-extension-development-host">Ngetes Hello World di Extension Development Host<a aria-hidden="true" class="anchor-heading icon-link" href="#ngetes-hello-world-di-extension-development-host"></a></h2>
+<p>Ini penting: <code>npm run compile</code> hanya mengubah TypeScript jadi JavaScript di folder <code>out/</code>. Itu bukan action yang langsung aktif di VS Code biasa atau di macOS. Kalau belum dijalankan lewat <code>F5</code>, tidak akan ada efek yang terasa. Kalau sudah muncul <code>out/extension.js</code>, berarti build TypeScript-nya sukses.
+Kalau notifikasi muncul di Extension Development Host, berarti basic flownya juga sudah benar.</p>
+<p>Setelah scaffold, langkah testing-nya begini:</p>
+<ul>
+<li><code>npm install</code> atau <code>pnpm install</code> kalau pakai pnpm</li>
+<li><code>npm run compile</code> atau <code>pnpm run compile</code></li>
+<li>tekan cmd + shift + P, lalu pilih <code>Debug: Start Debugging</code> atau tekan <code>F5</code></li>
+<li>Setelah muncul window baru (Extension Development Host), tekan cmd + shift + P lagi, lalu cari command <code>Hello World</code> yang sudah didaftarkan</li>
+</ul>
+<h2 id="coba-use-case-sederhana-extension-note-helper">Coba use case sederhana: extension note helper<a aria-hidden="true" class="anchor-heading icon-link" href="#coba-use-case-sederhana-extension-note-helper"></a></h2>
+<p>Biar nggak cuma Hello World, gue cari use case simpel yang masih relevan dengan Dendron: bikin extension yang bantu cari dan buka note.</p>
+<p>Use case yang gue bayangkan:</p>
+<ul>
+<li>command <code>Open Note by ID</code></li>
+<li>input prompt <code>Note ID</code></li>
+<li>extension cari file Markdown di workspace</li>
+<li>lalu buka file tersebut di editor</li>
+</ul>
+<p>Kenapa ini menarik?</p>
+<ul>
+<li>hampir semua extension VS Code butuh command + input + workspace file access</li>
+<li>dari sini ketahuan apakah <code>vscode.workspace.findFiles</code> dan <code>vscode.window.showQuickPick</code> cukup</li>
+<li>dan bisa dibandingkan dengan Dendron yang sudah punya note lookup built-in</li>
+</ul>
+<p>Kalau ini jalan, berarti basic extension flow sudah cukup untuk implementasi fitur note/navigation.</p>
+<h2 id="pelajaran-dari-dendron-vs-vanilla">Pelajaran dari Dendron vs vanilla<a aria-hidden="true" class="anchor-heading icon-link" href="#pelajaran-dari-dendron-vs-vanilla"></a></h2>
+<p>Beberapa hal yang sekarang gue anggap penting:</p>
+<ul>
+<li><code>activationEvents: ["*"]</code> di Dendron membuat extension aktif sangat dini. Itu ngebantu kalau extension punya banyak panel, tapi juga berarti startup lebih berat.</li>
+<li><code>contributes.commands</code> di <code>package.json</code> itu cuma daftar. Logic aslinya ada di TypeScript.</li>
+<li><code>webview</code> besar dan terisolasi. Kalau butuh UI custom, harus siap kirim pesan bolak-balik.</li>
+<li><code>FileSystemWatcher</code> itu penting, tapi gampang bikin out-of-sync kalau pattern-nya nggak benar.</li>
+<li><code>Reload Index</code> di Dendron bukan sekedar reload VS Code; itu rebuild engine dan parse note, jadi terasa lebih lambat daripada <code>workbench.action.reloadWindow</code>.</li>
+</ul>
+<h2 id="kekuatan-extension-vs-code-di-dendron">Kekuatan extension VS Code di Dendron<a aria-hidden="true" class="anchor-heading icon-link" href="#kekuatan-extension-vs-code-di-dendron"></a></h2>
+<p>Dari repo ini, gue lihat extension bisa dipakai untuk:</p>
+<ul>
+<li>bikin UI Dendron langsung di VS Code lewat tree view dan webview</li>
+<li>expose command custom untuk workflow note-taking dan engine control</li>
+<li>tambah language intelligence Markdown / frontmatter</li>
+<li>monitor file dan workspace event</li>
+<li>handle workspace trust, shell support, dan telemetry</li>
+</ul>
+<h2 id="batasan-praktis">Batasan praktis<a aria-hidden="true" class="anchor-heading icon-link" href="#batasan-praktis"></a></h2>
+<p>Tapi ada batasan yang perlu diingat:</p>
+<ul>
+<li>extension cuma bisa pakai API resmi VS Code. Kalau nggak ada kontribusi resmi, nggak bisa nyuntik langsung ke editor core.</li>
+<li>webview harus komunikasi via <code>postMessage</code>; nggak bisa panggil fungsi JS extension langsung.</li>
+<li>di mode web extension, beberapa API Node/shell mungkin nggak tersedia.</li>
+<li>fitur berat seperti reload engine bisa terasa lambat, dan itu biasanya bukan salah VS Code tapi domain logic yang sudah kompleks.</li>
+</ul>
+<h2 id="link-referensi-langsung">Link referensi langsung<a aria-hidden="true" class="anchor-heading icon-link" href="#link-referensi-langsung"></a></h2>
+<ul>
+<li>Official VS Code tutorial: <a href="https://code.visualstudio.com/api/get-started/your-first-extension">https://code.visualstudio.com/api/get-started/your-first-extension</a></li>
+<li>Sample repo Hello World: <a href="https://github.com/microsoft/vscode-extension-samples/tree/main/helloworld-sample">https://github.com/microsoft/vscode-extension-samples/tree/main/helloworld-sample</a></li>
+<li>Artikel step-by-step TS extension: <a href="https://dev.to/fabrikapp/how-to-make-a-vs-code-extension-using-typescript-a-step-by-step-guide-1hp6">https://dev.to/fabrikapp/how-to-make-a-vs-code-extension-using-typescript-a-step-by-step-guide-1hp6</a></li>
+<li>Artikel komprehensif TypeScript: <a href="https://www.blog.brightcoding.dev/2024/04/29/building-a-vs-code-extension-with-typescript-a-comprehensive-guide/">https://www.blog.brightcoding.dev/2024/04/29/building-a-vs-code-extension-with-typescript-a-comprehensive-guide/</a></li>
+<li>Artikel pengembang lanjut: <a href="https://hemaks.org/posts/developing-extensions-for-visual-studio-code-with-typescript/">https://hemaks.org/posts/developing-extensions-for-visual-studio-code-with-typescript/</a></li>
+</ul>
+<h2 id="referensi-yang-gue-temuin-di-repo-dendron">Referensi yang gue temuin di repo Dendron<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi-yang-gue-temuin-di-repo-dendron"></a></h2>
+<ul>
+<li><code>packages/plugin-core/vsc-extension-quickstart.md</code></li>
+<li><code>packages/plugin-core/.vscode/launch.json</code></li>
+<li><code>packages/plugin-core/package.json</code></li>
+<li><code>packages/plugin-core/src/_extension.ts</code></li>
+</ul>
+<hr>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">vscode (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">typescript (Private)</a></li>
+</ol>

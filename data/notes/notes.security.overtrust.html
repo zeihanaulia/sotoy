@@ -1,0 +1,146 @@
+<h1 id="overtrust-lokal-workstation-scanner-untuk-trust-boundary-bukan-bug-scanner">Overtrust: lokal workstation scanner untuk trust boundary, bukan bug scanner<a aria-hidden="true" class="anchor-heading icon-link" href="#overtrust-lokal-workstation-scanner-untuk-trust-boundary-bukan-bug-scanner"></a></h1>
+<h2 id="overview">Overview<a aria-hidden="true" class="anchor-heading icon-link" href="#overview"></a></h2>
+<p>Gue lihat <code>cheese-cakee/overtrust</code> sebagai lawan dari Deepsec. Deepsec nyari bug di codebase. Overtrust ngecek apakah workstation developer terlalu percaya pada tool, extension, process, dan config yang punya akses ke secret.</p>
+<h2 id="1-masalah-fundamental-overtrust">1. Masalah fundamental Overtrust<a aria-hidden="true" class="anchor-heading icon-link" href="#1-masalah-fundamental-overtrust"></a></h2>
+<ul>
+<li>workstation developer sekarang juga attack surface.</li>
+<li>bukan cuma secret yang ke-commit. secret bisa bocor gara-gara tool lokal punya akses file, process, atau shell.</li>
+<li>Overtrust nanya: "apa yang bisa nyentuh secret gue?", bukan sekadar "apa secret ada di repo?"</li>
+<li>ini penting buat era agentic coding.</li>
+</ul>
+<h2 id="2-cara-kerja-tanpa-ai">2. Cara kerja tanpa AI<a aria-hidden="true" class="anchor-heading icon-link" href="#2-cara-kerja-tanpa-ai"></a></h2>
+<ul>
+<li>Overtrust sengaja deterministik, offline, lokal.</li>
+<li>source code utamanya di <code>src/scanner/</code>:
+<ul>
+<li><code>walker.cpp</code> buat file walk dan ignore path,</li>
+<li><code>classifier.cpp</code> buat deteksi jenis file,</li>
+<li><code>manifest.cpp</code> buat parse manifest VS Code / npm / Dockerfile,</li>
+<li><code>secrets.cpp</code> buat keyword → regex → entropy → FP guard,</li>
+<li><code>procscanner_linux.cpp</code> / <code>procscanner_win.cpp</code> buat scan process.</li>
+</ul>
+</li>
+<li>semua logika ditulis di C++. nggak ada cloud, nggak ada LLM, jadi nggak nambah trust problem.</li>
+<li>untuk versi yang lebih detail tentang alur kerja lokal dan trust boundary, lihat <a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a>.</li>
+</ul>
+<h2 id="3-kategori-risiko-yang-dideteksi">3. Kategori risiko yang dideteksi<a aria-hidden="true" class="anchor-heading icon-link" href="#3-kategori-risiko-yang-dideteksi"></a></h2>
+<ul>
+<li>IDE extension: terminal access, auth provider, debug adapter, always-on activation.</li>
+<li>npm package: preinstall/postinstall, <code>curl | bash</code>.</li>
+<li>Dockerfile: root container, <code>curl | bash</code> pada RUN.</li>
+<li>Secrets: AWS, GitHub, OpenAI, Anthropic, Stripe, PEM.</li>
+<li>credential file: <code>~/.aws/credentials</code>, <code>.env</code>, SSH private key.</li>
+<li>Kubernetes: <code>~/.kube/config</code>.</li>
+<li>shell history: <code>.bash_history</code>, <code>.zsh_history</code>.</li>
+<li>process Linux: <code>CAP_SYS_PTRACE</code>, <code>CAP_SYS_ADMIN</code>, sensitive FD.</li>
+<li>process Windows: <code>SeDebugPrivilege</code>, <code>SeTcbPrivilege</code>, elevated token.</li>
+<li>AI tool: Cursor, Copilot, Codeium, dll.</li>
+</ul>
+<h2 id="4-bedanya-dengan-secret-scanner-biasa">4. Bedanya dengan secret scanner biasa<a aria-hidden="true" class="anchor-heading icon-link" href="#4-bedanya-dengan-secret-scanner-biasa"></a></h2>
+<ul>
+<li>secret scanner biasa cuma nyari secret di file.</li>
+<li>Overtrust juga ngecek siapa yang bisa akses secret itu sekarang.</li>
+<li>contoh: <code>.env</code> bisa ke-flag sama secret scanner. Overtrust juga bakal lihat extension auth provider, npm script, atau process privileged.</li>
+<li>menurut gue, Overtrust lebih mirip "workstation exposure scanner".</li>
+</ul>
+<h2 id="5-implementasi-nyata">5. Implementasi nyata<a aria-hidden="true" class="anchor-heading icon-link" href="#5-implementasi-nyata"></a></h2>
+<ul>
+<li>local inspection: jalankan <code>./build/overtrust</code> buat audit workstation.</li>
+<li>demo/tests: ada folder <code>demo/</code> buat ngecek fixture bahaya.</li>
+<li>CI: <code>--no-tui --report out.json --exit-code</code> buat pipeline.</li>
+<li>integrasi tim: ideal buat preflight sebelum agentic tool jalan atau sebelum scan Deepsec.</li>
+<li>praktik terbaik: jangan pakai <code>--exit-code</code> fail-all tanpa threshold, pakai report JSON buat triage.</li>
+</ul>
+<h2 id="6-limitasi-dan-false-positive">6. Limitasi dan false positive<a aria-hidden="true" class="anchor-heading icon-link" href="#6-limitasi-dan-false-positive"></a></h2>
+<ul>
+<li>Overtrust cuma risk indicator, bukan bukti breach.</li>
+<li>beberapa false positif mungkin muncul:
+<ul>
+<li>extension auth provider nggak otomatis jahat,</li>
+<li>Dockerfile root nggak otomatis exploit,</li>
+<li><code>curl | bash</code> bisa juga buat installer sah,</li>
+<li>shell history bisa berisi command biasa.</li>
+</ul>
+</li>
+<li>score sederhana bikin orientasi gampang, tapi bisa oversimplify.</li>
+<li>Overtrust cuma bisa baca yang usernya bisa akses. area protected nggak ke-scan.</li>
+<li>rules hardcoded perlu maintenance seiring ekosistem berubah.</li>
+<li>nggak ada threat intel cloud, jadi nggak deteksi reputasi package terbaru.</li>
+</ul>
+<h2 id="7-korelasi-dengan-agentic-coding-dan-deepsec">7. Korelasi dengan agentic coding dan Deepsec<a aria-hidden="true" class="anchor-heading icon-link" href="#7-korelasi-dengan-agentic-coding-dan-deepsec"></a></h2>
+<ul>
+<li>thread cheesecake nanya: "apa yang bisa dibaca agentic coding tool?"</li>
+<li>Overtrust jawab: "workstation lo sendiri juga rentan." </li>
+<li>Deepsec jawab: "apakah codebase lo punya vuln?"</li>
+<li>menurut gue, mereka saling melengkapi.</li>
+<li>jalankan Overtrust dulu buat ngecek boundary sebelum kasih agent akses.</li>
+<li>setelah lingkungan lebih bersih, baru pake Deepsec buat audit kode.</li>
+</ul>
+<h2 id="8-insight-penting">8. Insight penting<a aria-hidden="true" class="anchor-heading icon-link" href="#8-insight-penting"></a></h2>
+<ul>
+<li>Overtrust bukan cuma anti-secret leak. Dia ngecek trust boundary workstation.</li>
+<li>di era agentic tooling, developer sering kasih AI akses lokal tanpa sadar.</li>
+<li>pertanyaan yang lebih penting: "apa izin process ini?" bukan sekadar "apakah provider aman?"</li>
+<li>risiko agentic coding termasuk privilege lokal dan trust pada extension.</li>
+</ul>
+<h2 id="referensi">Referensi<a aria-hidden="true" class="anchor-heading icon-link" href="#referensi"></a></h2>
+<ul>
+<li><code>https://github.com/cheese-cakee/overtrust</code></li>
+<li><code>.references/overtrust</code> (local clone dari repo Overtrust)</li>
+<li><code>README.md</code></li>
+<li><code>src/scanner/walker.cpp</code></li>
+<li><code>src/scanner/classifier.cpp</code></li>
+<li><code>src/scanner/manifest.cpp</code></li>
+<li><code>src/scanner/secrets.cpp</code></li>
+<li><code>src/scanner/procscanner_linux.cpp</code></li>
+<li><code>src/scanner/procscanner_win.cpp</code></li>
+<li><code>src/graph/graph.cpp</code></li>
+<li><code>src/report.cpp</code></li>
+<li><code>demo/</code></li>
+</ul>
+<h2 id="practical-position">Practical position<a aria-hidden="true" class="anchor-heading icon-link" href="#practical-position"></a></h2>
+<ul>
+<li>Overtrust cocok buat developer yang pengen tahu apakah workstation mereka terlalu terbuka.</li>
+<li>lebih cocok sebagai audit/preflight daripada blocking gate setiap commit.</li>
+<li>jangan anggap ini pengganti secret scanner atau pentest.</li>
+<li>idealnya dipakai bareng secret scanner, SCA, dan Deepsec.</li>
+</ul>
+<h2 id="related-zettels">Related Zettels<a aria-hidden="true" class="anchor-heading icon-link" href="#related-zettels"></a></h2>
+<ul>
+<li><a href="/sotoy/notes/zettel.20260505179968">Workstation trust boundary adalah attack surface utama di era AI-native engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179971">Deterministic local scanners melengkapi AI scanners dalam keamanan developer workflow</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179972">Secret exposure bisa terjadi tanpa commit Git</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179979">Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+</ul>
+<hr>
+<strong>Children</strong>
+<ol>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+</ol>
+<h2 id="tags">Tags<a aria-hidden="true" class="anchor-heading icon-link" href="#tags"></a></h2>
+<ol>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">notes (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">security (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">overtrust (Private)</a></li>
+<li><a title="Private" href="https://wiki.dendron.so/notes/hfyvYGJZQiUwQaaxQO27q.html" target="_blank" class="private">agentic-coding (Private)</a></li>
+</ol>
+<hr>
+<strong>Backlinks</strong>
+<ul>
+<li><a href="/sotoy/notes/zettel.1777995556481">Audit trust boundary lokal sebagai ide keamanan developer</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179968">Workstation trust boundary adalah attack surface utama di era AI-native engineering</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179971">Deterministic local scanners melengkapi AI scanners dalam keamanan developer workflow</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179972">Secret exposure bisa terjadi tanpa commit Git</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179975">Rule-based checks tetap penting di era AI-native security</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179978">CI security gate butuh threshold dan baseline, bukan fail-on-any-finding</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179979">Biaya, sandbox, dan egress adalah concern arsitektur keamanan first-class</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179980">Keamanan AI-native adalah kebiasaan harian, bukan event sekali jalan</a></li>
+<li><a href="/sotoy/notes/zettel.20260505179983">Sandbox dan boundary adalah persyaratan untuk tool agentic aman</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust-evaluation">Evaluasi Overtrust: konsep bagus tapi rule-based dan belum all-cover</a></li>
+<li><a href="/sotoy/notes/notes.security.tanstack-postmortem">TanStack npm supply-chain compromise — postmortem notes</a></li>
+<li><a href="/sotoy/notes/notes.security.trusted-publishing-checklist">Trusted publishing: kritik argumen dan checklist operasional</a></li>
+<li><a href="/sotoy/notes/zettel.literature.overtrust">Overtrust sebagai literature note: audit local trust boundary</a></li>
+<li><a href="/sotoy/notes/notes.security.overtrust.workflow-detail">Overtrust workflow detail: cara kerja local scanner dan trust boundary</a></li>
+</ul>
